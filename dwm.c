@@ -41,12 +41,7 @@
 #endif /* XINERAMA */
 #include <X11/Xft/Xft.h>
 
-/* patch options */
-#define ALPHA_PATCH 0
-
-
-
-
+#include "patches.h"
 #include "drw.h"
 #include "util.h"
 
@@ -62,10 +57,6 @@
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
-
-#if ALPHA_PATCH
-#define OPAQUE                  0xffU
-#endif // ALPHA_PATCH
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
@@ -242,9 +233,6 @@ static Monitor *wintomon(Window w);
 static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
-#if ALPHA_PATCH
-static void xinitvisual();
-#endif // ALPHA_PATCH
 static void zoom(const Arg *arg);
 
 /* variables */
@@ -281,15 +269,12 @@ static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
 
-#if ALPHA_PATCH
-static int useargb = 0;
-static Visual *visual;
-static int depth;
-static Colormap cmap;
-#endif // ALPHA_PATCH
+#include "patch/include.h"
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
+
+#include "patch/include.c"
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
 struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
@@ -2150,45 +2135,6 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 	die("dwm: another window manager is already running");
 	return -1;
 }
-
-#if ALPHA_PATCH
-void
-xinitvisual()
-{
-	XVisualInfo *infos;
-	XRenderPictFormat *fmt;
-	int nitems;
-	int i;
-
-	XVisualInfo tpl = {
-		.screen = screen,
-		.depth = 32,
-		.class = TrueColor
-	};
-	long masks = VisualScreenMask | VisualDepthMask | VisualClassMask;
-
-	infos = XGetVisualInfo(dpy, masks, &tpl, &nitems);
-	visual = NULL;
-	for(i = 0; i < nitems; i ++) {
-		fmt = XRenderFindVisualFormat(dpy, infos[i].visual);
-		if (fmt->type == PictTypeDirect && fmt->direct.alphaMask) {
-			visual = infos[i].visual;
-			depth = infos[i].depth;
-			cmap = XCreateColormap(dpy, root, visual, AllocNone);
-			useargb = 1;
-			break;
-		}
-	}
-
-	XFree(infos);
-
-	if (! visual) {
-		visual = DefaultVisual(dpy, screen);
-		depth = DefaultDepth(dpy, screen);
-		cmap = DefaultColormap(dpy, screen);
-	}
-}
-#endif // ALPHA_PATCH
 
 void
 zoom(const Arg *arg)
