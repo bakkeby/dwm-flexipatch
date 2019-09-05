@@ -28,6 +28,12 @@
  */
 #define PERTAGBAR_PATCH 0
 
+
+/* This patch allows you to toggle fullscreen on and off using a single shortcut key.
+ * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff
+ */
+#define TOGGLEFULLSCREEN_PATCH 1
+
 /* The zoomswap patch allows a master and a stack window to swap places
  * rather than every window on the screen changing position.
  * https://dwm.suckless.org/patches/zoomswap/
