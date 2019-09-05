@@ -1952,9 +1952,20 @@ tag(const Arg *arg)
 void
 tagmon(const Arg *arg)
 {
+	#if TAGMONFIXFS_PATCH
+	Client *c = selmon->sel;
+	if (!c || !mons->next)
+		return;
+	sendmon(c, dirtomon(arg->i));
+	if (c->isfullscreen) {
+		setfullscreen(c, 0);
+		setfullscreen(c, 1);
+	}
+	#else
 	if (!selmon->sel || !mons->next)
 		return;
 	sendmon(selmon->sel, dirtomon(arg->i));
+	#endif // TAGMONFIXFS_PATCH
 }
 
 void
