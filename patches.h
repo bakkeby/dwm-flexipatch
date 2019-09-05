@@ -12,3 +12,9 @@
  * https://dwm.suckless.org/patches/alpha/
  */
 #define ALPHA_PATCH 0
+
+/*
+ * The systray patch adds systray for the status bar.
+ * https://dwm.suckless.org/patches/systray/
+ */
+#define SYSTRAY_PATCH 0
