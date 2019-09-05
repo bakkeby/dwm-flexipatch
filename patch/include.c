@@ -9,3 +9,7 @@
 #if SYSTRAY_PATCH
 #include "systray.c"
 #endif
+
+#if ZOOMSWAP_PATCH
+#include "zoomswap.c"
+#endif // ZOOMSWAP_PATCH

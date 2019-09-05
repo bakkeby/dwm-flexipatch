@@ -197,7 +197,9 @@ static void monocle(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
+#if !ZOOMSWAP_PATCH
 static void pop(Client *);
+#endif // !ZOOMSWAP_PATCH
 static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
@@ -1391,6 +1393,7 @@ nexttiled(Client *c)
 	return c;
 }
 
+#if !ZOOMSWAP_PATCH
 void
 pop(Client *c)
 {
@@ -1399,6 +1402,7 @@ pop(Client *c)
 	focus(c);
 	arrange(c->mon);
 }
+#endif // !ZOOMSWAP_PATCH
 
 void
 propertynotify(XEvent *e)
@@ -2506,14 +2510,66 @@ void
 zoom(const Arg *arg)
 {
 	Client *c = selmon->sel;
+	#if ZOOMSWAP_PATCH
+	Client *at = NULL, *cold, *cprevious = NULL, *p;
+	#endif // ZOOMSWAP_PATCH
 
 	if (!selmon->lt[selmon->sellt]->arrange
-	|| (selmon->sel && selmon->sel->isfloating))
+	|| (selmon->sel && selmon->sel->isfloating)
+	#if ZOOMSWAP_PATCH
+	|| !c
+	#endif // ZOOMSWAP_PATCH
+	)
 		return;
+
+	#if ZOOMSWAP_PATCH
+		if (c == nexttiled(selmon->clients)) {
+			#if PERTAG_PATCH
+			p = selmon->pertag->prevzooms[selmon->pertag->curtag];
+			#else
+			p = prevzoom;
+			#endif // PERTAG_PATCH
+			at = prevtiled(p);
+			if (at)
+				cprevious = nexttiled(at->next);
+			if (!cprevious || cprevious != p) {
+				#if PERTAG_PATCH
+				selmon->pertag->prevzooms[selmon->pertag->curtag] = NULL;
+				#else
+				prevzoom = NULL;
+				#endif // PERTAG_PATCH
+				if (!c || !(c = nexttiled(c->next)))
+					return;
+			} else
+				c = cprevious;
+		}
+
+		cold = nexttiled(selmon->clients);
+		if (c != cold && !at)
+			at = prevtiled(c);
+		detach(c);
+		attach(c);
+		/* swap windows instead of pushing the previous one down */
+		if (c != cold && at) {
+			#if PERTAG_PATCH
+			selmon->pertag->prevzooms[selmon->pertag->curtag] = cold;
+			#else
+			prevzoom = cold;
+			#endif // PERTAG_PATCH
+			if (cold && at != cold) {
+				detach(cold);
+				cold->next = at->next;
+				at->next = cold;
+			}
+		}
+		focus(c);
+		arrange(c->mon);
+	#else
 	if (c == nexttiled(selmon->clients))
 		if (!c || !(c = nexttiled(c->next)))
 			return;
 	pop(c);
+	#endif // ZOOMSWAP_PATCH
 }
 
 int

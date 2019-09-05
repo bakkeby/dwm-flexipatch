@@ -27,3 +27,9 @@
  * tag basis, or leave it as one bar per monitor.
  */
 #define PERTAGBAR_PATCH 0
+
+/* The zoomswap patch allows a master and a stack window to swap places
+ * rather than every window on the screen changing position.
+ * https://dwm.suckless.org/patches/zoomswap/
+ */
+#define ZOOMSWAP_PATCH 0

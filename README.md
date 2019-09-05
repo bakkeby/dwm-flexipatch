@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-05 - Alpha, systray and pertag patches added
+2019-09-05 - Alpha, systray, pertag and zoomswap patches added
 
 ### Patches included:
 
@@ -23,3 +23,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
+
+   - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
+      - allows a master and a stack window to swap places rather than every window on the screen changing position
+

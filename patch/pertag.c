@@ -7,5 +7,7 @@ struct Pertag {
 	#if PERTAGBAR_PATCH
 	Bool showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
 	#endif // PERTAGBAR_PATCH
+	#if ZOOMSWAP_PATCH
 	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
+	#endif // ZOOMSWAP_PATCH
 };
