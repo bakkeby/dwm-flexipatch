@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-05 - Alpha, systray, togglefullscreen, pertag and zoomswap patches added
+2019-09-05 - Alpha, systray, togglefullscreen, tagallmon, tagmonfixfs, tagswapmon, pertag and zoomswap patches added
 
 ### Patches included:
 
@@ -24,12 +24,17 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
 
+   - [tagallmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff)
+      - move all visible windows to an adjacent monitor
+
    - [tagmonfixfs](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagmonfixfs-6.2.diff)
       - allows moving a fullscreen window to another monitor while remaining in fullscreen
+
+   - [tagswapmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagswapmon-6.2.diff)
+      - swap all visible windows on one monitor with those of an adjacent monitor
 
    - [togglefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff)
       - allows you to toggle fullscreen on and off using a single shortcut key
 
    - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
       - allows a master and a stack window to swap places rather than every window on the screen changing position
-

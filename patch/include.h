@@ -6,6 +6,14 @@
 #include "systray.h"
 #endif
 
+#if TAGALLMON_PATCH
+#include "tagallmon.h"
+#endif
+
+#if TAGSWAPMON_PATCH
+#include "tagswapmon.h"
+#endif
+
 #if TOGGLEFULLSCREEN_PATCH
 #include "togglefullscreen.h"
 #endif
