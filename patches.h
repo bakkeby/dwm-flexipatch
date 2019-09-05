@@ -7,14 +7,23 @@
  * relevant descriptions.
  */
 
-/*
- * The alpha patch adds transparency for the status bar.
+/* The alpha patch adds transparency for the status bar.
  * https://dwm.suckless.org/patches/alpha/
  */
 #define ALPHA_PATCH 0
 
-/*
- * The systray patch adds systray for the status bar.
+/* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */
 #define SYSTRAY_PATCH 0
+
+/* The pertag patch adds nmaster, mfacts and layouts per tag rather
+ * than per monitor (default).
+ * https://dwm.suckless.org/patches/pertag/
+ */
+#define PERTAG_PATCH 0
+
+/* This controls whether or not to also store bar position on a per
+ * tag basis, or leave it as one bar per monitor.
+ */
+#define PERTAGBAR_PATCH 0

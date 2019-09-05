@@ -11,13 +11,15 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-05 - Systray patch added
-2019-09-05 - Alpha patch added
+2019-09-05 - Alpha, systray and pertag patches added
 
 ### Patches included:
 
    - [alpha](https://dwm.suckless.org/patches/alpha/)
       - adds transparency for the status bar
+
+   - [pertag](https://dwm.suckless.org/patches/pertag/)
+      - adds nmaster, mfact, layouts and more per tag rather than per monitor
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
