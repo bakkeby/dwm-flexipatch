@@ -6,6 +6,10 @@
 #include "attachx.h"
 #endif
 
+#if AUTOSTART_PATCH
+#include "autostart.h"
+#endif
+
 #if SYSTRAY_PATCH
 #include "systray.h"
 #endif

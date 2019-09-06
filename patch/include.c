@@ -6,6 +6,10 @@
 #include "attachx.c"
 #endif
 
+#if AUTOSTART_PATCH
+#include "autostart.c"
+#endif
+
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif

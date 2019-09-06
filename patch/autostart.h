@@ -1,0 +1,1 @@
+static void runAutostart(void);

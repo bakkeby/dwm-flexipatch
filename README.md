@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-06 - Added attachabove, attachaside, attachbelow and attachbottom patches
+2019-09-06 - Added attachabove, attachaside, attachbelow, attachbottom and autostart patches
 
 2019-09-05 - Alpha, systray, togglefullscreen, tagallmon, tagmonfixfs, tagswapmon, pertag and zoomswap patches added
 
@@ -31,6 +31,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [attachbottom](https://dwm.suckless.org/patches/attachbottom/)
       - new windows are placed at the bottom of the stack
+
+   - [autostart](https://dwm.suckless.org/patches/autostart/)
+      - makes dwm run `~/.dwm/autostart_blocking.sh` and `~/.dwm/autostart.sh &` on startup
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor

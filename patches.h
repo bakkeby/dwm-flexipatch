@@ -36,10 +36,13 @@
  */
 #define ATTACHBOTTOM_PATCH 0
 
-/* The systray patch adds systray for the status bar.
- * https://dwm.suckless.org/patches/systray/
+/* This patch will make dwm run "~/.config/dwm/autostart_blocking.sh" and
+ * "~/.config/dwm/autostart.sh &" before entering the handler loop. One or
+ * both of these files can be ommited. Note the path inside .config rather
+ * than the original ~/.dwm folder.
+ * https://dwm.suckless.org/patches/autostart/
  */
-#define SYSTRAY_PATCH 0
+#define AUTOSTART_PATCH 0
 
 /* The pertag patch adds nmaster, mfacts and layouts per tag rather
  * than per monitor (default).
@@ -51,6 +54,11 @@
  * tag basis, or leave it as one bar per monitor.
  */
 #define PERTAGBAR_PATCH 0
+
+/* The systray patch adds systray for the status bar.
+ * https://dwm.suckless.org/patches/systray/
+ */
+#define SYSTRAY_PATCH 0
 
 /* This patch allows you to move all visible windows on a monitor to an adjacent monitor.
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff
