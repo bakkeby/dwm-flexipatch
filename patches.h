@@ -44,6 +44,12 @@
  */
 #define AUTOSTART_PATCH 0
 
+/* This patch shows the titles of all visible windows in the status bar
+ * (as opposed to showing only the selected one).
+ * https://dwm.suckless.org/patches/fancybar/
+ */
+#define FANCYBAR_PATCH 0
+
 /* The pertag patch adds nmaster, mfacts and layouts per tag rather
  * than per monitor (default).
  * https://dwm.suckless.org/patches/pertag/

@@ -35,6 +35,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [autostart](https://dwm.suckless.org/patches/autostart/)
       - makes dwm run `~/.dwm/autostart_blocking.sh` and `~/.dwm/autostart.sh &` on startup
 
+   - [fancybar](https://dwm.suckless.org/patches/fancybar/)
+      - shows the titles of all visible windows in the status bar
+
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor
 
