@@ -2,6 +2,10 @@
 #include "alpha.c"
 #endif
 
+#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
+#include "attachx.c"
+#endif
+
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif

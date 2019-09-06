@@ -12,6 +12,30 @@
  */
 #define ALPHA_PATCH 0
 
+/* This patch adds new clients above the selected client, instead of always
+ * becoming the new master. This behaviour is known from Xmonad.
+ * This patch takes precedence over ATTACHASIDE_PATCH.
+ * https://dwm.suckless.org/patches/attachabove/
+ */
+#define ATTACHABOVE_PATCH 0
+
+/* This patch adds new clients on top of the stack.
+ * This patch takes precedence over ATTACHBELOW_PATCH.
+ * https://dwm.suckless.org/patches/attachaside/
+ */
+#define ATTACHASIDE_PATCH 0
+
+/* This patch adds new clients below the selected client.
+ * This patch takes precedence over ATTACHBOTTOM_PATCH.
+ * https://dwm.suckless.org/patches/attachbelow/
+ */
+#define ATTACHBELOW_PATCH 0
+
+/* This patch adds new clients at the bottom of the stack.
+ * https://dwm.suckless.org/patches/attachbottom/
+ */
+#define ATTACHBOTTOM_PATCH 0
+
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */
