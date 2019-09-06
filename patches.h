@@ -50,6 +50,21 @@
  */
 #define FANCYBAR_PATCH 0
 
+/* By default, dwm responds to _NET_ACTIVE_WINDOW client messages by setting
+ * the urgency bit on the named window. This patch activates the window instead.
+ * https://dwm.suckless.org/patches/focusonnetactive/
+ */
+#define FOCUSONNETACTIVE_PATCH 0
+
+/* By default in dwm it is possible to make an application fullscreen, then use
+ * the focusstack keybindings to focus on other windows beneath the current window.
+ * It is also possible to spawn new windows (e.g. a terminal) that end up getting
+ * focus while the previous window remains in fullscreen. This patch ensures that
+ * in such scenarios the previous window loses fullscreen.
+ * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-losefullscreen-6.2.diff
+ */
+#define LOSEFULLSCREEN_PATCH 0
+
 /* The pertag patch adds nmaster, mfacts and layouts per tag rather
  * than per monitor (default).
  * https://dwm.suckless.org/patches/pertag/

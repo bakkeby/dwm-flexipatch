@@ -564,6 +564,9 @@ clientmessage(XEvent *e)
 	#endif // SYSTRAY_PATCH
 	XClientMessageEvent *cme = &e->xclient;
 	Client *c = wintoclient(cme->window);
+	#if FOCUSONNETACTIVE_PATCH
+	unsigned int i;
+	#endif // FOCUSONNETACTIVE_PATCH
 
 	#if SYSTRAY_PATCH
 	if (showsystray && cme->window == systray->win && cme->message_type == netatom[NetSystemTrayOP]) {
@@ -618,8 +621,19 @@ clientmessage(XEvent *e)
 			setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
 				|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */ && !c->isfullscreen)));
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
+		#if FOCUSONNETACTIVE_PATCH
+		for (i = 0; i < LENGTH(tags) && !((1 << i) & c->tags); i++);
+		if (i < LENGTH(tags)) {
+			const Arg a = {.ui = 1 << i};
+			selmon = c->mon;
+			view(&a);
+			focus(c);
+			restack(selmon);
+		}
+		#else
 		if (c != selmon->sel && !c->isurgent)
 			seturgent(c, 1);
+		#endif // FOCUSONNETACTIVE_PATCH
 	}
 }
 
@@ -1001,6 +1015,12 @@ focus(Client *c)
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
 	selmon->sel = c;
+	#if LOSEFULLSCREEN_PATCH
+	Client *at;
+	for (at = selmon->clients; at; at = at->next)
+		if (at != c && at->isfullscreen && ISVISIBLE(at))
+			setfullscreen(at, 0);
+	#endif // LOSEFULLSCREEN_PATCH
 	drawbars();
 }
 
