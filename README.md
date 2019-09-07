@@ -11,6 +11,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-07 - Added cyclelayouts patch
+
 2019-09-06 - Added attachabove, attachaside, attachbelow, attachbottom, autostart, fancybar, focusonnetactive and losefullscreen patches
 
 2019-09-05 - Alpha, systray, togglefullscreen, tagallmon, tagmonfixfs, tagswapmon, pertag and zoomswap patches added
@@ -34,6 +36,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [autostart](https://dwm.suckless.org/patches/autostart/)
       - makes dwm run `~/.dwm/autostart_blocking.sh` and `~/.dwm/autostart.sh &` on startup
+
+   - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
+      - let's you cycle through all your layouts
 
    - [fancybar](https://dwm.suckless.org/patches/fancybar/)
       - shows the titles of all visible windows in the status bar

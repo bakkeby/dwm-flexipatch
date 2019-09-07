@@ -56,6 +56,9 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	#if CYCLELAYOUTS_PATCH
+	{ NULL,       NULL },
+	#endif // CYCLELAYOUTS_PATCH
 };
 
 /* key definitions */
@@ -110,6 +113,10 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ControlMask,  XK_comma,  tagswapmon,     {.i = +1 } },
 	{ MODKEY|Mod4Mask|ControlMask,  XK_period, tagswapmon,     {.i = -1 } },
 	#endif // TAGSWAPMON_PATCH
+	#if CYCLELAYOUTS_PATCH
+	{ MODKEY|ControlMask,           XK_comma,  cyclelayout,    {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period, cyclelayout,    {.i = +1 } },
+	#endif // CYCLELAYOUTS_PATCH
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -138,4 +145,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-

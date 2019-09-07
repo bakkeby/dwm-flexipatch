@@ -10,6 +10,10 @@
 #include "autostart.c"
 #endif
 
+#if CYCLELAYOUTS_PATCH
+#include "cyclelayouts.c"
+#endif // CYCLELAYOUTS_PATCH
+
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif

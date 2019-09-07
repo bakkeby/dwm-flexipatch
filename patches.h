@@ -44,6 +44,11 @@
  */
 #define AUTOSTART_PATCH 0
 
+/* The cyclelayouts patch let's you cycle through all your layouts.
+ * https://dwm.suckless.org/patches/cyclelayouts/
+ */
+#define CYCLELAYOUTS_PATCH 0
+
 /* This patch shows the titles of all visible windows in the status bar
  * (as opposed to showing only the selected one).
  * https://dwm.suckless.org/patches/fancybar/

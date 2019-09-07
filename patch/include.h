@@ -10,6 +10,10 @@
 #include "autostart.h"
 #endif
 
+#if CYCLELAYOUTS_PATCH
+#include "cyclelayouts.h"
+#endif // CYCLELAYOUTS_PATCH
+
 #if SYSTRAY_PATCH
 #include "systray.h"
 #endif
