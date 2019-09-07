@@ -112,6 +112,9 @@ struct Client {
 	int bw, oldbw;
 	unsigned int tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+	#if CENTER_PATCH
+	int iscentered;
+	#endif // CENTER_PATCH
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -165,6 +168,12 @@ typedef struct {
 	const char *instance;
 	const char *title;
 	unsigned int tags;
+	#if SWITCHTAG_PATCH
+	int switchtag;
+	#endif // SWITCHTAG_PATCH
+	#if CENTER_PATCH
+	int iscentered;
+	#endif // CENTER_PATCH
 	int isfloating;
 	int monitor;
 } Rule;
@@ -351,11 +360,29 @@ applyrules(Client *c)
 		#endif // WINDOWROLERULE_PATCH
 		&& (!r->instance || strstr(instance, r->instance)))
 		{
+			#if CENTER_PATCH
+			c->iscentered = r->iscentered;
+			#endif // CENTER_PATCH
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
+
+			#if SWITCHTAG_PATCH
+			if (r->switchtag) {
+				unsigned int newtagset;
+				if (r->switchtag == 2)
+					newtagset = c->mon->tagset[c->mon->seltags] ^ c->tags;
+				else
+					newtagset = c->tags;
+
+				if (newtagset) {
+					c->mon->tagset[c->mon->seltags] = newtagset;
+					arrange(c->mon);
+				}
+			}
+			#endif // SWITCHTAG_PATCH
 		}
 	}
 	if (ch.res_class)
@@ -1340,6 +1367,12 @@ manage(Window w, XWindowAttributes *wa)
 	updatewindowtype(c);
 	updatesizehints(c);
 	updatewmhints(c);
+	#if CENTER_PATCH
+	if (c->iscentered) {
+		c->x = c->mon->mx + (c->mon->mw - WIDTH(c)) / 2;
+		c->y = c->mon->my + (c->mon->mh - HEIGHT(c)) / 2;
+	}
+	#endif // CENTER_PATCH
 	#if SAVEFLOATS_PATCH
 	c->sfx = -9999;
 	c->sfy = -9999;
@@ -2591,8 +2624,12 @@ updatewindowtype(Client *c)
 
 	if (state == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
-	if (wtype == netatom[NetWMWindowTypeDialog])
+	if (wtype == netatom[NetWMWindowTypeDialog]) {
+		#if CENTER_PATCH
+		c->iscentered = 1;
+		#endif // CENTER_PATCH
 		c->isfloating = 1;
+	}
 }
 
 void

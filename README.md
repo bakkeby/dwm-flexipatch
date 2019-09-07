@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-07 - Added cyclelayouts, resizecorners, rotatestack, savefloats, statuspadding and windowrolerule patches
+2019-09-07 - Added cyclelayouts, resizecorners, rotatestack, savefloats, statuspadding, switchtag, center and windowrolerule patches
 
 2019-09-06 - Added attachabove, attachaside, attachbelow, attachbottom, autostart, fancybar, focusonnetactive and losefullscreen patches
 
@@ -36,6 +36,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [autostart](https://dwm.suckless.org/patches/autostart/)
       - makes dwm run `~/.dwm/autostart_blocking.sh` and `~/.dwm/autostart.sh &` on startup
+
+   - [center](https://dwm.suckless.org/patches/center/)
+      - adds an iscentered rule to automatically center clients on the current monitor
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
@@ -71,6 +74,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
+
+   - [switchtag](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff)
+      - when an application opens on a specific tab this patch adds the option to also switch to that tag when the application starts
 
    - [tagallmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff)
       - move all visible windows to an adjacent monitor

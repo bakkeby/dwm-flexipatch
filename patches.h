@@ -44,6 +44,11 @@
  */
 #define AUTOSTART_PATCH 0
 
+/* This patch adds an iscentered rule to automatically center clients on the current monitor.
+ * https://dwm.suckless.org/patches/center/
+ */
+#define CENTER_PATCH 0
+
 /* The cyclelayouts patch lets you cycle through all your layouts.
  * https://dwm.suckless.org/patches/cyclelayouts/
  */
@@ -108,6 +113,19 @@
  * https://dwm.suckless.org/patches/systray/
  */
 #define SYSTRAY_PATCH 0
+
+/* By default dwm allow you to set application specific rules so that you can have your browser,
+ * for example, start up on tag 9 optionally on a given monitor when you open your browser it is
+ * then automatically moved to the configured tag, but you have to manually enable the tag to see
+ * the newly opened application.
+ * This patch adds an extra configuration option for individual rules where:
+ *   0 is default behaviour
+ *   1 automatically moves you to the tag of the newly opened application and
+ *   2 enables the tag of the newly opened application in addition to your existing enabled tags
+
+ * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff
+ */
+#define SWITCHTAG_PATCH 0
 
 /* This patch allows you to move all visible windows on a monitor to an adjacent monitor.
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff

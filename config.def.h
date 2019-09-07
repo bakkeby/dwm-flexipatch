@@ -46,15 +46,39 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 *	WM_WINDOW_ROLE(STRING) = role
 	 */
-	#if WINDOWROLERULE_PATCH
-	/* class      role        instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,       1 << 8,       0,           -1 },
+	#if WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH
+	/* class      role        instance    title         tags mask    switchtag    iscentered   isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,           1,           -1 },
+	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,           -1 },
+	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH
+	/* class      role        instance    title         tags mask    iscentered   isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       NULL,         0,           0,           1,           -1 },
+	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,           -1 },
+	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH
+	/* class      role        instance    title         tags mask    switchtag    isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           1,           -1 },
+	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           -1 },
+	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH
+	/* class      instance    title       tags mask     switchtag    iscentered   isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,           0,           1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,           -1 },
+	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH
+	/* class      role        instance    title         tags mask    isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           -1 },
+	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           -1 },
+	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH
+	/* class      instance    title       tags mask     switchtag    isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,           1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           -1 },
+	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH
+	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
 	#else
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	#endif
+	#endif // granted the above will be confusing, do remember to delete rule entries for patches that you do not take
 };
 
 /* layout(s) */
