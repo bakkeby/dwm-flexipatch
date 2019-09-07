@@ -44,7 +44,7 @@
  */
 #define AUTOSTART_PATCH 0
 
-/* The cyclelayouts patch let's you cycle through all your layouts.
+/* The cyclelayouts patch lets you cycle through all your layouts.
  * https://dwm.suckless.org/patches/cyclelayouts/
  */
 #define CYCLELAYOUTS_PATCH 0
@@ -97,7 +97,12 @@
  * will be restored.
  * https://dwm.suckless.org/patches/save_floats/
  */
-#define SAVEFLOATS_PATCH 1
+#define SAVEFLOATS_PATCH 0
+
+/* This patch adds configuration options for horizontal and vertical padding in the status bar.
+ * https://dwm.suckless.org/patches/statuspadding/
+ */
+#define STATUSPADDING_PATCH 0
 
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
