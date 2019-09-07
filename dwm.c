@@ -100,6 +100,9 @@ struct Client {
 	char name[256];
 	float mina, maxa;
 	int x, y, w, h;
+	#if SAVEFLOATS_PATCH
+	int sfx, sfy, sfw, sfh; /* stored float geometry, used on mode revert */
+	#endif // SAVEFLOATS_PATCH
 	int oldx, oldy, oldw, oldh;
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
 	int bw, oldbw;
@@ -1312,6 +1315,13 @@ manage(Window w, XWindowAttributes *wa)
 	updatewindowtype(c);
 	updatesizehints(c);
 	updatewmhints(c);
+	#if SAVEFLOATS_PATCH
+	c->sfx = -9999;
+	c->sfy = -9999;
+	c->sfw = c->w;
+	c->sfh = c->h;
+	#endif // SAVEFLOATS_PATCH
+
 	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
 	grabbuttons(c, 0);
 	if (!c->isfloating)
@@ -1447,8 +1457,16 @@ movemouse(const Arg *arg)
 			if (!c->isfloating && selmon->lt[selmon->sellt]->arrange
 			&& (abs(nx - c->x) > snap || abs(ny - c->y) > snap))
 				togglefloating(NULL);
-			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating)
+			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
+			#if SAVEFLOATS_PATCH
 				resize(c, nx, ny, c->w, c->h, 1);
+				/* save last known float coordinates */
+				c->sfx = nx;
+				c->sfy = ny;
+			#else
+				resize(c, nx, ny, c->w, c->h, 1);
+			#endif // SAVEFLOATS_PATCH
+			}
 			break;
 		}
 	} while (ev.type != ButtonRelease);
@@ -1641,8 +1659,21 @@ resizemouse(const Arg *arg)
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
 				#if RESIZECORNERS_PATCH
 				resize(c, nx, ny, nw, nh, 1);
+				#if SAVEFLOATS_PATCH
+                /* save last known float dimensions */
+                c->sfx = nx;
+                c->sfy = ny;
+                c->sfw = nw;
+                c->sfh = nh;
+				#endif // SAVEFLOATS_PATCH
 				#else
 				resize(c, c->x, c->y, nw, nh, 1);
+				#if SAVEFLOATS_PATCH
+				c->sfx = c->x;
+				c->sfy = c->y;
+				c->sfw = nw;
+				c->sfh = nh;
+				#endif // SAVEFLOATS_PATCH
 				#endif // RESIZECORNERS_PATCH
 			}
 			break;
@@ -2020,6 +2051,14 @@ showhide(Client *c)
 		return;
 	if (ISVISIBLE(c)) {
 		/* show clients top down */
+		#if SAVEFLOATS_PATCH
+		if (!c->mon->lt[c->mon->sellt]->arrange && c->sfx != -9999 && !c->isfullscreen) {
+			XMoveWindow(dpy, c->win, c->sfx, c->sfy);
+			resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 0);
+			showhide(c->snext);
+			return;
+		}
+		#endif // SAVEFLOATS_PATCH
 		XMoveWindow(dpy, c->win, c->x, c->y);
 		if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating) && !c->isfullscreen)
 			resize(c, c->x, c->y, c->w, c->h, 0);
@@ -2144,9 +2183,27 @@ togglefloating(const Arg *arg)
 	if (selmon->sel->isfullscreen) /* no support for fullscreen windows */
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
-	if (selmon->sel->isfloating)
+	if (selmon->sel->isfloating) {
+		#if SAVEFLOATS_PATCH
+		if (selmon->sel->sfx != -9999) {
+			/* restore last known float dimensions */
+			resize(selmon->sel, selmon->sel->sfx, selmon->sel->sfy,
+			       selmon->sel->sfw, selmon->sel->sfh, 0);
+			arrange(selmon);
+			return;
+		}
+		#endif // SAVEFLOATS_PATCH
 		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
 			selmon->sel->w, selmon->sel->h, 0);
+	#if SAVEFLOATS_PATCH
+	} else {
+		/* save last known float dimensions */
+		selmon->sel->sfx = selmon->sel->x;
+		selmon->sel->sfy = selmon->sel->y;
+		selmon->sel->sfw = selmon->sel->w;
+		selmon->sel->sfh = selmon->sel->h;
+	#endif // SAVEFLOATS_PATCH
+	}
 	arrange(selmon);
 }
 

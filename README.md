@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-07 - Added cyclelayouts, resizecorners and rotatestack patch
+2019-09-07 - Added cyclelayouts, resizecorners, rotatestack and savefloats patches
 
 2019-09-06 - Added attachabove, attachaside, attachbelow, attachbottom, autostart, fancybar, focusonnetactive and losefullscreen patches
 
@@ -61,6 +61,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
       - let's you rotate through the stack using keyboard shortcuts
+
+   - [savefloats](https://dwm.suckless.org/patches/save_floats/)
+      - saves size and position of every floating window before it is forced into tiled mode
+      - if the window is made floating again then the old dimensions will be restored
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar

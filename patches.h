@@ -92,6 +92,13 @@
  */
 #define ROTATESTACK_PATCH 0
 
+/* This patch aves size and position of every floating window before it is forced
+ * into tiled mode. If the window is made floating again then the old dimensions
+ * will be restored.
+ * https://dwm.suckless.org/patches/save_floats/
+ */
+#define SAVEFLOATS_PATCH 1
+
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */
