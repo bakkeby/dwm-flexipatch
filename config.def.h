@@ -44,10 +44,17 @@ static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
+	 *	WM_WINDOW_ROLE(STRING) = role
 	 */
+	#if WINDOWROLERULE_PATCH
+	/* class      role        instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       NULL,       0,            1,           -1 },
+	{ "Firefox",  NULL,       NULL,       NULL,       1 << 8,       0,           -1 },
+	#else
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	#endif
 };
 
 /* layout(s) */

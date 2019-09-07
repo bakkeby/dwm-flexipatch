@@ -134,6 +134,16 @@
  */
 #define TOGGLEFULLSCREEN_PATCH 0
 
+
+/* Sometimes a single application opens different windows depending on the task
+ * at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property.
+ * This patch adds the role field to the rule configuration so that one can
+ * differentiate between, say, Firefox "browser" vs "Preferences" vs "Manager"
+ * or Google-chrome "browser" vs "pop-up".
+ * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-windowrolerule-6.2.diff
+ */
+#define WINDOWROLERULE_PATCH 0
+
 /* The zoomswap patch allows a master and a stack window to swap places
  * rather than every window on the screen changing position.
  * https://dwm.suckless.org/patches/zoomswap/

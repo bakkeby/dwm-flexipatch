@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-07 - Added cyclelayouts, resizecorners, rotatestack, savefloats and statuspadding patches
+2019-09-07 - Added cyclelayouts, resizecorners, rotatestack, savefloats, statuspadding and windowrolerule patches
 
 2019-09-06 - Added attachabove, attachaside, attachbelow, attachbottom, autostart, fancybar, focusonnetactive and losefullscreen patches
 
@@ -83,6 +83,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [togglefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff)
       - allows you to toggle fullscreen on and off using a single shortcut key
+
+   - [windowrolerule](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-windowrolerule-6.2.diff)
+      - sometimes a single application opens different windows depending on the task at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property
+      - this patch adds the role field to the rule configuration so that one can differentiate between, say, Firefox "browser" vs "Preferences" vs "Manager" or Google-chrome "browser" vs "pop-up".
 
    - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
       - allows a master and a stack window to swap places rather than every window on the screen changing position

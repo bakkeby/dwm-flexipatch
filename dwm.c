@@ -75,7 +75,11 @@ enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
 #endif // SYSTRAY_PATCH
+#if WINDOWROLERULE_PATCH
+enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMWindowRole, WMLast }; /* default atoms */
+#else
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
+#endif // WINDOWROLERULE_PATCH
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
 
@@ -155,6 +159,9 @@ struct Monitor {
 
 typedef struct {
 	const char *class;
+	#if WINDOWROLERULE_PATCH
+	const char *role;
+	#endif // WINDOWROLERULE_PATCH
 	const char *instance;
 	const char *title;
 	unsigned int tags;
@@ -317,6 +324,9 @@ void
 applyrules(Client *c)
 {
 	const char *class, *instance;
+	#if WINDOWROLERULE_PATCH
+	char role[64];
+	#endif // WINDOWROLERULE_PATCH
 	unsigned int i;
 	const Rule *r;
 	Monitor *m;
@@ -328,11 +338,17 @@ applyrules(Client *c)
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
+	#if WINDOWROLERULE_PATCH
+	gettextprop(c->win, wmatom[WMWindowRole], role, sizeof(role));
+	#endif // WINDOWROLERULE_PATCH
 
 	for (i = 0; i < LENGTH(rules); i++) {
 		r = &rules[i];
 		if ((!r->title || strstr(c->name, r->title))
 		&& (!r->class || strstr(class, r->class))
+		#if WINDOWROLERULE_PATCH
+		&& (!r->role || strstr(role, r->role))
+		#endif // WINDOWROLERULE_PATCH
 		&& (!r->instance || strstr(instance, r->instance)))
 		{
 			c->isfloating = r->isfloating;
@@ -1981,6 +1997,9 @@ setup(void)
 	wmatom[WMDelete] = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
 	wmatom[WMState] = XInternAtom(dpy, "WM_STATE", False);
 	wmatom[WMTakeFocus] = XInternAtom(dpy, "WM_TAKE_FOCUS", False);
+	#if WINDOWROLERULE_PATCH
+	wmatom[WMWindowRole] = XInternAtom(dpy, "WM_WINDOW_ROLE", False);
+	#endif // WINDOWROLERULE_PATCH
 	netatom[NetActiveWindow] = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 	netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
 	#if SYSTRAY_PATCH
