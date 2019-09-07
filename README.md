@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-07 - Added cyclelayouts patch
+2019-09-07 - Added cyclelayouts, resizecorners and rotatestack patch
 
 2019-09-06 - Added attachabove, attachaside, attachbelow, attachbottom, autostart, fancybar, focusonnetactive and losefullscreen patches
 
@@ -58,6 +58,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [resizecorners](https://dwm.suckless.org/patches/resizecorners/)
       - by default, windows only resize from the bottom right corner
       - with this patch the mouse is warped to the nearest corner and you resize from there
+
+   - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
+      - let's you rotate through the stack using keyboard shortcuts
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar

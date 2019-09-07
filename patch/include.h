@@ -12,7 +12,11 @@
 
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.h"
-#endif // CYCLELAYOUTS_PATCH
+#endif
+
+#if ROTATESTACK_PATCH
+#include "rotatestack.h"
+#endif
 
 #if SYSTRAY_PATCH
 #include "systray.h"

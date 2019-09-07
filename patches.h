@@ -87,6 +87,11 @@
  */
 #define RESIZECORNERS_PATCH 0
 
+/* This patch let's you rotate through the stack using keyboard shortcuts.
+ * https://dwm.suckless.org/patches/rotatestack/
+ */
+#define ROTATESTACK_PATCH 0
+
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */

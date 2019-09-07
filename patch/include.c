@@ -18,6 +18,10 @@
 #include "pertag.c"
 #endif
 
+#if ROTATESTACK_PATCH
+#include "rotatestack.c"
+#endif
+
 #if SYSTRAY_PATCH
 #include "systray.c"
 #endif
