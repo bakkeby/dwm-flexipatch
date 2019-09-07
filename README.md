@@ -55,6 +55,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor
 
+   - [resizecorners](https://dwm.suckless.org/patches/resizecorners/)
+      - by default, windows only resize from the bottom right corner
+      - with this patch the mouse is warped to the nearest corner and you resize from there
+
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
 

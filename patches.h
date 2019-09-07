@@ -81,6 +81,12 @@
  */
 #define PERTAGBAR_PATCH 0
 
+/* By default, windows only resize from the bottom right corner. With this
+ * patch the mouse is warped to the nearest corner and you resize from there.
+ * https://dwm.suckless.org/patches/resizecorners/
+ */
+#define RESIZECORNERS_PATCH 0
+
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */
