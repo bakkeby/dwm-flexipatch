@@ -11,6 +11,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-08 - Added cfacts and vanitygaps patches, added bstack and bstackhoriz layouts
+
 2019-09-07 - Added cyclelayouts, resizecorners, rotatestack, savefloats, statuspadding, switchtag, center and windowrolerule patches
 
 2019-09-06 - Added attachabove, attachaside, attachbelow, attachbottom, autostart, fancybar, focusonnetactive and losefullscreen patches
@@ -39,6 +41,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [center](https://dwm.suckless.org/patches/center/)
       - adds an iscentered rule to automatically center clients on the current monitor
+
+   - [cfacts](https://dwm.suckless.org/patches/cfacts/)
+      - the cfacts patch provides the ability to assign different weights to clients in their respective stack in tiled layout
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
@@ -90,9 +95,20 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [togglefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff)
       - allows you to toggle fullscreen on and off using a single shortcut key
 
+   - [vanitygaps](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-6.2.diff)
+      - adds configurable gaps between windows differentiating between outer, inner, horizontal and vertical gaps
+
    - [windowrolerule](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-windowrolerule-6.2.diff)
       - sometimes a single application opens different windows depending on the task at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property
       - this patch adds the role field to the rule configuration so that one can differentiate between, say, Firefox "browser" vs "Preferences" vs "Manager" or Google-chrome "browser" vs "pop-up".
 
    - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
       - allows a master and a stack window to swap places rather than every window on the screen changing position
+
+### Layouts included:
+
+   - [bstack](https://dwm.suckless.org/patches/bottomstack/)
+      - bottomstack layout
+
+   - [bstackhoriz](https://dwm.suckless.org/patches/bottomstack/)
+      - bottomstack horizontal layout

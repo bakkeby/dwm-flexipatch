@@ -5,7 +5,12 @@
  * you may want. In cases where patches are logically incompatible
  * one patch may take precedence over the other as noted in the
  * relevant descriptions.
+ *
+ * Although layouts typically come as patches they are differentiated
+ * here for grouping purposes.
  */
+
+/* Patches */
 
 /* The alpha patch adds transparency for the status bar.
  * https://dwm.suckless.org/patches/alpha/
@@ -48,6 +53,12 @@
  * https://dwm.suckless.org/patches/center/
  */
 #define CENTER_PATCH 0
+
+/* This patch provides the ability to assign different weights to clients in their
+ * respective stack in tiled layout.
+ * https://dwm.suckless.org/patches/cfacts/
+ */
+#define CFACTS_PATCH 0
 
 /* The cyclelayouts patch lets you cycle through all your layouts.
  * https://dwm.suckless.org/patches/cyclelayouts/
@@ -152,6 +163,12 @@
  */
 #define TOGGLEFULLSCREEN_PATCH 0
 
+/* This patch adds configurable gaps between windows differentiating between outer, inner,
+ * horizontal and vertical gaps.
+ * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-6.2.diff
+ * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-cfacts-6.2.diff
+ */
+#define VANITYGAPS_PATCH 0
 
 /* Sometimes a single application opens different windows depending on the task
  * at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property.
@@ -167,3 +184,25 @@
  * https://dwm.suckless.org/patches/zoomswap/
  */
 #define ZOOMSWAP_PATCH 0
+
+/* Layouts */
+
+/* Bottomstack layout.
+ * https://dwm.suckless.org/patches/bottomstack/
+ */
+#define BSTACK_LAYOUT 0
+
+/* Bottomstack horizontal layout.
+ * https://dwm.suckless.org/patches/bottomstack/
+ */
+#define BSTACKHORIZ_LAYOUT 0
+
+/* The default tile layout.
+ * This can be optionally disabled in favour of other layouts.
+ */
+#define TILE_LAYOUT 1
+
+/* Monocle (default)
+ * This can be optionally disabled in favour of other layouts.
+ */
+#define MONOCLE_LAYOUT 1

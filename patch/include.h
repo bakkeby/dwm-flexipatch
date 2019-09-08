@@ -1,3 +1,5 @@
+/* Patches */
+
 #if ALPHA_PATCH
 #include "alpha.h"
 #endif
@@ -8,6 +10,10 @@
 
 #if AUTOSTART_PATCH
 #include "autostart.h"
+#endif
+
+#if CFACTS_PATCH
+#include "cfacts.h"
 #endif
 
 #if CYCLELAYOUTS_PATCH
@@ -34,6 +40,28 @@
 #include "togglefullscreen.h"
 #endif
 
+#if VANITYGAPS_PATCH
+#include "vanitygaps.h"
+#endif
+
 #if ZOOMSWAP_PATCH
 #include "zoomswap.h"
+#endif
+
+/* Layouts */
+
+#if BSTACK_LAYOUT
+#include "bstack.h"
+#endif
+
+#if BSTACKHORIZ_LAYOUT
+#include "bstackhoriz.h"
+#endif
+
+#if MONOCLE_LAYOUT
+#include "monocle.h"
+#endif
+
+#if TILE_LAYOUT
+#include "tile.h"
 #endif
