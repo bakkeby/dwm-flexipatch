@@ -200,7 +200,17 @@
 /* Deck layout.
  * https://dwm.suckless.org/patches/deck/
  */
-#define DECK_LAYOUT 1
+#define DECK_LAYOUT 0
+
+/* Fibonacci dwindle layout.
+ * https://dwm.suckless.org/patches/fibonacci/
+ */
+#define FIBONACCI_DWINDLE_LAYOUT 0
+
+/* Fibonacci spiral layout.
+ * https://dwm.suckless.org/patches/fibonacci/
+ */
+#define FIBONACCI_SPIRAL_LAYOUT 0
 
 /* The default tile layout.
  * This can be optionally disabled in favour of other layouts.

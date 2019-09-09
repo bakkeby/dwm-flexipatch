@@ -111,6 +111,12 @@ static const Layout layouts[] = {
 	#if DECK_LAYOUT
 	{ "[D]",      deck },
 	#endif // DECK_LAYOUT
+	#if FIBONACCI_SPIRAL_LAYOUT
+	{ "(@)",      spiral },
+	#endif // FIBONACCI_SPIRAL_LAYOUT
+	#if FIBONACCI_DWINDLE_LAYOUT
+	{ "[\\]",     dwindle },
+	#endif // FIBONACCI_DWINDLE_LAYOUT
 	#if CYCLELAYOUTS_PATCH
 	{ NULL,       NULL },
 	#endif // CYCLELAYOUTS_PATCH

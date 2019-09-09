@@ -62,6 +62,10 @@
 #include "deck.h"
 #endif
 
+#if FIBONACCI_DWINDLE_LAYOUT || FIBONACCI_SPIRAL_LAYOUT
+#include "fibonacci.h"
+#endif
+
 #if MONOCLE_LAYOUT
 #include "monocle.h"
 #endif

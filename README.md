@@ -11,6 +11,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-09 - Added deck, fibonacci (dwindle and spiral) layouts
+
 2019-09-08 - Added cfacts and vanitygaps patches, added bstack and bstackhoriz layouts
 
 2019-09-07 - Added cyclelayouts, resizecorners, rotatestack, savefloats, statuspadding, switchtag, center and windowrolerule patches
@@ -115,3 +117,6 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [deck](https://dwm.suckless.org/patches/deck/)
       - deck layout
+
+   - [fibonacci](https://dwm.suckless.org/patches/fibonacci/)
+      - fibonacci (dwindle and spiral) layouts
