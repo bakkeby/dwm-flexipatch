@@ -70,6 +70,10 @@
 #include "fibonacci.c"
 #endif
 
+#if GAPPLESSGRID_LAYOUT
+#include "gapplessgrid.c"
+#endif
+
 #if MONOCLE_LAYOUT
 #include "monocle.c"
 #endif

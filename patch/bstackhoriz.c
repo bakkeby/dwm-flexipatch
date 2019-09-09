@@ -9,7 +9,8 @@ bstackhoriz(Monitor *m)
 	float mfacts, sfacts;
 	Client *c;
 
-	getgaps(m, &oh, &ov, &ih, &iv, &n, &mfacts, &sfacts);
+	getgaps(m, &oh, &ov, &ih, &iv, &n);
+	getfacts(m, &mfacts, &sfacts);
 
 	if (n == 0)
 		return;
@@ -82,18 +83,14 @@ bstackhoriz(Monitor *m)
 	unsigned int i, n;
 	int mx = 0, my = 0, mh = 0, mw = 0;
 	int sx = 0, sy = 0, sh = 0, sw = 0;
-	float mfacts = 1, sfacts = 1;
+	float mfacts, sfacts;
 	Client *c;
 
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
-		if (n < m->nmaster)
-			mfacts += c->cfact;
-		else
-			sfacts += c->cfact;
-	}
-
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
 	if (n == 0)
 		return;
+
+	getfacts(m, &mfacts, &sfacts);
 
 	sx = mx = m->wx;
 	sy = my = m->wy;

@@ -66,6 +66,10 @@
 #include "fibonacci.h"
 #endif
 
+#if GAPPLESSGRID_LAYOUT
+#include "gapplessgrid.h"
+#endif
+
 #if MONOCLE_LAYOUT
 #include "monocle.h"
 #endif

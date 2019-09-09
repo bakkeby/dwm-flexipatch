@@ -107,26 +107,12 @@ incrivgaps(const Arg *arg)
 }
 
 static void
-#if CFACTS_PATCH
-getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc, float *mf, float *sf)
-#else
-getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc )
-#endif // CFACTS_PATCH
+getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc)
 {
 	unsigned int n, oe = enablegaps, ie = enablegaps;
-	#if CFACTS_PATCH
-	float mfacts = 0, sfacts = 0;
-	#endif // CFACTS_PATCH
 	Client *c;
 
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
-		#if CFACTS_PATCH
-		if (!m->nmaster || n < m->nmaster)
-			mfacts += c->cfact;
-		else
-			sfacts += c->cfact;
-		#endif // CFACTS_PATCH
-	}
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
 	if (smartgaps && n == 1) {
 		oe = 0; // outer gaps disabled when only one client
 	}
@@ -136,8 +122,4 @@ getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc )
 	*ih = m->gappih*ie; // inner horizontal gap
 	*iv = m->gappiv*ie; // inner vertical gap
 	*nc = n;            // number of clients
-	#if CFACTS_PATCH
-	*mf = mfacts;       // total factor of master area
-	*sf = sfacts;       // total factor of slave area
-	#endif // CFACTS_PATCH
 }

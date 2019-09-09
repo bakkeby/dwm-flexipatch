@@ -15,3 +15,19 @@ setcfact(const Arg *arg) {
 	c->cfact = f;
 	arrange(selmon);
 }
+
+void
+getfacts(Monitor *m, float *mf, float *sf)
+{
+	float mfacts = 0, sfacts = 0;
+	Client *c;
+
+	for (c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
+		if (!m->nmaster || n < m->nmaster)
+			mfacts += c->cfact;
+		else
+			sfacts += c->cfact;
+	}
+	*mf = mfacts;       // total factor of master area
+	*sf = sfacts;       // total factor of slave area
+}
