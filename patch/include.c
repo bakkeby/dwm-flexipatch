@@ -16,6 +16,10 @@
 #include "autostart.c"
 #endif
 
+#if AWESOMEBAR_PATCH
+#include "awesomebar.c"
+#endif
+
 #if CFACTS_PATCH
 #include "cfacts.c"
 #endif

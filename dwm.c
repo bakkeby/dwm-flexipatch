@@ -56,6 +56,9 @@
 #else
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #endif // ATTACHASIDE_PATCH
+#if AWESOMEBAR_PATCH
+#define HIDDEN(C)               ((getstate(C->win) == IconicState))
+#endif // AWESOMEBAR_PATCH
 #define LENGTH(X)               (sizeof X / sizeof X[0])
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
@@ -65,7 +68,11 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
+#if AWESOMEBAR_PATCH
+enum { SchemeNorm, SchemeSel, SchemeHid }; /* color schemes */
+#else
 enum { SchemeNorm, SchemeSel }; /* color schemes */
+#endif // #if AWESOMEBAR_PATCH
 #if SYSTRAY_PATCH
 enum { NetSupported, NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayVisual,
 	   NetWMName, NetWMState, NetWMFullscreen, NetActiveWindow, NetWMWindowType, NetWMWindowTypeDock,
@@ -148,6 +155,10 @@ struct Monitor {
 	int nmaster;
 	int num;
 	int by;               /* bar geometry */
+	#if AWESOMEBAR_PATCH
+	int btw;              /* width of tasks portion of bar */
+	int bt;               /* number of tasks */
+	#endif // AWESOMEBAR_PATCH
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
 	#if VANITYGAPS_PATCH
@@ -533,14 +544,38 @@ buttonpress(XEvent *e)
 			arg.ui = 1 << i;
 		} else if (ev->x < x + blw)
 			click = ClkLtSymbol;
-		#if SYSTRAY_PATCH
+		#if AWESOMEBAR_PATCH && SYSTRAY_PATCH
+		else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2 - getsystraywidth())
+		#elif AWESOMEBAR_PATCH
+		else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2)
+		#elif SYSTRAY_PATCH
 		else if (ev->x > selmon->ww - TEXTW(stext) - getsystraywidth())
 		#else
 		else if (ev->x > selmon->ww - TEXTW(stext))
 		#endif // SYSTRAY_PATCH
 			click = ClkStatusText;
+
+		#if AWESOMEBAR_PATCH
+		else {
+			x += blw;
+			c = m->clients;
+
+			do {
+				if (!ISVISIBLE(c))
+					continue;
+				else
+					x += (1.0 / (double)m->bt) * m->btw;
+			} while (ev->x > x && (c = c->next));
+
+			if (c) {
+				click = ClkWinTitle;
+				arg.v = c;
+			}
+		}
+		#else
 		else
 			click = ClkWinTitle;
+		#endif // AWESOMEBAR_PATCH
 	} else if ((c = wintoclient(ev->window))) {
 		focus(c);
 		restack(selmon);
@@ -550,7 +585,11 @@ buttonpress(XEvent *e)
 	for (i = 0; i < LENGTH(buttons); i++)
 		if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
 		&& CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
+			#if AWESOMEBAR_PATCH
+			buttons[i].func((click == ClkTagBar || click == ClkWinTitle) && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
+			#else
 			buttons[i].func(click == ClkTagBar && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
+			#endif
 }
 
 void
@@ -920,10 +959,12 @@ drawbar(Monitor *m)
 	#if ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // ALTERNATIVE_TAGS_PATCH
-	#if FANCYBAR_PATCH
+	#if AWESOMEBAR_PATCH
+	int n = 0, scm;
+	#elif FANCYBAR_PATCH
 	int tw, mw, ew = 0;
-	unsigned int n = 0;
-	#endif // FANCYBAR_PATCH
+	int n = 0;
+	#endif // FANCYBAR_PATCH, AWESOMEBAR_PATCH
 	#if SYSTRAY_PATCH
 	int stw = 0;
 	#endif // SYSTRAY_PATCH
@@ -958,7 +999,7 @@ drawbar(Monitor *m)
 	}
 
 	for (c = m->clients; c; c = c->next) {
-		#if FANCYBAR_PATCH
+		#if AWESOMEBAR_PATCH || FANCYBAR_PATCH
 		if (ISVISIBLE(c))
 			n++;
 		#endif // FANCYBAR_PATCH
@@ -994,7 +1035,26 @@ drawbar(Monitor *m)
 	if ((w = m->ww - sw - x) > bh)
 	#endif // SYSTRAY_PATCH
 	{
-		#if FANCYBAR_PATCH
+		#if AWESOMEBAR_PATCH
+		if (n > 0) {
+			for (c = m->clients; c; c = c->next) {
+				if (!ISVISIBLE(c))
+					continue;
+				if (m->sel == c)
+					scm = SchemeSel;
+				else if (HIDDEN(c))
+					scm = SchemeHid;
+				else
+					scm = SchemeNorm;
+				drw_setscheme(drw, scheme[scm]);
+				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0);
+				x += (1.0 / (double)n) * w;
+			}
+ 		} else {
+ 			drw_setscheme(drw, scheme[SchemeNorm]);
+ 			drw_rect(drw, x, 0, w, bh, 1, 1);
+ 		}
+		#elif FANCYBAR_PATCH
 		if (n > 0) {
 			tw = TEXTW(m->sel->name) + lrpad;
 			mw = (tw >= w || n == 1) ? 0 : (w - tw) / (n - 1);
@@ -1038,8 +1098,13 @@ drawbar(Monitor *m)
 			drw_setscheme(drw, scheme[SchemeNorm]);
 			drw_rect(drw, x, 0, w, bh, 1, 1);
 		}
-		#endif // FANCYBAR_PATCH
+		#endif // FANCYBAR_PATCH, AWESOMEBAR_PATCH
 	}
+
+	#if AWESOMEBAR_PATCH
+	m->bt = n;
+	m->btw = w;
+	#endif // AWESOMEBAR_PATCH
 	#if SYSTRAY_PATCH
 	drw_map(drw, m->barwin, 0, 0, m->ww - stw, bh);
 	#else
@@ -1093,8 +1158,13 @@ expose(XEvent *e)
 void
 focus(Client *c)
 {
+	#if AWESOMEBAR_PATCH
+	if (!c || !ISVISIBLE(c) || HIDDEN(c))
+		for (c = selmon->stack; c && (!ISVISIBLE(c) || HIDDEN(c)); c = c->snext);
+	#else
 	if (!c || !ISVISIBLE(c))
 		for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
+	#endif // AWESOMEBAR_PATCH
 	if (selmon->sel && selmon->sel != c)
 		unfocus(selmon->sel, 0);
 	if (c) {
@@ -1440,12 +1510,23 @@ manage(Window w, XWindowAttributes *wa)
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 		(unsigned char *) &(c->win), 1);
 	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw, c->y, c->w, c->h); /* some windows require this */
+
+	#if AWESOMEBAR_PATCH
+	if (!HIDDEN(c))
+		setclientstate(c, NormalState);
+	#else
 	setclientstate(c, NormalState);
+	#endif // AWESOMEBAR_PATCH
 	if (c->mon == selmon)
 		unfocus(selmon->sel, 0);
 	c->mon->sel = c;
 	arrange(c->mon);
+	#if AWESOMEBAR_PATCH
+	if (!HIDDEN(c))
+		XMapWindow(dpy, c->win);
+	#else
 	XMapWindow(dpy, c->win);
+	#endif // AWESOMEBAR_PATCH
 	focus(NULL);
 }
 
@@ -1569,7 +1650,11 @@ movemouse(const Arg *arg)
 Client *
 nexttiled(Client *c)
 {
+	#if AWESOMEBAR_PATCH
+	for (; c && (c->isfloating || !ISVISIBLE(c) || HIDDEN(c)); c = c->next);
+	#else
 	for (; c && (c->isfloating || !ISVISIBLE(c)); c = c->next);
+	#endif // AWESOMEBAR_PATCH
 	return c;
 }
 

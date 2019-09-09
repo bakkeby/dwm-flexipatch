@@ -55,6 +55,12 @@
  */
 #define AUTOSTART_PATCH 0
 
+/* Enhanced taskbar that shows the titles of all visible windows in the status bar
+ * and allows focus / hiding / unhiding of windows by clicking on the status bar.
+ * https://dwm.suckless.org/patches/awesomebar/
+ */
+#define AWESOMEBAR_PATCH 1
+
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
  * https://dwm.suckless.org/patches/center/
  */

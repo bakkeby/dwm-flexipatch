@@ -42,6 +42,9 @@ static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	#if AWESOMEBAR_PATCH
+	[SchemeHid]  = { col_cyan,  col_gray1, col_cyan  },
+	#endif // AWESOMEBAR_PATCH
 };
 
 /* tagging */
@@ -276,6 +279,9 @@ static Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	#if AWESOMEBAR_PATCH
+	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
+	#endif // AWESOMEBAR_PATCH
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
