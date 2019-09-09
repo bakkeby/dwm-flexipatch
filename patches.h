@@ -57,9 +57,10 @@
 
 /* Enhanced taskbar that shows the titles of all visible windows in the status bar
  * and allows focus / hiding / unhiding of windows by clicking on the status bar.
+ * Awesomebar takes precedence over fancybar.
  * https://dwm.suckless.org/patches/awesomebar/
  */
-#define AWESOMEBAR_PATCH 1
+#define AWESOMEBAR_PATCH 0
 
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
  * https://dwm.suckless.org/patches/center/
@@ -79,6 +80,7 @@
 
 /* This patch shows the titles of all visible windows in the status bar
  * (as opposed to showing only the selected one).
+ * Awesomebar takes precedence over fancybar.
  * https://dwm.suckless.org/patches/fancybar/
  */
 #define FANCYBAR_PATCH 0
