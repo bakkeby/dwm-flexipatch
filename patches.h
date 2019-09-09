@@ -227,6 +227,11 @@
  */
 #define HORIZGRID_LAYOUT 0
 
+/* Grid layout where nmaster controls the number of rows.
+ * https://dwm.suckless.org/patches/nrowgrid/
+ */
+#define NROWGRID_LAYOUT 0
+
 /* The default tile layout.
  * This can be optionally disabled in favour of other layouts.
  */

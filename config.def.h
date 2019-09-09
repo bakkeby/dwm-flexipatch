@@ -93,39 +93,49 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
+#if NROWGRID_LAYOUT
+#define FORCE_VSPLIT 1
+#endif
+
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	#if TILE_LAYOUT
 	{ "[]=",      tile },    /* first entry is default */
-	#endif // TILE_LAYOUT
+	#endif
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	#if MONOCLE_LAYOUT
 	{ "[M]",      monocle },
-	#endif // MONOCLE_LAYOUT
+	#endif
 	#if BSTACK_LAYOUT
 	{ "TTT",      bstack },
-	#endif // BSTACK_LAYOUT
+	#endif
 	#if BSTACKHORIZ_LAYOUT
 	{ "===",      bstackhoriz },
-	#endif // BSTACKHORIZ_LAYOUT
+	#endif
 	#if DECK_LAYOUT
 	{ "[D]",      deck },
-	#endif // DECK_LAYOUT
+	#endif
 	#if FIBONACCI_SPIRAL_LAYOUT
 	{ "(@)",      spiral },
-	#endif // FIBONACCI_SPIRAL_LAYOUT
+	#endif
 	#if FIBONACCI_DWINDLE_LAYOUT
 	{ "[\\]",     dwindle },
-	#endif // FIBONACCI_DWINDLE_LAYOUT
+	#endif
 	#if GRIDMODE_LAYOUT
 	{ "HHH",      grid },
-	#endif // GRIDMODE_LAYOUT
+	#endif
 	#if HORIZGRID_LAYOUT
-	{ "###",      horizgrid },
+	{ "---",      horizgrid },
+	#endif
+	#if GAPPLESSGRID_LAYOUT
+	{ ":::",      gaplessgrid },
+	#endif
+	#if NROWGRID_LAYOUT
+	{ "###",      nrowgrid },
 	#endif
 	#if CYCLELAYOUTS_PATCH
 	{ NULL,       NULL },
-	#endif // CYCLELAYOUTS_PATCH
+	#endif
 };
 
 /* key definitions */

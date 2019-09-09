@@ -82,6 +82,10 @@
 #include "monocle.h"
 #endif
 
+#if NROWGRID_LAYOUT
+#include "nrowgrid.h"
+#endif
+
 #if TILE_LAYOUT
 #include "tile.h"
 #endif
