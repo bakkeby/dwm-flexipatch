@@ -11,7 +11,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-09 - Added deck, fibonacci (dwindle and spiral), gridmode, gapplessgrid, horizgrid and nrowgrid layouts
+2019-09-09 - Added deck, fibonacci (dwindle and spiral), gridmode, gapplessgrid, horizgrid, nrowgrid and centeredmaster layouts
 
 2019-09-08 - Added cfacts and vanitygaps patches, added bstack and bstackhoriz layouts
 
@@ -114,6 +114,12 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [bstackhoriz](https://dwm.suckless.org/patches/bottomstack/)
       - bottomstack horizontal layout
+
+   - [centeredmaster](https://dwm.suckless.org/patches/centeredmaster/)
+      - centeredmaster layout
+
+   - [centeredfloatingmaster](https://dwm.suckless.org/patches/centeredmaster/)
+      - centeredfloatingmaster layout
 
    - [deck](https://dwm.suckless.org/patches/deck/)
       - deck layout

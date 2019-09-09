@@ -58,6 +58,14 @@
 #include "bstackhoriz.h"
 #endif
 
+#if CENTEREDMASTER_LAYOUT
+#include "centeredmaster.h"
+#endif
+
+#if CENTEREDFLOATINGMASTER_LAYOUT
+#include "centeredfloatingmaster.h"
+#endif
+
 #if DECK_LAYOUT
 #include "deck.h"
 #endif

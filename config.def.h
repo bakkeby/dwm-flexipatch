@@ -112,6 +112,12 @@ static const Layout layouts[] = {
 	#if BSTACKHORIZ_LAYOUT
 	{ "===",      bstackhoriz },
 	#endif
+	#if CENTEREDMASTER_LAYOUT
+	{ "|M|",      centeredmaster },
+	#endif
+	#if CENTEREDFLOATINGMASTER_LAYOUT
+	{ ">M>",      centeredfloatingmaster },
+	#endif
 	#if DECK_LAYOUT
 	{ "[D]",      deck },
 	#endif

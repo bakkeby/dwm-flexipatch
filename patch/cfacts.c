@@ -1,5 +1,6 @@
 void
-setcfact(const Arg *arg) {
+setcfact(const Arg *arg)
+{
 	float f;
 	Client *c;
 
@@ -19,10 +20,11 @@ setcfact(const Arg *arg) {
 void
 getfacts(Monitor *m, float *mf, float *sf)
 {
+	unsigned int n;
 	float mfacts = 0, sfacts = 0;
 	Client *c;
 
-	for (c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
 		if (!m->nmaster || n < m->nmaster)
 			mfacts += c->cfact;
 		else

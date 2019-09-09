@@ -197,6 +197,16 @@
  */
 #define BSTACKHORIZ_LAYOUT 0
 
+/* Centered master layout.
+ * https://dwm.suckless.org/patches/centeredmaster/
+ */
+#define CENTEREDMASTER_LAYOUT 0
+
+/* Centered floating master layout.
+ * https://dwm.suckless.org/patches/centeredmaster/
+ */
+#define CENTEREDFLOATINGMASTER_LAYOUT 1
+
 /* Deck layout.
  * https://dwm.suckless.org/patches/deck/
  */
