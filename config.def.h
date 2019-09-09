@@ -108,6 +108,9 @@ static const Layout layouts[] = {
 	#if BSTACKHORIZ_LAYOUT
 	{ "===",      bstackhoriz },
 	#endif // BSTACKHORIZ_LAYOUT
+	#if DECK_LAYOUT
+	{ "[D]",      deck },
+	#endif // DECK_LAYOUT
 	#if CYCLELAYOUTS_PATCH
 	{ NULL,       NULL },
 	#endif // CYCLELAYOUTS_PATCH

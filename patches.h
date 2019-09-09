@@ -197,12 +197,17 @@
  */
 #define BSTACKHORIZ_LAYOUT 0
 
+/* Deck layout.
+ * https://dwm.suckless.org/patches/deck/
+ */
+#define DECK_LAYOUT 1
+
 /* The default tile layout.
  * This can be optionally disabled in favour of other layouts.
  */
 #define TILE_LAYOUT 1
 
-/* Monocle (default)
+/* Monocle layout (default).
  * This can be optionally disabled in favour of other layouts.
  */
 #define MONOCLE_LAYOUT 1

@@ -112,3 +112,6 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [bstackhoriz](https://dwm.suckless.org/patches/bottomstack/)
       - bottomstack horizontal layout
+
+   - [deck](https://dwm.suckless.org/patches/deck/)
+      - deck layout

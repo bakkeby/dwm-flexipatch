@@ -62,6 +62,10 @@
 #include "bstackhoriz.c"
 #endif
 
+#if DECK_LAYOUT
+#include "deck.c"
+#endif
+
 #if MONOCLE_LAYOUT
 #include "monocle.c"
 #endif
