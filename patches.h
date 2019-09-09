@@ -205,7 +205,7 @@
 /* Centered floating master layout.
  * https://dwm.suckless.org/patches/centeredmaster/
  */
-#define CENTEREDFLOATINGMASTER_LAYOUT 1
+#define CENTEREDFLOATINGMASTER_LAYOUT 0
 
 /* Deck layout.
  * https://dwm.suckless.org/patches/deck/
@@ -221,6 +221,11 @@
  * https://dwm.suckless.org/patches/fibonacci/
  */
 #define FIBONACCI_SPIRAL_LAYOUT 0
+
+/* Flextile layout.
+ * https://dwm.suckless.org/patches/flextile/
+ */
+#define FLEXTILE_LAYOUT 0
 
 /* Gappless grid layout.
  * https://dwm.suckless.org/patches/gaplessgrid/

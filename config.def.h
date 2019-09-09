@@ -93,6 +93,14 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
+#if FLEXTILE_LAYOUT
+static const int layoutaxis[] = {
+	SPLIT_VERTICAL,   /* layout axis: 1 = x, 2 = y; negative values mirror the layout, setting the master area to the right / bottom instead of left / top */
+	TOP_TO_BOTTOM,    /* master axis: 1 = x (from left to right), 2 = y (from top to bottom), 3 = z (monocle), 4 = grid */
+	TOP_TO_BOTTOM,    /* stack axis:  1 = x (from left to right), 2 = y (from top to bottom), 3 = z (monocle), 4 = grid */
+};
+#endif
+
 #if NROWGRID_LAYOUT
 #define FORCE_VSPLIT 1
 #endif
@@ -126,6 +134,9 @@ static const Layout layouts[] = {
 	#endif
 	#if FIBONACCI_DWINDLE_LAYOUT
 	{ "[\\]",     dwindle },
+	#endif
+	#if FLEXTILE_LAYOUT
+	{ "[]=",	flextile },
 	#endif
 	#if GRIDMODE_LAYOUT
 	{ "HHH",      grid },
@@ -204,6 +215,19 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	#if FLEXTILE_LAYOUT
+	{ MODKEY,                       XK_w,      setflexlayout,     {.i = 293 } }, // centered master
+	{ MODKEY,                       XK_e,      setflexlayout,     {.i = 273 } }, // bstackhoriz layout
+	{ MODKEY,                       XK_r,      setflexlayout,     {.i = 272 } }, // bstack layout
+	{ MODKEY,                       XK_g,      setflexlayout,     {.i = 263 } }, // tile + grid layout
+	{ MODKEY|ControlMask,           XK_w,      setflexlayout,     {.i =   7 } }, // grid
+	{ MODKEY|ControlMask,           XK_e,      setflexlayout,     {.i = 262 } }, // deck layout
+	{ MODKEY|ControlMask,           XK_r,      setflexlayout,     {.i =   6 } }, // monocle
+	{ MODKEY|ControlMask,           XK_t,      rotatelayoutaxis,  {.i = 0} },    /* flextile, 0 = layout axis */
+	{ MODKEY|ControlMask,           XK_Tab,    rotatelayoutaxis,  {.i = 1} },    /* flextile, 1 = master axis */
+	{ MODKEY|ControlMask|ShiftMask, XK_Tab,    rotatelayoutaxis,  {.i = 2} },    /* flextile, 2 = stack axis */
+	{ MODKEY|ControlMask,           XK_Return, mirrorlayout,      {0} },         /* flextile, flip master and stack areas */
+	#endif // FLEXTILE_LAYOUT
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	#if TOGGLEFULLSCREEN_PATCH

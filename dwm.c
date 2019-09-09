@@ -142,6 +142,9 @@ typedef struct Pertag Pertag;
 struct Monitor {
 	char ltsymbol[16];
 	float mfact;
+	#if FLEXTILE_LAYOUT
+	int ltaxis[3];
+	#endif // FLEXTILE_LAYOUT
 	int nmaster;
 	int num;
 	int by;               /* bar geometry */
@@ -812,6 +815,12 @@ createmon(void)
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
+	#if FLEXTILE_LAYOUT
+	m->ltaxis[0] = layoutaxis[0];
+	m->ltaxis[1] = layoutaxis[1];
+	m->ltaxis[2] = layoutaxis[2];
+	#endif // FLEXTILE_LAYOUT
+
 	#if PERTAG_PATCH
 	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
 		die("fatal: could not malloc() %u bytes\n", sizeof(Pertag));
@@ -827,6 +836,13 @@ createmon(void)
 		m->pertag->ltidxs[i][0] = m->lt[0];
 		m->pertag->ltidxs[i][1] = m->lt[1];
 		m->pertag->sellts[i] = m->sellt;
+
+		#if FLEXTILE_LAYOUT
+		/* init flextile axes */
+		m->pertag->ltaxes[i][0] = m->ltaxis[0];
+		m->pertag->ltaxes[i][1] = m->ltaxis[1];
+		m->pertag->ltaxes[i][2] = m->ltaxis[2];
+		#endif // FLEXTILE_LAYOUT
 
 		#if PERTAGBAR_PATCH
 		/* init showbar */

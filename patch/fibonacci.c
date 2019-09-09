@@ -5,16 +5,9 @@ fibonacci(Monitor *m, int s)
 	unsigned int i, n;
 	int nx, ny, nw, nh;
 	int oh, ov, ih, iv;
-	#if CFACTS_PATCH
-	float mfacts, sfacts;
-	#endif // CFACTS_PATCH
 	Client *c;
 
-	#if CFACTS_PATCH
-	getgaps(m, &oh, &ov, &ih, &iv, &n, &mfacts, &sfacts);
-	#else
 	getgaps(m, &oh, &ov, &ih, &iv, &n);
-	#endif // CFACTS_PATCH
 
 	if (n == 0)
 		return;

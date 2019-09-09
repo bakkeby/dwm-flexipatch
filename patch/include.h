@@ -74,6 +74,10 @@
 #include "fibonacci.h"
 #endif
 
+#if FLEXTILE_LAYOUT
+#include "flextile.h"
+#endif
+
 #if GAPPLESSGRID_LAYOUT
 #include "gapplessgrid.h"
 #endif
