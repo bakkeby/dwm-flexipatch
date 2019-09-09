@@ -46,6 +46,9 @@ static const char *colors[][3]      = {
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+#if ALTERNATIVE_TAGS_PATCH
+static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+#endif // ALTERNATIVE_TAGS_PATCH
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -249,6 +252,9 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ControlMask,  XK_comma,  tagswapmon,        {.i = +1 } },
 	{ MODKEY|Mod4Mask|ControlMask,  XK_period, tagswapmon,        {.i = -1 } },
 	#endif // TAGSWAPMON_PATCH
+	#if ALTERNATIVE_TAGS_PATCH
+	{ MODKEY,                       XK_n,      togglealttag,      {0} },
+	#endif // ALTERNATIVE_TAGS_PATCH
 	#if CYCLELAYOUTS_PATCH
 	{ MODKEY|ControlMask,           XK_comma,  cyclelayout,       {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period, cyclelayout,       {.i = +1 } },

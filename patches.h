@@ -17,6 +17,12 @@
  */
 #define ALPHA_PATCH 0
 
+/* This patch introduces alternative tags which can be switched on the fly for the
+ * sole purpose of providing visual aid.
+ * https://dwm.suckless.org/patches/alternativetags/
+ */
+#define ALTERNATIVE_TAGS_PATCH 0
+
 /* This patch adds new clients above the selected client, instead of always
  * becoming the new master. This behaviour is known from Xmonad.
  * This patch takes precedence over ATTACHASIDE_PATCH.

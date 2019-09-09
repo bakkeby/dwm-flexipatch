@@ -4,6 +4,10 @@
 #include "alpha.c"
 #endif
 
+#if ALTERNATIVE_TAGS_PATCH
+#include "alternativetags.c"
+#endif
+
 #if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 #include "attachx.c"
 #endif

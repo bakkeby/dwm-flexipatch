@@ -5,13 +5,15 @@ For example to include the alpha patch then you would only need to flip this set
 #define ALPHA_PATCH 1
 ```
 
+So if you have ever been curious about trying out dwm, but have been discouraged by manual patching, then this may be a good starting point to see what a "fully fledged" dwm can look like. Want to try out the `pertag` patch? Just flip a config and recompile. Once you have found out what works for you and what don't then you should be in a better position to choose patches should you want to start patching from scratch.
+
 Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on the dwm window manager, how to install it and how it works.
 
 ---
 
 ### Changelog:
 
-2019-09-09 - Added deck, fibonacci (dwindle and spiral), gridmode, gapplessgrid, horizgrid, nrowgrid, centeredmaster and flextile layouts
+2019-09-09 - Added deck, fibonacci (dwindle and spiral), gridmode, gapplessgrid, horizgrid, nrowgrid, centeredmaster and flextile layouts. Added alternativetags patch.
 
 2019-09-08 - Added cfacts and vanitygaps patches, added bstack and bstackhoriz layouts
 
@@ -25,6 +27,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [alpha](https://dwm.suckless.org/patches/alpha/)
       - adds transparency for the status bar
+
+   - [alternativetags](https://dwm.suckless.org/patches/alternativetags/)
+      - adds alternative tags which can be toggled on the fly for the sole purpose of providing visual aid
 
    - [attachabove](https://dwm.suckless.org/patches/attachabove/)
       - new windows are placed above selected client

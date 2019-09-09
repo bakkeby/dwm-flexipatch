@@ -167,6 +167,9 @@ struct Monitor {
 	Monitor *next;
 	Window barwin;
 	const Layout *lt[2];
+	#if ALTERNATIVE_TAGS_PATCH
+	unsigned int alttag;
+	#endif // ALTERNATIVE_TAGS_PATCH
 	#if PERTAG_PATCH
 	Pertag *pertag;
 	#endif // PERTAG_PATCH
@@ -914,6 +917,9 @@ void
 drawbar(Monitor *m)
 {
 	int x, w, sw = 0;
+	#if ALTERNATIVE_TAGS_PATCH
+	int wdelta;
+	#endif // ALTERNATIVE_TAGS_PATCH
 	#if FANCYBAR_PATCH
 	int tw, mw, ew = 0;
 	unsigned int n = 0;
@@ -963,8 +969,15 @@ drawbar(Monitor *m)
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
+		#if ALTERNATIVE_TAGS_PATCH
+		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
+		#endif // ALTERNATIVE_TAGS_PATCH
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+		#if ALTERNATIVE_TAGS_PATCH
+		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+		#else
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+		#endif // ALTERNATIVE_TAGS_PATCH
 		if (occ & 1 << i)
 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
 				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
