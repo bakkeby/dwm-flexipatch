@@ -117,6 +117,12 @@ static const Layout layouts[] = {
 	#if FIBONACCI_DWINDLE_LAYOUT
 	{ "[\\]",     dwindle },
 	#endif // FIBONACCI_DWINDLE_LAYOUT
+	#if GRIDMODE_LAYOUT
+	{ "HHH",      grid },
+	#endif // GRIDMODE_LAYOUT
+	#if HORIZGRID_LAYOUT
+	{ "###",      horizgrid },
+	#endif
 	#if CYCLELAYOUTS_PATCH
 	{ NULL,       NULL },
 	#endif // CYCLELAYOUTS_PATCH

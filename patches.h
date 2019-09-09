@@ -190,32 +190,42 @@
 /* Bottomstack layout.
  * https://dwm.suckless.org/patches/bottomstack/
  */
-#define BSTACK_LAYOUT 1
+#define BSTACK_LAYOUT 0
 
 /* Bottomstack horizontal layout.
  * https://dwm.suckless.org/patches/bottomstack/
  */
-#define BSTACKHORIZ_LAYOUT 1
+#define BSTACKHORIZ_LAYOUT 0
 
 /* Deck layout.
  * https://dwm.suckless.org/patches/deck/
  */
-#define DECK_LAYOUT 1
+#define DECK_LAYOUT 0
 
 /* Fibonacci dwindle layout.
  * https://dwm.suckless.org/patches/fibonacci/
  */
-#define FIBONACCI_DWINDLE_LAYOUT 1
+#define FIBONACCI_DWINDLE_LAYOUT 0
 
 /* Fibonacci spiral layout.
  * https://dwm.suckless.org/patches/fibonacci/
  */
-#define FIBONACCI_SPIRAL_LAYOUT 1
+#define FIBONACCI_SPIRAL_LAYOUT 0
 
 /* Gappless grid layout.
  * https://dwm.suckless.org/patches/gaplessgrid/
  */
-#define GAPPLESSGRID_LAYOUT 1
+#define GAPPLESSGRID_LAYOUT 0
+
+/* Gridmode (grid) layout.
+ * https://dwm.suckless.org/patches/gridmode/
+ */
+#define GRIDMODE_LAYOUT 0
+
+/* Horizontal grid (horizgrid) layout.
+ * https://dwm.suckless.org/patches/horizgrid/
+ */
+#define HORIZGRID_LAYOUT 0
 
 /* The default tile layout.
  * This can be optionally disabled in favour of other layouts.

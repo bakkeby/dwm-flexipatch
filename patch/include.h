@@ -70,6 +70,14 @@
 #include "gapplessgrid.h"
 #endif
 
+#if GRIDMODE_LAYOUT
+#include "grid.h"
+#endif
+
+#if HORIZGRID_LAYOUT
+#include "horizgrid.h"
+#endif
+
 #if MONOCLE_LAYOUT
 #include "monocle.h"
 #endif

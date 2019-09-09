@@ -74,6 +74,14 @@
 #include "gapplessgrid.c"
 #endif
 
+#if GRIDMODE_LAYOUT
+#include "grid.c"
+#endif
+
+#if HORIZGRID_LAYOUT
+#include "horizgrid.c"
+#endif
+
 #if MONOCLE_LAYOUT
 #include "monocle.c"
 #endif
