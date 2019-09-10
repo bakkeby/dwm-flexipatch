@@ -90,7 +90,7 @@ fibonacci(Monitor *mon, int s)
 					ny += nh;
 			}
 			if ((i % 4) == 0) {
-				if(s)
+				if (s)
 					ny += nh;
 				else
 					ny -= nh;

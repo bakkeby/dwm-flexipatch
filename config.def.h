@@ -32,16 +32,26 @@ static const char col_cyan[]        = "#005577";
 #if ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
-static const unsigned int alphas[][3]      = {
+static const unsigned int alphas[][3] = {
 	/*               fg      bg        border     */
 	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 	#if AWESOMEBAR_PATCH
-	[SchemeHid]  = { OPAQUE, baralpha, borderalpha  },
+	[SchemeHid]  = { OPAQUE, baralpha, borderalpha },
 	#endif // AWESOMEBAR_PATCH
 };
 #endif // ALPHA_PATCH
-static const char *colors[][3]      = {
+#if FLOAT_BORDER_COLOR_PATCH
+static const char *colors[][4] = {
+	/*               fg         bg         border     float     */
+	[SchemeNorm] = { col_gray3, col_gray1, col_gray2, col_gray2 },
+	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan,  col_cyan  },
+	#if AWESOMEBAR_PATCH
+	[SchemeHid]  = { col_cyan,  col_gray1, col_cyan,  col_cyan  },
+	#endif // AWESOMEBAR_PATCH
+};
+#else
+static const char *colors[][3] = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
@@ -49,6 +59,7 @@ static const char *colors[][3]      = {
 	[SchemeHid]  = { col_cyan,  col_gray1, col_cyan  },
 	#endif // AWESOMEBAR_PATCH
 };
+#endif // FLOAT_BORDER_COLOR_PATCH
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -238,9 +249,9 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_e,      setflexlayout,     {.i = 262 } }, // deck layout
 	{ MODKEY|ControlMask,           XK_r,      setflexlayout,     {.i =   6 } }, // monocle
 	{ MODKEY|ControlMask,           XK_g,      setflexlayout,     {.i = 257 } }, // columns (col) layout
-	{ MODKEY|ControlMask,           XK_t,      rotatelayoutaxis,  {.i = 0 } }, /* flextile, 0 = layout axis */
-	{ MODKEY|ControlMask,           XK_Tab,    rotatelayoutaxis,  {.i = 1 } }, /* flextile, 1 = master axis */
-	{ MODKEY|ControlMask|ShiftMask, XK_Tab,    rotatelayoutaxis,  {.i = 2 } }, /* flextile, 2 = stack axis */
+	{ MODKEY|ControlMask,           XK_t,      rotatelayoutaxis,  {.i = 0 } },   /* flextile, 0 = layout axis */
+	{ MODKEY|ControlMask,           XK_Tab,    rotatelayoutaxis,  {.i = 1 } },   /* flextile, 1 = master axis */
+	{ MODKEY|ControlMask|ShiftMask, XK_Tab,    rotatelayoutaxis,  {.i = 2 } },   /* flextile, 2 = stack axis */
 	{ MODKEY|ControlMask,           XK_Return, mirrorlayout,      {0} },         /* flextile, flip master and stack areas */
 	#endif // FLEXTILE_LAYOUT
 	{ MODKEY,                       XK_space,  setlayout,         {0} },

@@ -12,7 +12,11 @@ typedef struct Fnt {
 	struct Fnt *next;
 } Fnt;
 
+#if FLOAT_BORDER_COLOR_PATCH
+enum { ColFg, ColBg, ColBorder, ColFloat }; /* Clr scheme index */
+#else
 enum { ColFg, ColBg, ColBorder }; /* Clr scheme index */
+#endif // FLOAT_BORDER_COLOR_PATCH
 typedef XftColor Clr;
 
 typedef struct {

@@ -1064,7 +1064,7 @@ drawbar(Monitor *m)
 				if (!ISVISIBLE(c) || c == m->sel)
 					continue;
 				tw = TEXTW(c->name);
-				if(tw < mw)
+				if (tw < mw)
 					ew += (mw - tw);
 				else
 					i++;
@@ -1117,8 +1117,21 @@ drawbars(void)
 {
 	Monitor *m;
 
+	#if SYSTRAY_PATCH
+	if (showsystray) {
+		/* Clear status bar to avoid artifacts beneath systray icons */
+		drw_rect(drw, 0, 0, selmon->ww, bh, 1, 1);
+		drw_map(drw, selmon->barwin, 0, 0, selmon->ww, bh);
+	}
+	#endif // SYSTRAY_PATCH
+
 	for (m = mons; m; m = m->next)
 		drawbar(m);
+
+	#if SYSTRAY_PATCH
+	if (showsystray)
+		updatesystray();
+	#endif // SYSTRAY_PATCH
 }
 
 void
@@ -1175,7 +1188,14 @@ focus(Client *c)
 		detachstack(c);
 		attachstack(c);
 		grabbuttons(c, 1);
+		#if FLOAT_BORDER_COLOR_PATCH
+		if (c->isfloating)
+			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColFloat].pixel);
+		else
+			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+		#else
 		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+		#endif // FLOAT_BORDER_COLOR_PATCH
 		setfocus(c);
 	} else {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
@@ -1197,21 +1217,8 @@ focusin(XEvent *e)
 {
 	XFocusChangeEvent *ev = &e->xfocus;
 
-	#if SYSTRAY_PATCH && !AWESOMEBAR_PATCH
-	if (showsystray) {
-		/* Clear status bar to avoid artifacts beneath systray icons */
-		drw_rect(drw, 0, 0, selmon->ww, bh, 1, 1);
-		drw_map(drw, selmon->barwin, 0, 0, selmon->ww, bh);
-	}
-	#endif // SYSTRAY_PATCH
-
 	if (selmon->sel && ev->window != selmon->sel->win)
 		setfocus(selmon->sel);
-
-	#if SYSTRAY_PATCH
-	if (showsystray)
-		updatesystray();
-	#endif // SYSTRAY_PATCH
 }
 
 void
@@ -1477,7 +1484,14 @@ manage(Window w, XWindowAttributes *wa)
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
+	#if FLOAT_BORDER_COLOR_PATCH
+	if (c->isfloating)
+		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
+	else
+		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
+	#else
 	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
+	#endif // FLOAT_BORDER_COLOR_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
 	updatewindowtype(c);
 	updatesizehints(c);
@@ -1501,6 +1515,10 @@ manage(Window w, XWindowAttributes *wa)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
 	if (c->isfloating)
 		XRaiseWindow(dpy, c->win);
+	#if FLOAT_BORDER_COLOR_PATCH
+	if (c->isfloating)
+		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
+	#endif // FLOAT_BORDER_COLOR_PATCH
 	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 	attachx(c);
 	#else
@@ -2175,11 +2193,16 @@ setup(void)
 	/* init appearance */
 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
 	for (i = 0; i < LENGTH(colors); i++)
+		scheme[i] = drw_scm_create(drw, colors[i],
 		#if ALPHA_PATCH
-		scheme[i] = drw_scm_create(drw, colors[i], alphas[i], 3);
-		#else
-		scheme[i] = drw_scm_create(drw, colors[i], 3);
+		alphas[i],
 		#endif // ALPHA_PATCH
+		#if FLOAT_BORDER_COLOR_PATCH
+		4
+		#else
+		3
+		#endif // FLOAT_BORDER_COLOR_PATCH
+		);
 	#if SYSTRAY_PATCH
 	/* init system tray */
 	if (showsystray)
@@ -2338,6 +2361,12 @@ togglefloating(const Arg *arg)
 	if (selmon->sel->isfullscreen) /* no support for fullscreen windows */
 		return;
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
+	#if FLOAT_BORDER_COLOR_PATCH
+	if (selmon->sel->isfloating)
+		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeSel][ColFloat].pixel);
+	else
+		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeSel][ColBorder].pixel);
+	#endif // FLOAT_BORDER_COLOR_PATCH
 	if (selmon->sel->isfloating) {
 		#if SAVEFLOATS_PATCH
 		if (selmon->sel->sfx != -9999) {
@@ -2422,7 +2451,14 @@ unfocus(Client *c, int setfocus)
 	if (!c)
 		return;
 	grabbuttons(c, 0);
+	#if FLOAT_BORDER_COLOR_PATCH
+	if (c->isfloating)
+		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColFloat].pixel);
+	else
+		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+	#else
 	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+	#endif // FLOAT_BORDER_COLOR_PATCH
 	if (setfocus) {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);

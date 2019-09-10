@@ -85,6 +85,11 @@
  */
 #define FANCYBAR_PATCH 0
 
+/* This patch allows a different border color to be chosen for floating windows.
+ * https://dwm.suckless.org/patches/float_border_color/
+ */
+#define FLOAT_BORDER_COLOR_PATCH 0
+
 /* By default, dwm responds to _NET_ACTIVE_WINDOW client messages by setting
  * the urgency bit on the named window. This patch activates the window instead.
  * https://dwm.suckless.org/patches/focusonnetactive/
