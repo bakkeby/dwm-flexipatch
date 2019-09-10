@@ -36,6 +36,9 @@ static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
 	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
+	#if AWESOMEBAR_PATCH
+	[SchemeHid]  = { OPAQUE, baralpha, borderalpha  },
+	#endif // AWESOMEBAR_PATCH
 };
 #endif // ALPHA_PATCH
 static const char *colors[][3]      = {
@@ -217,6 +220,9 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,      defaultgaps,       {0} },
 	#endif // VANITYGAPS_PATCH
 	{ MODKEY,                       XK_Tab,    view,              {0} },
+	#if AWESOMEBAR_PATCH
+	{ MODKEY,                       XK_z,      showhideclient,    {0} },
+	#endif // AWESOMEBAR_PATCH
 	{ MODKEY|ShiftMask,             XK_c,      killclient,        {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,              {0} },
 	{ MODKEY,                       XK_t,      setlayout,         {.v = &layouts[0]} },
@@ -231,9 +237,10 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_w,      setflexlayout,     {.i =   7 } }, // grid
 	{ MODKEY|ControlMask,           XK_e,      setflexlayout,     {.i = 262 } }, // deck layout
 	{ MODKEY|ControlMask,           XK_r,      setflexlayout,     {.i =   6 } }, // monocle
-	{ MODKEY|ControlMask,           XK_t,      rotatelayoutaxis,  {.i = 0} },    /* flextile, 0 = layout axis */
-	{ MODKEY|ControlMask,           XK_Tab,    rotatelayoutaxis,  {.i = 1} },    /* flextile, 1 = master axis */
-	{ MODKEY|ControlMask|ShiftMask, XK_Tab,    rotatelayoutaxis,  {.i = 2} },    /* flextile, 2 = stack axis */
+	{ MODKEY|ControlMask,           XK_g,      setflexlayout,     {.i = 257 } }, // columns (col) layout
+	{ MODKEY|ControlMask,           XK_t,      rotatelayoutaxis,  {.i = 0 } }, /* flextile, 0 = layout axis */
+	{ MODKEY|ControlMask,           XK_Tab,    rotatelayoutaxis,  {.i = 1 } }, /* flextile, 1 = master axis */
+	{ MODKEY|ControlMask|ShiftMask, XK_Tab,    rotatelayoutaxis,  {.i = 2 } }, /* flextile, 2 = stack axis */
 	{ MODKEY|ControlMask,           XK_Return, mirrorlayout,      {0} },         /* flextile, flip master and stack areas */
 	#endif // FLEXTILE_LAYOUT
 	{ MODKEY,                       XK_space,  setlayout,         {0} },
@@ -281,6 +288,7 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	#if AWESOMEBAR_PATCH
 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
+	{ ClkWinTitle,          0,              Button3,        showhideclient, {0} },
 	#endif // AWESOMEBAR_PATCH
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },

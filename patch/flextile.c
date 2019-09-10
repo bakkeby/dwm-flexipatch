@@ -29,6 +29,7 @@
  *    000100000101   261  default tile layout
  *    000100100101   293  centered master
  *    000100000111   263  default tile layout with grid stack
+ *    000100000001   257  columns (col) layout
  */
 void
 setflexlayout(const Arg *arg)

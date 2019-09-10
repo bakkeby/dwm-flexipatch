@@ -1197,7 +1197,7 @@ focusin(XEvent *e)
 {
 	XFocusChangeEvent *ev = &e->xfocus;
 
-	#if SYSTRAY_PATCH
+	#if SYSTRAY_PATCH && !AWESOMEBAR_PATCH
 	if (showsystray) {
 		/* Clear status bar to avoid artifacts beneath systray icons */
 		drw_rect(drw, 0, 0, selmon->ww, bh, 1, 1);

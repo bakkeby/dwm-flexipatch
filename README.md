@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-10 - Minor tweaks to awesomebar patch (incl. alpha and systray compatibility).
+
 2019-09-09 - Added deck, fibonacci (dwindle and spiral), gridmode, gapplessgrid, horizgrid, nrowgrid, centeredmaster and flextile layouts. Added alternativetags and awesomebar patches.
 
 2019-09-08 - Added cfacts and vanitygaps patches, added bstack and bstackhoriz layouts

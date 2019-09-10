@@ -1,5 +1,6 @@
 void
 hide(Client *c) {
+
 	if (!c || HIDDEN(c))
 		return;
 
@@ -45,5 +46,22 @@ togglewin(const Arg *arg)
 			show(c);
 		focus(c);
 		restack(selmon);
+	}
+}
+
+void
+showhideclient(const Arg *arg)
+{
+	Client *c = (Client*)arg->v;
+	if (!c)
+		c = selmon->sel;
+	if (!c)
+		return;
+
+	if (HIDDEN(c)) {
+		show(c);
+		restack(selmon);
+	} else {
+		hide(c);
 	}
 }
