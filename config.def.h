@@ -108,18 +108,30 @@ static const Rule rules[] = {
 	#endif // granted the above will be confusing, do remember to delete rule entries for patches that you do not take
 };
 
-/* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-
-#if FLEXTILE_LAYOUT
+#if MONITOR_RULES_PATCH
+static const MonitorRule monrules[] = {
+	#if FLEXTILE_LAYOUT
+	/* monitor layout axis              master            stack             */
+	{  1,      0,     SPLIT_HORIZONTAL, LEFT_TO_RIGHT,    GRID,             }, // use a different layout for the second monitor
+	{  -1,     0,     SPLIT_VERTICAL,   TOP_TO_BOTTOM,    TOP_TO_BOTTOM,    }, // default
+	#else
+	/* monitor layout */
+	{  1,      2 }, // use a different layout for the second monitor
+	{  -1,     0 }, // default
+	#endif // FLEXTILE_LAYOUT
+};
+#elif FLEXTILE_LAYOUT
 static const int layoutaxis[] = {
 	SPLIT_VERTICAL,   /* layout axis: 1 = x, 2 = y; negative values mirror the layout, setting the master area to the right / bottom instead of left / top */
 	TOP_TO_BOTTOM,    /* master axis: 1 = x (from left to right), 2 = y (from top to bottom), 3 = z (monocle), 4 = grid */
 	TOP_TO_BOTTOM,    /* stack axis:  1 = x (from left to right), 2 = y (from top to bottom), 3 = z (monocle), 4 = grid */
 };
-#endif
+#endif // MONITOR_RULES_PATCH
+
+/* layout(s) */
+static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const int nmaster     = 1;    /* number of clients in master area */
+static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
 #if NROWGRID_LAYOUT
 #define FORCE_VSPLIT 1

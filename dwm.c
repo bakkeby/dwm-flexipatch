@@ -204,6 +204,18 @@ typedef struct {
 	int monitor;
 } Rule;
 
+#if MONITOR_RULES_PATCH
+typedef struct {
+	int monitor;
+	int layout;
+	#if FLEXTILE_LAYOUT
+	int layoutaxis;
+	int masteraxis;
+	int stackaxis;
+	#endif
+} MonitorRule;
+#endif // MONITOR_RULES_PATCH
+
 /* function declarations */
 static void applyrules(Client *c);
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
@@ -838,9 +850,14 @@ Monitor *
 createmon(void)
 {
 	Monitor *m;
-	#if PERTAG_PATCH
+	#if PERTAG_PATCH || MONITOR_RULES_PATCH
 	int i;
-	#endif // PERTAG_PATCH
+	#endif // PERTAG_PATCH / MONITOR_RULES_PATCH
+	#if MONITOR_RULES_PATCH
+	int mc;
+	Monitor *mi;
+	const MonitorRule *mr;
+	#endif // MONITOR_RULES_PATCH
 
 	m = ecalloc(1, sizeof(Monitor));
 	m->tagset[0] = m->tagset[1] = 1;
@@ -854,20 +871,38 @@ createmon(void)
 	m->gappoh = gappoh;
 	m->gappov = gappov;
 	#endif // VANITYGAPS_PATCH
-	m->lt[0] = &layouts[0];
-	m->lt[1] = &layouts[1 % LENGTH(layouts)];
-	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
+	#if MONITOR_RULES_PATCH
+	for (mc = 0, mi = mons; mi; mi = mi->next, mc++);
+	for (i = 0; i < LENGTH(monrules); i++) {
+		mr = &monrules[i];
+		if (mr->monitor == -1 || mr->monitor == mc) {
+			m->lt[0] = &layouts[mr->layout];
+			m->lt[1] = &layouts[1 % LENGTH(layouts)];
+			strncpy(m->ltsymbol, layouts[mr->layout].symbol, sizeof m->ltsymbol);
+			#if FLEXTILE_LAYOUT
+			m->ltaxis[0] = mr->layoutaxis;
+			m->ltaxis[1] = mr->masteraxis;
+			m->ltaxis[2] = mr->stackaxis;
+			#endif // FLEXTILE_LAYOUT
+			break;
+		}
+	}
+	#else
 	#if FLEXTILE_LAYOUT
 	m->ltaxis[0] = layoutaxis[0];
 	m->ltaxis[1] = layoutaxis[1];
 	m->ltaxis[2] = layoutaxis[2];
 	#endif // FLEXTILE_LAYOUT
+	m->lt[0] = &layouts[0];
+	m->lt[1] = &layouts[1 % LENGTH(layouts)];
+	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
+	#endif // MONITOR_RULES_PATCH
 
 	#if PERTAG_PATCH
 	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
 		die("fatal: could not malloc() %u bytes\n", sizeof(Pertag));
 	m->pertag->curtag = m->pertag->prevtag = 1;
-	for (i=0; i <= LENGTH(tags); i++) {
+	for (i = 0; i <= LENGTH(tags); i++) {
 		/* init nmaster */
 		m->pertag->nmasters[i] = m->nmaster;
 

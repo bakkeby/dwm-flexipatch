@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-11 - Added monitor rules patch.
+
 2019-09-10 - Minor tweaks to awesomebar patch (incl. alpha and systray compatibility). Added floatbordercolor patch.
 
 2019-09-09 - Added deck, fibonacci (dwindle and spiral), gridmode, gapplessgrid, horizgrid, nrowgrid, centeredmaster and flextile layouts. Added alternativetags and awesomebar patches.
@@ -74,6 +76,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window
       - it is also possible to spawn new windows (e.g. a terminal) that end up getting focus while the previous window remains in fullscreen
       - this patch ensures that in such scenarios the previous window loses fullscreen
+
+   - monitorrules
+      - adds rules per monitor, e.g. have default layouts per monitor
+      - the use case for this is if the second monitor is vertical (i.e. rotated) then you may want to use a different default layout for this monitor than what is used for the main monitor (for example normal vertical split for main monitor and horizontal split for the second)
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor
