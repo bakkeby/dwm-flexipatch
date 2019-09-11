@@ -24,6 +24,10 @@
 #include "cfacts.c"
 #endif
 
+#if COMBO_PATCH
+#include "combo.c"
+#endif
+
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.c"
 #endif

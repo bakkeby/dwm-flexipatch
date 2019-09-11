@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-11 - Added monitor rules patch.
+2019-09-11 - Added monitor rules and combo patches
 
 2019-09-10 - Minor tweaks to awesomebar patch (incl. alpha and systray compatibility). Added floatbordercolor patch.
 
@@ -58,6 +58,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [cfacts](https://dwm.suckless.org/patches/cfacts/)
       - the cfacts patch provides the ability to assign different weights to clients in their respective stack in tiled layout
+
+   - [combo](https://dwm.suckless.org/patches/combo/)
+      - allows you to select multiple tags by pressing all the right keys as a combo, e.g. hold MOD and press and hold 1 and 3 together to view those two tags
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
