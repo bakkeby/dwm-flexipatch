@@ -85,6 +85,13 @@
  */
 #define CYCLELAYOUTS_PATCH 0
 
+/* Adds EWMH support for _NET_NUMBER_OF_DESKTOPS, _NET_CURRENT_DESKTOP, _NET_DESKTOP_NAMES
+ * and _NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs
+ * that request workspace information. For example polybar's xworkspaces module.
+ * https://dwm.suckless.org/patches/ewmhtags/
+ */
+#define EWMHTAGS_PATCH 0
+
 /* This patch shows the titles of all visible windows in the status bar
  * (as opposed to showing only the selected one).
  * Awesomebar takes precedence over fancybar.

@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-11 - Added monitor rules and combo patches
+2019-09-11 - Added monitor rules, combo and ewmhtags patches
 
 2019-09-10 - Minor tweaks to awesomebar patch (incl. alpha and systray compatibility). Added floatbordercolor patch.
 
@@ -64,6 +64,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
+
+   - [ewmhtags](https://dwm.suckless.org/patches/ewmhtags/)
+      - adds EWMH support for \_NET_NUMBER_OF_DESKTOPS, \_NET_CURRENT_DESKTOP, \_NET_DESKTOP_NAMES and \_NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs that request workspace information, e.g. polybar's xworkspaces module
 
    - [fancybar](https://dwm.suckless.org/patches/fancybar/)
       - shows the titles of all visible windows in the status bar

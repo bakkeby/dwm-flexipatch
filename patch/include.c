@@ -32,6 +32,10 @@
 #include "cyclelayouts.c"
 #endif
 
+#if EWMHTAGS_PATCH
+#include "ewmhtags.c"
+#endif
+
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif

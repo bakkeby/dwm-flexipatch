@@ -73,15 +73,18 @@ enum { SchemeNorm, SchemeSel, SchemeHid }; /* color schemes */
 #else
 enum { SchemeNorm, SchemeSel }; /* color schemes */
 #endif // #if AWESOMEBAR_PATCH
-#if SYSTRAY_PATCH
-enum { NetSupported, NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayVisual,
-	   NetWMName, NetWMState, NetWMFullscreen, NetActiveWindow, NetWMWindowType, NetWMWindowTypeDock,
-	   NetSystemTrayOrientationHorz, NetWMWindowTypeDialog, NetClientList, NetWMCheck, NetLast }; /* EWMH atoms */
-#else
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-       NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
-#endif // SYSTRAY_PATCH
+	   #if SYSTRAY_PATCH
+       NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation,
+       NetSystemTrayVisual, NetWMWindowTypeDock, NetSystemTrayOrientationHorz,
+	   #endif // SYSTRAY_PATCH
+	   #if EWMHTAGS_PATCH
+       NetDesktopNames, NetDesktopViewport, NetNumberOfDesktops, NetCurrentDesktop,
+	   #endif // EWMHTAGS_PATCH
+       NetWMWindowTypeDialog, NetClientList, NetLast
+}; /* EWMH atoms */
+
 #if WINDOWROLERULE_PATCH
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMWindowRole, WMLast }; /* default atoms */
 #else
@@ -2220,6 +2223,12 @@ setup(void)
 	xatom[Xembed] = XInternAtom(dpy, "_XEMBED", False);
 	xatom[XembedInfo] = XInternAtom(dpy, "_XEMBED_INFO", False);
 	#endif // SYSTRAY_PATCH
+	#if EWMHTAGS_PATCH
+	netatom[NetDesktopViewport] = XInternAtom(dpy, "_NET_DESKTOP_VIEWPORT", False);
+	netatom[NetNumberOfDesktops] = XInternAtom(dpy, "_NET_NUMBER_OF_DESKTOPS", False);
+	netatom[NetCurrentDesktop] = XInternAtom(dpy, "_NET_CURRENT_DESKTOP", False);
+	netatom[NetDesktopNames] = XInternAtom(dpy, "_NET_DESKTOP_NAMES", False);
+	#endif // EWMHTAGS_PATCH
 	netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
 	netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
@@ -2263,6 +2272,12 @@ setup(void)
 	/* EWMH support per view */
 	XChangeProperty(dpy, root, netatom[NetSupported], XA_ATOM, 32,
 		PropModeReplace, (unsigned char *) netatom, NetLast);
+	#if EWMHTAGS_PATCH
+	setnumdesktops();
+	setcurrentdesktop();
+	setdesktopnames();
+	setviewport();
+	#endif // EWMHTAGS_PATCH
 	XDeleteProperty(dpy, root, netatom[NetClientList]);
 	/* select events */
 	wa.cursor = cursor[CurNormal]->cursor;
@@ -2445,6 +2460,9 @@ toggletag(const Arg *arg)
 		focus(NULL);
 		arrange(selmon);
 	}
+	#if EWMHTAGS_PATCH
+	updatecurrentdesktop();
+	#endif // EWMHTAGS_PATCH
 }
 
 void
@@ -2484,6 +2502,9 @@ toggleview(const Arg *arg)
 		focus(NULL);
 		arrange(selmon);
 	}
+	#if EWMHTAGS_PATCH
+	updatecurrentdesktop();
+	#endif // EWMHTAGS_PATCH
 }
 
 void
@@ -2858,6 +2879,9 @@ view(const Arg *arg)
 	#endif // PERTAG_PATCH
 	focus(NULL);
 	arrange(selmon);
+	#if EWMHTAGS_PATCH
+	updatecurrentdesktop();
+	#endif // EWMHTAGS_PATCH
 }
 
 Client *

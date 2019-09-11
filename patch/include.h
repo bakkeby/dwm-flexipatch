@@ -32,6 +32,10 @@
 #include "cyclelayouts.h"
 #endif
 
+#if EWMHTAGS_PATCH
+#include "ewmhtags.h"
+#endif
+
 #if ROTATESTACK_PATCH
 #include "rotatestack.h"
 #endif

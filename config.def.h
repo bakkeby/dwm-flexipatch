@@ -62,7 +62,11 @@ static const char *colors[][3] = {
 #endif // FLOAT_BORDER_COLOR_PATCH
 
 /* tagging */
+#if EWMHTAGS_PATCH
+static char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+#else
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+#endif // EWMHTAGS_PATCH
 #if ALTERNATIVE_TAGS_PATCH
 static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 #endif // ALTERNATIVE_TAGS_PATCH
