@@ -125,6 +125,9 @@ struct Client {
 	int bw, oldbw;
 	unsigned int tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+	#if AUTORESIZE_PATCH
+	int needresize;
+	#endif // AUTORESIZE_PATCH
 	#if CENTER_PATCH
 	int iscentered;
 	#endif // CENTER_PATCH
@@ -840,6 +843,10 @@ configurerequest(XEvent *e)
 				configure(c);
 			if (ISVISIBLE(c))
 				XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
+			#if AUTORESIZE_PATCH
+			else
+				c->needresize = 1;
+			#endif // AUTORESIZE_PATCH
 		} else
 			configure(c);
 	} else {
@@ -1012,7 +1019,9 @@ drawbar(Monitor *m)
 	#if SYSTRAY_PATCH
 	int stw = 0;
 	#endif // SYSTRAY_PATCH
+	#if !ACTIVETAGINDICATORBAR_PATCH
 	int boxs = drw->fonts->h / 9;
+	#endif // ACTIVETAGINDICATORBAR_PATCH
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
@@ -1064,9 +1073,15 @@ drawbar(Monitor *m)
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
 		#endif // ALTERNATIVE_TAGS_PATCH
 		if (occ & 1 << i)
+			#if ACTIVETAGINDICATORBAR_PATCH
+			drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw,
+				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
+				urg & 1 << i);
+			#else
 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
 				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
 				urg & 1 << i);
+			#endif // ACTIVETAGINDICATORBAR_PATCH
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
@@ -1135,7 +1150,12 @@ drawbar(Monitor *m)
 		#else
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
+			#if CENTEREDWINDOWNAME_PATCH
+			int mid = (m->ww - TEXTW(m->sel->name)) / 2 - x;
+			drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);
+			#else
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+			#endif // CENTEREDWINDOWNAME_PATCH
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
@@ -1286,6 +1306,10 @@ focusstack(const Arg *arg)
 
 	if (!selmon->sel)
 		return;
+	#if ALWAYSFULLSCREEN_PATCH
+	if (selmon->sel->isfullscreen)
+ 		return;
+	#endif // ALWAYSFULLSCREEN_PATCH
 	if (arg->i > 0) {
 		for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
 		if (!c)
@@ -2319,7 +2343,16 @@ showhide(Client *c)
 			return;
 		}
 		#endif // SAVEFLOATS_PATCH
+		#if AUTORESIZE_PATCH
+		if (c->needresize) {
+			c->needresize = 0;
+			XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
+		} else {
+			XMoveWindow(dpy, c->win, c->x, c->y);
+		}
+		#else
 		XMoveWindow(dpy, c->win, c->x, c->y);
+		#endif // AUTORESIZE_PATCH
 		if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating) && !c->isfullscreen)
 			resize(c, c->x, c->y, c->w, c->h, 0);
 		showhide(c->snext);

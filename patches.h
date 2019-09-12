@@ -12,6 +12,12 @@
 
 /* Patches */
 
+/* This patch changes the rectangle indicating if a tag is used by a client into a bar
+ * above the tag name for better visibility.
+ * https://dwm.suckless.org/patches/activetagindicatorbar/
+ */
+#define ACTIVETAGINDICATORBAR_PATCH 0
+
 /* The alpha patch adds transparency for the status bar.
  * https://dwm.suckless.org/patches/alpha/
  */
@@ -22,6 +28,12 @@
  * https://dwm.suckless.org/patches/alternativetags/
  */
 #define ALTERNATIVE_TAGS_PATCH 0
+
+/* This patch prevents the focus to drift from the active fullscreen client when
+ * using focusstack().
+ * https://dwm.suckless.org/patches/alwaysfullscreen/
+ */
+#define ALWAYSFULLSCREEN_PATCH 0
 
 /* This patch adds new clients above the selected client, instead of always
  * becoming the new master. This behaviour is known from Xmonad.
@@ -55,6 +67,12 @@
  */
 #define AUTOSTART_PATCH 0
 
+/* By default, windows that are not visible when requesting a resize/move will not
+ * get resized/moved. With this patch, they will.
+ * https://dwm.suckless.org/patches/autoresize/
+ */
+#define AUTORESIZE_PATCH 0
+
 /* Enhanced taskbar that shows the titles of all visible windows in the status bar
  * and allows focus / hiding / unhiding of windows by clicking on the status bar.
  * Awesomebar takes precedence over fancybar.
@@ -63,9 +81,16 @@
 #define AWESOMEBAR_PATCH 0
 
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
+ * This patch takes precedence over centeredwindowname and fancybar patches.
  * https://dwm.suckless.org/patches/center/
  */
 #define CENTER_PATCH 0
+
+/* This patch centers the WM_NAME of the currently selected window on the status bar.
+ * Both fancybar and awesomebar patches take precedence over this patch.
+ * https://dwm.suckless.org/patches/centeredwindowname/
+ */
+#define CENTEREDWINDOWNAME_PATCH 0
 
 /* This patch provides the ability to assign different weights to clients in their
  * respective stack in tiled layout.
@@ -94,7 +119,8 @@
 
 /* This patch shows the titles of all visible windows in the status bar
  * (as opposed to showing only the selected one).
- * Awesomebar takes precedence over fancybar.
+ * Awesomebar takes precedence over fancybar. Fancybar takes precedence over
+ * the centeredwindowname patch.
  * https://dwm.suckless.org/patches/fancybar/
  */
 #define FANCYBAR_PATCH 0

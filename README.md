@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-12 - Added activetagindicatorbar, alwaysfullscreen and autoresize patches
+
 2019-09-11 - Added monitor rules, combo and ewmhtags patches
 
 2019-09-10 - Minor tweaks to awesomebar patch (incl. alpha and systray compatibility). Added floatbordercolor patch.
@@ -29,11 +31,17 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Patches included:
 
+   - [activetagindicatorbar](https://dwm.suckless.org/patches/activetagindicatorbar/)
+      - this patch changes the rectangle indicating if a tag is used by a client into a bar above the tag name
+
    - [alpha](https://dwm.suckless.org/patches/alpha/)
       - adds transparency for the status bar
 
    - [alternativetags](https://dwm.suckless.org/patches/alternativetags/)
       - adds alternative tags which can be toggled on the fly for the sole purpose of providing visual aid
+
+   - [alwaysfullscreen](https://dwm.suckless.org/patches/alwaysfullscreen/)
+      - prevents the focus to drift from the active fullscreen client when using focusstack\(\)
 
    - [attachabove](https://dwm.suckless.org/patches/attachabove/)
       - new windows are placed above selected client
@@ -46,6 +54,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [attachbottom](https://dwm.suckless.org/patches/attachbottom/)
       - new windows are placed at the bottom of the stack
+
+   - [autoresize](https://dwm.suckless.org/patches/autoresize/)
+      - by default, windows that are not visible when requesting a resize/move will not get resized/moved, with this patch, however, they will
 
    - [autostart](https://dwm.suckless.org/patches/autostart/)
       - makes dwm run `~/.dwm/autostart_blocking.sh` and `~/.dwm/autostart.sh &` on startup
