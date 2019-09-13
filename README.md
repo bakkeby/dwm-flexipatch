@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-13 - Added titlecolor patch
+
 2019-09-12 - Added activetagindicatorbar, alwaysfullscreen and autoresize patches
 
 2019-09-11 - Added monitor rules, combo and ewmhtags patches
@@ -129,6 +131,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [tagswapmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagswapmon-6.2.diff)
       - swap all visible windows on one monitor with those of an adjacent monitor
+
+   - [titlecolor](https://dwm.suckless.org/patches/titlecolor/)
+      - adds a new color scheme used by the (selected) window title in the bar
 
    - [togglefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff)
       - allows you to toggle fullscreen on and off using a single shortcut key

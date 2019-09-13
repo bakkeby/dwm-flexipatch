@@ -68,11 +68,18 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-#if AWESOMEBAR_PATCH
-enum { SchemeNorm, SchemeSel, SchemeHid }; /* color schemes */
-#else
-enum { SchemeNorm, SchemeSel }; /* color schemes */
-#endif // #if AWESOMEBAR_PATCH
+
+enum {
+	SchemeNorm
+	,SchemeSel
+	#if AWESOMEBAR_PATCH
+	,SchemeHid
+	#endif // AWESOMEBAR_PATCH
+	#if TITLECOLOR_PATCH
+	,SchemeTitle
+	#endif // TITLECOLOR_PATCH
+}; /* color schemes */
+
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
 	   #if SYSTRAY_PATCH
@@ -1100,11 +1107,16 @@ drawbar(Monitor *m)
 				if (!ISVISIBLE(c))
 					continue;
 				if (m->sel == c)
+					#if TITLECOLOR_PATCH
+					scm = SchemeTitle;
+					#else
 					scm = SchemeSel;
+					#endif // TITLECOLOR_PATCH
 				else if (HIDDEN(c))
 					scm = SchemeHid;
 				else
 					scm = SchemeNorm;
+
 				drw_setscheme(drw, scheme[scm]);
 				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0);
 				x += (1.0 / (double)n) * w;
@@ -1136,7 +1148,11 @@ drawbar(Monitor *m)
 					continue;
 				tw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 
+				#if TITLECOLOR_PATCH
+				drw_setscheme(drw, scheme[m->sel == c ? SchemeTitle : SchemeNorm]);
+				#else
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
+				#endif // TITLECOLOR_PATCH
 				if (tw > 0) /* trap special handling of 0 in drw_text */
 					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
 				if (c->isfloating)
@@ -1149,7 +1165,11 @@ drawbar(Monitor *m)
 		drw_rect(drw, x, 0, w, bh, 1, 1);
 		#else
 		if (m->sel) {
+			#if TITLECOLOR_PATCH
+			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : SchemeNorm]);
+			#else
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
+			#endif // TITLECOLOR_PATCH
 			#if CENTEREDWINDOWNAME_PATCH
 			int mid = (m->ww - TEXTW(m->sel->name)) / 2 - x;
 			drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);

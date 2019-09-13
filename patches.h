@@ -225,6 +225,11 @@
  */
 #define TAGSWAPMON_PATCH 0
 
+/* Adds a new color scheme used by the (selected) window title in the bar.
+ * https://dwm.suckless.org/patches/titlecolor/
+ */
+#define TITLECOLOR_PATCH 0
+
 /* This patch allows you to toggle fullscreen on and off using a single shortcut key.
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff
  */

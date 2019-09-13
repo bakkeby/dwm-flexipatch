@@ -33,31 +33,40 @@ static const char col_cyan[]        = "#005577";
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const unsigned int alphas[][3] = {
-	/*               fg      bg        border     */
-	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
-	#if AWESOMEBAR_PATCH
-	[SchemeHid]  = { OPAQUE, baralpha, borderalpha },
+	/*                fg      bg        border     */
+	[SchemeNorm]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeSel]   = { OPAQUE, baralpha, borderalpha },
+	#if AWESOMEBA R_PATCH
+	[SchemeHid]   = { OPAQUE, baralpha, borderalpha },
 	#endif // AWESOMEBAR_PATCH
+	#if TITLECOLOR_PATCH
+	[SchemeTitle] = { OPAQUE, baralpha, borderalpha },
+	#endif // TITLECOLOR_PATCH
 };
 #endif // ALPHA_PATCH
 #if FLOAT_BORDER_COLOR_PATCH
 static const char *colors[][4] = {
-	/*               fg         bg         border     float     */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan,  col_cyan  },
+	/*                fg         bg         border     float     */
+	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2, col_gray2 },
+	[SchemeSel]   = { col_gray4, col_cyan,  col_cyan,  col_cyan  },
 	#if AWESOMEBAR_PATCH
-	[SchemeHid]  = { col_cyan,  col_gray1, col_cyan,  col_cyan  },
+	[SchemeHid]   = { col_cyan,  col_gray1, col_cyan,  col_cyan  },
 	#endif // AWESOMEBAR_PATCH
+	#if TITLECOLOR_PATCH
+	[SchemeTitle] = { col_gray4, col_cyan,  col_cyan,  col_cyan  },
+	#endif // TITLECOLOR_PATCH
 };
 #else
 static const char *colors[][3] = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	/*                fg         bg         border   */
+	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2 },
+	[SchemeSel]   = { col_gray4, col_cyan,  col_cyan  },
 	#if AWESOMEBAR_PATCH
-	[SchemeHid]  = { col_cyan,  col_gray1, col_cyan  },
+	[SchemeHid]   = { col_cyan,  col_gray1, col_cyan  },
 	#endif // AWESOMEBAR_PATCH
+	#if TITLECOLOR_PATCH
+	[SchemeTitle] = { col_gray4, col_cyan,  col_cyan  },
+	#endif // TITLECOLOR_PATCH
 };
 #endif // FLOAT_BORDER_COLOR_PATCH
 
