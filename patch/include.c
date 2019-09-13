@@ -40,6 +40,10 @@
 #include "pertag.c"
 #endif
 
+#if PUSH_PATCH
+#include "push.c"
+#endif
+
 #if ROTATESTACK_PATCH
 #include "rotatestack.c"
 #endif

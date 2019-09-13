@@ -36,6 +36,10 @@
 #include "ewmhtags.h"
 #endif
 
+#if PUSH_PATCH
+#include "push.h"
+#endif
+
 #if ROTATESTACK_PATCH
 #include "rotatestack.h"
 #endif

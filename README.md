@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-13 - Added titlecolor patch
+2019-09-13 - Added titlecolor and push patches
 
 2019-09-12 - Added activetagindicatorbar, alwaysfullscreen and autoresize patches
 
@@ -102,6 +102,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor
+
+   - [push](https://dwm.suckless.org/patches/push/)
+      - this patch provides a way to move clients up and down inside the client list
 
    - [resizecorners](https://dwm.suckless.org/patches/resizecorners/)
       - by default, windows only resize from the bottom right corner
