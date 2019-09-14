@@ -44,6 +44,10 @@
 #include "rotatestack.h"
 #endif
 
+#if SETBORDERPX_PATCH
+#include "setborderpx.h"
+#endif
+
 #if SYSTRAY_PATCH
 #include "systray.h"
 #endif

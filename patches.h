@@ -187,6 +187,11 @@
  */
 #define SAVEFLOATS_PATCH 0
 
+/* This patch allows border pixels to be changed during runtime.
+ * https://dwm.suckless.org/patches/setborderpx/
+ */
+#define SETBORDERPX_PATCH 0
+
 /* This patch adds configuration options for horizontal and vertical padding in the status bar.
  * https://dwm.suckless.org/patches/statuspadding/
  */

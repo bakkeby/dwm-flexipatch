@@ -180,6 +180,9 @@ struct Monitor {
 	int gappoh;           /* horizontal outer gaps */
 	int gappov;           /* vertical outer gaps */
 	#endif // VANITYGAPS_PATCH
+	#if SETBORDERPX_PATCH
+	unsigned int borderpx;
+	#endif // SETBORDERPX_PATCH
 	unsigned int seltags;
 	unsigned int sellt;
 	unsigned int tagset[2];
@@ -888,6 +891,9 @@ createmon(void)
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
+	#if SETBORDERPX_PATCH
+	m->borderpx = borderpx;
+	#endif // SETBORDERPX_PATCH
 	#if VANITYGAPS_PATCH
 	m->gappih = gappih;
 	m->gappiv = gappiv;
@@ -1568,7 +1574,11 @@ manage(Window w, XWindowAttributes *wa)
 	/* only fix client y-offset, if the client center might cover the bar */
 	c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
 		&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
+	#if SETBORDERPX_PATCH
+	c->bw = c->mon->borderpx;
+	#else
 	c->bw = borderpx;
+	#endif // SETBORDERPX_PATCH
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);

@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-09-14 - Added setborderpx patch
+
 2019-09-13 - Added titlecolor and push patches
 
 2019-09-12 - Added activetagindicatorbar, alwaysfullscreen and autoresize patches
@@ -116,6 +118,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [savefloats](https://dwm.suckless.org/patches/save_floats/)
       - saves size and position of every floating window before it is forced into tiled mode
       - if the window is made floating again then the old dimensions will be restored
+
+   - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
+      - this patch allows border pixels to be changed during runtime
 
    - [statuspadding](https://dwm.suckless.org/patches/statuspadding/)
       - adds configuration options for horizontal and vertical padding in the status bar
