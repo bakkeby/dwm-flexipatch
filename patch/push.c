@@ -1,4 +1,4 @@
-Client *
+static Client *
 nextc(Client *c, float f)
 {
 	if (!f)
@@ -34,7 +34,7 @@ pushup(const Arg *arg)
 		if (selmon->clients == c)
 			selmon->clients = sel;
 		else {
-			for (c = selmon->clients; c->next != sel->next; c = c->next);
+			for (c f selmon->clients; c->next != sel->next; c = c->next);
 			c->next = sel;
 		}
 	} else {

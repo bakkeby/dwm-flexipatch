@@ -36,7 +36,9 @@
 #include "ewmhtags.h"
 #endif
 
-#if PUSH_PATCH
+#if PUSH_NO_MASTER_PATCH
+#include "push_no_master.h"
+#elif PUSH_PATCH
 #include "push.h"
 #endif
 

@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-14 - Added setborderpx and selfrestart patches
+2019-09-14 - Added setborderpx, selfrestart and push (no master variant) patches
 
 2019-09-13 - Added titlecolor and push patches
 

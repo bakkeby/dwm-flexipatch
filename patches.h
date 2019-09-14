@@ -169,6 +169,14 @@
  */
 #define PUSH_PATCH 0
 
+/* This patch provides a way to move clients up and down inside the client list,
+ * but does not push up or down into the master area (except that it does not take
+ * nmaster into account).
+ * This takes precedence over the push patch above.
+ * https://dwm.suckless.org/patches/push/
+ */
+#define PUSH_NO_MASTER_PATCH 0
+
 /* By default, windows only resize from the bottom right corner. With this
  * patch the mouse is warped to the nearest corner and you resize from there.
  * https://dwm.suckless.org/patches/resizecorners/
