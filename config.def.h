@@ -299,6 +299,9 @@ static Key keys[] = {
 	#if TOGGLEFULLSCREEN_PATCH
 	{ MODKEY,                       XK_y,          togglefullscreen,  {0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
+	#if STICKY_PATCH
+	{ MODKEY,                       XK_s,          togglesticky,      {0} },
+	#endif // STICKY_PATCH
 	{ MODKEY,                       XK_0,          view,              {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,               {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,      focusmon,          {.i = -1 } },

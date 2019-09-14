@@ -34,7 +34,7 @@ pushup(const Arg *arg)
 		if (selmon->clients == c)
 			selmon->clients = sel;
 		else {
-			for (c f selmon->clients; c->next != sel->next; c = c->next);
+			for (c = selmon->clients; c->next != sel->next; c = c->next);
 			c->next = sel;
 		}
 	} else {

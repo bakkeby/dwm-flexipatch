@@ -54,6 +54,10 @@
 #include "setborderpx.h"
 #endif
 
+#if STICKY_PATCH
+#include "sticky.h"
+#endif
+
 #if SYSTRAY_PATCH
 #include "systray.h"
 #endif

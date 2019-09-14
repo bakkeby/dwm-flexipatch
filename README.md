@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-14 - Added setborderpx, selfrestart and push (no master variant) patches
+2019-09-14 - Added setborderpx, selfrestart and push (no master variant), sticky and warp patches
 
 2019-09-13 - Added titlecolor and push patches
 
@@ -128,11 +128,14 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [statuspadding](https://dwm.suckless.org/patches/statuspadding/)
       - adds configuration options for horizontal and vertical padding in the status bar
 
-   - [systray](https://dwm.suckless.org/patches/systray/)
-      - adds system tray in the status bar
+   - [sticky](https://dwm.suckless.org/patches/sticky/)
+      - adds toggleable keyboard shortcut to make a client 'sticky', i.e. visible on all tags
 
    - [switchtag](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff)
       - when an application opens on a specific tab this patch adds the option to also switch to that tag when the application starts
+
+   - [systray](https://dwm.suckless.org/patches/systray/)
+      - adds system tray in the status bar
 
    - [tagallmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff)
       - move all visible windows to an adjacent monitor
@@ -151,6 +154,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [vanitygaps](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-6.2.diff)
       - adds configurable gaps between windows differentiating between outer, inner, horizontal and vertical gaps
+
+   - [warp](https://dwm.suckless.org/patches/warp/)
+      - warps the mouse cursor to the center of the currently focused window or screen when the mouse cursor is (a) on a different screen or (b) on top of a different window
 
    - [windowrolerule](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-windowrolerule-6.2.diff)
       - sometimes a single application opens different windows depending on the task at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property

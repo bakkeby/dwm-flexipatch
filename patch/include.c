@@ -58,6 +58,10 @@
 #include "setborderpx.c"
 #endif
 
+#if STICKY_PATCH
+#include "sticky.c"
+#endif
+
 #if SYSTRAY_PATCH
 #include "systray.c"
 #endif
@@ -76,6 +80,10 @@
 
 #if VANITYGAPS_PATCH
 #include "vanitygaps.c"
+#endif
+
+#if WARP_PATCH
+#include "warp.c"
 #endif
 
 #if ZOOMSWAP_PATCH

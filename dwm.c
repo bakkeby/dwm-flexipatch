@@ -50,9 +50,14 @@
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
-#if ATTACHASIDE_PATCH
+#if ATTACHASIDE_PATCH && STICKY_PATCH
+#define ISVISIBLEONTAG(C, T)    ((C->tags & T) || C->issticky)
+#define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])
+#elif ATTACHASIDE_PATCH
 #define ISVISIBLEONTAG(C, T)    ((C->tags & T))
 #define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])
+#elif STICKY_PATCH
+#define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]) || C->issticky)
 #else
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #endif // ATTACHASIDE_PATCH
@@ -138,6 +143,9 @@ struct Client {
 	#if CENTER_PATCH
 	int iscentered;
 	#endif // CENTER_PATCH
+	#if STICKY_PATCH
+	int issticky;
+	#endif // STICKY_PATCH
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -1323,6 +1331,9 @@ focusmon(const Arg *arg)
 	unfocus(selmon->sel, 0);
 	selmon = m;
 	focus(NULL);
+	#if WARP_PATCH
+	warp(selmon->sel);
+	#endif // WARP_PATCH
 }
 
 void
@@ -2007,6 +2018,10 @@ restack(Monitor *m)
 	}
 	XSync(dpy, False);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
+	#if WARP_PATCH
+	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && selmon->lt[selmon->sellt] != &layouts[2])
+		warp(m->sel);
+	#endif // WARP_PATCH
 }
 
 void

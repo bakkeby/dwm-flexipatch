@@ -210,6 +210,11 @@
  */
 #define STATUSPADDING_PATCH 0
 
+/* Adds toggleable keyboard shortcut to make a client 'sticky', i.e. visible on all tags.
+ * https://dwm.suckless.org/patches/sticky/
+ */
+#define STICKY_PATCH 0
+
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */
@@ -264,6 +269,12 @@
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-cfacts-6.2.diff
  */
 #define VANITYGAPS_PATCH 0
+
+/* This patch warps the mouse cursor to the center of the currently focused window or screen
+ * when the mouse cursor is (a) on a different screen or (b) on top of a different window.
+ * https://dwm.suckless.org/patches/warp/
+ */
+#define WARP_PATCH 0
 
 /* Sometimes a single application opens different windows depending on the task
  * at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property.
