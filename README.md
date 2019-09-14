@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-14 - Added setborderpx patch
+2019-09-14 - Added setborderpx and selfrestart patches
 
 2019-09-13 - Added titlecolor and push patches
 
@@ -118,6 +118,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [savefloats](https://dwm.suckless.org/patches/save_floats/)
       - saves size and position of every floating window before it is forced into tiled mode
       - if the window is made floating again then the old dimensions will be restored
+
+   - [selfrestart](https://dwm.suckless.org/patches/selfrestart/)
+      - restart dwm without the unnecessary dependency of an external script
 
    - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
       - this patch allows border pixels to be changed during runtime

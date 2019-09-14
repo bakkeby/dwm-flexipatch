@@ -187,6 +187,11 @@
  */
 #define SAVEFLOATS_PATCH 0
 
+/* Allows restarting dwm without the dependency of an external script.
+ * https://dwm.suckless.org/patches/selfrestart/
+ */
+#define SELFRESTART_PATCH 0
+
 /* This patch allows border pixels to be changed during runtime.
  * https://dwm.suckless.org/patches/setborderpx/
  */

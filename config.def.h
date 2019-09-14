@@ -272,6 +272,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_z,          showhideclient,    {0} },
 	#endif // AWESOMEBAR_PATCH
 	{ MODKEY|ShiftMask,             XK_c,          killclient,        {0} },
+	#if SELFRESTART_PATCH
+	{ MODKEY|ShiftMask,             XK_r,          self_restart,      {0} },
+	#endif // SELFRESTART_PATCH
 	{ MODKEY|ShiftMask,             XK_q,          quit,              {0} },
 	{ MODKEY,                       XK_t,          setlayout,         {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,         {.v = &layouts[1]} },
