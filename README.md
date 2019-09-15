@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-15 - Added xrdb, viewontag, urgentborder and winview patches
+2019-09-15 - Added focusonclick, xrdb, viewontag, urgentborder and winview patches
 
 2019-09-14 - Added setborderpx, selfrestart and push (no master variant), sticky and warp patches
 
@@ -90,6 +90,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [floatbordercolor](https://dwm.suckless.org/patches/float_border_color/)
       - this patch allows a different border color to be chosen for floating windows
+
+   - [focusonclick](https://dwm.suckless.org/patches/focusonclick/)
+      - this patch makes you switch focus only by mouse click and not sloppy (focus follows mouse pointer)
 
    - [focusonnetactive](https://dwm.suckless.org/patches/focusonnetactive/)
       - by default, dwm responds to \_NET_ACTIVE_WINDOW client messages by setting the urgency bit on the named window
