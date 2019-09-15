@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-15 - Added xrdb, viewontag and winview patches
+2019-09-15 - Added xrdb, viewontag, urgentborder and winview patches
 
 2019-09-14 - Added setborderpx, selfrestart and push (no master variant), sticky and warp patches
 
@@ -154,6 +154,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [togglefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff)
       - allows you to toggle fullscreen on and off using a single shortcut key
 
+   - [urgentborder](https://dwm.suckless.org/patches/urgentborder/)
+      - this patch makes "urgent" windows have different colors
+
    - [vanitygaps](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-6.2.diff)
       - adds configurable gaps between windows differentiating between outer, inner, horizontal and vertical gaps
 
@@ -170,7 +173,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [winview](http://dwm.suckless.org/patches/winview/)
       - allows switching the view to that of a given client from the all-window view (Mod-0) using a keyboard shortcut
 
-   - [xrdb](http://dwm.suckless.org/patches/xrdb/)
+   - [xrdb](http://dwm.suckless.org/patches/xrdb/f)
       - allows dwm to read colors from xrdb (.Xresources) during runtime
 
    - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)

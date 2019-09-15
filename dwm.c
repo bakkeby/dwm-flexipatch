@@ -77,6 +77,9 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum {
 	SchemeNorm
 	,SchemeSel
+	#if URGENTBORDER_PATCH
+	,SchemeUrg
+	#endif // URGENTBORDER_PATCH
 	#if AWESOMEBAR_PATCH
 	,SchemeHid
 	#endif // AWESOMEBAR_PATCH
@@ -2909,8 +2912,19 @@ updatewmhints(Client *c)
 		if (c == selmon->sel && wmh->flags & XUrgencyHint) {
 			wmh->flags &= ~XUrgencyHint;
 			XSetWMHints(dpy, c->win, wmh);
-		} else
+		} else {
 			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
+			#if URGENTBORDER_PATCH
+			if (c->isurgent) {
+				#if FLOAT_BORDER_COLOR_PATCH
+				if (c->isfloating)
+					XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColFloat].pixel);
+				else
+				#endif
+				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
+			}
+			#endif // URGENTBORDER_PATCH
+		}
 		if (wmh->flags & InputHint)
 			c->neverfocus = !wmh->input;
 		else

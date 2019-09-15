@@ -39,6 +39,15 @@ static char selbordercolor[]             = "#005577";
 static char selfloatcolor[]              = "#005577";
 #endif // FLOAT_BORDER_COLOR_PATCH
 
+#if URGENTBORDER_PATCH
+static char urgfgcolor[]                 = "#000000";
+static char urgbgcolor[]                 = "#000000";
+static char urgbordercolor[]             = "#ff0000"; // NB: patch only works with border color for now
+#if FLOAT_BORDER_COLOR_PATCH
+static char urgfloatcolor[]              = "#000000";
+#endif // FLOAT_BORDER_COLOR_PATCH
+#endif // URGENTBORDER_PATCH
+
 #if AWESOMEBAR_PATCH
 static char hidfgcolor[]                 = "#005577";
 static char hidbgcolor[]                 = "#222222";
@@ -64,6 +73,9 @@ static const unsigned int alphas[][3] = {
 	/*                fg      bg        border     */
 	[SchemeNorm]  = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]   = { OPAQUE, baralpha, borderalpha },
+	#if URGENTBORDER_PATCH
+	[SchemeUrg]   = { OPAQUE, baralpha, borderalpha },
+	#endif // URGENTBORDER_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]   = { OPAQUE, baralpha, borderalpha },
 	#endif // AWESOMEBAR_PATCH
@@ -81,6 +93,9 @@ char *colors[][4] = {
 	/*                fg            bg            border            float          */
 	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor,  normfloatcolor },
 	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor,   selfloatcolor  },
+	#if URGENTBORDER_PATCH
+	[SchemeUrg]   = { urgfgcolor,   urgbgcolor,   urgbordercolor,   urgfloatcolor },
+	#endif // URGENTBORDER_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor,   hidfloatcolor },
 	#endif // AWESOMEBAR_PATCH
@@ -97,6 +112,9 @@ char *colors[][3] = {
 	/*                fg            bg            border          */
 	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor },
 	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor  },
+	#if URGENTBORDER_PATCH
+	[SchemeUrg]   = { urgfgcolor,   urgbgcolor,   urgbordercolor },
+	#endif // URGENTBORDER_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor  },
 	#endif // AWESOMEBAR_PATCH
