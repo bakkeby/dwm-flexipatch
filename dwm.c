@@ -2439,6 +2439,9 @@ tag(const Arg *arg)
 		selmon->sel->tags = arg->ui & TAGMASK;
 		focus(NULL);
 		arrange(selmon);
+		#if VIEWONTAG_PATCH
+		view(arg);
+		#endif // VIEWONTAG_PATCH
 	}
 }
 

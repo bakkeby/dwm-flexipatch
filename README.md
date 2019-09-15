@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-09-15 - Added xrdb and winview patches
+2019-09-15 - Added xrdb, viewontag and winview patches
 
 2019-09-14 - Added setborderpx, selfrestart and push (no master variant), sticky and warp patches
 
@@ -156,6 +156,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [vanitygaps](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-6.2.diff)
       - adds configurable gaps between windows differentiating between outer, inner, horizontal and vertical gaps
+
+   - [viewontag](https://dwm.suckless.org/patches/viewontag/)
+      - follow a window to the tag it is being moved to
 
    - [warp](https://dwm.suckless.org/patches/warp/)
       - warps the mouse cursor to the center of the currently focused window or screen when the mouse cursor is (a) on a different screen or (b) on top of a different window

@@ -270,6 +270,11 @@
  */
 #define VANITYGAPS_PATCH 0
 
+/* Follow a window to the tag it is being moved to.
+ * https://dwm.suckless.org/patches/viewontag/
+ */
+#define VIEWONTAG_PATCH 0
+
 /* This patch warps the mouse cursor to the center of the currently focused window or screen
  * when the mouse cursor is (a) on a different screen or (b) on top of a different window.
  * https://dwm.suckless.org/patches/warp/
