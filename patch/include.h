@@ -82,6 +82,10 @@
 #include "warp.h"
 #endif
 
+#if WINVIEW_PATCH
+#include "winview.h"
+#endif
+
 #if ZOOMSWAP_PATCH
 #include "zoomswap.h"
 #endif

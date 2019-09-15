@@ -29,14 +29,14 @@ static char normfgcolor[]                = "#bbbbbb";
 static char normbgcolor[]                = "#222222";
 static char normbordercolor[]            = "#444444";
 #if FLOAT_BORDER_COLOR_PATCH
-static char normflcolor[]                = "#db8fd9";
+static char normfloatcolor[]             = "#db8fd9";
 #endif // FLOAT_BORDER_COLOR_PATCH
 
 static char selfgcolor[]                 = "#eeeeee";
 static char selbgcolor[]                 = "#005577";
 static char selbordercolor[]             = "#005577";
 #if FLOAT_BORDER_COLOR_PATCH
-static char selflcolor[]                 = "#005577";
+static char selfloatcolor[]              = "#005577";
 #endif // FLOAT_BORDER_COLOR_PATCH
 
 #if AWESOMEBAR_PATCH
@@ -44,7 +44,7 @@ static char hidfgcolor[]                 = "#005577";
 static char hidbgcolor[]                 = "#222222";
 static char hidbordercolor[]             = "#005577";
 #if FLOAT_BORDER_COLOR_PATCH
-static char hidflcolor[]                 = "#f76e0c";
+static char hidfloatcolor[]              = "#f76e0c";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // AWESOMEBAR_PATCH
 
@@ -53,7 +53,7 @@ static char titlefgcolor[]               = "#eeeeee";
 static char titlebgcolor[]               = "#005577";
 static char titlebordercolor[]           = "#005577";
 #if FLOAT_BORDER_COLOR_PATCH
-static char titleflcolor[]               = "#005577";
+static char titlefloatcolor[]            = "#005577";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // TITLECOLOR_PATCH
 
@@ -73,19 +73,27 @@ static const unsigned int alphas[][3] = {
 };
 #endif // ALPHA_PATCH
 #if FLOAT_BORDER_COLOR_PATCH
-static char *colors[][4] = {
-	/*                fg            bg            border            float       */
-	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor,  normflcolor },
-	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor,   selflcolor  },
+static
+#if !XRDB_PATCH
+const
+#endif // XRDB_PATCH
+char *colors[][4] = {
+	/*                fg            bg            border            float          */
+	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor,  normfloatcolor },
+	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor,   selfloatcolor  },
 	#if AWESOMEBAR_PATCH
-	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor,   hidflcolor },
+	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor,   hidfloatcolor },
 	#endif // AWESOMEBAR_PATCH
 	#if TITLECOLOR_PATCH
-	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor, titleflcolor },
+	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor, titlefloatcolor },
 	#endif // TITLECOLOR_PATCH
 };
 #else
-static char *colors[][3] = {
+static
+#if !XRDB_PATCH
+const
+#endif // XRDB_PATCH
+char *colors[][3] = {
 	/*                fg            bg            border          */
 	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor },
 	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor  },
@@ -304,6 +312,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_r,          self_restart,      {0} },
 	#endif // SELFRESTART_PATCH
 	{ MODKEY|ShiftMask,             XK_q,          quit,              {0} },
+	#if WINVIEW_PATCH
+	{ MODKEY,                       XK_o,          winview,           {0} },
+	#endif // WINVIEW_PATCH
 	#if XRDB_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,              {.v = NULL } },
 	#endif // XRDB_PATCH

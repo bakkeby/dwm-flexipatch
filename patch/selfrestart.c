@@ -43,7 +43,7 @@ char *get_dwm_path()
             perror("readlink:");
             return NULL;
         }
-    } while(r >= length);
+    } while (r >= length);
 
     path[r] = '\0';
 

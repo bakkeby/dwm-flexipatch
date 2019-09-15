@@ -20,14 +20,14 @@ loadxrdb()
 				XRDB_LOAD_COLOR("dwm.normbgcolor", normbgcolor);
 				XRDB_LOAD_COLOR("dwm.normbordercolor", normbordercolor);
 				#if FLOAT_BORDER_COLOR_PATCH
-				XRDB_LOAD_COLOR("dwm.normflcolor", normflcolor);
+				XRDB_LOAD_COLOR("dwm.normfloatcolor", normfloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
 
 				XRDB_LOAD_COLOR("dwm.selfgcolor", selfgcolor);
 				XRDB_LOAD_COLOR("dwm.selbgcolor", selbgcolor);
 				XRDB_LOAD_COLOR("dwm.selbordercolor", selbordercolor);
 				#if FLOAT_BORDER_COLOR_PATCH
-				XRDB_LOAD_COLOR("dwm.selflcolor", selflcolor);
+				XRDB_LOAD_COLOR("dwm.selfloatcolor", selfloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
 
 				#if AWESOMEBAR_PATCH
@@ -35,7 +35,7 @@ loadxrdb()
 				XRDB_LOAD_COLOR("dwm.hidbgcolor", hidbgcolor);
 				XRDB_LOAD_COLOR("dwm.hidbordercolor", hidbordercolor);
 				#if FLOAT_BORDER_COLOR_PATCH
-				XRDB_LOAD_COLOR("dwm.hidflcolor", hidflcolor);
+				XRDB_LOAD_COLOR("dwm.hidfloatcolor", hidfloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
 				#endif // AWESOMEBAR_PATCH
 
@@ -44,7 +44,7 @@ loadxrdb()
 				XRDB_LOAD_COLOR("dwm.titlebgcolor", titlebgcolor);
 				XRDB_LOAD_COLOR("dwm.titlebordercolor", titlebordercolor);
 				#if FLOAT_BORDER_COLOR_PATCH
-				XRDB_LOAD_COLOR("dwm.titleflcolor", titleflcolor);
+				XRDB_LOAD_COLOR("dwm.titlefloatcolor", titlefloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
 				#endif // TITLECOLOR_PATCH
 			}

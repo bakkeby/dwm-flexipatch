@@ -285,7 +285,14 @@
  */
 #define WINDOWROLERULE_PATCH 0
 
-/* Allows dwm to read colors from xrdb (.Xresources) at run time.
+/* The winview patch allows switching the view to that of a given client from the all-window
+ * view (Mod-0) using a keyboard shortcut.
+ * http://dwm.suckless.org/patches/winview/
+ */
+#define WINVIEW_PATCH 0
+
+/* Allows dwm to read colors from xrdb (.Xresources) during runtime. Compatible with
+ * the float border color, awesomebar and titlecolor patches.
  * https://dwm.suckless.org/patches/xrdb/
  */
 #define XRDB_PATCH 0
