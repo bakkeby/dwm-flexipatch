@@ -24,11 +24,39 @@ static const int showsystray             = 1;   /* 0 means no systray */
 #endif // SYSTRAY_PATCH
 static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+
+static char normfgcolor[]                = "#bbbbbb";
+static char normbgcolor[]                = "#222222";
+static char normbordercolor[]            = "#444444";
+#if FLOAT_BORDER_COLOR_PATCH
+static char normflcolor[]                = "#db8fd9";
+#endif // FLOAT_BORDER_COLOR_PATCH
+
+static char selfgcolor[]                 = "#eeeeee";
+static char selbgcolor[]                 = "#005577";
+static char selbordercolor[]             = "#005577";
+#if FLOAT_BORDER_COLOR_PATCH
+static char selflcolor[]                 = "#005577";
+#endif // FLOAT_BORDER_COLOR_PATCH
+
+#if AWESOMEBAR_PATCH
+static char hidfgcolor[]                 = "#005577";
+static char hidbgcolor[]                 = "#222222";
+static char hidbordercolor[]             = "#005577";
+#if FLOAT_BORDER_COLOR_PATCH
+static char hidflcolor[]                 = "#f76e0c";
+#endif // FLOAT_BORDER_COLOR_PATCH
+#endif // AWESOMEBAR_PATCH
+
+#if TITLECOLOR_PATCH
+static char titlefgcolor[]               = "#eeeeee";
+static char titlebgcolor[]               = "#005577";
+static char titlebordercolor[]           = "#005577";
+#if FLOAT_BORDER_COLOR_PATCH
+static char titleflcolor[]               = "#005577";
+#endif // FLOAT_BORDER_COLOR_PATCH
+#endif // TITLECOLOR_PATCH
+
 #if ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
@@ -36,7 +64,7 @@ static const unsigned int alphas[][3] = {
 	/*                fg      bg        border     */
 	[SchemeNorm]  = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]   = { OPAQUE, baralpha, borderalpha },
-	#if AWESOMEBA R_PATCH
+	#if AWESOMEBAR_PATCH
 	[SchemeHid]   = { OPAQUE, baralpha, borderalpha },
 	#endif // AWESOMEBAR_PATCH
 	#if TITLECOLOR_PATCH
@@ -45,27 +73,27 @@ static const unsigned int alphas[][3] = {
 };
 #endif // ALPHA_PATCH
 #if FLOAT_BORDER_COLOR_PATCH
-static const char *colors[][4] = {
-	/*                fg         bg         border     float     */
-	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2, col_gray2 },
-	[SchemeSel]   = { col_gray4, col_cyan,  col_cyan,  col_cyan  },
+static char *colors[][4] = {
+	/*                fg            bg            border            float       */
+	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor,  normflcolor },
+	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor,   selflcolor  },
 	#if AWESOMEBAR_PATCH
-	[SchemeHid]   = { col_cyan,  col_gray1, col_cyan,  col_cyan  },
+	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor,   hidflcolor },
 	#endif // AWESOMEBAR_PATCH
 	#if TITLECOLOR_PATCH
-	[SchemeTitle] = { col_gray4, col_cyan,  col_cyan,  col_cyan  },
+	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor, titleflcolor },
 	#endif // TITLECOLOR_PATCH
 };
 #else
-static const char *colors[][3] = {
-	/*                fg         bg         border   */
-	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]   = { col_gray4, col_cyan,  col_cyan  },
+static char *colors[][3] = {
+	/*                fg            bg            border          */
+	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor },
+	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor  },
 	#if AWESOMEBAR_PATCH
-	[SchemeHid]   = { col_cyan,  col_gray1, col_cyan  },
+	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor  },
 	#endif // AWESOMEBAR_PATCH
 	#if TITLECOLOR_PATCH
-	[SchemeTitle] = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor },
 	#endif // TITLECOLOR_PATCH
 };
 #endif // FLOAT_BORDER_COLOR_PATCH
@@ -221,7 +249,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
@@ -276,6 +304,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_r,          self_restart,      {0} },
 	#endif // SELFRESTART_PATCH
 	{ MODKEY|ShiftMask,             XK_q,          quit,              {0} },
+	#if XRDB_PATCH
+	{ MODKEY|ShiftMask,             XK_F5,         xrdb,              {.v = NULL } },
+	#endif // XRDB_PATCH
 	{ MODKEY,                       XK_t,          setlayout,         {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,         {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,          setlayout,         {.v = &layouts[2]} },

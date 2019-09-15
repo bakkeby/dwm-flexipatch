@@ -90,6 +90,10 @@
 #include "zoomswap.c"
 #endif
 
+#if XRDB_PATCH
+#include "xrdb.c"
+#endif
+
 /* Layouts */
 
 #if BSTACK_LAYOUT

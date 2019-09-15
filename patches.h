@@ -285,6 +285,11 @@
  */
 #define WINDOWROLERULE_PATCH 0
 
+/* Allows dwm to read colors from xrdb (.Xresources) at run time.
+ * https://dwm.suckless.org/patches/xrdb/
+ */
+#define XRDB_PATCH 0
+
 /* The zoomswap patch allows a master and a stack window to swap places
  * rather than every window on the screen changing position.
  * https://dwm.suckless.org/patches/zoomswap/

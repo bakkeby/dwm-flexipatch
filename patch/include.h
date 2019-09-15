@@ -78,8 +78,16 @@
 #include "vanitygaps.h"
 #endif
 
+#if WARP_PATCH
+#include "warp.h"
+#endif
+
 #if ZOOMSWAP_PATCH
 #include "zoomswap.h"
+#endif
+
+#if XRDB_PATCH
+#include "xrdb.h"
 #endif
 
 /* Layouts */
