@@ -176,7 +176,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [winview](http://dwm.suckless.org/patches/winview/)
       - allows switching the view to that of a given client from the all-window view (Mod-0) using a keyboard shortcut
 
-   - [xrdb](http://dwm.suckless.org/patches/xrdb/f)
+   - [xrdb](http://dwm.suckless.org/patches/xrdb/)
       - allows dwm to read colors from xrdb (.Xresources) during runtime
 
    - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
