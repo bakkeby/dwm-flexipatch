@@ -36,6 +36,10 @@
 #include "ewmhtags.h"
 #endif
 
+#if PERTAG_PATCH
+#include "pertag.h"
+#endif
+
 #if PUSH_NO_MASTER_PATCH
 #include "push_no_master.h"
 #elif PUSH_PATCH
@@ -120,8 +124,8 @@
 #include "fibonacci.h"
 #endif
 
-#if FLEXTILE_LAYOUT
-#include "flextile.h"
+#if FLEXTILE_DELUXE_LAYOUT
+#include "flextile-deluxe.h"
 #endif
 
 #if GAPPLESSGRID_LAYOUT

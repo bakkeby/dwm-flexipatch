@@ -17,6 +17,7 @@ setcfact(const Arg *arg)
 	arrange(selmon);
 }
 
+#if BSTACK_LAYOUT || BSTACKHORIZ_LAYOUT || CENTEREDMASTER_LAYOUT || CENTEREDFLOATINGMASTER_LAYOUT || DECK_LAYOUT || TILE_LAYOUT || MONOCLE_LAYOUT
 void
 getfacts(Monitor *m, float *mf, float *sf)
 {
@@ -30,6 +31,7 @@ getfacts(Monitor *m, float *mf, float *sf)
 		else
 			sfacts += c->cfact;
 	}
-	*mf = mfacts;       // total factor of master area
-	*sf = sfacts;       // total factor of slave area
+	*mf = mfacts; // total factor of master area
+	*sf = sfacts; // total factor of slave area
 }
+#endif

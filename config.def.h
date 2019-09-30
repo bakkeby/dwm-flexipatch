@@ -179,34 +179,53 @@ static const Rule rules[] = {
 };
 
 #if MONITOR_RULES_PATCH
+#if PERTAG_PATCH
 static const MonitorRule monrules[] = {
-	#if FLEXTILE_LAYOUT
-	/* monitor layout axis              master            stack             */
-	{  1,      0,     SPLIT_HORIZONTAL, LEFT_TO_RIGHT,    GRID,             }, // use a different layout for the second monitor
-	{  -1,     0,     SPLIT_VERTICAL,   TOP_TO_BOTTOM,    TOP_TO_BOTTOM,    }, // default
-	#else
-	/* monitor layout */
-	{  1,      2 }, // use a different layout for the second monitor
-	{  -1,     0 }, // default
-	#endif // FLEXTILE_LAYOUT
+	/* monitor tag   layout  mfact */
+	{  1,      -1,   2,      -1 }, // use a different layout for the second monitor
+	{  -1,     -1,   0,      -1 }, // default
 };
-#elif FLEXTILE_LAYOUT
-static const int layoutaxis[] = {
-	SPLIT_VERTICAL,   /* layout axis: 1 = x, 2 = y; negative values mirror the layout, setting the master area to the right / bottom instead of left / top */
-	TOP_TO_BOTTOM,    /* master axis: 1 = x (from left to right), 2 = y (from top to bottom), 3 = z (monocle), 4 = grid */
-	TOP_TO_BOTTOM,    /* stack axis:  1 = x (from left to right), 2 = y (from top to bottom), 3 = z (monocle), 4 = grid */
+#else
+static const MonitorRule monrules[] = {
+	/* monitor layout  mfact */
+	{  1,      2,      -1 }, // use a different layout for the second monitor
+	{  -1,     0,      -1 }, // default
 };
+#endif // PERTAG_PATCH
 #endif // MONITOR_RULES_PATCH
 
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
+#if FLEXTILE_DELUXE_LAYOUT
+static const int nstack      = 0;    /* number of clients in primary stack area */
+#endif // FLEXTILE_DELUXE_LAYOUT
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
 #if NROWGRID_LAYOUT
 #define FORCE_VSPLIT 1
 #endif
 
+#if FLEXTILE_DELUXE_LAYOUT
+static const Layout layouts[] = {
+	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis } */
+	{ "[]=",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, // default tile layout
+ 	{ "><>",      NULL,             {0} },    /* no layout function means floating behavior */
+	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, 0, 0, NULL } }, // monocle
+	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, // floating master
+	{ "[D]",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL } }, // deck
+	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, // bstack
+	{ "===",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // bstackhoriz
+	{ "|M|",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, monoclesymbols } }, // centeredmaster
+	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID, 0, 0, NULL } }, // gappless grid
+	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE, 0, 0, NULL } }, // fibonacci dwindle
+	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL, 0, 0, NULL } }, // fibonacci spiral
+	{ "|||",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // columns (col) layout
+	#if CYCLELAYOUTS_PATCH
+	{ NULL,       NULL,             {0} },
+	#endif
+};
+#else
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	#if TILE_LAYOUT
@@ -237,9 +256,6 @@ static const Layout layouts[] = {
 	#if FIBONACCI_DWINDLE_LAYOUT
 	{ "[\\]",     dwindle },
 	#endif
-	#if FLEXTILE_LAYOUT
-	{ "[]=",	flextile },
-	#endif
 	#if GRIDMODE_LAYOUT
 	{ "HHH",      grid },
 	#endif
@@ -256,6 +272,7 @@ static const Layout layouts[] = {
 	{ NULL,       NULL },
 	#endif
 };
+#endif // FLEXTILE_DELUXE_LAYOUT
 
 /* key definitions */
 #define MODKEY Mod1Mask
@@ -342,21 +359,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,          setlayout,         {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,         {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,          setlayout,         {.v = &layouts[2]} },
-	#if FLEXTILE_LAYOUT
-	{ MODKEY,                       XK_w,          setflexlayout,     {.i = 293 } }, // centered master
-	{ MODKEY,                       XK_e,          setflexlayout,     {.i = 273 } }, // bstackhoriz layout
-	{ MODKEY,                       XK_r,          setflexlayout,     {.i = 272 } }, // bstack layout
-	{ MODKEY,                       XK_v,          setflexlayout,     {.i = 261 } }, // default tile layout
-	{ MODKEY,                       XK_g,          setflexlayout,     {.i = 263 } }, // tile + grid layout
-	{ MODKEY|ControlMask,           XK_w,          setflexlayout,     {.i =   7 } }, // grid
-	{ MODKEY|ControlMask,           XK_e,          setflexlayout,     {.i = 262 } }, // deck layout
-	{ MODKEY|ControlMask,           XK_r,          setflexlayout,     {.i =   6 } }, // monocle
-	{ MODKEY|ControlMask,           XK_g,          setflexlayout,     {.i = 257 } }, // columns (col) layout
+	#if FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,  {.i = 0 } },   /* flextile, 0 = layout axis */
 	{ MODKEY|ControlMask,           XK_Tab,        rotatelayoutaxis,  {.i = 1 } },   /* flextile, 1 = master axis */
 	{ MODKEY|ControlMask|ShiftMask, XK_Tab,        rotatelayoutaxis,  {.i = 2 } },   /* flextile, 2 = stack axis */
+	{ MODKEY|ControlMask|Mod1Mask,  XK_Tab,        rotatelayoutaxis,  {.i = 3 } },   /* flextile, 3 = secondary stack axis */
 	{ MODKEY|ControlMask,           XK_Return,     mirrorlayout,      {0} },         /* flextile, flip master and stack areas */
-	#endif // FLEXTILE_LAYOUT
+	#endif // FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY,                       XK_space,      setlayout,         {0} },
 	{ MODKEY|ShiftMask,             XK_space,      togglefloating,    {0} },
 	#if TOGGLEFULLSCREEN_PATCH

@@ -124,8 +124,8 @@
 #include "fibonacci.c"
 #endif
 
-#if FLEXTILE_LAYOUT
-#include "flextile.c"
+#if FLEXTILE_DELUXE_LAYOUT
+#include "flextile-deluxe.c"
 #endif
 
 #if GAPPLESSGRID_LAYOUT

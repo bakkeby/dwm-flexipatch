@@ -162,9 +162,24 @@ typedef struct {
 	const Arg arg;
 } Key;
 
+#if FLEXTILE_DELUXE_LAYOUT
+typedef struct {
+	int nmaster;
+	int nstack;
+	int layout;
+	int masteraxis; // master stack area
+	int stack1axis; // primary stack area
+	int stack2axis; // secondary stack area, e.g. centered master
+	void (*symbolfunc)(Monitor *, unsigned int);
+} LayoutPreset;
+#endif // FLEXTILE_DELUXE_LAYOUT
+
 typedef struct {
 	const char *symbol;
 	void (*arrange)(Monitor *);
+	#if FLEXTILE_DELUXE_LAYOUT
+	LayoutPreset preset;
+	#endif // FLEXTILE_DELUXE_LAYOUT
 } Layout;
 
 #if PERTAG_PATCH
@@ -173,9 +188,10 @@ typedef struct Pertag Pertag;
 struct Monitor {
 	char ltsymbol[16];
 	float mfact;
-	#if FLEXTILE_LAYOUT
-	int ltaxis[3];
-	#endif // FLEXTILE_LAYOUT
+	#if FLEXTILE_DELUXE_LAYOUT
+	int ltaxis[4];
+	int nstack;
+	#endif // FLEXTILE_DELUXE_LAYOUT
 	int nmaster;
 	int num;
 	int by;               /* bar geometry */
@@ -234,12 +250,11 @@ typedef struct {
 #if MONITOR_RULES_PATCH
 typedef struct {
 	int monitor;
+	#if PERTAG_PATCH
+	int tag;
+	#endif // PERTAG_PATCH
 	int layout;
-	#if FLEXTILE_LAYOUT
-	int layoutaxis;
-	int masteraxis;
-	int stackaxis;
-	#endif
+	float mfact;
 } MonitorRule;
 #endif // MONITOR_RULES_PATCH
 
@@ -456,6 +471,8 @@ applyrules(Client *c)
 
 				if (newtagset) {
 					c->mon->tagset[c->mon->seltags] = newtagset;
+					if (r->switchtag == 1)
+						pertagview(&((Arg) { .ui = newtagset }));
 					arrange(c->mon);
 				}
 			}
@@ -904,11 +921,11 @@ Monitor *
 createmon(void)
 {
 	Monitor *m;
-	#if PERTAG_PATCH || MONITOR_RULES_PATCH
+	#if PERTAG_PATCH
 	int i;
-	#endif // PERTAG_PATCH / MONITOR_RULES_PATCH
+	#endif // PERTAG_PATCH
 	#if MONITOR_RULES_PATCH
-	int mc;
+	int mc, j;
 	Monitor *mi;
 	const MonitorRule *mr;
 	#endif // MONITOR_RULES_PATCH
@@ -917,6 +934,9 @@ createmon(void)
 	m->tagset[0] = m->tagset[1] = 1;
 	m->mfact = mfact;
 	m->nmaster = nmaster;
+	#if FLEXTILE_DELUXE_LAYOUT
+	m->nstack = nstack;
+	#endif // FLEXTILE_DELUXE_LAYOUT
 	m->showbar = showbar;
 	m->topbar = topbar;
 	#if SETBORDERPX_PATCH
@@ -930,30 +950,31 @@ createmon(void)
 	#endif // VANITYGAPS_PATCH
 	#if MONITOR_RULES_PATCH
 	for (mc = 0, mi = mons; mi; mi = mi->next, mc++);
-	for (i = 0; i < LENGTH(monrules); i++) {
-		mr = &monrules[i];
-		if (mr->monitor == -1 || mr->monitor == mc) {
+	for (j = 0; j < LENGTH(monrules); j++) {
+		mr = &monrules[j];
+		if ((mr->monitor == -1 || mr->monitor == mc)
+		#if PERTAG_PATCH
+				&& (mr->tag == -1 || mr->tag == 0)
+		#endif // PERTAG_PATCH
+		) {
 			m->lt[0] = &layouts[mr->layout];
 			m->lt[1] = &layouts[1 % LENGTH(layouts)];
 			strncpy(m->ltsymbol, layouts[mr->layout].symbol, sizeof m->ltsymbol);
-			#if FLEXTILE_LAYOUT
-			m->ltaxis[0] = mr->layoutaxis;
-			m->ltaxis[1] = mr->masteraxis;
-			m->ltaxis[2] = mr->stackaxis;
-			#endif // FLEXTILE_LAYOUT
 			break;
 		}
 	}
 	#else
-	#if FLEXTILE_LAYOUT
-	m->ltaxis[0] = layoutaxis[0];
-	m->ltaxis[1] = layoutaxis[1];
-	m->ltaxis[2] = layoutaxis[2];
-	#endif // FLEXTILE_LAYOUT
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
 	#endif // MONITOR_RULES_PATCH
+
+	#if FLEXTILE_DELUXE_LAYOUT
+	m->ltaxis[LAYOUT] = m->lt[0]->preset.layout;
+	m->ltaxis[MASTER] = m->lt[0]->preset.masteraxis;
+	m->ltaxis[STACK]  = m->lt[0]->preset.stack1axis;
+	m->ltaxis[STACK2] = m->lt[0]->preset.stack2axis;
+	#endif // FLEXTILE_DELUXE_LAYOUT
 
 	#if PERTAG_PATCH
 	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
@@ -963,20 +984,43 @@ createmon(void)
 		/* init nmaster */
 		m->pertag->nmasters[i] = m->nmaster;
 
+		#if FLEXTILE_DELUXE_LAYOUT
+		m->pertag->nstacks[i] = m->nstack;
+		#endif // FLEXTILE_DELUXE_LAYOUT
+
 		/* init mfacts */
 		m->pertag->mfacts[i] = m->mfact;
 
 		/* init layouts */
+		#if MONITOR_RULES_PATCH
+		for (j = 0; j < LENGTH(monrules); j++) {
+			mr = &monrules[j];
+			if ((mr->monitor == -1 || mr->monitor == mc) && (mr->tag == -1 || mr->tag == i)) {
+				m->pertag->ltidxs[i][0] = &layouts[mr->layout];
+				m->pertag->ltidxs[i][1] = m->lt[0];
+				if (mr->mfact != -1)
+					m->pertag->mfacts[i] = mr->mfact;
+				#if FLEXTILE_DELUXE_LAYOUT
+				m->pertag->ltaxis[i][LAYOUT] = m->pertag->ltidxs[i][0]->preset.layout;
+				m->pertag->ltaxis[i][MASTER] = m->pertag->ltidxs[i][0]->preset.masteraxis;
+				m->pertag->ltaxis[i][STACK]  = m->pertag->ltidxs[i][0]->preset.stack1axis;
+				m->pertag->ltaxis[i][STACK2] = m->pertag->ltidxs[i][0]->preset.stack2axis;
+				#endif // FLEXTILE_DELUXE_LAYOUT
+				break;
+			}
+		}
+		#else
 		m->pertag->ltidxs[i][0] = m->lt[0];
 		m->pertag->ltidxs[i][1] = m->lt[1];
-		m->pertag->sellts[i] = m->sellt;
-
-		#if FLEXTILE_LAYOUT
+		#if FLEXTILE_DELUXE_LAYOUT
 		/* init flextile axes */
-		m->pertag->ltaxes[i][0] = m->ltaxis[0];
-		m->pertag->ltaxes[i][1] = m->ltaxis[1];
-		m->pertag->ltaxes[i][2] = m->ltaxis[2];
-		#endif // FLEXTILE_LAYOUT
+		m->pertag->ltaxis[i][LAYOUT] = m->ltaxis[LAYOUT];
+		m->pertag->ltaxis[i][MASTER] = m->ltaxis[MASTER];
+		m->pertag->ltaxis[i][STACK]  = m->ltaxis[STACK];
+		m->pertag->ltaxis[i][STACK2] = m->ltaxis[STACK2];
+		#endif // FLEXTILE_DELUXE_LAYOUT
+		#endif // MONITOR_RULES_PATCH
+		m->pertag->sellts[i] = m->sellt;
 
 		#if PERTAGBAR_PATCH
 		/* init showbar */
@@ -2043,7 +2087,7 @@ restack(Monitor *m)
 	XSync(dpy, False);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 	#if WARP_PATCH
-	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && selmon->lt[selmon->sellt] != &layouts[2])
+	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && selmon->lt[selmon->sellt] != &layouts[2]) // <-- NB! hardcoded monocle
 		warp(m->sel);
 	#endif // WARP_PATCH
 }
@@ -2237,6 +2281,25 @@ setlayout(const Arg *arg)
 	#else
 		selmon->lt[selmon->sellt] = (Layout *)arg->v;
 	#endif // PERTAG_PATCH
+
+	#if FLEXTILE_DELUXE_LAYOUT
+	if (selmon->lt[selmon->sellt]->preset.nmaster != -1)
+		selmon->nmaster = selmon->lt[selmon->sellt]->preset.nmaster;
+	if (selmon->lt[selmon->sellt]->preset.nstack != -1)
+		selmon->nstack = selmon->lt[selmon->sellt]->preset.nstack;
+
+	selmon->ltaxis[LAYOUT] = selmon->lt[selmon->sellt]->preset.layout;
+	selmon->ltaxis[MASTER] = selmon->lt[selmon->sellt]->preset.masteraxis;
+	selmon->ltaxis[STACK]  = selmon->lt[selmon->sellt]->preset.stack1axis;
+	selmon->ltaxis[STACK2] = selmon->lt[selmon->sellt]->preset.stack2axis;
+
+	#if PERTAG_PATCH
+	selmon->pertag->ltaxis[selmon->pertag->curtag][LAYOUT] = selmon->ltaxis[LAYOUT];
+	selmon->pertag->ltaxis[selmon->pertag->curtag][MASTER] = selmon->ltaxis[MASTER];
+	selmon->pertag->ltaxis[selmon->pertag->curtag][STACK]  = selmon->ltaxis[STACK];
+	selmon->pertag->ltaxis[selmon->pertag->curtag][STACK2] = selmon->ltaxis[STACK2];
+	#endif // PERTAG_PATCH
+	#endif // FLEXTILE_DELUXE_LAYOUT
 	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof selmon->ltsymbol);
 	if (selmon->sel)
 		arrange(selmon);
@@ -2957,38 +3020,11 @@ updatewmhints(Client *c)
 void
 view(const Arg *arg)
 {
-	#if PERTAG_PATCH
-	int i;
-	unsigned int tmptag;
-	#endif // PERTAG_PATCH
-
 	if ((arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
 		return;
 	selmon->seltags ^= 1; /* toggle sel tagset */
 	#if PERTAG_PATCH
-	if (arg->ui & TAGMASK) {
-		selmon->pertag->prevtag = selmon->pertag->curtag;
-		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
-		if (arg->ui == ~0)
-			selmon->pertag->curtag = 0;
-		else {
-			for (i=0; !(arg->ui & 1 << i); i++) ;
-			selmon->pertag->curtag = i + 1;
-		}
-	} else {
-		tmptag = selmon->pertag->prevtag;
-		selmon->pertag->prevtag = selmon->pertag->curtag;
-		selmon->pertag->curtag = tmptag;
-	}
-	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
-	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
-	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
-	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
-	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
-	#if PERTAGBAR_PATCH
-	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
-		togglebar(NULL);
-	#endif // PERTAGBAR_PATCH
+	pertagview(arg);
 	#else
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;

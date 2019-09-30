@@ -5,13 +5,15 @@ For example to include the `alpha` patch then you would only need to flip this s
 #define ALPHA_PATCH 1
 ```
 
-So if you have ever been curious about trying out dwm, but have been discouraged by manual patching, then this may be a good starting point to see what a "fully fledged" dwm can look like. Want to try out the `pertag` patch? Just flip a config and recompile. Once you have found out what works for you and what don't then you should be in a better position to choose patches should you want to start patching from scratch.
+So if you have ever been curious about trying out dwm, but have been discouraged by manual patching, then this may be a good starting point to see what a "fully fledged" dwm can look like. Want to try out the `pertag` patch? Just flip a config and recompile. Once you have found out what works for you and what doesn't then you should be in a better position to choose patches should you want to start patching from scratch.
 
 Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on the dwm window manager, how to install it and how it works.
 
 ---
 
 ### Changelog:
+
+2019-09-30 - Replaced flextile with flextile-deluxe, refactored monitor rules to support predetermined layouts per tag
 
 2019-09-15 - Added focusonclick, xrdb, viewontag, urgentborder and winview patches
 
@@ -202,12 +204,13 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [fibonacci](https://dwm.suckless.org/patches/fibonacci/)
       - fibonacci (dwindle and spiral) layouts
 
-   - [flextile](https://dwm.suckless.org/patches/flextile/)
-      - expanded flextile patch supporting:
-         - horizontal and vertical split
-         - centered horizontal and vertical split
-         - pertag, cfacts, rmaster, vanitygaps patches
+   - flextile-deluxe
+      - a re-envisioned, flexible and over-the-top version of the original [flextile](https://dwm.suckless.org/patches/flextile/) patch supporting
+         - multiple split layouts (horizontal, vertical, centered, floating, fixed)
+         - tile arrangement on a per split basis (stack horizontally, stack vertically, grids, fibonacci)
+         - pertag, cfacts, rmaster, vanitygaps compatibility
          - tile, deck, monocle, centeredmaster, bstack, bstackhoriz, gapplessgrid and more
+      - this gives you a lot of versatility in terms of layout
 
    - [gapplessgrid](https://dwm.suckless.org/patches/gaplessgrid/)
       - gappless grid layout

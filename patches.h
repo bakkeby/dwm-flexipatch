@@ -355,10 +355,11 @@
  */
 #define FIBONACCI_SPIRAL_LAYOUT 0
 
-/* Flextile layout.
- * https://dwm.suckless.org/patches/flextile/
+/* Flextile deluxe layout.
+ * A revamped, more flexible, and over-the-top version of the original flextile layout.
+ * https://dwm.suckless.org/patches/flextile/ (original)
  */
-#define FLEXTILE_LAYOUT 0
+#define FLEXTILE_DELUXE_LAYOUT 0
 
 /* Gappless grid layout.
  * https://dwm.suckless.org/patches/gaplessgrid/
