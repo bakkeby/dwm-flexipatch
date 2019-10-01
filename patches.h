@@ -141,6 +141,19 @@
  */
 #define FOCUSONNETACTIVE_PATCH 0
 
+/* Applies the monocle layout with the focused client on top and hides the bar. When pressed
+ * again it shows the bar and restores the layout that was active before going fullscreen.
+ * NB: This patch assumes that the third layout is monocle and that the bar is shown.
+ * https://dwm.suckless.org/patches/fullscreen/
+ */
+#define FULLSCREEN_PATCH 0
+
+/* With this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
+ * and the bar will now overlay the display.
+ * http://dwm.suckless.org/patches/holdbar/
+ */
+#define HOLDBAR_PATCH 0
+
 /* Moves the layout symbol in the status bar to the left hand side.
  * http://dwm.suckless.org/patches/leftlayout/
  */
@@ -272,6 +285,12 @@
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff
  */
 #define TOGGLEFULLSCREEN_PATCH 0
+
+/* This patch resets isfloating on any visible windows that have it set.
+ * Optionally also applies a layout.
+ * https://dwm.suckless.org/patches/unfloatvisible/
+ */
+#define UNFLOATVISIBLE_PATCH 0
 
 /* This patch makes "urgent" windows have different colors.
  * https://dwm.suckless.org/patches/urgentborder/

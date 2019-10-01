@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-01 - Added leftlayout patch
+2019-10-01 - Added leftlayout, fullscreen, holdbar and unfloatvisible patches
 
 2019-09-30 - Replaced flextile with flextile-deluxe, refactored monitor rules to support predetermined layouts per tag
 
@@ -102,6 +102,14 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - by default, dwm responds to \_NET_ACTIVE_WINDOW client messages by setting the urgency bit on the named window
       - this patch activates the window instead
 
+   - [fullscreen](https://dwm.suckless.org/patches/fullscreen/)
+      - applies the monocle layout with the focused client on top and hides the bar
+      - when pressed again it shows the bar and restores the layout that was active before going fullscreen
+
+   - [holdbar](http://dwm.suckless.org/patches/holdbar/)
+      - with this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
+      - additionally the bar will now overlay the display
+
    - [leftlayout](http://dwm.suckless.org/patches/leftlayout/)
       - moves the layout symbol in the status bar to the left hand side
 
@@ -163,6 +171,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [togglefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff)
       - allows you to toggle fullscreen on and off using a single shortcut key
+
+   - [unfloatvisible](https://dwm.suckless.org/patches/unfloatvisible/)
+      - resets isfloating on any visible windows that have it set and optionally also applies a layout
 
    - [urgentborder](https://dwm.suckless.org/patches/urgentborder/)
       - this patch makes "urgent" windows have different colors

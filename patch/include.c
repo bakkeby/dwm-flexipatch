@@ -36,6 +36,14 @@
 #include "ewmhtags.c"
 #endif
 
+#if FULLSCREEN_PATCH
+#include "fullscreen.c"
+#endif
+
+#if HOLDBAR_PATCH
+#include "holdbar.c"
+#endif
+
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif
@@ -76,6 +84,10 @@
 
 #if TOGGLEFULLSCREEN_PATCH
 #include "togglefullscreen.c"
+#endif
+
+#if UNFLOATVISIBLE_PATCH
+#include "unfloatvisible.c"
 #endif
 
 #if VANITYGAPS_PATCH

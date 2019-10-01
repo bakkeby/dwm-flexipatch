@@ -10,7 +10,11 @@ static const unsigned int gappoh         = 10   /* horiz outer gap between windo
 static const unsigned int gappov         = 30   /* vert outer gap between windows and screen edge */
 static const int smartgaps               = 0;   /* 1 means no outer gap when there is only one window */
 #endif // VANITYGAPS_PATCH
+#if HOLDBAR_PATCH
+static const int showbar                 = 0;   /* 0 means no bar */
+#else
 static const int showbar                 = 1;   /* 0 means no bar */
+#endif // HOLDBAR_PATCH
 static const int topbar                  = 1;   /* 0 means bottom bar */
 #if FOCUSONCLICK_PATCH
 static const int focusonwheel            = 0;
@@ -290,6 +294,10 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 #endif // COMBO_PATCH
 
+#if HOLDBAR_PATCH
+#define HOLDKEY 0 // replace 0 with the keysym to activate holdbar
+#endif // HOLDBAR_PATCH
+
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
@@ -350,6 +358,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_r,          self_restart,      {0} },
 	#endif // SELFRESTART_PATCH
 	{ MODKEY|ShiftMask,             XK_q,          quit,              {0} },
+	#if HOLDBAR_PATCH
+	{ 0,                            HOLDKEY,       holdbar,           {0} },
+	#endif // HOLDBAR_PATCH
 	#if WINVIEW_PATCH
 	{ MODKEY,                       XK_o,          winview,           {0} },
 	#endif // WINVIEW_PATCH
@@ -368,6 +379,10 @@ static Key keys[] = {
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY,                       XK_space,      setlayout,         {0} },
 	{ MODKEY|ShiftMask,             XK_space,      togglefloating,    {0} },
+	#if UNFLOATVISIBLE_PATCH
+	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,    {0} },
+	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,    {.v = &layouts[0]} },
+	#endif // UNFLOATVISIBLE_PATCH
 	#if TOGGLEFULLSCREEN_PATCH
 	{ MODKEY,                       XK_y,          togglefullscreen,  {0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
