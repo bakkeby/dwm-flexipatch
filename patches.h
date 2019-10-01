@@ -141,6 +141,11 @@
  */
 #define FOCUSONNETACTIVE_PATCH 0
 
+/* Moves the layout symbol in the status bar to the left hand side.
+ * http://dwm.suckless.org/patches/leftlayout/
+ */
+#define LEFTLAYOUT_PATCH 0
+
 /* By default in dwm it is possible to make an application fullscreen, then use
  * the focusstack keybindings to focus on other windows beneath the current window.
  * It is also possible to spawn new windows (e.g. a terminal) that end up getting

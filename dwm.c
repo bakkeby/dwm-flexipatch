@@ -610,6 +610,51 @@ buttonpress(XEvent *e)
 	}
 	if (ev->window == selmon->barwin) {
 		i = x = 0;
+		#if LEFTLAYOUT_PATCH
+		x += blw;
+		if (ev->x < x) {
+ 			click = ClkLtSymbol;
+		} else {
+			do
+				x += TEXTW(tags[i]);
+			while (ev->x >= x && ++i < LENGTH(tags));
+			if (i < LENGTH(tags)) {
+				click = ClkTagBar;
+				arg.ui = 1 << i;
+			}
+			#if AWESOMEBAR_PATCH && SYSTRAY_PATCH
+			else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2 - getsystraywidth())
+			#elif AWESOMEBAR_PATCH
+			else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2)
+			#elif SYSTRAY_PATCH
+			else if (ev->x > selmon->ww - TEXTW(stext) - getsystraywidth())
+			#else
+			else if (ev->x > selmon->ww - TEXTW(stext))
+			#endif // SYSTRAY_PATCH / AWESOMEBAR_PATCH
+				click = ClkStatusText;
+			#if AWESOMEBAR_PATCH
+			else {
+				x += blw;
+				c = m->clients;
+
+				do {
+					if (!ISVISIBLE(c))
+						continue;
+					else
+						x += (1.0 / (double)m->bt) * m->btw;
+				} while (ev->x > x && (c = c->next));
+
+				if (c) {
+					click = ClkWinTitle;
+					arg.v = c;
+				}
+			}
+			#else
+			else
+				click = ClkWinTitle;
+			#endif // AWESOMEBAR_PATCH
+		}
+		#else // LEFTLAYOUT_PATCH
 		do
 			x += TEXTW(tags[i]);
 		while (ev->x >= x && ++i < LENGTH(tags));
@@ -626,9 +671,8 @@ buttonpress(XEvent *e)
 		else if (ev->x > selmon->ww - TEXTW(stext) - getsystraywidth())
 		#else
 		else if (ev->x > selmon->ww - TEXTW(stext))
-		#endif // SYSTRAY_PATCH
+		#endif // SYSTRAY_PATCH / AWESOMEBAR_PATCH
 			click = ClkStatusText;
-
 		#if AWESOMEBAR_PATCH
 		else {
 			x += blw;
@@ -650,6 +694,7 @@ buttonpress(XEvent *e)
 		else
 			click = ClkWinTitle;
 		#endif // AWESOMEBAR_PATCH
+		#endif // LEFTLAYOUT_PATCH
 	} else if ((c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
 		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
@@ -1146,6 +1191,11 @@ drawbar(Monitor *m)
 			urg |= c->tags;
 	}
 	x = 0;
+	#if LEFTLAYOUT_PATCH
+	w = blw = TEXTW(m->ltsymbol);
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	#endif // LEFTLAYOUT_PATCH
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
 		#if ALTERNATIVE_TAGS_PATCH
@@ -1169,9 +1219,11 @@ drawbar(Monitor *m)
 			#endif // ACTIVETAGINDICATORBAR_PATCH
 		x += w;
 	}
+	#if !LEFTLAYOUT_PATCH
 	w = blw = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	#endif // LEFTLAYOUT_PATCH
 
 	#if SYSTRAY_PATCH
 	if ((w = m->ww - sw - stw - x) > bh)

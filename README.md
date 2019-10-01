@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-01 - Added leftlayout patch
+
 2019-09-30 - Replaced flextile with flextile-deluxe, refactored monitor rules to support predetermined layouts per tag
 
 2019-09-15 - Added focusonclick, xrdb, viewontag, urgentborder and winview patches
@@ -99,6 +101,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [focusonnetactive](https://dwm.suckless.org/patches/focusonnetactive/)
       - by default, dwm responds to \_NET_ACTIVE_WINDOW client messages by setting the urgency bit on the named window
       - this patch activates the window instead
+
+   - [leftlayout](http://dwm.suckless.org/patches/leftlayout/)
+      - moves the layout symbol in the status bar to the left hand side
 
    - [losefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-losefullscreen-6.2.diff)
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window
