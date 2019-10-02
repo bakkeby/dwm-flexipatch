@@ -361,6 +361,9 @@ static Key keys[] = {
 	#if RESTARTSIG_PATCH
 	{ MODKEY|ControlMask|ShiftMask, XK_q,          quit,              {1} },
 	#endif // RESTARTSIG_PATCH
+	#if FOCUSURGENT_PATCH
+	{ MODKEY,                       XK_u,          focusurgent,       {0} },
+	#endif // FOCUSURGENT_PATCH
 	#if HOLDBAR_PATCH
 	{ 0,                            HOLDKEY,       holdbar,           {0} },
 	#endif // HOLDBAR_PATCH

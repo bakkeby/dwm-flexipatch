@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-02 - Added restartsig, emptyview and focusadjacenttag patches
+2019-10-02 - Added restartsig, emptyview, focusurgent and focusadjacenttag patches
 
 2019-10-01 - Added leftlayout, fullscreen, holdbar and unfloatvisible patches
 
@@ -111,6 +111,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [focusonnetactive](https://dwm.suckless.org/patches/focusonnetactive/)
       - by default, dwm responds to \_NET_ACTIVE_WINDOW client messages by setting the urgency bit on the named window
       - this patch activates the window instead
+
+   - [focusurgent](https://dwm.suckless.org/patches/focusurgent/)
+      - adds a keyboard shortcut to select the next window having the urgent flag regardless of the tag it is on
 
    - [fullscreen](https://dwm.suckless.org/patches/fullscreen/)
       - applies the monocle layout with the focused client on top and hides the bar

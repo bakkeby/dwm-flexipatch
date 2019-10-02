@@ -40,6 +40,10 @@
 #include "focusadjacenttag.c"
 #endif
 
+#if FOCUSURGENT_PATCH
+#include "focusurgent.c"
+#endif
+
 #if FULLSCREEN_PATCH
 #include "fullscreen.c"
 #endif
