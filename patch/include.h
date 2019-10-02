@@ -54,6 +54,10 @@
 #include "push.h"
 #endif
 
+#if RESTARTSIG_PATCH
+#include "restartsig.h"
+#endif
+
 #if ROTATESTACK_PATCH
 #include "rotatestack.h"
 #endif

@@ -54,6 +54,10 @@
 #include "push.c"
 #endif
 
+#if RESTARTSIG_PATCH
+#include "restartsig.c"
+#endif
+
 #if ROTATESTACK_PATCH
 #include "rotatestack.c"
 #endif

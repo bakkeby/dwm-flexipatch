@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-02 - Added restartsig and emptyview patch
+
 2019-10-01 - Added leftlayout, fullscreen, holdbar and unfloatvisible patches
 
 2019-09-30 - Replaced flextile with flextile-deluxe, refactored monitor rules to support predetermined layouts per tag
@@ -86,6 +88,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
 
+   - [emptyview](https://dwm.suckless.org/patches/emptyview/)
+      - allows no tag at all to be selected
+      - dwm will start with no tag selected and when a client with no tag rule is started and no tag is selected then it will be opened on the first tag
+
    - [ewmhtags](https://dwm.suckless.org/patches/ewmhtags/)
       - adds EWMH support for \_NET_NUMBER_OF_DESKTOPS, \_NET_CURRENT_DESKTOP, \_NET_DESKTOP_NAMES and \_NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs that request workspace information, e.g. polybar's xworkspaces module
 
@@ -131,6 +137,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [resizecorners](https://dwm.suckless.org/patches/resizecorners/)
       - by default, windows only resize from the bottom right corner
       - with this patch the mouse is warped to the nearest corner and you resize from there
+
+   - [restartsig](https://dwm.suckless.org/patches/restartsig/)
+      - adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid
+      - additionally dwm can quit cleanly by using kill -TERM dwmpid
 
    - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
       - let's you rotate through the stack using keyboard shortcuts

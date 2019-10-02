@@ -110,6 +110,13 @@
  */
 #define CYCLELAYOUTS_PATCH 0
 
+/* This patch allows no tag at all to be selected. The result is that dwm will start with
+ * no tag selected and when you start a client with no tag rule and no tag selected then
+ * it will be opened on the first tag.
+ * https://dwm.suckless.org/patches/emptyview/
+ */
+#define EMPTYVIEW_PATCH 0
+
 /* Adds EWMH support for _NET_NUMBER_OF_DESKTOPS, _NET_CURRENT_DESKTOP, _NET_DESKTOP_NAMES
  * and _NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs
  * that request workspace information. For example polybar's xworkspaces module.
@@ -205,6 +212,12 @@
  * https://dwm.suckless.org/patches/resizecorners/
  */
 #define RESIZECORNERS_PATCH 0
+
+/* Adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid.
+ * Additionally dwm can quit cleanly by using kill -TERM dwmpid.
+ * https://dwm.suckless.org/patches/restartsig/
+ */
+#define RESTARTSIG_PATCH 0
 
 /* This patch let's you rotate through the stack using keyboard shortcuts.
  * https://dwm.suckless.org/patches/rotatestack/

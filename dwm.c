@@ -483,7 +483,13 @@ applyrules(Client *c)
 		XFree(ch.res_class);
 	if (ch.res_name)
 		XFree(ch.res_name);
+	#if EMPTYVIEW_PATCH
+	if(c->tags & TAGMASK)                    c->tags = c->tags & TAGMASK;
+	else if(c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
+	else                                     c->tags = 1;
+	#else
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
+	#endif // EMPTYVIEW_PATCH
 }
 
 int
@@ -976,7 +982,11 @@ createmon(void)
 	#endif // MONITOR_RULES_PATCH
 
 	m = ecalloc(1, sizeof(Monitor));
+	#if EMPTYVIEW_PATCH
+	m->tagset[0] = m->tagset[1] = 0;
+	#else
 	m->tagset[0] = m->tagset[1] = 1;
+	#endif // EMPTYVIEW_PATCH
 	m->mfact = mfact;
 	m->nmaster = nmaster;
 	#if FLEXTILE_DELUXE_LAYOUT
@@ -1968,6 +1978,10 @@ propertynotify(XEvent *e)
 void
 quit(const Arg *arg)
 {
+	#if RESTARTSIG_PATCH
+	if (arg->i)
+		restart = 1;
+	#endif // RESTARTSIG_PATCH
 	running = 0;
 }
 
@@ -2191,7 +2205,11 @@ sendmon(Client *c, Monitor *m)
 	detach(c);
 	detachstack(c);
 	c->mon = m;
+	#if EMPTYVIEW_PATCH
+	c->tags = (m->tagset[m->seltags] ? m->tagset[m->seltags] : 1);
+	#else
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
+	#endif // EMPTYVIEW_PATCH
 	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 	attachx(c);
 	#else
@@ -2387,6 +2405,11 @@ setup(void)
 
 	/* clean up any zombies immediately */
 	sigchld(0);
+
+	#if RESTARTSIG_PATCH
+	signal(SIGHUP, sighup);
+	signal(SIGTERM, sigterm);
+	#endif // RESTARTSIG_PATCH
 
 	/* init screen */
 	screen = DefaultScreen(dpy);
@@ -2693,7 +2716,9 @@ toggleview(const Arg *arg)
 	int i;
 	#endif // PERTAG_PATCH
 
+	#if !EMPTYVIEW_PATCH
 	if (newtagset) {
+	#endif // EMPTYVIEW_PATCH
 		selmon->tagset[selmon->seltags] = newtagset;
 
 		#if PERTAG_PATCH
@@ -2721,7 +2746,9 @@ toggleview(const Arg *arg)
 		#endif // PERTAG_PATCH
 		focus(NULL);
 		arrange(selmon);
+	#if !EMPTYVIEW_PATCH
 	}
+	#endif // EMPTYVIEW_PATCH
 	#if EWMHTAGS_PATCH
 	updatecurrentdesktop();
 	#endif // EWMHTAGS_PATCH
@@ -3072,7 +3099,11 @@ updatewmhints(Client *c)
 void
 view(const Arg *arg)
 {
+	#if EMPTYVIEW_PATCH
+	if (arg->ui && (arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
+	#else
 	if ((arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
+	#endif // EMPTYVIEW_PATCH
 		return;
 	selmon->seltags ^= 1; /* toggle sel tagset */
 	#if PERTAG_PATCH
@@ -3247,6 +3278,10 @@ main(int argc, char *argv[])
 	runAutostart();
 	#endif
 	run();
+	#if RESTARTSIG_PATCH
+	if (restart)
+		execvp(argv[0], argv);
+	#endif // RESTARTSIG_PATCH
 	cleanup();
 	XCloseDisplay(dpy);
 	return EXIT_SUCCESS;
