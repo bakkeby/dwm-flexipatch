@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-02 - Added restartsig and emptyview patch
+2019-10-02 - Added restartsig, emptyview and focusadjacenttag patches
 
 2019-10-01 - Added leftlayout, fullscreen, holdbar and unfloatvisible patches
 
@@ -100,6 +100,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [floatbordercolor](https://dwm.suckless.org/patches/float_border_color/)
       - this patch allows a different border color to be chosen for floating windows
+
+   - [focusadjacenttag](https://dwm.suckless.org/patches/focusadjacenttag/)
+      - provides the ability to focus the tag on the immediate left or right of the currently focused tag
+      - it also allows to send the focused window either on the left or the right tag
 
    - [focusonclick](https://dwm.suckless.org/patches/focusonclick/)
       - this patch makes you switch focus only by mouse click and not sloppy (focus follows mouse pointer)

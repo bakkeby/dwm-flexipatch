@@ -36,6 +36,10 @@
 #include "ewmhtags.c"
 #endif
 
+#if FOCUSADJACENTTAG_PATCH
+#include "focusadjacenttag.c"
+#endif
+
 #if FULLSCREEN_PATCH
 #include "fullscreen.c"
 #endif

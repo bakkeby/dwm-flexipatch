@@ -132,6 +132,13 @@
  */
 #define FANCYBAR_PATCH 0
 
+/* This patch provides the ability to focus the tag on the immediate left or right of the
+ * currently focused tag. It also allows to send the focused window either on the left or
+ * the right tag.
+ * http://dwm.suckless.org/patches/focusadjacenttag/
+ */
+#define FOCUSADJACENTTAG_PATCH 1
+
 /* Switch focus only by mouse click and not sloppy (focus follows mouse pointer).
  * https://dwm.suckless.org/patches/focusonclick/
  */
