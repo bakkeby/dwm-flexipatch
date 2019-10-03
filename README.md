@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-03 - Added onlyquitonempty patch
+
 2019-10-02 - Added restartsig, emptyview, focusurgent and focusadjacenttag patches
 
 2019-10-01 - Added leftlayout, fullscreen, holdbar and unfloatvisible patches
@@ -134,6 +136,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - monitorrules
       - adds rules per monitor, e.g. have default layouts per monitor
       - the use case for this is if the second monitor is vertical (i.e. rotated) then you may want to use a different default layout for this monitor than what is used for the main monitor (for example normal vertical split for main monitor and horizontal split for the second)
+
+   - [onlyquitonempty](https://dwm.suckless.org/patches/onlyquitonempty/)
+      - makes it so dwm will only exit via quit() if no windows are open (in order to prevent accidental loss of work)
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor

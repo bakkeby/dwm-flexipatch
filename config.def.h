@@ -29,6 +29,9 @@ static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray             = 1;   /* 0 means no systray */
 #endif // SYSTRAY_PATCH
+#if ONLYQUITONEMPTY_PATCH
+static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
+#endif // ONLYQUITONEMPTY_PATCH
 static const char *fonts[]               = { "monospace:size=10" };
 static const char dmenufont[]            = "monospace:size=10";
 
@@ -209,6 +212,9 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 #if NROWGRID_LAYOUT
 #define FORCE_VSPLIT 1
 #endif
+
+/* Position of the monocle layout in the layouts variable, used by warp and fullscreen patches */
+#define MONOCLE_LAYOUT_POS 2
 
 #if FLEXTILE_DELUXE_LAYOUT
 static const Layout layouts[] = {

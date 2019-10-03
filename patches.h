@@ -197,6 +197,12 @@
  */
 #define MONITOR_RULES_PATCH 0
 
+/* This patch makes it so dwm will only exit via quit() if no windows are open.
+ * This is to prevent you accidentally losing all your work.
+ * https://dwm.suckless.org/patches/onlyquitonempty/
+ */
+#define ONLYQUITONEMPTY_PATCH 0
+
 /* The pertag patch adds nmaster, mfacts and layouts per tag rather than per
  * monitor (default).
  * https://dwm.suckless.org/patches/pertag/

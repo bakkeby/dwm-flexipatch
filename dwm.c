@@ -1978,11 +1978,30 @@ propertynotify(XEvent *e)
 void
 quit(const Arg *arg)
 {
+	#if ONLYQUITONEMPTY_PATCH
+	unsigned int n;
+	Window *junk = malloc(1);
+
+	XQueryTree(dpy, root, junk, junk, &junk, &n);
+
+	if (n == quit_empty_window_count) {
+		#if RESTARTSIG_PATCH
+		if (arg->i)
+			restart = 1;
+		#endif // RESTARTSIG_PATCH
+		running = 0;
+	}
+	else
+		printf("[dwm] not exiting (n=%d)\n", n);
+
+	free(junk);
+	#else
 	#if RESTARTSIG_PATCH
 	if (arg->i)
 		restart = 1;
 	#endif // RESTARTSIG_PATCH
 	running = 0;
+	#endif // ONLYQUITONEMPTY_PATCH
 }
 
 Monitor *
@@ -2153,7 +2172,7 @@ restack(Monitor *m)
 	XSync(dpy, False);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 	#if WARP_PATCH
-	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && selmon->lt[selmon->sellt] != &layouts[2]) // <-- NB! hardcoded monocle
+	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && selmon->lt[selmon->sellt] != &layouts[MONOCLE_LAYOUT_POS])
 		warp(m->sel);
 	#endif // WARP_PATCH
 }
