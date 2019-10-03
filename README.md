@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-03 - Added onlyquitonempty patch
+2019-10-03 - Added onlyquitonempty and switchcol patches
 
 2019-10-02 - Added restartsig, emptyview, focusurgent and focusadjacenttag patches
 
@@ -172,6 +172,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [sticky](https://dwm.suckless.org/patches/sticky/)
       - adds toggleable keyboard shortcut to make a client 'sticky', i.e. visible on all tags
+
+   - [switchcol](https://dwm.suckless.org/patches/switchcol/)
+      - allows you to switch focus between the master and stack columns using a single keybinding
 
    - [switchtag](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff)
       - when an application opens on a specific tab this patch adds the option to also switch to that tag when the application starts

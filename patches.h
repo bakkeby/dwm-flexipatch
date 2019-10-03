@@ -276,6 +276,11 @@
  */
 #define SYSTRAY_PATCH 0
 
+/* Switch focus between the master and stack columns using a single keybinding.
+ * https://dwm.suckless.org/patches/switchcol/
+ */
+#define SWITCHCOL_PATCH 0
+
 /* By default dwm allow you to set application specific rules so that you can have your browser,
  * for example, start up on tag 9 optionally on a given monitor when you open your browser it is
  * then automatically moved to the configured tag, but you have to manually enable the tag to see
@@ -284,7 +289,7 @@
  *   0 is default behaviour
  *   1 automatically moves you to the tag of the newly opened application and
  *   2 enables the tag of the newly opened application in addition to your existing enabled tags
-
+ *
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff
  */
 #define SWITCHTAG_PATCH 0

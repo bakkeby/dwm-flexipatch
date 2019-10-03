@@ -86,6 +86,10 @@
 #include "systray.c"
 #endif
 
+#if SWITCHCOL_PATCH
+#include "switchcol.c"
+#endif
+
 #if TAGALLMON_PATCH
 #include "tagallmon.c"
 #endif
