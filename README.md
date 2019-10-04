@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-04 - Added maximize, movestack and monoclesymbol patches
+2019-10-04 - Added maximize, movestack, monoclesymbol, noborder patches
 
 2019-10-03 - Added onlyquitonempty and switchcol patches
 
@@ -148,6 +148,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [movestack](https://dwm.suckless.org/patches/movestack/)
       - allows you to move clients around in the stack and swap them with the master
+
+   - [noborder](https://dwm.suckless.org/patches/noborder/)
+      - removes the border when there is only one window visible
 
    - [onlyquitonempty](https://dwm.suckless.org/patches/onlyquitonempty/)
       - makes it so dwm will only exit via quit() if no windows are open (in order to prevent accidental loss of work)

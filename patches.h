@@ -214,6 +214,11 @@
  */
 #define MOVESTACK_PATCH 0
 
+/* Removes the border when there is only one window visible.
+ * https://dwm.suckless.org/patches/noborder/
+ */
+#define NOBORDER_PATCH 0
+
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/
