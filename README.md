@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-04 - Added maximize patch
+2019-10-04 - Added maximize and monoclesymbol patches
 
 2019-10-03 - Added onlyquitonempty and switchcol patches
 
@@ -141,6 +141,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - monitorrules
       - adds rules per monitor, e.g. have default layouts per monitor
       - the use case for this is if the second monitor is vertical (i.e. rotated) then you may want to use a different default layout for this monitor than what is used for the main monitor (for example normal vertical split for main monitor and horizontal split for the second)
+
+   - [monoclesymbol](https://dwm.suckless.org/patches/monoclesymbol/)
+      - always display the the monocle-symbol as defined in config.h if the monocle-layout is activated
+      - do not display the number of open clients in the current tag
 
    - [onlyquitonempty](https://dwm.suckless.org/patches/onlyquitonempty/)
       - makes it so dwm will only exit via quit() if no windows are open (in order to prevent accidental loss of work)

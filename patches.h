@@ -203,6 +203,12 @@
  */
 #define MONITOR_RULES_PATCH 0
 
+/* Always display the the monocle-symbol as defined in config.h if the monocle-layout
+ * is activated. Do not display the number of open clients in the current tag.
+ * https://dwm.suckless.org/patches/monoclesymbol/
+ */
+#define MONOCLESYMBOL_PATCH 0
+
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/
