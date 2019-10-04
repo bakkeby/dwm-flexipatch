@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-04 - Added maximize patch
+
 2019-10-03 - Added onlyquitonempty and switchcol patches
 
 2019-10-02 - Added restartsig, emptyview, focusurgent and focusadjacenttag patches
@@ -132,6 +134,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window
       - it is also possible to spawn new windows (e.g. a terminal) that end up getting focus while the previous window remains in fullscreen
       - this patch ensures that in such scenarios the previous window loses fullscreen
+
+   - [maximize](https://dwm.suckless.org/patches/maximize/)
+      - adds helper functions for maximizing, horizontally and vertically, floating windows using keybindings
 
    - monitorrules
       - adds rules per monitor, e.g. have default layouts per monitor

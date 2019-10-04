@@ -52,6 +52,10 @@
 #include "holdbar.h"
 #endif
 
+#if MAXIMIZE_PATCH
+#include "maximize.h"
+#endif
+
 #if PERTAG_PATCH
 #include "pertag.h"
 #endif

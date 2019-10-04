@@ -189,6 +189,12 @@
  */
 #define LOSEFULLSCREEN_PATCH 0
 
+/* This patch adds helper functions for maximizing, horizontally and vertically, floating
+ * windows using keybindings.
+ * https://dwm.suckless.org/patches/maximize/
+ */
+#define MAXIMIZE_PATCH 0
+
 /* Adds rules per monitor, e.g. have default layouts per monitor.
  * The use case for this is if the second monitor is vertical (i.e. rotated) then
  * you may want to use a different default layout for this monitor than what is
