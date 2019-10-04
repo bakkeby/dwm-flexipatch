@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-04 - Added maximize, movestack, monoclesymbol, noborder patches
+2019-10-04 - Added maximize, movestack, monoclesymbol, noborder and tagall patches
 
 2019-10-03 - Added onlyquitonempty and switchcol patches
 
@@ -196,6 +196,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
+
+   - [tagall](https://dwm.suckless.org/patches/tagall/)
+      - adds keyboard shortcuts to move all (or only floating) windows from one tag to another
 
    - [tagallmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff)
       - move all visible windows to an adjacent monitor

@@ -426,6 +426,26 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_Left,       tagandviewtoleft,    {0} },
 	{ MODKEY|ControlMask,           XK_Right,      tagandviewtoright,   {0} },
 	#endif // FOCUSADJACENTTAG_PATCH
+	#if TAGALL_PATCH
+	{ MODKEY|ShiftMask,             XK_F1,         tagall,              {.v = "F1"} },
+	{ MODKEY|ShiftMask,             XK_F2,         tagall,              {.v = "F2"} },
+	{ MODKEY|ShiftMask,             XK_F3,         tagall,              {.v = "F3"} },
+	{ MODKEY|ShiftMask,             XK_F4,         tagall,              {.v = "F4"} },
+	{ MODKEY|ShiftMask,             XK_F5,         tagall,              {.v = "F5"} },
+	{ MODKEY|ShiftMask,             XK_F6,         tagall,              {.v = "F6"} },
+	{ MODKEY|ShiftMask,             XK_F7,         tagall,              {.v = "F7"} },
+	{ MODKEY|ShiftMask,             XK_F8,         tagall,              {.v = "F8"} },
+	{ MODKEY|ShiftMask,             XK_F9,         tagall,              {.v = "F9"} },
+	{ MODKEY|ControlMask,           XK_F1,         tagall,              {.v = "1"} },
+	{ MODKEY|ControlMask,           XK_F2,         tagall,              {.v = "2"} },
+	{ MODKEY|ControlMask,           XK_F3,         tagall,              {.v = "3"} },
+	{ MODKEY|ControlMask,           XK_F4,         tagall,              {.v = "4"} },
+	{ MODKEY|ControlMask,           XK_F5,         tagall,              {.v = "5"} },
+	{ MODKEY|ControlMask,           XK_F6,         tagall,              {.v = "6"} },
+	{ MODKEY|ControlMask,           XK_F7,         tagall,              {.v = "7"} },
+	{ MODKEY|ControlMask,           XK_F8,         tagall,              {.v = "8"} },
+	{ MODKEY|ControlMask,           XK_F9,         tagall,              {.v = "9"} },
+	#endif // TAGALL_PATCH
 	#if TAGALLMON_PATCH
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_comma,      tagallmon,           {.i = +1 } },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_period,     tagallmon,           {.i = -1 } },

@@ -316,6 +316,11 @@
  */
 #define SWITCHTAG_PATCH 0
 
+/* Adds keyboard shortcuts to move all (or only floating) windows from one tag to another.
+ * https://dwm.suckless.org/patches/tagall/
+ */
+#define TAGALL_PATCH 0
+
 /* This patch allows you to move all visible windows on a monitor to an adjacent monitor.
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff
  */

@@ -98,6 +98,10 @@
 #include "switchcol.h"
 #endif
 
+#if TAGALL_PATCH
+#include "tagall.h"
+#endif
+
 #if TAGALLMON_PATCH
 #include "tagallmon.h"
 #endif
