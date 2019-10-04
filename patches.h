@@ -326,6 +326,21 @@
  */
 #define TAGALLMON_PATCH 0
 
+/* This patch makes new clients attach into the stack area when you toggle a new tag into
+ * view. This means your master area will remain unchanged when toggling views.
+ * The allmaster patch will cause all clients in the master area to be left alone. This patch
+ * takes precedence over the onemaster tagintostack patch.
+ * https://dwm.suckless.org/patches/tagintostack/
+ */
+#define TAGINTOSTACK_ALLMASTER_PATCH 0
+
+/* This patch makes new clients attach into the stack area when you toggle a new tag into
+ * view. This means your master area will remain unchanged when toggling views.
+ * The onemaster patch will cause the first client in the master area to be left alone.
+ * https://dwm.suckless.org/patches/tagintostack/
+ */
+#define TAGINTOSTACK_ONEMASTER_PATCH 0
+
 /* If you try to send a fullscreen window to an adjacent monitor using tagmon then
  * the window is moved behind the scenes, but it remains in fullscreen on the original
  * monitor until you exit fullscreen view (at which point it will appear on the adjacent

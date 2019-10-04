@@ -2751,6 +2751,39 @@ toggleview(const Arg *arg)
 	int i;
 	#endif // PERTAG_PATCH
 
+	#if TAGINTOSTACK_ALLMASTER_PATCH
+	Client *const selected = selmon->sel;
+
+	// clients in the master area should be the same after we add a new tag
+	Client **const masters = calloc(selmon->nmaster, sizeof(Client *));
+	if (!masters) {
+		die("fatal: could not calloc() %u bytes \n", selmon->nmaster * sizeof(Client *));
+	}
+	// collect (from last to first) references to all clients in the master area
+	Client *c;
+	size_t i;
+	for (c = nexttiled(selmon->clients), i = 0; c && i < selmon->nmaster; c = nexttiled(c->next), ++i)
+		masters[selmon->nmaster - (i + 1)] = c;
+	// put the master clients at the front of the list
+	// > go from the 'last' master to the 'first'
+	for (size_t i = 0; i < selmon->nmaster; ++i)
+		if (masters[i])
+			pop(masters[i]);
+	free(masters);
+
+	// we also want to be sure not to mutate the focus
+	focus(selected);
+	#elif TAGINTOSTACK_ONEMASTER_PATCH
+	// the first visible client should be the same after we add a new tag
+	// we also want to be sure not to mutate the focus
+	Client *const c = nexttiled(selmon->clients);
+	if (c) {
+		Client * const selected = selmon->sel;
+		pop(c);
+		focus(selected);
+	}
+	#endif // TAGINTOSTACK_ALLMASTER_PATCH / TAGINTOSTACK_ONEMASTER_PATCH
+
 	#if !EMPTYVIEW_PATCH
 	if (newtagset) {
 	#endif // EMPTYVIEW_PATCH
