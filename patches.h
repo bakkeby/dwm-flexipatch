@@ -209,6 +209,11 @@
  */
 #define MONOCLESYMBOL_PATCH 0
 
+/* This patch allows you to move clients around in the stack and swap them with the master.
+ * https://dwm.suckless.org/patches/movestack/
+ */
+#define MOVESTACK_PATCH 0
+
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/

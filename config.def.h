@@ -320,8 +320,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_j,          focusstack,          {.i = +1 } },
 	{ MODKEY,                       XK_k,          focusstack,          {.i = -1 } },
 	#if ROTATESTACK_PATCH
-	{ MODKEY|ShiftMask,             XK_j,          rotatestack,         {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,          rotatestack,         {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_j,          rotatestack,         {.i = +1 } },
+	{ MODKEY|Mod4Mask,              XK_k,          rotatestack,         {.i = -1 } },
 	#endif // ROTATESTACK_PATCH
 	#if PUSH_PATCH || PUSH_NO_MASTER_PATCH
 	{ MODKEY|ControlMask,           XK_j,          pushdown,            {0} },
@@ -336,6 +336,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_l,          setcfact,            {.f = -0.25} },
 	{ MODKEY|ShiftMask,             XK_o,          setcfact,            {.f =  0.00} },
 	#endif // CFACTS_PATCH
+	#if MOVESTACK_PATCH
+	{ MODKEY|ShiftMask,             XK_j,          movestack,           {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,          movestack,           {.i = -1 } },
+	#endif // MOVESTACK_PATCH
 	{ MODKEY,                       XK_Return,     zoom,                {0} },
 	#if VANITYGAPS_PATCH
 	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,            {.i = +1 } },

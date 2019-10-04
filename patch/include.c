@@ -56,6 +56,10 @@
 #include "maximize.c"
 #endif
 
+#if MOVESTACK_PATCH
+#include "movestack.c"
+#endif
+
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif
