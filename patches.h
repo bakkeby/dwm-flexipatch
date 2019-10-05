@@ -169,6 +169,11 @@
  */
 #define FULLSCREEN_PATCH 0
 
+/* This patch prevents dwm from drawing tags with no clients (i.e. vacant) on the bar.
+ * https://dwm.suckless.org/patches/hide_vacant_tags/
+ */
+#define HIDEVACANTTAGS_PATCH 0
+
 /* With this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
  * and the bar will now overlay the display.
  * http://dwm.suckless.org/patches/holdbar/

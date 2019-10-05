@@ -604,6 +604,9 @@ buttonpress(XEvent *e)
 	#if TAGGRID_PATCH
 	unsigned int columns;
 	#endif // TAGGRID_PATCH
+	#if HIDEVACANTTAGS_PATCH
+	unsigned int occ = 0;
+	#endif // HIDEVACANTTAGS_PATCH
 	Arg arg = {0};
 	Client *c;
 	Monitor *m;
@@ -673,9 +676,18 @@ buttonpress(XEvent *e)
 		#if TAGGRID_PATCH
 		if (drawtagmask & DRAWCLASSICTAGS)
 		#endif // TAGGRID_PATCH
-		do
+		#if HIDEVACANTTAGS_PATCH
+		for (c = m->clients; c; c = c->next)
+			occ |= c->tags == 255 ? 0 : c->tags;
+		#endif // HIDEVACANTTAGS_PATCH
+		do {
+			#if HIDEVACANTTAGS_PATCH
+			/* do not reserve space for vacant tags */
+			if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+				continue;
+			#endif // HIDEVACANTTAGS_PATCH
 			x += TEXTW(tags[i]);
-		while (ev->x >= x && ++i < LENGTH(tags));
+		} while (ev->x >= x && ++i < LENGTH(tags));
 		if (i < LENGTH(tags)
 		#if TAGGRID_PATCH
 			&& (drawtagmask & DRAWCLASSICTAGS)
@@ -1226,7 +1238,11 @@ drawbar(Monitor *m)
 		if (ISVISIBLE(c))
 			n++;
 		#endif // FANCYBAR_PATCH
+		#if HIDEVACANTTAGS_PATCH
+		occ |= c->tags == 255 ? 0 : c->tags;
+		#else
 		occ |= c->tags;
+		#endif // HIDEVACANTTAGS_PATCH
 		if (c->isurgent)
 			urg |= c->tags;
 	}
@@ -1240,6 +1256,11 @@ drawbar(Monitor *m)
 	if (drawtagmask & DRAWCLASSICTAGS)
 	#endif // TAGGRID_PATCH
 	for (i = 0; i < LENGTH(tags); i++) {
+		#if HIDEVACANTTAGS_PATCH
+		/* do not draw vacant tags */
+		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+		continue;
+		#endif // HIDEVACANTTAGS_PATCH
 		w = TEXTW(tags[i]);
 		#if ALTERNATIVE_TAGS_PATCH
 		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
@@ -1250,6 +1271,7 @@ drawbar(Monitor *m)
 		#else
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
 		#endif // ALTERNATIVE_TAGS_PATCH
+		#if !HIDEVACANTTAGS_PATCH
 		if (occ & 1 << i)
 			#if ACTIVETAGINDICATORBAR_PATCH
 			drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw,
@@ -1260,6 +1282,7 @@ drawbar(Monitor *m)
 				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
 				urg & 1 << i);
 			#endif // ACTIVETAGINDICATORBAR_PATCH
+		#endif // HIDEVACANTTAGS_PATCH
 		x += w;
 	}
 	#if TAGGRID_PATCH

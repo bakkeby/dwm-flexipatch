@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-05 - Added killunsel and taggrid patches
+2019-10-05 - Added killunsel, taggrid and hidevacanttags patches
 
 2019-10-04 - Added maximize, movestack, monoclesymbol, noborder, tagall and tagintostack  patches
 
@@ -124,6 +124,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [fullscreen](https://dwm.suckless.org/patches/fullscreen/)
       - applies the monocle layout with the focused client on top and hides the bar
       - when pressed again it shows the bar and restores the layout that was active before going fullscreen
+
+   - [hidevacanttags](https://dwm.suckless.org/patches/hide_vacant_tags/)
+      - prevents dwm from drawing tags with no clients (i.e. vacant) on the bar
 
    - [holdbar](http://dwm.suckless.org/patches/holdbar/)
       - with this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
