@@ -175,6 +175,11 @@
  */
 #define HOLDBAR_PATCH 0
 
+/* This patch adds a keybinding to kills all visible clients that are not selected.
+ * https://dwm.suckless.org/patches/killunsel/
+ */
+#define KILLUNSEL_PATCH 0
+
 /* Moves the layout symbol in the status bar to the left hand side.
  * http://dwm.suckless.org/patches/leftlayout/
  */

@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-05 - Added killunsel patch
+
 2019-10-04 - Added maximize, movestack, monoclesymbol, noborder, tagall and tagintostack  patches
 
 2019-10-03 - Added onlyquitonempty and switchcol patches
@@ -221,6 +223,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [unfloatvisible](https://dwm.suckless.org/patches/unfloatvisible/)
       - resets isfloating on any visible windows that have it set and optionally also applies a layout
+
+   - [killunsel](https://dwm.suckless.org/patches/killunsel/)
+      - kills all visible clients that are not selected (only the selected client will remain)
 
    - [urgentborder](https://dwm.suckless.org/patches/urgentborder/)
       - this patch makes "urgent" windows have different colors

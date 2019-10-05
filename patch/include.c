@@ -52,6 +52,10 @@
 #include "holdbar.c"
 #endif
 
+#if KILLUNSEL_PATCH
+#include "killunsel.c"
+#endif
+
 #if MAXIMIZE_PATCH
 #include "maximize.c"
 #endif
