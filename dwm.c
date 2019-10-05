@@ -601,11 +601,17 @@ void
 buttonpress(XEvent *e)
 {
 	unsigned int i, x, click;
+	#if TAGGRID_PATCH
+	unsigned int columns;
+	#endif // TAGGRID_PATCH
 	Arg arg = {0};
 	Client *c;
 	Monitor *m;
 	XButtonPressedEvent *ev = &e->xbutton;
 
+	#if TAGGRID_PATCH
+	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
+	#endif // TAGGRID_PATCH
 	click = ClkRootWin;
 	/* focus monitor if necessary */
 	if ((m = wintomon(ev->window)) && m != selmon
@@ -664,14 +670,35 @@ buttonpress(XEvent *e)
 			#endif // AWESOMEBAR_PATCH
 		}
 		#else // LEFTLAYOUT_PATCH
+		#if TAGGRID_PATCH
+		if (drawtagmask & DRAWCLASSICTAGS)
+		#endif // TAGGRID_PATCH
 		do
 			x += TEXTW(tags[i]);
 		while (ev->x >= x && ++i < LENGTH(tags));
-		if (i < LENGTH(tags)) {
+		if (i < LENGTH(tags)
+		#if TAGGRID_PATCH
+			&& (drawtagmask & DRAWCLASSICTAGS)
+		#endif
+		) {
 			click = ClkTagBar;
 			arg.ui = 1 << i;
+		#if TAGGRID_PATCH
+		} else if (ev->x < x + columns * bh / tagrows && (drawtagmask & DRAWTAGGRID)) {
+			click = ClkTagBar;
+			i = (ev->x - x) / (bh / tagrows);
+			i = i + columns * (ev->y / (bh / tagrows));
+			if (i >= LENGTH(tags)) {
+				i = LENGTH(tags) - 1;
+			}
+			arg.ui = 1 << i;
+		}
+		else if (ev->x < x + blw + columns * bh / tagrows)
+			click = ClkLtSymbol;
+		#else
 		} else if (ev->x < x + blw)
 			click = ClkLtSymbol;
+		#endif // TAGGRID_PATCH
 		#if AWESOMEBAR_PATCH && SYSTRAY_PATCH
 		else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2 - getsystraywidth())
 		#elif AWESOMEBAR_PATCH
@@ -1209,6 +1236,9 @@ drawbar(Monitor *m)
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // LEFTLAYOUT_PATCH
+	#if TAGGRID_PATCH
+	if (drawtagmask & DRAWCLASSICTAGS)
+	#endif // TAGGRID_PATCH
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
 		#if ALTERNATIVE_TAGS_PATCH
@@ -1232,6 +1262,11 @@ drawbar(Monitor *m)
 			#endif // ACTIVETAGINDICATORBAR_PATCH
 		x += w;
 	}
+	#if TAGGRID_PATCH
+	if (drawtagmask & DRAWTAGGRID) {
+		drawtaggrid(m,&x,occ);
+	}
+	#endif // TAGGRID_PATCH
 	#if !LEFTLAYOUT_PATCH
 	w = blw = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeNorm]);

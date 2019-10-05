@@ -110,6 +110,10 @@
 #include "tagallmon.c"
 #endif
 
+#if TAGGRID_PATCH
+#include "taggrid.c"
+#endif
+
 #if TAGSWAPMON_PATCH
 #include "tagswapmon.c"
 #endif

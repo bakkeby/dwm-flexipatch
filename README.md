@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-05 - Added killunsel patch
+2019-10-05 - Added killunsel and taggrid patches
 
 2019-10-04 - Added maximize, movestack, monoclesymbol, noborder, tagall and tagintostack  patches
 
@@ -208,6 +208,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [tagintostack](https://dwm.suckless.org/patches/tagintostack/)
       - makes new clients attach into the stack area when you toggle a new tag into view
       - this means your master area will remain unchanged when toggling views
+
+   - [taggrid](https://dwm.suckless.org/patches/taggrid/)
+      - adds an option to place tags in rows like in many other window managers
 
    - [tagmonfixfs](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagmonfixfs-6.2.diff)
       - allows moving a fullscreen window to another monitor while remaining in fullscreen

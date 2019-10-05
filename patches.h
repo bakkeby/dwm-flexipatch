@@ -331,6 +331,11 @@
  */
 #define TAGALLMON_PATCH 0
 
+/* This patch adds an option to place tags in rows like in many other window managers.
+ * https://dwm.suckless.org/patches/taggrid/
+ */
+#define TAGGRID_PATCH 0
+
 /* This patch makes new clients attach into the stack area when you toggle a new tag into
  * view. This means your master area will remain unchanged when toggling views.
  * The allmaster patch will cause all clients in the master area to be left alone. This patch
