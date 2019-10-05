@@ -24,6 +24,10 @@
 #include "cfacts.h"
 #endif
 
+#if CMDCUSTOMIZE
+#include "cmdcustomize.h"
+#endif
+
 #if COMBO_PATCH
 #include "combo.h"
 #endif

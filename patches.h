@@ -98,6 +98,11 @@
  */
 #define CFACTS_PATCH 0
 
+/* This patch allows color attributes to be set through the command line.
+ * https://dwm.suckless.org/patches/cmdcustomize/
+ */
+#define CMDCUSTOMIZE 0
+
 /* This patch tweaks the tagging interface so that you can select multiple tags for tag
  * or view by pressing all the right keys as a combo. For example to view tags 1 and 3,
  * hold MOD and then press and hold 1 and 3 together.

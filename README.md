@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-05 - Added killunsel, taggrid and hidevacanttags patches
+2019-10-05 - Added killunsel, taggrid, hidevacanttags and cmdcustomize patches
 
 2019-10-04 - Added maximize, movestack, monoclesymbol, noborder, tagall and tagintostack  patches
 
@@ -87,6 +87,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [cfacts](https://dwm.suckless.org/patches/cfacts/)
       - the cfacts patch provides the ability to assign different weights to clients in their respective stack in tiled layout
+
+   - [cmdcustomize](https://dwm.suckless.org/patches/cmdcustomize/)
+      - allows color attributes to be set through the command line
 
    - [combo](https://dwm.suckless.org/patches/combo/)
       - allows you to select multiple tags by pressing all the right keys as a combo, e.g. hold MOD and press and hold 1 and 3 together to view those two tags
