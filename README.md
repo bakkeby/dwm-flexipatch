@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-06 - Added statusallmons patch, fixed minor cross-compatibility issues for killunsel, fullscreen, noborder, tagintostack patches
+2019-10-06 - Added statuscolors and statusallmons patches, fixed minor cross-compatibility issues for killunsel, fullscreen, noborder, tagintostack patches
 
 2019-10-05 - Added killunsel, taggrid, hidevacanttags and cmdcustomize patches
 
@@ -194,6 +194,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
       - this patch draws and updates the statusbar on all monitors
+
+   - [statuscolors](https://dwm.suckless.org/patches/statuscolors/)
+      - enables colored text in the status bar allowing multiple color combinations for use in the status script
 
    - [statuspadding](https://dwm.suckless.org/patches/statuspadding/)
       - adds configuration options for horizontal and vertical padding in the status bar

@@ -77,9 +77,12 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum {
 	SchemeNorm
 	,SchemeSel
-	#if URGENTBORDER_PATCH
+	#if STATUSCOLORS_PATCH
+	,SchemeWarn
+	#endif // STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
 	,SchemeUrg
-	#endif // URGENTBORDER_PATCH
+	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	,SchemeHid
 	#endif // AWESOMEBAR_PATCH
@@ -1188,7 +1191,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, sw = 0;
+	int x, w, sw = 0, invert;
 	#if ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // ALTERNATIVE_TAGS_PATCH
@@ -1208,6 +1211,12 @@ drawbar(Monitor *m)
 	int boxw = drw->fonts->h / 6 + 2;
 	#endif // HIDEVACANTTAGS_PATCH
 	unsigned int i, occ = 0, urg = 0;
+	#if STATUSCOLORS_PATCH
+	char *ts = stext;
+	char *tp = stext;
+	int tx = 0;
+	char ctmp;
+	#endif // STATUSCOLORS_PATCH
 	Client *c;
 
 	#if SYSTRAY_PATCH
@@ -1222,19 +1231,54 @@ drawbar(Monitor *m)
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		#if STATUSPADDING_PATCH
 		sw = TEXTW(stext);
+		#else
+		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+		#endif // STATUSPADDING_PATCH
+		#if STATUSCOLORS_PATCH
+		while (1) {
+			if ((unsigned int)*ts > LENGTH(colors)) {
+				ts++;
+				continue;
+			}
+			ctmp = *ts;
+			*ts = '\0';
+			drw_text(drw, m->ww - sw + tx, 0, sw - tx, bh, 0, tp, 0);
+			#if STATUSPADDING_PATCH
+			#if SYSTRAY_PATCH
+			drw_text(drw, m->ww - sw - stw + tx, 0, sw - tx, bh, lrpad / 2, tp, 0);
+			#else
+			drw_text(drw, m->ww - sw + tx, 0, sw - tx, bh, lrpad / 2, tp, 0);
+			#endif // SYSTRAY_PATCH
+			#else // STATUSPADDING_PATCH
+			#if SYSTRAY_PATCH
+			drw_text(drw, m->ww - sw - stw + tx, 0, sw - tx, bh, 0, tp, 0);
+			#else
+			drw_text(drw, m->ww - sw + tx, 0, sw - tx, bh, 0, tp, 0);
+			#endif // SYSTRAY_PATCH
+			#endif // STATUSPADDING_PATCH
+			tx += TEXTW(tp) -lrpad;
+			if (ctmp == '\0') {
+				break;
+			}
+			drw_setscheme(drw, scheme[(unsigned int)(ctmp-1)]);
+			*ts = ctmp;
+			tp = ++ts;
+		}
+		#else // STATUSCOLORS_PATCH
+		#if STATUSPADDING_PATCH
 		#if SYSTRAY_PATCH
 		drw_text(drw, m->ww - sw - stw, 0, sw, bh, lrpad / 2, stext, 0);
 		#else
 		drw_text(drw, m->ww - sw, 0, sw, bh, lrpad / 2, stext, 0);
 		#endif // SYSTRAY_PATCH
-		#else
-		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+		#else // STATUSPADDING_PATCH
 		#if SYSTRAY_PATCH
 		drw_text(drw, m->ww - sw - stw, 0, sw, bh, 0, stext, 0);
 		#else
 		drw_text(drw, m->ww - sw, 0, sw, bh, 0, stext, 0);
 		#endif // SYSTRAY_PATCH
 		#endif // STATUSPADDING_PATCH
+		#endif // STATUSCOLORS_PATCH
 	#if !STATUSALLMONS_PATCH
 	}
 	#endif // STATUSALLMONS_PATCH
@@ -1262,6 +1306,11 @@ drawbar(Monitor *m)
 	if (drawtagmask & DRAWCLASSICTAGS)
 	#endif // TAGGRID_PATCH
 	for (i = 0; i < LENGTH(tags); i++) {
+		#if URGENTBORDER_PATCH
+		invert = 0;
+		#else
+		invert = urg & 1 << i;
+		#endif // URGENTBORDER_PATCH
 		#if HIDEVACANTTAGS_PATCH
 		/* do not draw vacant tags */
 		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
@@ -1271,23 +1320,27 @@ drawbar(Monitor *m)
 		#if ALTERNATIVE_TAGS_PATCH
 		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
 		#endif // ALTERNATIVE_TAGS_PATCH
+		#if URGENTBORDER_PATCH
+		if (m->tagset[m->seltags] & 1 << i)
+			drw_setscheme(drw, scheme[SchemeSel]);
+		else
+			drw_setscheme(drw, scheme[urg & 1 << i ? SchemeUrg : SchemeNorm]);
+		#else // URGENTBORDER_PATCH
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+		#endif // URGENTBORDER_PATCH
 		#if ALTERNATIVE_TAGS_PATCH
-		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), urg & 1 << i);
+		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert);
 		#else
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert);
 		#endif // ALTERNATIVE_TAGS_PATCH
 		#if !HIDEVACANTTAGS_PATCH
 		if (occ & 1 << i)
 			#if ACTIVETAGINDICATORBAR_PATCH
 			drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw,
-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-				urg & 1 << i);
 			#else
 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-				urg & 1 << i);
 			#endif // ACTIVETAGINDICATORBAR_PATCH
+				m == selmon && selmon->sel && selmon->sel->tags & 1 << i, invert);
 		#endif // HIDEVACANTTAGS_PATCH
 		x += w;
 	}
@@ -2034,6 +2087,10 @@ propertynotify(XEvent *e)
 		case XA_WM_HINTS:
 			updatewmhints(c);
 			drawbars();
+			#if URGENTBORDER_PATCH
+			if (c->isurgent)
+				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
+			#endif // URGENTBORDER_PATCH
 			break;
 		}
 		if (ev->atom == XA_WM_NAME || ev->atom == netatom[NetWMName]) {
