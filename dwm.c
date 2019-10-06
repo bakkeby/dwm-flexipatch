@@ -307,9 +307,9 @@ static void motionnotify(XEvent *e);
 #endif // FOCUSONCLICK_PATCH
 static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
-#if !ZOOMSWAP_PATCH
+#if !ZOOMSWAP_PATCH || TAGINTOSTACK_ALLMASTER_PATCH || TAGINTOSTACK_ONEMASTER_PATCH
 static void pop(Client *);
-#endif // !ZOOMSWAP_PATCH
+#endif // !ZOOMSWAP_PATCH / TAGINTOSTACK_ALLMASTER_PATCH / TAGINTOSTACK_ONEMASTER_PATCH
 static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
@@ -1201,10 +1201,12 @@ drawbar(Monitor *m)
 	#if SYSTRAY_PATCH
 	int stw = 0;
 	#endif // SYSTRAY_PATCH
+	#if !HIDEVACANTTAGS_PATCH
 	#if !ACTIVETAGINDICATORBAR_PATCH
 	int boxs = drw->fonts->h / 9;
 	#endif // ACTIVETAGINDICATORBAR_PATCH
 	int boxw = drw->fonts->h / 6 + 2;
+	#endif // HIDEVACANTTAGS_PATCH
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
 
@@ -1214,7 +1216,9 @@ drawbar(Monitor *m)
 	#endif // SYSTRAY_PATCH
 
 	/* draw status first so it can be overdrawn by tags later */
+	#if !STATUSALLMONS_PATCH
 	if (m == selmon) { /* status is only drawn on selected monitor */
+	#endif // STATUSALLMONS_PATCH
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		#if STATUSPADDING_PATCH
 		sw = TEXTW(stext);
@@ -1231,7 +1235,9 @@ drawbar(Monitor *m)
 		drw_text(drw, m->ww - sw, 0, sw, bh, 0, stext, 0);
 		#endif // SYSTRAY_PATCH
 		#endif // STATUSPADDING_PATCH
+	#if !STATUSALLMONS_PATCH
 	}
+	#endif // STATUSALLMONS_PATCH
 
 	for (c = m->clients; c; c = c->next) {
 		#if AWESOMEBAR_PATCH || FANCYBAR_PATCH
@@ -1980,7 +1986,7 @@ nexttiled(Client *c)
 	return c;
 }
 
-#if !ZOOMSWAP_PATCH
+#if !ZOOMSWAP_PATCH || TAGINTOSTACK_ALLMASTER_PATCH || TAGINTOSTACK_ONEMASTER_PATCH
 void
 pop(Client *c)
 {
@@ -1989,7 +1995,7 @@ pop(Client *c)
 	focus(c);
 	arrange(c->mon);
 }
-#endif // !ZOOMSWAP_PATCH
+#endif // !ZOOMSWAP_PATCH / TAGINTOSTACK_ALLMASTER_PATCH / TAGINTOSTACK_ONEMASTER_PATCH
 
 void
 propertynotify(XEvent *e)
@@ -2049,7 +2055,7 @@ quit(const Arg *arg)
 
 	XQueryTree(dpy, root, junk, junk, &junk, &n);
 
-	if (n == quit_empty_window_count) {
+	if (n <= quit_empty_window_count) {
 		#if RESTARTSIG_PATCH
 		if (arg->i)
 			restart = 1;
@@ -2102,8 +2108,10 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	wc.border_width = c->bw;
 	#if NOBORDER_PATCH
 	if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
-	    || &monocle == c->mon->lt[c->mon->sellt]->arrange)
-	    && !c->isfullscreen && !c->isfloating) {
+		#if MONOCLE_LAYOUT
+	    || &monocle == c->mon->lt[c->mon->sellt]->arrange
+	    #endif // MONOCLE_LAYOUT
+	    ) && !c->isfullscreen && !c->isfloating) {
 		c->w = wc.width += c->bw * 2;
 		c->h = wc.height += c->bw * 2;
 		wc.border_width = 0;
@@ -2819,14 +2827,14 @@ toggleview(const Arg *arg)
 	}
 	// collect (from last to first) references to all clients in the master area
 	Client *c;
-	size_t i;
-	for (c = nexttiled(selmon->clients), i = 0; c && i < selmon->nmaster; c = nexttiled(c->next), ++i)
-		masters[selmon->nmaster - (i + 1)] = c;
+	size_t j;
+	for (c = nexttiled(selmon->clients), j = 0; c && j < selmon->nmaster; c = nexttiled(c->next), ++j)
+		masters[selmon->nmaster - (j + 1)] = c;
 	// put the master clients at the front of the list
 	// > go from the 'last' master to the 'first'
-	for (size_t i = 0; i < selmon->nmaster; ++i)
-		if (masters[i])
-			pop(masters[i]);
+	for (j = 0; j < selmon->nmaster; ++j)
+		if (masters[j])
+			pop(masters[j]);
 	free(masters);
 
 	// we also want to be sure not to mutate the focus
@@ -3158,9 +3166,17 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
+	#if STATUSALLMONS_PATCH
+	Monitor* m;
+	#endif // STATUSALLMONS_PATCH
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
+	#if STATUSALLMONS_PATCH
+	for (m = mons; m; m = m->next)
+		drawbar(m);
+	#else
 	drawbar(selmon);
+	#endif // STATUSALLMONS_PATCH
 	#if SYSTRAY_PATCH
 	if (showsystray)
 		updatesystray();
