@@ -298,6 +298,14 @@
  */
 #define SETBORDERPX_PATCH 0
 
+/* In a multi-head setup monitor 0 is by default the primary screen, with the left and right
+ * screen being monitor 1 and 2 respectively. This patch sorts screens left to right (or
+ * top to bottom in a vertical layout) which aims to address some inconsistencies when it
+ * comes to focusmon, tagmon and similar functionality.
+ * https://www.mail-archive.com/hackers@suckless.org/msg09400.html
+ */
+#define SORTSCREENS_PATCH 0
+
 /* This patch draws and updates the statusbar on all monitors.
  * https://dwm.suckless.org/patches/statusallmons/
  */

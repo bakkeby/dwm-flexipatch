@@ -3104,6 +3104,9 @@ updategeom(void)
 				memcpy(&unique[j++], &info[i], sizeof(XineramaScreenInfo));
 		XFree(info);
 		nn = j;
+		#if SORTSCREENS_PATCH
+		sortscreens(unique, nn);
+		#endif // SORTSCREENS_PATCH
 		if (n <= nn) { /* new monitors available */
 			for (i = 0; i < (nn - n); i++) {
 				for (m = mons; m && m->next; m = m->next);

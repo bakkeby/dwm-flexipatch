@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-07 - Added sortscreens patch
+
 2019-10-06 - Added statuscolors and statusallmons patches, fixed minor cross-compatibility issues for killunsel, fullscreen, noborder, tagintostack patches
 
 2019-10-05 - Added killunsel, taggrid, hidevacanttags and cmdcustomize patches
@@ -191,6 +193,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
       - this patch allows border pixels to be changed during runtime
+
+   - [sortscreens](https://www.mail-archive.com/hackers@suckless.org/msg09400.html)
+      - this patch aims to address some inconsistencies when it comes to focusmon, tagmon and similar functionality by explicitly sorting screens left to right (or top to bottom in a vertical layout)
 
    - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
       - this patch draws and updates the statusbar on all monitors

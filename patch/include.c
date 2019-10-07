@@ -94,6 +94,12 @@
 #include "setborderpx.c"
 #endif
 
+#ifdef XINERAMA
+#if SORTSCREENS_PATCH
+#include "sortscreens.c"
+#endif
+#endif
+
 #if STICKY_PATCH
 #include "sticky.c"
 #endif
