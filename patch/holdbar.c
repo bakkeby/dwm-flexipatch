@@ -15,6 +15,9 @@ keyrelease(XEvent *e)
 		XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
 		arrange(selmon);
 	}
+	#if COMBO_PATCH
+	combo = 0;
+	#endif // COMBO_PATCH
 }
 
 void

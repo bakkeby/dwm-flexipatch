@@ -267,6 +267,45 @@ static const Layout layouts[] = {
 	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE, 0, 0, NULL } }, // fibonacci dwindle
 	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL, 0, 0, NULL } }, // fibonacci spiral
 	{ "|||",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // columns (col) layout
+	#if TILE_LAYOUT
+	{ "[]=",      tile,             {0} },
+	#endif
+	#if MONOCLE_LAYOUT
+	{ "[M]",      monocle,          {0} },
+	#endif
+	#if BSTACK_LAYOUT
+	{ "TTT",      bstack,           {0} },
+	#endif
+	#if BSTACKHORIZ_LAYOUT
+	{ "===",      bstackhoriz,      {0} },
+	#endif
+	#if CENTEREDMASTER_LAYOUT
+	{ "|M|",      centeredmaster,   {0} },
+	#endif
+	#if CENTEREDFLOATINGMASTER_LAYOUT
+	{ ">M>",      centeredfloatingmaster, {0} },
+	#endif
+	#if DECK_LAYOUT
+	{ "[D]",      deck,             {0} },
+	#endif
+	#if FIBONACCI_SPIRAL_LAYOUT
+	{ "(@)",      spiral,           {0} },
+	#endif
+	#if FIBONACCI_DWINDLE_LAYOUT
+	{ "[\\]",     dwindle,          {0} },
+	#endif
+	#if GRIDMODE_LAYOUT
+	{ "HHH",      grid,             {0} },
+	#endif
+	#if HORIZGRID_LAYOUT
+	{ "---",      horizgrid,        {0} },
+	#endif
+	#if GAPPLESSGRID_LAYOUT
+	{ ":::",      gaplessgrid,      {0} },
+	#endif
+	#if NROWGRID_LAYOUT
+	{ "###",      nrowgrid,         {0} },
+	#endif
 	#if CYCLELAYOUTS_PATCH
 	{ NULL,       NULL,             {0} },
 	#endif
@@ -355,6 +394,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_b,          togglebar,           {0} },
 	{ MODKEY,                       XK_j,          focusstack,          {.i = +1 } },
 	{ MODKEY,                       XK_k,          focusstack,          {.i = -1 } },
+	#if SWITCHCOL_PATCH
+	{ MODKEY,                       XK_v,          switchcol,           {0} },
+	#endif // SWITCHCOL_PATCH
 	#if ROTATESTACK_PATCH
 	{ MODKEY|Mod4Mask,              XK_j,          rotatestack,         {.i = +1 } },
 	{ MODKEY|Mod4Mask,              XK_k,          rotatestack,         {.i = -1 } },
@@ -365,6 +407,10 @@ static Key keys[] = {
 	#endif // PUSH_PATCH / PUSH_NO_MASTER_PATCH
 	{ MODKEY,                       XK_i,          incnmaster,          {.i = +1 } },
 	{ MODKEY,                       XK_d,          incnmaster,          {.i = -1 } },
+	#if FLEXTILE_DELUXE_LAYOUT
+	{ MODKEY|ControlMask,           XK_i,          incnstack,           {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_u,          incnstack,           {.i = -1 } },
+	#endif // FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY,                       XK_h,          setmfact,            {.f = -0.05} },
 	{ MODKEY,                       XK_l,          setmfact,            {.f = +0.05} },
 	#if CFACTS_PATCH
@@ -448,6 +494,9 @@ static Key keys[] = {
 	#if TOGGLEFULLSCREEN_PATCH
 	{ MODKEY,                       XK_y,          togglefullscreen,    {0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
+	#if FULLSCREEN_PATCH
+	{ MODKEY|ShiftMask,             XK_f,          fullscreen,          {0} },
+	#endif // FULLSCREEN_PATCH
 	#if STICKY_PATCH
 	{ MODKEY,                       XK_s,          togglesticky,        {0} },
 	#endif // STICKY_PATCH

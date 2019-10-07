@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-07 - Added sortscreens and dwmc patches
+2019-10-07 - Added sortscreens and dwmc patches, fixed minor cross-compatibility issues for combo, holdbar, leftlayout, hidevacanttags, taggrid and activetagindicatorbar
 
 2019-10-06 - Added statuscolors and statusallmons patches, fixed minor cross-compatibility issues for killunsel, fullscreen, noborder, tagintostack patches
 

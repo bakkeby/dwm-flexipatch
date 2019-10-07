@@ -636,13 +636,40 @@ buttonpress(XEvent *e)
 		if (ev->x < x) {
  			click = ClkLtSymbol;
 		} else {
-			do
+			#if HIDEVACANTTAGS_PATCH
+			for (c = m->clients; c; c = c->next)
+				occ |= c->tags == 255 ? 0 : c->tags;
+			#endif // HIDEVACANTTAGS_PATCH
+			#if TAGGRID_PATCH
+			if (drawtagmask & DRAWCLASSICTAGS)
+			#endif // TAGGRID_PATCH
+			do {
+				#if HIDEVACANTTAGS_PATCH
+				/* do not reserve space for vacant tags */
+				if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+					continue;
+				#endif // HIDEVACANTTAGS_PATCH
 				x += TEXTW(tags[i]);
-			while (ev->x >= x && ++i < LENGTH(tags));
+			} while (ev->x >= x && ++i < LENGTH(tags));
 			if (i < LENGTH(tags)) {
 				click = ClkTagBar;
 				arg.ui = 1 << i;
+			#if TAGGRID_PATCH
+			} else if (ev->x < x + columns * bh / tagrows && (drawtagmask & DRAWTAGGRID)) {
+				click = ClkTagBar;
+				i = (ev->x - x) / (bh / tagrows);
+				i = i + columns * (ev->y / (bh / tagrows));
+				if (i >= LENGTH(tags)) {
+					i = LENGTH(tags) - 1;
+				}
+				arg.ui = 1 << i;
 			}
+			else if (ev->x < x + blw + columns * bh / tagrows)
+				click = ClkLtSymbol;
+			#else // TAGGRID_PATCH
+			} else if (ev->x < x + blw)
+				click = ClkLtSymbol;
+			#endif // TAGGRID_PATCH
 			#if AWESOMEBAR_PATCH && SYSTRAY_PATCH
 			else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2 - getsystraywidth())
 			#elif AWESOMEBAR_PATCH
@@ -676,13 +703,13 @@ buttonpress(XEvent *e)
 			#endif // AWESOMEBAR_PATCH
 		}
 		#else // LEFTLAYOUT_PATCH
-		#if TAGGRID_PATCH
-		if (drawtagmask & DRAWCLASSICTAGS)
-		#endif // TAGGRID_PATCH
 		#if HIDEVACANTTAGS_PATCH
 		for (c = m->clients; c; c = c->next)
 			occ |= c->tags == 255 ? 0 : c->tags;
 		#endif // HIDEVACANTTAGS_PATCH
+		#if TAGGRID_PATCH
+		if (drawtagmask & DRAWCLASSICTAGS)
+		#endif // TAGGRID_PATCH
 		do {
 			#if HIDEVACANTTAGS_PATCH
 			/* do not reserve space for vacant tags */
@@ -710,7 +737,7 @@ buttonpress(XEvent *e)
 		}
 		else if (ev->x < x + blw + columns * bh / tagrows)
 			click = ClkLtSymbol;
-		#else
+		#else // TAGGRID_PATCH
 		} else if (ev->x < x + blw)
 			click = ClkLtSymbol;
 		#endif // TAGGRID_PATCH
@@ -1416,7 +1443,11 @@ drawbar(Monitor *m)
 				if (tw > 0) /* trap special handling of 0 in drw_text */
 					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
 				if (c->isfloating)
+					#if ACTIVETAGINDICATORBAR_PATCH
+					drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, c->isfixed, 0);
+					#else
 					drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
+					#endif // ACTIVETAGINDICATORBAR_PATCH
 				x += tw;
 				w -= tw;
 			}
@@ -1437,7 +1468,11 @@ drawbar(Monitor *m)
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			#endif // CENTEREDWINDOWNAME_PATCH
 			if (m->sel->isfloating)
+				#if ACTIVETAGINDICATORBAR_PATCH
+				drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, m->sel->isfixed, 0);
+				#else
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
+				#endif // ACTIVETAGINDICATORBAR_PATCH
 		} else {
 			drw_setscheme(drw, scheme[SchemeNorm]);
 			drw_rect(drw, x, 0, w, bh, 1, 1);
