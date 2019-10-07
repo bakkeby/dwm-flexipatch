@@ -115,6 +115,13 @@
  */
 #define CYCLELAYOUTS_PATCH 0
 
+/* Simple dwmc client using a fork of fsignal to communicate with dwm.
+ * To use this either copy the patch/dwmc shell script to somewhere in your path or
+ * uncomment the following line in Makefile: #cp -f patch/dwmc ${DESTDIR}${PREFIX}/bin
+ * http://dwm.suckless.org/patches/dwmc/
+ */
+#define DWMC_PATCH 0
+
 /* This patch allows no tag at all to be selected. The result is that dwm will start with
  * no tag selected and when you start a client with no tag rule and no tag selected then
  * it will be opened on the first tag.

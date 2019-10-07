@@ -2069,11 +2069,14 @@ propertynotify(XEvent *e)
 	}
 	#endif // SYSTRAY_PATCH
 
-	if ((ev->window == root) && (ev->atom == XA_WM_NAME))
+	if ((ev->window == root) && (ev->atom == XA_WM_NAME)) {
+		#if DWMC_PATCH
+		if (!fake_signal())
+		#endif // DWMC_PATCH
 		updatestatus();
-	else if (ev->state == PropertyDelete)
+	} else if (ev->state == PropertyDelete) {
 		return; /* ignore */
-	else if ((c = wintoclient(ev->window))) {
+	} else if ((c = wintoclient(ev->window))) {
 		switch(ev->atom) {
 		default: break;
 		case XA_WM_TRANSIENT_FOR:

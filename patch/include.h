@@ -36,6 +36,10 @@
 #include "cyclelayouts.h"
 #endif
 
+#if DWMC_PATCH
+#include "dwmc.h"
+#endif
+
 #if EWMHTAGS_PATCH
 #include "ewmhtags.h"
 #endif
