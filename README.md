@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-08 - Added columns layout
+2019-10-08 - Added columns layout and fakefullscreen patch
 
 2019-10-07 - Added sortscreens and dwmc patches, fixed minor cross-compatibility issues for combo, holdbar, leftlayout, hidevacanttags, taggrid and activetagindicatorbar
 
@@ -112,6 +112,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [ewmhtags](https://dwm.suckless.org/patches/ewmhtags/)
       - adds EWMH support for \_NET_NUMBER_OF_DESKTOPS, \_NET_CURRENT_DESKTOP, \_NET_DESKTOP_NAMES and \_NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs that request workspace information, e.g. polybar's xworkspaces module
+
+   - [fakefullscreen](https://dwm.suckless.org/patches/fakefullscreen/)
+      - only allow clients to "fullscreen" into the space currently given to them
+      - as an example, this will allow you to view a fullscreen video in your browser on one half of the screen, while having the other half available for other tasks
 
    - [fancybar](https://dwm.suckless.org/patches/fancybar/)
       - shows the titles of all visible windows in the status bar
