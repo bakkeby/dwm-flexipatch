@@ -490,6 +490,12 @@
  */
 #define CENTEREDFLOATINGMASTER_LAYOUT 0
 
+/* Same as the default tile layout except clients in the master area are arranged in
+ * columns (i.e. left to right).
+ * https://dwm.suckless.org/patches/columns/
+ */
+#define COLUMNS_LAYOUT 0
+
 /* Deck layout.
  * https://dwm.suckless.org/patches/deck/
  */

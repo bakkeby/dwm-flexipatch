@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-08 - Added columns layout
+
 2019-10-07 - Added sortscreens and dwmc patches, fixed minor cross-compatibility issues for combo, holdbar, leftlayout, hidevacanttags, taggrid and activetagindicatorbar
 
 2019-10-06 - Added statuscolors and statusallmons patches, fixed minor cross-compatibility issues for killunsel, fullscreen, noborder, tagintostack patches
@@ -291,8 +293,11 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [centeredfloatingmaster](https://dwm.suckless.org/patches/centeredmaster/)
       - centeredfloatingmaster layout
 
+   - [columns](https://dwm.suckless.org/patches/columns/)
+      - same as the default tile layout except clients in the master area are arranged in columns (i.e. left to right)
+
    - [deck](https://dwm.suckless.org/patches/deck/)
-      - deck layout
+      - deck layout - clients in the stack area are arranged on top of each other (like monocle)
 
    - [fibonacci](https://dwm.suckless.org/patches/fibonacci/)
       - fibonacci (dwindle and spiral) layouts

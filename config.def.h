@@ -258,6 +258,7 @@ static const Layout layouts[] = {
 	{ "[]=",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, // default tile layout
  	{ "><>",      NULL,             {0} },    /* no layout function means floating behavior */
 	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, 0, 0, NULL } }, // monocle
+	{ "|||",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // columns (col) layout
 	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, // floating master
 	{ "[D]",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL } }, // deck
 	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, // bstack
@@ -266,7 +267,6 @@ static const Layout layouts[] = {
 	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID, 0, 0, NULL } }, // gappless grid
 	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE, 0, 0, NULL } }, // fibonacci dwindle
 	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL, 0, 0, NULL } }, // fibonacci spiral
-	{ "|||",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // columns (col) layout
 	#if TILE_LAYOUT
 	{ "[]=",      tile,             {0} },
 	#endif
@@ -284,6 +284,9 @@ static const Layout layouts[] = {
 	#endif
 	#if CENTEREDFLOATINGMASTER_LAYOUT
 	{ ">M>",      centeredfloatingmaster, {0} },
+	#endif
+	#if COLUMNS_LAYOUT
+	{ "|||",      col,              {0} },
 	#endif
 	#if DECK_LAYOUT
 	{ "[D]",      deck,             {0} },
@@ -331,6 +334,9 @@ static const Layout layouts[] = {
 	#endif
 	#if CENTEREDFLOATINGMASTER_LAYOUT
 	{ ">M>",      centeredfloatingmaster },
+	#endif
+	#if COLUMNS_LAYOUT
+	{ "|||",      col },
 	#endif
 	#if DECK_LAYOUT
 	{ "[D]",      deck },
@@ -471,6 +477,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,          setlayout,           {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,           {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,          setlayout,           {.v = &layouts[2]} },
+	#if COLUMNS_LAYOUT
+	{ MODKEY,                       XK_c,          setlayout,           {.v = &layouts[3]} },
+	#endif // COLUMNS_LAYOUT
 	#if FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,    {.i = 0 } },   /* flextile, 0 = layout axis */
 	{ MODKEY|ControlMask,           XK_Tab,        rotatelayoutaxis,    {.i = 1 } },   /* flextile, 1 = master axis */

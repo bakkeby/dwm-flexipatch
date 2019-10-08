@@ -178,6 +178,10 @@
 #include "centeredfloatingmaster.h"
 #endif
 
+#if COLUMNS_LAYOUT
+#include "columns.h"
+#endif
+
 #if DECK_LAYOUT
 #include "deck.h"
 #endif
