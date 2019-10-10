@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-10 - Added mdpcontrol patch
+2019-10-10 - Added mdpcontrol and scratchpad patches
 
 2019-10-08 - Added columns layout and fakefullscreen patch
 
@@ -201,6 +201,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [savefloats](https://dwm.suckless.org/patches/save_floats/)
       - saves size and position of every floating window before it is forced into tiled mode
       - if the window is made floating again then the old dimensions will be restored
+
+   - [scratchpad](https://dwm.suckless.org/patches/scratchpad/)
+      - the scratchpad patch allows you to spawn or restore a floating terminal window
 
    - [selfrestart](https://dwm.suckless.org/patches/selfrestart/)
       - restart dwm without the unnecessary dependency of an external script

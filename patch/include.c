@@ -94,6 +94,10 @@
 #include "rotatestack.c"
 #endif
 
+#if SCRATCHPAD_PATCH
+#include "scratchpad.c"
+#endif
+
 #if SELFRESTART_PATCH
 #include "selfrestart.c"
 #endif

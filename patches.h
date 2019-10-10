@@ -310,6 +310,12 @@
  */
 #define SAVEFLOATS_PATCH 0
 
+/* The scratchpad patch allows you to spawn or restore a floating terminal window.
+ * It is typically useful when one need to do some short typing.
+ * https://dwm.suckless.org/patches/scratchpad/
+ */
+#define SCRATCHPAD_PATCH 0
+
 /* Allows restarting dwm without the dependency of an external script.
  * https://dwm.suckless.org/patches/selfrestart/
  */

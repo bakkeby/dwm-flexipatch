@@ -1882,6 +1882,16 @@ manage(Window w, XWindowAttributes *wa)
 	c->bw = borderpx;
 	#endif // SETBORDERPX_PATCH
 
+	#if SCRATCHPAD_PATCH
+	selmon->tagset[selmon->seltags] &= ~scratchtag;
+	if (!strcmp(c->name, scratchpadname)) {
+		c->mon->tagset[c->mon->seltags] |= c->tags = scratchtag;
+		c->isfloating = True;
+		c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
+		c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
+	}
+	#endif // SCRATCHPAD_PATCH
+
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
 	#if FLOAT_BORDER_COLOR_PATCH
@@ -2799,6 +2809,9 @@ spawn(const Arg *arg)
 {
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
+	#if SCRATCHPAD_PATCH
+	selmon->tagset[selmon->seltags] &= ~scratchtag;
+	#endif // SCRATCHPAD_PATCH
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
