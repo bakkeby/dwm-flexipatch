@@ -334,6 +334,11 @@
  */
 #define SORTSCREENS_PATCH 0
 
+/* Spawns programs from currently focused client's working directory.
+ * https://dwm.suckless.org/patches/spawn_cwd/
+ */
+#define SPAWNCMD_PATCH 0
+
 /* This patch draws and updates the statusbar on all monitors.
  * https://dwm.suckless.org/patches/statusallmons/
  */

@@ -13,7 +13,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-10 - Added mdpcontrol and scratchpad patches
+2019-10-10 - Added mdpcontrol, scratchpad and spawn_cwd cpatches
 
 2019-10-08 - Added columns layout and fakefullscreen patch
 
@@ -213,6 +213,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [sortscreens](https://www.mail-archive.com/hackers@suckless.org/msg09400.html)
       - this patch aims to address some inconsistencies when it comes to focusmon, tagmon and similar functionality by explicitly sorting screens left to right (or top to bottom in a vertical layout)
+
+   - [spawn_cwd](https://dwm.suckless.org/patches/spawn_cwd/)
+      - spawns programs from currently focused client's working directory
 
    - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
       - this patch draws and updates the statusbar on all monitors

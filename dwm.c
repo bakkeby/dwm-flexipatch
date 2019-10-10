@@ -45,6 +45,13 @@
 #include "drw.h"
 #include "util.h"
 
+#if SPAWNCMD_PATCH
+#include <assert.h>
+#include <libgen.h>
+#include <sys/stat.h>
+#define SPAWN_CWD_DELIM " []{}()<>\"':"
+#endif // SPAWNCMD_PATCH
+
 /* macros */
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
@@ -2815,6 +2822,40 @@ spawn(const Arg *arg)
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
+		#if SPAWNCMD_PATCH
+		if (selmon->sel) {
+			const char* const home = getenv("HOME");
+			assert(home && strchr(home, '/'));
+			const size_t homelen = strlen(home);
+			char *cwd, *pathbuf = NULL;
+			struct stat statbuf;
+
+			cwd = strtok(selmon->sel->name, SPAWN_CWD_DELIM);
+			/* NOTE: strtok() alters selmon->sel->name in-place,
+			 * but that does not matter because we are going to
+			 * exec() below anyway; nothing else will use it */
+			while (cwd) {
+				if (*cwd == '~') { /* replace ~ with $HOME */
+					if (!(pathbuf = malloc(homelen + strlen(cwd)))) /* ~ counts for NULL term */
+						die("fatal: could not malloc() %u bytes\n", homelen + strlen(cwd));
+					strcpy(strcpy(pathbuf, home) + homelen, cwd + 1);
+					cwd = pathbuf;
+				}
+
+				if (strchr(cwd, '/') && !stat(cwd, &statbuf)) {
+					if (!S_ISDIR(statbuf.st_mode))
+						cwd = dirname(cwd);
+
+					if (!chdir(cwd))
+						break;
+				}
+
+				cwd = strtok(NULL, SPAWN_CWD_DELIM);
+			}
+
+			free(pathbuf);
+		}
+		#endif // SPAWNCMD_PATCH
 		setsid();
 		execvp(((char **)arg->v)[0], (char **)arg->v);
 		fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[0]);
