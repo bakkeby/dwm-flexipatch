@@ -573,6 +573,11 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,         {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period,     cyclelayout,         {.i = +1 } },
 	#endif // CYCLELAYOUTS_PATCH
+	#if MDPCONTROL_PATCH
+	{ MODKEY,                       XK_F1,         mpdchange,           {.i = -1} },
+	{ MODKEY,                       XK_F2,         mpdchange,           {.i = +1} },
+	{ MODKEY,                       XK_Escape,     mpdcontrol,          {0} },
+	#endif // MDPCONTROL_PATCH
 	TAGKEYS(                        XK_1,                               0)
 	TAGKEYS(                        XK_2,                               1)
 	TAGKEYS(                        XK_3,                               2)

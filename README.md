@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-10 - Added mdpcontrol patch
+
 2019-10-08 - Added columns layout and fakefullscreen patch
 
 2019-10-07 - Added sortscreens and dwmc patches, fixed minor cross-compatibility issues for combo, holdbar, leftlayout, hidevacanttags, taggrid and activetagindicatorbar
@@ -158,6 +160,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [maximize](https://dwm.suckless.org/patches/maximize/)
       - adds helper functions for maximizing, horizontally and vertically, floating windows using keybindings
+
+   - [mdpcontrol](https://dwm.suckless.org/patches/mpdcontrol/)
+      - adds keyboard bindings to control MDP (Music Player Daemon)
 
    - monitorrules
       - adds rules per monitor, e.g. have default layouts per monitor

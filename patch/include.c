@@ -68,6 +68,10 @@
 #include "maximize.c"
 #endif
 
+#if MDPCONTROL_PATCH
+#include "mdpcontrol.c"
+#endif
+
 #if MOVESTACK_PATCH
 #include "movestack.c"
 #endif

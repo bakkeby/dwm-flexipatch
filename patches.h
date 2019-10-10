@@ -224,6 +224,14 @@
  */
 #define MAXIMIZE_PATCH 0
 
+/* Control Music Player Daemon via keybinds.
+ * This patch depends on an additional library lmdpclient so if you want to enable this
+ * then you will also have to append -lmpdclient to the LIBS configuration in config.mk.
+ * A placeholder has been added there for reference.
+ * https://dwm.suckless.org/patches/mpdcontrol/
+ */
+#define MDPCONTROL_PATCH 0
+
 /* Adds rules per monitor, e.g. have default layouts per monitor.
  * The use case for this is if the second monitor is vertical (i.e. rotated) then
  * you may want to use a different default layout for this monitor than what is

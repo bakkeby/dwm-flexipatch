@@ -20,9 +20,13 @@ FREETYPEINC = /usr/include/freetype2
 # OpenBSD (uncomment)
 #FREETYPEINC = ${X11INC}/freetype2
 
+# Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
+#LMPDCLIENT = -lmpdclient
+
 # includes and libs
 INCS = -I${X11INC} -I${FREETYPEINC}
-LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} -lXrender
+LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} -lXrender ${LMPDCLIENT}
+
 
 # flags
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=2 -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
