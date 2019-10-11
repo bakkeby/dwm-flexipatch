@@ -13,6 +13,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-11 - Added the patch to ignore Xft errors when drawing text in the status bar
+
 2019-10-10 - Added mdpcontrol, scratchpad and spawn_cwd cpatches
 
 2019-10-08 - Added columns layout and fakefullscreen patch
@@ -149,6 +151,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [holdbar](http://dwm.suckless.org/patches/holdbar/)
       - with this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
       - additionally the bar will now overlay the display
+
+   - [ignore-xft-errors-when-drawing-text](https://groups.google.com/forum/m/#!topic/wmii/7bncCahYIww)
+      - sometimes dwm crashes when it cannot render some glyphs in window titles (usually emoji)
+      - this patch is essentially a hack to ignore any errors when drawing text on the status bar and may be removed if a more appropriate solution comes up
 
    - [leftlayout](http://dwm.suckless.org/patches/leftlayout/)
       - moves the layout symbol in the status bar to the left hand side

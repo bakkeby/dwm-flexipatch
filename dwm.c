@@ -1476,12 +1476,19 @@ drawbar(Monitor *m)
 			#else
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
 			#endif // TITLECOLOR_PATCH
+			#if IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
+			XSetErrorHandler(xerrordummy);
+			#endif // IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 			#if CENTEREDWINDOWNAME_PATCH
 			int mid = (m->ww - TEXTW(m->sel->name)) / 2 - x;
 			drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);
 			#else
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			#endif // CENTEREDWINDOWNAME_PATCH
+			#if IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
+			XSync(dpy, False);
+			XSetErrorHandler(xerror);
+			#endif // IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 			if (m->sel->isfloating)
 				#if ACTIVETAGINDICATORBAR_PATCH
 				drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, m->sel->isfixed, 0);

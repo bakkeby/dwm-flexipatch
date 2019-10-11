@@ -199,6 +199,13 @@
  */
 #define HOLDBAR_PATCH 0
 
+/* Sometimes dwm crashes when it cannot render some glyphs in window titles (usually emoji).
+ * This patch is essentially a hack to ignore any errors when drawing text on the status bar.
+ * https://groups.google.com/forum/m/#!topic/wmii/7bncCahYIww
+ * https://docs.google.com/viewer?a=v&pid=forums&srcid=MDAwODA2MTg0MDQyMjE0OTgzMzMBMDQ3ODQzODkyMTU3NTAyMTMxNTYBX2RUMVNtOUtDQUFKATAuMQEBdjI&authuser=0
+ */
+#define IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH 0
+
 /* This patch adds a keybinding to kills all visible clients that are not selected.
  * https://dwm.suckless.org/patches/killunsel/
  */
