@@ -159,6 +159,9 @@ struct Client {
 	#if CENTER_PATCH
 	int iscentered;
 	#endif // CENTER_PATCH
+	#if ISPERMANENT_PATCH
+	int ispermanent;
+	#endif // ISPERMANENT_PATCH
 	#if STICKY_PATCH
 	int issticky;
 	#endif // STICKY_PATCH
@@ -257,6 +260,9 @@ typedef struct {
 	int iscentered;
 	#endif // CENTER_PATCH
 	int isfloating;
+	#if ISPERMANENT_PATCH
+	int ispermanent;
+	#endif // ISPERMANENT_PATCH
 	int monitor;
 } Rule;
 
@@ -468,6 +474,9 @@ applyrules(Client *c)
 			#if CENTER_PATCH
 			c->iscentered = r->iscentered;
 			#endif // CENTER_PATCH
+			#if ISPERMANENT_PATCH
+			c->ispermanent = r->ispermanent;
+			#endif // ISPERMANENT_PATCH
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
 			for (m = mons; m && m->num != r->monitor; m = m->next);
@@ -1837,7 +1846,11 @@ keypress(XEvent *e)
 void
 killclient(const Arg *arg)
 {
+	#if ISPERMANENT_PATCH
+	if (!selmon->sel || selmon->sel->ispermanent)
+	#else
 	if (!selmon->sel)
+	#endif // ISPERMANENT_PATCH
 		return;
 	#if SYSTRAY_PATCH
 	if (!sendevent(selmon->sel->win, wmatom[WMDelete], NoEventMask, wmatom[WMDelete], CurrentTime, 0, 0, 0)) {

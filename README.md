@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-22 - Added ispermanent patch
+
 2019-10-16 - Introduced [flexipatch-finalizer](https://github.com/bakkeby/flexipatch-finalizer)
 
 2019-10-11 - Added the patch to ignore Xft errors when drawing text in the status bar
@@ -159,6 +161,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [ignore-xft-errors-when-drawing-text](https://groups.google.com/forum/m/#!topic/wmii/7bncCahYIww)
       - sometimes dwm crashes when it cannot render some glyphs in window titles (usually emoji)
       - this patch is essentially a hack to ignore any errors when drawing text on the status bar and may be removed if a more appropriate solution comes up
+
+   - [ispermanent](https://dwm.suckless.org/patches/ispermanent/)
+      - adds rule option for clients to avoid accidental termination by killclient for sticky windows
 
    - [leftlayout](http://dwm.suckless.org/patches/leftlayout/)
       - moves the layout symbol in the status bar to the left hand side

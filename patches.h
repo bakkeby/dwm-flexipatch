@@ -199,6 +199,11 @@
  */
 #define HOLDBAR_PATCH 0
 
+/* Adds rule option for clients to avoid accidental termination by killclient for sticky windows.
+ * https://dwm.suckless.org/patches/ispermanent/
+ */
+#define ISPERMANENT_PATCH 0
+
 /* Sometimes dwm crashes when it cannot render some glyphs in window titles (usually emoji).
  * This patch is essentially a hack to ignore any errors when drawing text on the status bar.
  * https://groups.google.com/forum/m/#!topic/wmii/7bncCahYIww
