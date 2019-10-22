@@ -162,11 +162,18 @@ struct Client {
 	#if ISPERMANENT_PATCH
 	int ispermanent;
 	#endif // ISPERMANENT_PATCH
+	#if SWALLOW_PATCH
+	int isterminal, noswallow;
+	pid_t pid;
+	#endif // SWALLOW_PATCH
 	#if STICKY_PATCH
 	int issticky;
 	#endif // STICKY_PATCH
 	Client *next;
 	Client *snext;
+	#if SWALLOW_PATCH
+	Client *swallowing;
+	#endif // SWALLOW_PATCH
 	Monitor *mon;
 	Window win;
 };
@@ -263,6 +270,10 @@ typedef struct {
 	#if ISPERMANENT_PATCH
 	int ispermanent;
 	#endif // ISPERMANENT_PATCH
+	#if SWALLOW_PATCH
+	int isterminal;
+	int noswallow;
+	#endif // SWALLOW_PATCH
 	int monitor;
 } Rule;
 
@@ -477,6 +488,10 @@ applyrules(Client *c)
 			#if ISPERMANENT_PATCH
 			c->ispermanent = r->ispermanent;
 			#endif // ISPERMANENT_PATCH
+			#if SWALLOW_PATCH
+			c->isterminal = r->isterminal;
+			c->noswallow = r->noswallow;
+			#endif // SWALLOW_PATCH
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
 			for (m = mons; m && m->num != r->monitor; m = m->next);
@@ -1193,6 +1208,10 @@ destroynotify(XEvent *e)
 
 	if ((c = wintoclient(ev->window)))
 		unmanage(c, 1);
+	#if SWALLOW_PATCH
+	else if ((c = swallowingclient(ev->window)))
+		unmanage(c->swallowing, 1);
+	#endif // SWALLOW_PATCH
 	#if SYSTRAY_PATCH
 	else if (showsystray && (c = wintosystrayicon(ev->window))) {
 		removesystrayicon(c);
@@ -1871,11 +1890,17 @@ void
 manage(Window w, XWindowAttributes *wa)
 {
 	Client *c, *t = NULL;
+	#if SWALLOW_PATCH
+	Client *term = NULL;
+	#endif // SWALLOW_PATCH
 	Window trans = None;
 	XWindowChanges wc;
 
 	c = ecalloc(1, sizeof(Client));
 	c->win = w;
+	#if SWALLOW_PATCH
+	c->pid = winpid(w);
+	#endif // SWALLOW_PATCH
 	/* geometry */
 	c->x = c->oldx = wa->x;
 	c->y = c->oldy = wa->y;
@@ -1893,6 +1918,9 @@ manage(Window w, XWindowAttributes *wa)
 	} else {
 		c->mon = selmon;
 		applyrules(c);
+		#if SWALLOW_PATCH
+		term = termforwin(c);
+		#endif // SWALLOW_PATCH
 	}
 
 	if (c->x + WIDTH(c) > c->mon->mx + c->mon->mw)
@@ -1986,6 +2014,10 @@ manage(Window w, XWindowAttributes *wa)
 	#else
 	XMapWindow(dpy, c->win);
 	#endif // AWESOMEBAR_PATCH
+	#if SWALLOW_PATCH
+	if (term)
+		swallow(term, c);
+	#endif // SWALLOW_PATCH
 	focus(NULL);
 }
 
@@ -3105,6 +3137,22 @@ unmanage(Client *c, int destroyed)
 	Monitor *m = c->mon;
 	XWindowChanges wc;
 
+	#if SWALLOW_PATCH
+	if (c->swallowing) {
+		unswallow(c);
+		return;
+	}
+
+	Client *s = swallowingclient(c->win);
+	if (s) {
+		free(s->swallowing);
+		s->swallowing = NULL;
+		arrange(m);
+		focus(NULL);
+		return;
+	}
+	#endif // SWALLOW_PATCH
+
 	detach(c);
 	detachstack(c);
 	if (!destroyed) {
@@ -3119,6 +3167,10 @@ unmanage(Client *c, int destroyed)
 		XUngrabServer(dpy);
 	}
 	free(c);
+	#if SWALLOW_PATCH
+	if (s)
+		return;
+	#endif // SWALLOW_PATCH
 	focus(NULL);
 	updateclientlist();
 	arrange(m);
@@ -3627,6 +3679,10 @@ main(int argc, char *argv[])
 		fputs("warning: no locale support\n", stderr);
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
+	#if SWALLOW_PATCH
+	if (!(xcon = XGetXCBConnection(dpy)))
+		die("dwm: cannot get xcb connection\n");
+	#endif // SWALLOW_PATCH
 	checkotherwm();
 	#if XRDB_PATCH
 	XrmInitialize();

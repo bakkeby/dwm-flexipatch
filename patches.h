@@ -377,6 +377,14 @@
  */
 #define SYSTRAY_PATCH 0
 
+/* This patch adds "window swallowing" to dwm as known from Plan 9's windowing system rio.
+ * Clients marked with isterminal in config.h swallow a window opened by any child process,
+ * e.g. running xclock in a terminal. Closing the xclock window restores the terminal window
+ * in the current position.
+ * https://dwm.suckless.org/patches/swallow/
+ */
+#define SWALLOW_PATCH 0
+
 /* Switch focus between the master and stack columns using a single keybinding.
  * https://dwm.suckless.org/patches/switchcol/
  */

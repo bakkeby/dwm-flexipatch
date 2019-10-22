@@ -90,6 +90,9 @@
 #if SYSTRAY_PATCH
 #include "systray.h"
 #endif
+#if SWALLOW_PATCH
+#include "swallow.h"
+#endif // SWALLOW_PATCH
 #if SWITCHCOL_PATCH
 #include "switchcol.h"
 #endif

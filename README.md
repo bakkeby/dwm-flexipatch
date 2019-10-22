@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-22 - Added ispermanent patch
+2019-10-22 - Added ispermanent and swallow patches
 
 2019-10-16 - Introduced [flexipatch-finalizer](https://github.com/bakkeby/flexipatch-finalizer)
 
@@ -243,6 +243,11 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [sticky](https://dwm.suckless.org/patches/sticky/)
       - adds toggleable keyboard shortcut to make a client 'sticky', i.e. visible on all tags
+
+   - [swallow](https://dwm.suckless.org/patches/swallow/)
+      - this patch adds "window swallowing" to dwm as known from Plan 9's windowing system rio
+      - clients marked with isterminal in config.h swallow a window opened by any child process, e.g. running xclock in a terminal
+      - closing the xclock window restores the terminal window in the current position
 
    - [switchcol](https://dwm.suckless.org/patches/switchcol/)
       - allows you to switch focus between the master and stack columns using a single keybinding
