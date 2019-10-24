@@ -282,6 +282,12 @@
  */
 #define NOBORDER_PATCH 0
 
+/* Enable modifying or removing dmenu in config.def.h which resulted previously in a
+ * compilation error because two lines of code hardcode dmenu into dwm.
+ * https://dwm.suckless.org/patches/nodmenu/
+ */
+#define NODMENU_PATCH 0
+
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/

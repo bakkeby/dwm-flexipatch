@@ -2929,8 +2929,10 @@ sigchld(int unused)
 void
 spawn(const Arg *arg)
 {
+	#if !NODMENU_PATCH
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
+	#endif // NODMENU_PATCH
 	#if SCRATCHPAD_PATCH
 	selmon->tagset[selmon->seltags] &= ~scratchtag;
 	#endif // SCRATCHPAD_PATCH

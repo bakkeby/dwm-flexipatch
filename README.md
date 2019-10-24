@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-24 - Added dragmfact and extrabar patches
+2019-10-24 - Added dragmfact, extrabar and nodmenu patches
 
 2019-10-22 - Added ispermanent and swallow patches
 
@@ -201,6 +201,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [noborder](https://dwm.suckless.org/patches/noborder/)
       - removes the border when there is only one window visible
+
+   - [nodmenu](https://dwm.suckless.org/patches/nodmenu/)
+      - enable modifying dmenu in config.def.h which resulted previously in a compilation error because two lines of code hardcode dmenu into dwm
+      - allows complete removal of dmenu, should you want to do that
 
    - [onlyquitonempty](https://dwm.suckless.org/patches/onlyquitonempty/)
       - makes it so dwm will only exit via quit() if no windows are open (in order to prevent accidental loss of work)
