@@ -2333,9 +2333,25 @@ resizemouse(const Arg *arg)
 	       return;
 	horizcorner = nx < c->w / 2;
 	vertcorner = ny < c->h / 2;
+	#if DRAGMFACT_PATCH
+	if (c->isfloating || NULL == c->mon->lt[c->mon->sellt]->arrange) {
+		XWarpPointer (dpy, None, c->win, 0, 0, 0, 0,
+				horizcorner ? (-c->bw) : (c->w + c->bw - 1),
+				vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+	} else {
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+	}
+	#else
 	XWarpPointer (dpy, None, c->win, 0, 0, 0, 0,
-		      horizcorner ? (-c->bw) : (c->w + c->bw - 1),
-		      vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+			horizcorner ? (-c->bw) : (c->w + c->bw - 1),
+			vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+	#endif // DRAGMFACT_PATCH
+	#elif DRAGMFACT_PATCH
+	if (c->isfloating || NULL == c->mon->lt[c->mon->sellt]->arrange) {
+		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
+	} else {
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+	}
 	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
 	#endif // RESIZECORNERS_PATCH
@@ -2360,6 +2376,7 @@ resizemouse(const Arg *arg)
 			nw = MAX(horizcorner ? (ocx2 - nx) : (ev.xmotion.x - ocx - 2 * c->bw + 1), 1);
 			nh = MAX(vertcorner ? (ocy2 - ny) : (ev.xmotion.y - ocy - 2 * c->bw + 1), 1);
 			#endif // RESIZECORNERS_PATCH
+			#if !DRAGMFACT_PATCH
 			if (c->mon->wx + nw >= selmon->wx && c->mon->wx + nw <= selmon->wx + selmon->ww
 			&& c->mon->wy + nh >= selmon->wy && c->mon->wy + nh <= selmon->wy + selmon->wh)
 			{
@@ -2367,6 +2384,7 @@ resizemouse(const Arg *arg)
 				&& (abs(nw - c->w) > snap || abs(nh - c->h) > snap))
 					togglefloating(NULL);
 			}
+			#endif // DRAGMFACT_PATCH
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
 				#if RESIZECORNERS_PATCH
 				resize(c, nx, ny, nw, nh, 1);
@@ -2391,9 +2409,29 @@ resizemouse(const Arg *arg)
 		}
 	} while (ev.type != ButtonRelease);
 	#if RESIZECORNERS_PATCH
+	#if DRAGMFACT_PATCH
+	if (c->isfloating || NULL == c->mon->lt[c->mon->sellt]->arrange) {
+		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0,
+				horizcorner ? (-c->bw) : (c->w + c->bw - 1),
+				vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+	} else {
+		selmon->mfact = (double) ev.xmotion.x / (double) selmon->mw;
+		arrange(selmon);
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+	}
+	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0,
-		      horizcorner ? (-c->bw) : (c->w + c->bw - 1),
-		      vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+			horizcorner ? (-c->bw) : (c->w + c->bw - 1),
+			vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+	#endif // DRAGMFACT_PATCH
+	#elif DRAGMFACT_PATCH
+	if (c->isfloating || NULL == c->mon->lt[c->mon->sellt]->arrange) {
+		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
+	} else {
+		selmon->mfact = (double) ev.xmotion.x / (double) selmon->mw;
+		arrange(selmon);
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+	}
 	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
 	#endif // RESIZECORNERS_PATCH

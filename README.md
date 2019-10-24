@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-10-24 - Added dragmfact patch
+
 2019-10-22 - Added ispermanent and swallow patches
 
 2019-10-16 - Introduced [flexipatch-finalizer](https://github.com/bakkeby/flexipatch-finalizer)
@@ -112,6 +114,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
+
+   - [dragmfact](https://dwm.suckless.org/patches/dragmfact/)
+      - lets you resize the split in the tile layout (i.e. modify mfact) by holding the modkey and dragging the mouse
 
    - [dwmc](http://dwm.suckless.org/patches/dwmc/)
       - a simple dwmc client using a fork of fsignal to communicate with dwm

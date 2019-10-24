@@ -115,6 +115,13 @@
  */
 #define CYCLELAYOUTS_PATCH 0
 
+/* This patch lets you resize the split in the tile layout (i.e. modify mfact) by holding
+ * the modkey and dragging the mouse.
+ * This patch can be a bit wonky with other layouts, but generally works.
+ * https://dwm.suckless.org/patches/dragmfact/
+ */
+#define DRAGMFACT_PATCH 0
+
 /* Simple dwmc client using a fork of fsignal to communicate with dwm.
  * To use this either copy the patch/dwmc shell script to somewhere in your path or
  * uncomment the following line in Makefile: #cp -f patch/dwmc ${DESTDIR}${PREFIX}/bin
