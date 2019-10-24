@@ -143,6 +143,13 @@
  */
 #define EWMHTAGS_PATCH 0
 
+/* This patch will enable an extra status bar in dwm in a similar manner to the dualstatus
+ * patch. If the primary status is at the top via topbar then the extra status bar will be
+ * placed at the bottom and vice versa.
+ * https://dwm.suckless.org/patches/extrabar/
+ */
+#define EXTRABAR_PATCH 0
+
 /* Only allow clients to "fullscreen" into the space currently given to them.
  * As an example, this will allow you to view a fullscreen video in your browser on
  * one half of the screen, while having the other half available for other tasks.

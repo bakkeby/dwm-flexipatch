@@ -218,6 +218,9 @@ struct Monitor {
 	int nmaster;
 	int num;
 	int by;               /* bar geometry */
+	#if EXTRABAR_PATCH
+	int eby;	          /* extra bar geometry */
+	#endif // EXTRABAR_PATCH
 	#if AWESOMEBAR_PATCH
 	int btw;              /* width of tasks portion of bar */
 	int bt;               /* number of tasks */
@@ -243,6 +246,9 @@ struct Monitor {
 	Client *stack;
 	Monitor *next;
 	Window barwin;
+	#if EXTRABAR_PATCH
+	Window extrabarwin;
+	#endif // EXTRABAR_PATCH
 	const Layout *lt[2];
 	#if ALTERNATIVE_TAGS_PATCH
 	unsigned int alttag;
@@ -394,6 +400,9 @@ static void zoom(const Arg *arg);
 /* variables */
 static const char broken[] = "broken";
 static char stext[256];
+#if EXTRABAR_PATCH
+static char estext[256];
+#endif // EXTRABAR_PATCH
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar geometry */
@@ -882,7 +891,13 @@ cleanupmon(Monitor *mon)
 		m->next = mon->next;
 	}
 	XUnmapWindow(dpy, mon->barwin);
+	#if EXTRABAR_PATCH
+	XUnmapWindow(dpy, mon->extrabarwin);
+	#endif // EXTRABAR_PATCH
 	XDestroyWindow(dpy, mon->barwin);
+	#if EXTRABAR_PATCH
+	XDestroyWindow(dpy, mon->extrabarwin);
+	#endif // EXTRABAR_PATCH
 	free(mon);
 }
 
@@ -1016,6 +1031,9 @@ configurenotify(XEvent *e)
 						resizeclient(c, m->mx, m->my, m->mw, m->mh);
 				#endif // !FAKEFULLSCREEN_PATCH
 				XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, m->ww, bh);
+				#if EXTRABAR_PATCH
+				XMoveResizeWindow(dpy, m->extrabarwin, m->wx, m->eby, m->ww, bh);
+				#endif // EXTRABAR_PATCH
 			}
 			focus(NULL);
 			arrange(NULL);
@@ -1539,6 +1557,13 @@ drawbar(Monitor *m)
 	#else
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
 	#endif // SYSTRAY_PATCH
+	#if EXTRABAR_PATCH
+	if (m == selmon) { /* extra status is only drawn on selected monitor */
+		drw_setscheme(drw, scheme[SchemeNorm]);
+		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0);
+		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
+	}
+	#endif // EXTRABAR_PATCH
 }
 
 void
@@ -2996,6 +3021,9 @@ togglebar(const Arg *arg)
 	#endif // PERTAG_PATCH
 	updatebarpos(selmon);
 	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
+	#if EXTRABAR_PATCH
+	XMoveResizeWindow(dpy, selmon->extrabarwin, selmon->wx, selmon->eby, selmon->ww, bh);
+	#endif // EXTRABAR_PATCH
 	#if SYSTRAY_PATCH
 	if (showsystray) {
 		XWindowChanges wc;
@@ -3254,8 +3282,12 @@ updatebars(void)
 	};
 	XClassHint ch = {"dwm", "dwm"};
 	for (m = mons; m; m = m->next) {
+		#if EXTRABAR_PATCH
+		if (!m->barwin) {
+		#else
 		if (m->barwin)
 			continue;
+		#endif // EXTRABAR_PATCH
 		w = m->ww;
 		#if SYSTRAY_PATCH
 		if (showsystray && m == systraytomon(m))
@@ -3277,6 +3309,24 @@ updatebars(void)
 		#endif // SYSTRAY_PATCH
 		XMapRaised(dpy, m->barwin);
 		XSetClassHint(dpy, m->barwin, &ch);
+		#if EXTRABAR_PATCH
+		}
+		if (!m->extrabarwin) {
+			#if ALPHA_PATCH
+			m->extrabarwin = XCreateWindow(dpy, root, m->wx, m->eby, m->ww, bh, 0, depth,
+			                          InputOutput, visual,
+			                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
+			#else
+			m->extrabarwin = XCreateWindow(dpy, root, m->wx, m->eby, m->ww, bh, 0, DefaultDepth(dpy, screen),
+					CopyFromParent, DefaultVisual(dpy, screen),
+					CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+			#endif // ALPHA_PATCH
+			XDefineCursor(dpy, m->extrabarwin, cursor[CurNormal]->cursor);
+			XMapRaised(dpy, m->extrabarwin);
+			XSetClassHint(dpy, m->extrabarwin, &ch);
+		}
+		#endif // EXTRABAR_PATCH
+
 	}
 }
 
@@ -3285,12 +3335,24 @@ updatebarpos(Monitor *m)
 {
 	m->wy = m->my;
 	m->wh = m->mh;
+	#if EXTRABAR_PATCH
+	m->wh -= bh * m->showbar * 2;
+	m->wy = m->showbar ? m->wy + bh : m->wy;
+	if (m->showbar) {
+		m->by = m->topbar ? m->wy - bh : m->wy + m->wh;
+		m->eby = m->topbar ? m->wy + m->wh : m->wy - bh;
+	} else {
+		m->by = -bh;
+		m->eby = -bh;
+	}
+	#else
 	if (m->showbar) {
 		m->wh -= bh;
 		m->by = m->topbar ? m->wy : m->wy + m->wh;
 		m->wy = m->topbar ? m->wy + bh : m->wy;
 	} else
 		m->by = -bh;
+	#endif // EXTRABAR_PATCH
 }
 
 void
@@ -3453,8 +3515,25 @@ updatestatus(void)
 	#if STATUSALLMONS_PATCH
 	Monitor* m;
 	#endif // STATUSALLMONS_PATCH
+	#if EXTRABAR_PATCH
+	char text[512];
+	if (!gettextprop(root, XA_WM_NAME, text, sizeof(text))) {
+		strcpy(stext, "dwm-"VERSION);
+		estext[0] = '\0';
+	} else {
+		char *e = strchr(text, statussep);
+		if (e) {
+			*e = '\0'; e++;
+			strncpy(estext, e, sizeof(estext) - 1);
+		} else {
+			estext[0] = '\0';
+		}
+		strncpy(stext, text, sizeof(stext) - 1);
+	}
+	#else
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
+	#endif // EXTRABAR_PATCH
 	#if STATUSALLMONS_PATCH
 	for (m = mons; m; m = m->next)
 		drawbar(m);
@@ -3568,7 +3647,11 @@ wintomon(Window w)
 	if (w == root && getrootptr(&x, &y))
 		return recttomon(x, y, 1, 1);
 	for (m = mons; m; m = m->next)
+		#if EXTRABAR_PATCH
+		if (w == m->barwin || w == m->extrabarwin)
+		#else
 		if (w == m->barwin)
+		#endif // EXTRABAR_PATCH
 			return m;
 	if ((c = wintoclient(w)))
 		return c->mon;

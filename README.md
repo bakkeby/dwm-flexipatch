@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-24 - Added dragmfact patch
+2019-10-24 - Added dragmfact and extrabar patches
 
 2019-10-22 - Added ispermanent and swallow patches
 
@@ -127,6 +127,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [ewmhtags](https://dwm.suckless.org/patches/ewmhtags/)
       - adds EWMH support for \_NET_NUMBER_OF_DESKTOPS, \_NET_CURRENT_DESKTOP, \_NET_DESKTOP_NAMES and \_NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs that request workspace information, e.g. polybar's xworkspaces module
+
+   - [extrabar](https://dwm.suckless.org/patches/extrabar/)
+      - enables an extra status bar in dwm in a similar manner to the dualstatus patch
+      - if the primary status is at the top via topbar then the extra status bar will be placed at the bottom and vice versa
 
    - [fakefullscreen](https://dwm.suckless.org/patches/fakefullscreen/)
       - only allow clients to "fullscreen" into the space currently given to them
