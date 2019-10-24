@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2019-10-24 - Added dragmfact, extrabar and nodmenu patches
+2019-10-24 - Added dragmfact, extrabar, exresize and nodmenu patches
 
 2019-10-22 - Added ispermanent and swallow patches
 
@@ -127,6 +127,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [ewmhtags](https://dwm.suckless.org/patches/ewmhtags/)
       - adds EWMH support for \_NET_NUMBER_OF_DESKTOPS, \_NET_CURRENT_DESKTOP, \_NET_DESKTOP_NAMES and \_NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs that request workspace information, e.g. polybar's xworkspaces module
+
+   - [exresize](https://dwm.suckless.org/patches/exresize/)
+      - this patch allows the user to change size and placement of floating windows using only the keyboard
+      - it also allows for temporary vertical and horizontal extension of windows similar to other WMs fill command
 
    - [extrabar](https://dwm.suckless.org/patches/extrabar/)
       - enables an extra status bar in dwm in a similar manner to the dualstatus patch

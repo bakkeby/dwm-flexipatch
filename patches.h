@@ -143,6 +143,13 @@
  */
 #define EWMHTAGS_PATCH 0
 
+/* This patch allows the user to change size and placement of floating windows using only the
+ * keyboard. It also allows for temporary vertical and horizontal extension of windows similar
+ * to other WMs fill command.
+ * https://dwm.suckless.org/patches/exresize/
+ */
+#define EXRESIZE_PATCH 0
+
 /* This patch will enable an extra status bar in dwm in a similar manner to the dualstatus
  * patch. If the primary status is at the top via topbar then the extra status bar will be
  * placed at the bottom and vice versa.

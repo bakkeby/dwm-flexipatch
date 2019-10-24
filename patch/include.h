@@ -32,6 +32,9 @@
 #if EWMHTAGS_PATCH
 #include "ewmhtags.h"
 #endif
+#if EXRESIZE_PATCH
+#include "exresize.h"
+#endif
 #if FOCUSADJACENTTAG_PATCH
 #include "focusadjacenttag.h"
 #endif

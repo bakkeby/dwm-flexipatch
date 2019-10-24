@@ -44,6 +44,9 @@
 #if HOLDBAR_PATCH
 #include "holdbar.c"
 #endif
+#if EXRESIZE_PATCH
+#include "exresize.c"
+#endif
 #if KILLUNSEL_PATCH
 #include "killunsel.c"
 #endif

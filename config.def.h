@@ -502,202 +502,230 @@ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34
 #endif // SCRATCHPAD_PATCH
 
 static Key keys[] = {
-	/* modifier                     key            function             argument */
-	{ MODKEY,                       XK_p,          spawn,               {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return,     spawn,               {.v = termcmd } },
+	/* modifier                     key            function                argument */
+	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
 	#if SCRATCHPAD_PATCH
-	{ MODKEY,                       XK_grave,      togglescratch,       {.v = scratchpadcmd } },
+	{ MODKEY,                       XK_grave,      togglescratch,          {.v = scratchpadcmd } },
 	#endif // SCRATCHPAD_PATCH
-	{ MODKEY,                       XK_b,          togglebar,           {0} },
-	{ MODKEY,                       XK_j,          focusstack,          {.i = +1 } },
-	{ MODKEY,                       XK_k,          focusstack,          {.i = -1 } },
+	{ MODKEY,                       XK_b,          togglebar,              {0} },
+	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
+	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
 	#if SWITCHCOL_PATCH
-	{ MODKEY,                       XK_v,          switchcol,           {0} },
+	{ MODKEY,                       XK_v,          switchcol,              {0} },
 	#endif // SWITCHCOL_PATCH
 	#if ROTATESTACK_PATCH
-	{ MODKEY|Mod4Mask,              XK_j,          rotatestack,         {.i = +1 } },
-	{ MODKEY|Mod4Mask,              XK_k,          rotatestack,         {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_j,          rotatestack,            {.i = +1 } },
+	{ MODKEY|Mod4Mask,              XK_k,          rotatestack,            {.i = -1 } },
 	#endif // ROTATESTACK_PATCH
 	#if PUSH_PATCH || PUSH_NO_MASTER_PATCH
-	{ MODKEY|ControlMask,           XK_j,          pushdown,            {0} },
-	{ MODKEY|ControlMask,           XK_k,          pushup,              {0} },
+	{ MODKEY|ControlMask,           XK_j,          pushdown,               {0} },
+	{ MODKEY|ControlMask,           XK_k,          pushup,                 {0} },
 	#endif // PUSH_PATCH / PUSH_NO_MASTER_PATCH
-	{ MODKEY,                       XK_i,          incnmaster,          {.i = +1 } },
-	{ MODKEY,                       XK_d,          incnmaster,          {.i = -1 } },
+	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
+	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
 	#if FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY|ControlMask,           XK_i,          incnstack,           {.i = +1 } },
-	{ MODKEY|ControlMask,           XK_u,          incnstack,           {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY,                       XK_h,          setmfact,            {.f = -0.05} },
-	{ MODKEY,                       XK_l,          setmfact,            {.f = +0.05} },
+	{ MODKEY,                       XK_h,          setmfact,               {.f = -0.05} },
+	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
 	#if CFACTS_PATCH
-	{ MODKEY|ShiftMask,             XK_h,          setcfact,            {.f = +0.25} },
-	{ MODKEY|ShiftMask,             XK_l,          setcfact,            {.f = -0.25} },
-	{ MODKEY|ShiftMask,             XK_o,          setcfact,            {.f =  0.00} },
+	{ MODKEY|ShiftMask,             XK_h,          setcfact,               {.f = +0.25} },
+	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
+	{ MODKEY|ShiftMask,             XK_o,          setcfact,               {.f =  0.00} },
 	#endif // CFACTS_PATCH
 	#if MOVESTACK_PATCH
-	{ MODKEY|ShiftMask,             XK_j,          movestack,           {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,          movestack,           {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
 	#endif // MOVESTACK_PATCH
-	{ MODKEY,                       XK_Return,     zoom,                {0} },
+	{ MODKEY,                       XK_Return,     zoom,                   {0} },
 	#if VANITYGAPS_PATCH
-	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,            {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,            {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_i,          incrigaps,           {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_i,          incrigaps,           {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_o,          incrogaps,           {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_o,          incrogaps,           {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_6,          incrihgaps,          {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_6,          incrihgaps,          {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_7,          incrivgaps,          {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_7,          incrivgaps,          {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_8,          incrohgaps,          {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_8,          incrohgaps,          {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_9,          incrovgaps,          {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,          incrovgaps,          {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,          {0} },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,         {0} },
+	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_i,          incrigaps,              {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_i,          incrigaps,              {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_o,          incrogaps,              {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_o,          incrogaps,              {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_6,          incrihgaps,             {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_6,          incrihgaps,             {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_7,          incrivgaps,             {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_7,          incrivgaps,             {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_8,          incrohgaps,             {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_8,          incrohgaps,             {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_9,          incrovgaps,             {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,          incrovgaps,             {.i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,             {0} },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	#endif // VANITYGAPS_PATCH
-	{ MODKEY,                       XK_Tab,        view,                {0} },
+	{ MODKEY,                       XK_Tab,        view,                   {0} },
 	#if AWESOMEBAR_PATCH
-	{ MODKEY,                       XK_z,          showhideclient,      {0} },
+	{ MODKEY,                       XK_z,          showhideclient,         {0} },
 	#endif // AWESOMEBAR_PATCH
-	{ MODKEY|ShiftMask,             XK_c,          killclient,          {0} },
+	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
 	#if KILLUNSEL_PATCH
-	{ MODKEY|ShiftMask,             XK_x,          killunsel,           {0} },
+	{ MODKEY|ShiftMask,             XK_x,          killunsel,              {0} },
 	#endif // KILLUNSEL_PATCH
 	#if SELFRESTART_PATCH
-	{ MODKEY|ShiftMask,             XK_r,          self_restart,        {0} },
+	{ MODKEY|ShiftMask,             XK_r,          self_restart,           {0} },
 	#endif // SELFRESTART_PATCH
-	{ MODKEY|ShiftMask,             XK_q,          quit,                {0} },
+	{ MODKEY|ShiftMask,             XK_q,          quit,                   {0} },
 	#if RESTARTSIG_PATCH
-	{ MODKEY|ControlMask|ShiftMask, XK_q,          quit,                {1} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,          quit,                   {1} },
 	#endif // RESTARTSIG_PATCH
 	#if FOCUSURGENT_PATCH
-	{ MODKEY,                       XK_u,          focusurgent,         {0} },
+	{ MODKEY,                       XK_u,          focusurgent,            {0} },
 	#endif // FOCUSURGENT_PATCH
 	#if HOLDBAR_PATCH
-	{ 0,                            HOLDKEY,       holdbar,             {0} },
+	{ 0,                            HOLDKEY,       holdbar,                {0} },
 	#endif // HOLDBAR_PATCH
 	#if WINVIEW_PATCH
-	{ MODKEY,                       XK_o,          winview,             {0} },
+	{ MODKEY,                       XK_o,          winview,                {0} },
 	#endif // WINVIEW_PATCH
 	#if XRDB_PATCH
-	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                {.v = NULL } },
+	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
-	{ MODKEY,                       XK_t,          setlayout,           {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,          setlayout,           {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,          setlayout,           {.v = &layouts[2]} },
+	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
+	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
+	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
 	#if COLUMNS_LAYOUT
-	{ MODKEY,                       XK_c,          setlayout,           {.v = &layouts[3]} },
+	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
 	#if FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,    {.i = 0 } },   /* flextile, 0 = layout axis */
-	{ MODKEY|ControlMask,           XK_Tab,        rotatelayoutaxis,    {.i = 1 } },   /* flextile, 1 = master axis */
-	{ MODKEY|ControlMask|ShiftMask, XK_Tab,        rotatelayoutaxis,    {.i = 2 } },   /* flextile, 2 = stack axis */
-	{ MODKEY|ControlMask|Mod1Mask,  XK_Tab,        rotatelayoutaxis,    {.i = 3 } },   /* flextile, 3 = secondary stack axis */
-	{ MODKEY|ControlMask,           XK_Return,     mirrorlayout,        {0} },         /* flextile, flip master and stack areas */
+	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,       {.i = 0 } },   /* flextile, 0 = layout axis */
+	{ MODKEY|ControlMask,           XK_Tab,        rotatelayoutaxis,       {.i = 1 } },   /* flextile, 1 = master axis */
+	{ MODKEY|ControlMask|ShiftMask, XK_Tab,        rotatelayoutaxis,       {.i = 2 } },   /* flextile, 2 = stack axis */
+	{ MODKEY|ControlMask|Mod1Mask,  XK_Tab,        rotatelayoutaxis,       {.i = 3 } },   /* flextile, 3 = secondary stack axis */
+	{ MODKEY|ControlMask,           XK_Return,     mirrorlayout,           {0} },         /* flextile, flip master and stack areas */
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY,                       XK_space,      setlayout,           {0} },
-	{ MODKEY|ShiftMask,             XK_space,      togglefloating,      {0} },
+	{ MODKEY,                       XK_space,      setlayout,              {0} },
+	{ MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
 	#if MAXIMIZE_PATCH
-	{ MODKEY|ControlMask|ShiftMask, XK_h,          togglehorizontalmax, {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_l,          togglehorizontalmax, {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_j,          toggleverticalmax,   {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_k,          toggleverticalmax,   {0} },
-	{ MODKEY|ControlMask,           XK_m,          togglemaximize,      {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_h,          togglehorizontalmax,    {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_l,          togglehorizontalmax,    {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_j,          toggleverticalmax,      {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_k,          toggleverticalmax,      {0} },
+	{ MODKEY|ControlMask,           XK_m,          togglemaximize,         {0} },
 	#endif // MAXIMIZE_PATCH
 	#if UNFLOATVISIBLE_PATCH
-	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,      {0} },
-	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,      {.v = &layouts[0]} },
+	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
+	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
 	#endif // UNFLOATVISIBLE_PATCH
 	#if TOGGLEFULLSCREEN_PATCH
-	{ MODKEY,                       XK_y,          togglefullscreen,    {0} },
+	{ MODKEY,                       XK_y,          togglefullscreen,       {0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
 	#if FULLSCREEN_PATCH
-	{ MODKEY|ShiftMask,             XK_f,          fullscreen,          {0} },
+	{ MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
 	#endif // FULLSCREEN_PATCH
 	#if STICKY_PATCH
-	{ MODKEY,                       XK_s,          togglesticky,        {0} },
+	{ MODKEY,                       XK_s,          togglesticky,           {0} },
 	#endif // STICKY_PATCH
-	{ MODKEY,                       XK_0,          view,                {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,          tag,                 {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,      focusmon,            {.i = -1 } },
-	{ MODKEY,                       XK_period,     focusmon,            {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,      tagmon,              {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period,     tagmon,              {.i = +1 } },
+	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
+	{ MODKEY,                       XK_comma,      focusmon,               {.i = -1 } },
+	{ MODKEY,                       XK_period,     focusmon,               {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,      tagmon,                 {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_period,     tagmon,                 {.i = +1 } },
 	#if FOCUSADJACENTTAG_PATCH
-	{ MODKEY,                       XK_Left,       viewtoleft,          {0} },
-	{ MODKEY,                       XK_Right,      viewtoright,         {0} },
-	{ MODKEY|ShiftMask,             XK_Left,       tagtoleft,           {0} },
-	{ MODKEY|ShiftMask,             XK_Right,      tagtoright,          {0} },
-	{ MODKEY|ControlMask,           XK_Left,       tagandviewtoleft,    {0} },
-	{ MODKEY|ControlMask,           XK_Right,      tagandviewtoright,   {0} },
+	{ MODKEY,                       XK_Left,       viewtoleft,             {0} },
+	{ MODKEY,                       XK_Right,      viewtoright,            {0} },
+	{ MODKEY|ShiftMask,             XK_Left,       tagtoleft,              {0} },
+	{ MODKEY|ShiftMask,             XK_Right,      tagtoright,             {0} },
+	{ MODKEY|ControlMask,           XK_Left,       tagandviewtoleft,       {0} },
+	{ MODKEY|ControlMask,           XK_Right,      tagandviewtoright,      {0} },
 	#endif // FOCUSADJACENTTAG_PATCH
 	#if TAGALL_PATCH
-	{ MODKEY|ShiftMask,             XK_F1,         tagall,              {.v = "F1"} },
-	{ MODKEY|ShiftMask,             XK_F2,         tagall,              {.v = "F2"} },
-	{ MODKEY|ShiftMask,             XK_F3,         tagall,              {.v = "F3"} },
-	{ MODKEY|ShiftMask,             XK_F4,         tagall,              {.v = "F4"} },
-	{ MODKEY|ShiftMask,             XK_F5,         tagall,              {.v = "F5"} },
-	{ MODKEY|ShiftMask,             XK_F6,         tagall,              {.v = "F6"} },
-	{ MODKEY|ShiftMask,             XK_F7,         tagall,              {.v = "F7"} },
-	{ MODKEY|ShiftMask,             XK_F8,         tagall,              {.v = "F8"} },
-	{ MODKEY|ShiftMask,             XK_F9,         tagall,              {.v = "F9"} },
-	{ MODKEY|ControlMask,           XK_F1,         tagall,              {.v = "1"} },
-	{ MODKEY|ControlMask,           XK_F2,         tagall,              {.v = "2"} },
-	{ MODKEY|ControlMask,           XK_F3,         tagall,              {.v = "3"} },
-	{ MODKEY|ControlMask,           XK_F4,         tagall,              {.v = "4"} },
-	{ MODKEY|ControlMask,           XK_F5,         tagall,              {.v = "5"} },
-	{ MODKEY|ControlMask,           XK_F6,         tagall,              {.v = "6"} },
-	{ MODKEY|ControlMask,           XK_F7,         tagall,              {.v = "7"} },
-	{ MODKEY|ControlMask,           XK_F8,         tagall,              {.v = "8"} },
-	{ MODKEY|ControlMask,           XK_F9,         tagall,              {.v = "9"} },
+	{ MODKEY|ShiftMask,             XK_F1,         tagall,                 {.v = "F1"} },
+	{ MODKEY|ShiftMask,             XK_F2,         tagall,                 {.v = "F2"} },
+	{ MODKEY|ShiftMask,             XK_F3,         tagall,                 {.v = "F3"} },
+	{ MODKEY|ShiftMask,             XK_F4,         tagall,                 {.v = "F4"} },
+	{ MODKEY|ShiftMask,             XK_F5,         tagall,                 {.v = "F5"} },
+	{ MODKEY|ShiftMask,             XK_F6,         tagall,                 {.v = "F6"} },
+	{ MODKEY|ShiftMask,             XK_F7,         tagall,                 {.v = "F7"} },
+	{ MODKEY|ShiftMask,             XK_F8,         tagall,                 {.v = "F8"} },
+	{ MODKEY|ShiftMask,             XK_F9,         tagall,                 {.v = "F9"} },
+	{ MODKEY|ControlMask,           XK_F1,         tagall,                 {.v = "1"} },
+	{ MODKEY|ControlMask,           XK_F2,         tagall,                 {.v = "2"} },
+	{ MODKEY|ControlMask,           XK_F3,         tagall,                 {.v = "3"} },
+	{ MODKEY|ControlMask,           XK_F4,         tagall,                 {.v = "4"} },
+	{ MODKEY|ControlMask,           XK_F5,         tagall,                 {.v = "5"} },
+	{ MODKEY|ControlMask,           XK_F6,         tagall,                 {.v = "6"} },
+	{ MODKEY|ControlMask,           XK_F7,         tagall,                 {.v = "7"} },
+	{ MODKEY|ControlMask,           XK_F8,         tagall,                 {.v = "8"} },
+	{ MODKEY|ControlMask,           XK_F9,         tagall,                 {.v = "9"} },
 	#endif // TAGALL_PATCH
 	#if TAGALLMON_PATCH
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_comma,      tagallmon,           {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_period,     tagallmon,           {.i = -1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_comma,      tagallmon,              {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_period,     tagallmon,              {.i = -1 } },
 	#endif // TAGALLMON_PATCH
 	#if TAGSWAPMON_PATCH
-	{ MODKEY|Mod4Mask|ControlMask,  XK_comma,      tagswapmon,          {.i = +1 } },
-	{ MODKEY|Mod4Mask|ControlMask,  XK_period,     tagswapmon,          {.i = -1 } },
+	{ MODKEY|Mod4Mask|ControlMask,  XK_comma,      tagswapmon,             {.i = +1 } },
+	{ MODKEY|Mod4Mask|ControlMask,  XK_period,     tagswapmon,             {.i = -1 } },
 	#endif // TAGSWAPMON_PATCH
 	#if ALTERNATIVE_TAGS_PATCH
-	{ MODKEY,                       XK_n,          togglealttag,        {0} },
+	{ MODKEY,                       XK_n,          togglealttag,           {0} },
 	#endif // ALTERNATIVE_TAGS_PATCH
 	#if TAGGRID_PATCH
-	{ MODKEY|ControlMask,           XK_Up,          switchtag,          { .ui = SWITCHTAG_UP    | SWITCHTAG_VIEW } },
-	{ MODKEY|ControlMask,           XK_Down,        switchtag,          { .ui = SWITCHTAG_DOWN  | SWITCHTAG_VIEW } },
-	{ MODKEY|ControlMask,           XK_Right,       switchtag,          { .ui = SWITCHTAG_RIGHT | SWITCHTAG_VIEW } },
-	{ MODKEY|ControlMask,           XK_Left,        switchtag,          { .ui = SWITCHTAG_LEFT  | SWITCHTAG_VIEW } },
-	{ MODKEY|Mod4Mask,              XK_Up,          switchtag,          { .ui = SWITCHTAG_UP    | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
-	{ MODKEY|Mod4Mask,              XK_Down,        switchtag,          { .ui = SWITCHTAG_DOWN  | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
-	{ MODKEY|Mod4Mask,              XK_Right,       switchtag,          { .ui = SWITCHTAG_RIGHT | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
-	{ MODKEY|Mod4Mask,              XK_Left,        switchtag,          { .ui = SWITCHTAG_LEFT  | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
+	{ MODKEY|ControlMask,           XK_Up,         switchtag,              { .ui = SWITCHTAG_UP    | SWITCHTAG_VIEW } },
+	{ MODKEY|ControlMask,           XK_Down,       switchtag,              { .ui = SWITCHTAG_DOWN  | SWITCHTAG_VIEW } },
+	{ MODKEY|ControlMask,           XK_Right,      switchtag,              { .ui = SWITCHTAG_RIGHT | SWITCHTAG_VIEW } },
+	{ MODKEY|ControlMask,           XK_Left,       switchtag,              { .ui = SWITCHTAG_LEFT  | SWITCHTAG_VIEW } },
+	{ MODKEY|Mod4Mask,              XK_Up,         switchtag,              { .ui = SWITCHTAG_UP    | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
+	{ MODKEY|Mod4Mask,              XK_Down,       switchtag,              { .ui = SWITCHTAG_DOWN  | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
+	{ MODKEY|Mod4Mask,              XK_Right,      switchtag,              { .ui = SWITCHTAG_RIGHT | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
+	{ MODKEY|Mod4Mask,              XK_Left,       switchtag,              { .ui = SWITCHTAG_LEFT  | SWITCHTAG_TAG | SWITCHTAG_VIEW } },
 	#endif // TAGGRID_PATCH
+	#if EXRESIZE_PATCH
+	{ MODKEY,                       XK_KP_7,       explace,                {.ui = EX_NW }},
+	{ MODKEY,                       XK_KP_8,       explace,                {.ui = EX_N  }},
+	{ MODKEY,                       XK_KP_9,       explace,                {.ui = EX_NE }},
+	{ MODKEY,                       XK_KP_4,       explace,                {.ui = EX_W  }},
+	{ MODKEY,                       XK_KP_5,       explace,                {.ui = EX_C  }},
+	{ MODKEY,                       XK_KP_6,       explace,                {.ui = EX_E  }},
+	{ MODKEY,                       XK_KP_1,       explace,                {.ui = EX_SW }},
+	{ MODKEY,                       XK_KP_2,       explace,                {.ui = EX_S  }},
+	{ MODKEY,                       XK_KP_3,       explace,                {.ui = EX_SE }},
+
+	{ MODKEY|ShiftMask,             XK_KP_8,       exresize,               {.v = (int []){   0,  25 }}},
+	{ MODKEY|ShiftMask,             XK_KP_2,       exresize,               {.v = (int []){   0, -25 }}},
+	{ MODKEY|ShiftMask,             XK_KP_6,       exresize,               {.v = (int []){  25,   0 }}},
+	{ MODKEY|ShiftMask,             XK_KP_4,       exresize,               {.v = (int []){ -25,   0 }}},
+	{ MODKEY|ShiftMask,             XK_KP_5,       exresize,               {.v = (int []){  25,  25 }}},
+	{ MODKEY|ShiftMask|ControlMask, XK_KP_5,       exresize,               {.v = (int []){ -25, -25 }}},
+
+	{ MODKEY|ControlMask,           XK_KP_6,       togglehorizontalexpand, {.i = +1} },
+	{ MODKEY|ControlMask,           XK_KP_3,       togglehorizontalexpand, {.i =  0} },
+	{ MODKEY|ControlMask,           XK_KP_4,       togglehorizontalexpand, {.i = -1} },
+	{ MODKEY|ControlMask,           XK_KP_8,       toggleverticalexpand,   {.i = +1} },
+	{ MODKEY|ControlMask,           XK_KP_1,       toggleverticalexpand,   {.i =  0} },
+	{ MODKEY|ControlMask,           XK_KP_2,       toggleverticalexpand,   {.i = -1} },
+	{ MODKEY|ControlMask,           XK_KP_9,       togglemaximize,         {.i = -1} },
+	{ MODKEY|ControlMask,           XK_KP_7,       togglemaximize,         {.i = +1} },
+	{ MODKEY|ControlMask,           XK_KP_5,       togglemaximize,         {.i =  0} },
+	#endif // EXRESIZE_PATCH
 	#if SETBORDERPX_PATCH
-	{ MODKEY|ShiftMask,             XK_minus,      setborderpx,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_plus,       setborderpx,         {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_numbersign, setborderpx,         {.i = 0 } },
+	{ MODKEY|ShiftMask,             XK_minus,      setborderpx,            {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_plus,       setborderpx,            {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_numbersign, setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,         {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_period,     cyclelayout,         {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MDPCONTROL_PATCH
-	{ MODKEY,                       XK_F1,         mpdchange,           {.i = -1} },
-	{ MODKEY,                       XK_F2,         mpdchange,           {.i = +1} },
-	{ MODKEY,                       XK_Escape,     mpdcontrol,          {0} },
+	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
+	{ MODKEY,                       XK_F2,         mpdchange,              {.i = +1} },
+	{ MODKEY,                       XK_Escape,     mpdcontrol,             {0} },
 	#endif // MDPCONTROL_PATCH
-	TAGKEYS(                        XK_1,                               0)
-	TAGKEYS(                        XK_2,                               1)
-	TAGKEYS(                        XK_3,                               2)
-	TAGKEYS(                        XK_4,                               3)
-	TAGKEYS(                        XK_5,                               4)
-	TAGKEYS(                        XK_6,                               5)
-	TAGKEYS(                        XK_7,                               6)
-	TAGKEYS(                        XK_8,                               7)
-	TAGKEYS(                        XK_9,                               8)
+	TAGKEYS(                        XK_1,                                  0)
+	TAGKEYS(                        XK_2,                                  1)
+	TAGKEYS(                        XK_3,                                  2)
+	TAGKEYS(                        XK_4,                                  3)
+	TAGKEYS(                        XK_5,                                  4)
+	TAGKEYS(                        XK_6,                                  5)
+	TAGKEYS(                        XK_7,                                  6)
+	TAGKEYS(                        XK_8,                                  7)
+	TAGKEYS(                        XK_9,                                  8)
 };
 
 /* button definitions */
