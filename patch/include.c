@@ -17,7 +17,7 @@
 #if CFACTS_PATCH
 #include "cfacts.c"
 #endif
-#if CMDCUSTOMIZE
+#if CMDCUSTOMIZE_PATCH
 #include "cmdcustomize.c"
 #endif
 #if COMBO_PATCH

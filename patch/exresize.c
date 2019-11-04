@@ -11,7 +11,8 @@
 #define FORCE_EXPANDALL ~0 // Force expand in all directions
 
 void
-exresize(const Arg *arg) {
+exresize(const Arg *arg)
+{
 	Client *c;
 	int x, y, nx, ny, nw, nh;
 	c = selmon->sel;
@@ -59,7 +60,8 @@ exresize(const Arg *arg) {
 }
 
 void
-explace(const Arg *arg) {
+explace(const Arg *arg)
+{
 	Client *c;
 	int nx, ny;
 
@@ -87,13 +89,13 @@ int
 calculate_expand(unsigned char mask, unsigned char curmask,
 		unsigned char *newmask, unsigned char key,
 		int *reset_value, int new_reset_value,
-		int max_value, int old_value) {
+		int max_value, int old_value)
+{
 	if (IS_SET(key, mask) ||
 			(IS_SET(key, curmask) && (!IS_SET(key, mask) && IS_FORCED(key, mask))) ||
 			(!IS_SET(key, curmask) && (IS_SET(key, mask) && IS_FORCED(key, mask)))) {
 
-		if (IS_SET(key, mask) && (!IS_SET(key,curmask) || IS_FORCED(key,mask)))
-		{
+		if (IS_SET(key, mask) && (!IS_SET(key,curmask) || IS_FORCED(key,mask))) {
 			if (!IS_SET(key, curmask))
 				*reset_value = new_reset_value;
 			*newmask |= key;
@@ -111,13 +113,14 @@ calculate_expand(unsigned char mask, unsigned char curmask,
 }
 
 void
-expand(unsigned char mask) {
+expand(unsigned char mask)
+{
 	XEvent ev;
 	int nx1, ny1, nx2, ny2;
 	unsigned char curmask;
 	unsigned char newmask;
 
-	if(!selmon->sel || selmon->sel->isfixed)
+	if (!selmon->sel || selmon->sel->isfixed)
 		return;
 	XRaiseWindow(dpy, selmon->sel->win);
 	newmask = curmask = selmon->sel->expandmask;
@@ -163,21 +166,24 @@ expand(unsigned char mask) {
 }
 
 void
-togglemaximize(const Arg *arg) {
+togglemaximize(const Arg *arg)
+{
 	if (arg->i > 0) expand(FORCE_EXPANDALL);
 	else if (arg->i < 0) expand(UNEXPAND);
 	else expand(EXPANDALL);
 }
 
 void
-toggleverticalexpand(const Arg *arg) {
+toggleverticalexpand(const Arg *arg)
+{
 	if (arg->i < 0) expand(EXPAND_DOWN);
 	else if (arg->i > 0) expand(EXPAND_UP);
 	else expand(EXPAND_DOWN | EXPAND_UP);
 }
 
 void
-togglehorizontalexpand(const Arg *arg) {
+togglehorizontalexpand(const Arg *arg)
+{
 	if (arg->i < 0) expand(EXPAND_LEFT);
 	else if (arg->i > 0) expand(EXPAND_RIGHT);
 	else expand(EXPAND_LEFT | EXPAND_RIGHT);

@@ -1,12 +1,13 @@
 void
-maximize(int x, int y, int w, int h) {
+maximize(int x, int y, int w, int h)
+{
 	XEvent ev;
 
-	if(!selmon->sel || selmon->sel->isfixed)
+	if (!selmon->sel || selmon->sel->isfixed)
 		return;
 	XRaiseWindow(dpy, selmon->sel->win);
-	if(!selmon->sel->ismax) {
-		if(!selmon->lt[selmon->sellt]->arrange || selmon->sel->isfloating)
+	if (!selmon->sel->ismax) {
+		if (!selmon->lt[selmon->sellt]->arrange || selmon->sel->isfloating)
 			selmon->sel->wasfloating = True;
 		else {
 			togglefloating(NULL);
@@ -21,25 +22,28 @@ maximize(int x, int y, int w, int h) {
 	}
 	else {
 		resize(selmon->sel, selmon->sel->oldx, selmon->sel->oldy, selmon->sel->oldw, selmon->sel->oldh, True);
-		if(!selmon->sel->wasfloating)
+		if (!selmon->sel->wasfloating)
 			togglefloating(NULL);
 		selmon->sel->ismax = False;
 	}
 	drawbar(selmon);
-	while(XCheckMaskEvent(dpy, EnterWindowMask, &ev));
+	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 }
 
 void
-togglemaximize(const Arg *arg) {
+togglemax(const Arg *arg)
+{
 	maximize(selmon->wx, selmon->wy, selmon->ww - 2 * borderpx, selmon->wh - 2 * borderpx);
 }
 
 void
-toggleverticalmax(const Arg *arg) {
+toggleverticalmax(const Arg *arg)
+{
 	maximize(selmon->sel->x, selmon->wy, selmon->sel->w, selmon->wh - 2 * borderpx);
 }
 
 void
-togglehorizontalmax(const Arg *arg) {
+togglehorizontalmax(const Arg *arg)
+{
 	maximize(selmon->wx, selmon->sel->y, selmon->ww - 2 * borderpx, selmon->sel->h);
 }

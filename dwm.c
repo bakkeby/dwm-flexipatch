@@ -3800,7 +3800,7 @@ zoom(const Arg *arg)
 int
 main(int argc, char *argv[])
 {
-	#if CMDCUSTOMIZE
+	#if CMDCUSTOMIZE_PATCH
 	for (int i=1;i<argc;i+=1)
 		if (!strcmp("-v", argv[i]))
 			die("dwm-"VERSION);
@@ -3816,6 +3816,19 @@ main(int argc, char *argv[])
 			colors[SchemeSel][1] = argv[++i];
 		else if (!strcmp("-sf", argv[i])) /* selected foreground color */
 			colors[SchemeSel][0] = argv[++i];
+		#if NODMENU_PATCH
+		else if (!strcmp("-df", argv[i])) /* dmenu font */
+			dmenucmd[2] = argv[++i];
+		else if (!strcmp("-dnb", argv[i])) /* dmenu normal background color */
+			dmenucmd[4] = argv[++i];
+		else if (!strcmp("-dnf", argv[i])) /* dmenu normal foreground color */
+			dmenucmd[6] = argv[++i];
+		else if (!strcmp("-dsb", argv[i])) /* dmenu selected background color */
+			dmenucmd[8] = argv[++i];
+		else if (!strcmp("-dsf", argv[i])) /* dmenu selected foreground color */
+			dmenucmd[10] = argv[++i];
+		else die(help());
+		#else
 		else if (!strcmp("-df", argv[i])) /* dmenu font */
 			dmenucmd[4] = argv[++i];
 		else if (!strcmp("-dnb", argv[i])) /* dmenu normal background color */
@@ -3827,12 +3840,13 @@ main(int argc, char *argv[])
 		else if (!strcmp("-dsf", argv[i])) /* dmenu selected foreground color */
 			dmenucmd[12] = argv[++i];
 		else die(help());
+		#endif // NODMENU_PATCH
 	#else
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
 	else if (argc != 1)
 		die("usage: dwm [-v]");
-	#endif // CMDCUSTOMIZE
+	#endif // CMDCUSTOMIZE_PATCH
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);
 	if (!(dpy = XOpenDisplay(NULL)))
