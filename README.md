@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-11-21 - Added fakefullscreenclient patch
+
 2019-10-24 - Added dragmfact, extrabar, exresize and nodmenu patches
 
 2019-10-22 - Added ispermanent and swallow patches
@@ -139,6 +141,11 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [fakefullscreen](https://dwm.suckless.org/patches/fakefullscreen/)
       - only allow clients to "fullscreen" into the space currently given to them
       - as an example, this will allow you to view a fullscreen video in your browser on one half of the screen, while having the other half available for other tasks
+
+   - fakefullscreenclient
+      - similarly to the fakefullscreen patch this patch only allows clients to "fullscreen" into the space currently given to them
+      - as an example, this will allow you to view a fullscreen video in your browser on one half of the screen, while having the other half available for other tasks
+      - the "twist" with this patch is that fake fullscreen can be toggled on a per client basis rather than applying to all clients globally
 
    - [fancybar](https://dwm.suckless.org/patches/fancybar/)
       - shows the titles of all visible windows in the status bar

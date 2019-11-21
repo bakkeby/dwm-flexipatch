@@ -32,6 +32,9 @@
 #if EWMHTAGS_PATCH
 #include "ewmhtags.c"
 #endif
+#if FAKEFULLSCREEN_CLIENT_PATCH
+#include "fakefullscreenclient.c"
+#endif
 #if FOCUSADJACENTTAG_PATCH
 #include "focusadjacenttag.c"
 #endif

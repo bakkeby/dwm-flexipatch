@@ -35,6 +35,9 @@
 #if EXRESIZE_PATCH
 #include "exresize.h"
 #endif
+#if FAKEFULLSCREEN_CLIENT_PATCH
+#include "fakefullscreenclient.h"
+#endif
 #if FOCUSADJACENTTAG_PATCH
 #include "focusadjacenttag.h"
 #endif

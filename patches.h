@@ -164,6 +164,13 @@
  */
 #define FAKEFULLSCREEN_PATCH 0
 
+/* Similarly to the fakefullscreen patch this patch only allows clients to "fullscreen" into
+ * the space currently given to them.
+ * The "twist" with this patch is that fake fullscreen can be toggled on a per client basis
+ * rather than applying to all clients globally.
+ */
+#define FAKEFULLSCREEN_CLIENT_PATCH 0
+
 /* This patch shows the titles of all visible windows in the status bar
  * (as opposed to showing only the selected one).
  * Awesomebar takes precedence over fancybar. Fancybar takes precedence over
