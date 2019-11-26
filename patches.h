@@ -115,6 +115,12 @@
  */
 #define CYCLELAYOUTS_PATCH 0
 
+/* Updates the position of dmenu to match that of the bar. I.e. if topbar is 0 then dmenu
+ * will appear at the bottom and if 1 then dmenu will appear at the top.
+ * https://dwm.suckless.org/patches/dmenumatchtop
+ */
+#define DMENUMATCHTOP_PATCH 0
+
 /* This patch lets you resize the split in the tile layout (i.e. modify mfact) by holding
  * the modkey and dragging the mouse.
  * This patch can be a bit wonky with other layouts, but generally works.

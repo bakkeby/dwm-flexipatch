@@ -488,12 +488,24 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-#if NODMENU_PATCH
-static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-#else
+#if !NODMENU_PATCH
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
-#endif
+#endif // NODMENU_PATCH
+static const char *dmenucmd[] = {
+	"dmenu_run",
+	#if !NODMENU_PATCH
+	"-m", dmenumon,
+	#endif // NODMENU_PATCH
+	"-fn", dmenufont,
+	"-nb", normbgcolor,
+	"-nf", normfgcolor,
+	"-sb", selbgcolor,
+	"-sf", selfgcolor,
+	#if DMENUMATCHTOP_PATCH
+	topbar ? NULL : "-b",
+	#endif // DMENUMATCHTOP_PATCH
+	NULL
+};
 static const char *termcmd[]  = { "st", NULL };
 
 #if SCRATCHPAD_PATCH

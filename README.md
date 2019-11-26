@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-11-26 - Added dmenumatchtop patch
+
 2019-11-21 - Added fakefullscreenclient patch
 
 2019-10-24 - Added dragmfact, extrabar, exresize and nodmenu patches
@@ -116,6 +118,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
+
+   - [dmenumatchtop](https://dwm.suckless.org/patches/dmenumatchtop)
+      - updates the position of dmenu to match that of the bar
+      - i.e. if topbar is 0 then dmenu will appear at the bottom and if 1 then dmenu will appear at the top
 
    - [dragmfact](https://dwm.suckless.org/patches/dragmfact/)
       - lets you resize the split in the tile layout (i.e. modify mfact) by holding the modkey and dragging the mouse
