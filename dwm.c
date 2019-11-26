@@ -149,6 +149,9 @@ struct Client {
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
 	int bw, oldbw;
 	unsigned int tags;
+	#if SWITCHTAG_PATCH
+	unsigned int switchtag;
+	#endif // SWITCHTAG_PATCH
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
 	#if FAKEFULLSCREEN_CLIENT_PATCH
 	int fakefullscreen;
@@ -526,9 +529,14 @@ applyrules(Client *c)
 					newtagset = c->tags;
 
 				if (newtagset) {
+					c->switchtag = selmon->tagset[selmon->seltags];
 					c->mon->tagset[c->mon->seltags] = newtagset;
 					if (r->switchtag == 1)
+						#if PERTAG_PATCH
 						pertagview(&((Arg) { .ui = newtagset }));
+						#else
+						view(&((Arg) { .ui = newtagset }));
+						#endif // PERTAG_PATCH
 					arrange(c->mon);
 				}
 			}
@@ -3316,6 +3324,10 @@ unmanage(Client *c, int destroyed)
 	focus(NULL);
 	updateclientlist();
 	arrange(m);
+	#if SWITCHTAG_PATCH
+	if (c->switchtag)
+		view(&((Arg) { .ui = c->switchtag }));
+	#endif // SWITCHTAG_PATCH
 }
 
 void

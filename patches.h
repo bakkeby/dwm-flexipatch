@@ -439,7 +439,10 @@
  *   1 automatically moves you to the tag of the newly opened application and
  *   2 enables the tag of the newly opened application in addition to your existing enabled tags
  *
+ * Closing that window reverts the view back to what it was before the window was opened.
+ *
  * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff
+ * Also see https://dwm.suckless.org/patches/switchtotag
  */
 #define SWITCHTAG_PATCH 0
 
