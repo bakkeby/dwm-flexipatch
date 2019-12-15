@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2019-12-15 - Updated dragmfact patch to include fix patch to make it work with multiple monitors
+
 2019-11-26 - Added dmenumatchtop patch, added improvements to the switchtag patch based on ideas from the switchtotag patch
 
 2019-11-21 - Added fakefullscreenclient patch

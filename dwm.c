@@ -2404,10 +2404,14 @@ resizemouse(const Arg *arg)
 	#if DRAGMFACT_PATCH
 	if (c->isfloating || NULL == c->mon->lt[c->mon->sellt]->arrange) {
 		XWarpPointer (dpy, None, c->win, 0, 0, 0, 0,
-				horizcorner ? (-c->bw) : (c->w + c->bw - 1),
-				vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+			horizcorner ? (-c->bw) : (c->w + c->bw - 1),
+			vertcorner ? (-c->bw) : (c->h + c->bw - 1)
+		);
 	} else {
-		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0,
+			selmon->mx + (selmon->ww * selmon->mfact),
+			selmon->my + (selmon->wh / 2)
+		);
 	}
 	#else
 	XWarpPointer (dpy, None, c->win, 0, 0, 0, 0,
@@ -2418,7 +2422,10 @@ resizemouse(const Arg *arg)
 	if (c->isfloating || NULL == c->mon->lt[c->mon->sellt]->arrange) {
 		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
 	} else {
-		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0,
+			selmon->mx + (selmon->ww * selmon->mfact),
+			selmon->my + (selmon->wh / 2)
+		);
 	}
 	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
@@ -2483,9 +2490,12 @@ resizemouse(const Arg *arg)
 				horizcorner ? (-c->bw) : (c->w + c->bw - 1),
 				vertcorner ? (-c->bw) : (c->h + c->bw - 1));
 	} else {
-		selmon->mfact = (double) ev.xmotion.x / (double) selmon->mw;
+		selmon->mfact = (double) (ev.xmotion.x_root - selmon->mx) / (double) selmon->ww;
 		arrange(selmon);
-		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0,
+			selmon->mx + (selmon->ww * selmon->mfact),
+			selmon->my + (selmon->wh / 2)
+		);
 	}
 	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0,
@@ -2496,9 +2506,12 @@ resizemouse(const Arg *arg)
 	if (c->isfloating || NULL == c->mon->lt[c->mon->sellt]->arrange) {
 		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
 	} else {
-		selmon->mfact = (double) ev.xmotion.x / (double) selmon->mw;
+		selmon->mfact = (double) (ev.xmotion.x_root - selmon->mx) / (double) selmon->ww;
 		arrange(selmon);
-		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->mw * selmon->mfact, selmon->mh / 2);
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0,
+			selmon->mx + (selmon->ww * selmon->mfact),
+			selmon->my + (selmon->wh / 2)
+		);
 	}
 	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
