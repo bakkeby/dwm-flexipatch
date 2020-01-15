@@ -3812,47 +3812,47 @@ zoom(const Arg *arg)
 		return;
 
 	#if ZOOMSWAP_PATCH
-		if (c == nexttiled(selmon->clients)) {
+	if (c == nexttiled(selmon->clients)) {
+		#if PERTAG_PATCH
+		p = selmon->pertag->prevzooms[selmon->pertag->curtag];
+		#else
+		p = prevzoom;
+		#endif // PERTAG_PATCH
+		at = prevtiled(p);
+		if (at)
+			cprevious = nexttiled(at->next);
+		if (!cprevious || cprevious != p) {
 			#if PERTAG_PATCH
-			p = selmon->pertag->prevzooms[selmon->pertag->curtag];
+			selmon->pertag->prevzooms[selmon->pertag->curtag] = NULL;
 			#else
-			p = prevzoom;
+			prevzoom = NULL;
 			#endif // PERTAG_PATCH
-			at = prevtiled(p);
-			if (at)
-				cprevious = nexttiled(at->next);
-			if (!cprevious || cprevious != p) {
-				#if PERTAG_PATCH
-				selmon->pertag->prevzooms[selmon->pertag->curtag] = NULL;
-				#else
-				prevzoom = NULL;
-				#endif // PERTAG_PATCH
-				if (!c || !(c = nexttiled(c->next)))
-					return;
-			} else
-				c = cprevious;
-		}
+			if (!c || !(c = nexttiled(c->next)))
+				return;
+		} else
+			c = cprevious;
+	}
 
-		cold = nexttiled(selmon->clients);
-		if (c != cold && !at)
-			at = prevtiled(c);
-		detach(c);
-		attach(c);
-		/* swap windows instead of pushing the previous one down */
-		if (c != cold && at) {
-			#if PERTAG_PATCH
-			selmon->pertag->prevzooms[selmon->pertag->curtag] = cold;
-			#else
-			prevzoom = cold;
-			#endif // PERTAG_PATCH
-			if (cold && at != cold) {
-				detach(cold);
-				cold->next = at->next;
-				at->next = cold;
-			}
+	cold = nexttiled(selmon->clients);
+	if (c != cold && !at)
+		at = prevtiled(c);
+	detach(c);
+	attach(c);
+	/* swap windows instead of pushing the previous one down */
+	if (c != cold && at) {
+		#if PERTAG_PATCH
+		selmon->pertag->prevzooms[selmon->pertag->curtag] = cold;
+		#else
+		prevzoom = cold;
+		#endif // PERTAG_PATCH
+		if (cold && at != cold) {
+			detach(cold);
+			cold->next = at->next;
+			at->next = cold;
 		}
-		focus(c);
-		arrange(c->mon);
+	}
+	focus(c);
+	arrange(c->mon);
 	#else
 	if (c == nexttiled(selmon->clients))
 		if (!c || !(c = nexttiled(c->next)))
