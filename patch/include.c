@@ -32,6 +32,9 @@
 #if EWMHTAGS_PATCH
 #include "ewmhtags.c"
 #endif
+#if EXRESIZE_PATCH
+#include "exresize.c"
+#endif
 #if FAKEFULLSCREEN_CLIENT_PATCH
 #include "fakefullscreenclient.c"
 #endif
@@ -47,8 +50,8 @@
 #if HOLDBAR_PATCH
 #include "holdbar.c"
 #endif
-#if EXRESIZE_PATCH
-#include "exresize.c"
+#if INPLACEROTATE_PATCH
+#include "inplacerotate.c"
 #endif
 #if KILLUNSEL_PATCH
 #include "killunsel.c"

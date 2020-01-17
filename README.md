@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-01-17 - Added inplacerotate patch
+
 2019-12-15 - Updated dragmfact patch to include fix patch to make it work with multiple monitors
 
 2019-11-26 - Added dmenumatchtop patch, added improvements to the switchtag patch based on ideas from the switchtotag patch
@@ -189,6 +191,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [ignore-xft-errors-when-drawing-text](https://groups.google.com/forum/m/#!topic/wmii/7bncCahYIww)
       - sometimes dwm crashes when it cannot render some glyphs in window titles (usually emoji)
       - this patch is essentially a hack to ignore any errors when drawing text on the status bar and may be removed if a more appropriate solution comes up
+
+   - [inplacerotate](https://dwm.suckless.org/patches/inplacerotate/)
+      - allows rotation of all clients in the master or stack area without affecting the other area
 
    - [ispermanent](https://dwm.suckless.org/patches/ispermanent/)
       - adds rule option for clients to avoid accidental termination by killclient for sticky windows

@@ -233,6 +233,12 @@
  */
 #define HOLDBAR_PATCH 0
 
+/* This patch provides a keybinding to rotate all clients in the currently selected
+ * area (master or stack) without affecting the other area.
+ * https://dwm.suckless.org/patches/inplacerotate/
+ */
+#define INPLACEROTATE_PATCH 0
+
 /* Adds rule option for clients to avoid accidental termination by killclient for sticky windows.
  * https://dwm.suckless.org/patches/ispermanent/
  */
@@ -355,7 +361,7 @@
  */
 #define ROTATESTACK_PATCH 0
 
-/* This patch aves size and position of every floating window before it is forced
+/* This patch saves size and position of every floating window before it is forced
  * into tiled mode. If the window is made floating again then the old dimensions
  * will be restored.
  * https://dwm.suckless.org/patches/save_floats/

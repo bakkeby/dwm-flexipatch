@@ -50,6 +50,9 @@
 #if HOLDBAR_PATCH
 #include "holdbar.h"
 #endif
+#if INPLACEROTATE_PATCH
+#include "inplacerotate.h"
+#endif
 #if KILLUNSEL_PATCH
 #include "killunsel.h"
 #endif
