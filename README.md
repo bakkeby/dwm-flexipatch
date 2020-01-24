@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-01-24 - Added barpadding patch (incl. statusallmons, statuspadding, statuscolors, systray, alpha and extrabar patch compatibility). Moved patches.h to patches.def.h to mimic the config pattern of having default and personal settings.
+2020-01-24 - Added barpadding patch (incl. statusallmons, statuspadding, statuscolors, systray, alpha, holdbar and extrabar patch compatibility). Moved patches.h to patches.def.h to mimic the config pattern of having default and personal settings.
 
 2020-01-17 - Added inplacerotate patch
 

@@ -1063,7 +1063,7 @@ configurenotify(XEvent *e)
 				#endif // BARPADDING_PATCH
 				#if EXTRABAR_PATCH
 				#if BARPADDING_PATCH
-				XMoveResizeWindow(dpy, m->extrabarwin, m->wx, m->eby - vp, m->ww - 2 * sp, bh);
+				XMoveResizeWindow(dpy, m->extrabarwin, m->wx + sp, m->eby - vp, m->ww - 2 * sp, bh);
 				#else
 				XMoveResizeWindow(dpy, m->extrabarwin, m->wx, m->eby, m->ww, bh);
 				#endif // BARPADDING_PATCH
