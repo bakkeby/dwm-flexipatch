@@ -80,6 +80,11 @@
  */
 #define AWESOMEBAR_PATCH 0
 
+/* This patch adds vertical and horizontal space between the statusbar and the edge of the screen.
+ * https://dwm.suckless.org/patches/barpadding/
+ */
+#define BARPADDING_PATCH 0
+
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
  * This patch takes precedence over centeredwindowname and fancybar patches.
  * https://dwm.suckless.org/patches/center/

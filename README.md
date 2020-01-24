@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-01-24 - Added barpadding patch (incl. statusallmons, statuspadding, statuscolors, systray, alpha and extrabar patch compatibility). Moved patches.h to patches.def.h to mimic the config pattern of having default and personal settings.
+
 2020-01-17 - Added inplacerotate patch
 
 2019-12-15 - Updated dragmfact patch to include fix patch to make it work with multiple monitors
@@ -107,6 +109,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [awesomebar](https://dwm.suckless.org/patches/awesomebar/)
       - enhanced taskbar that allows focus / hiding / unhiding of windows by clicking on the status bar
+
+   - [barpadding](https://dwm.suckless.org/patches/barpadding/)
+      - adds vertical and horizontal space between the statusbar and the edge of the screen
 
    - [center](https://dwm.suckless.org/patches/center/)
       - adds an iscentered rule to automatically center clients on the current monitor

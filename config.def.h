@@ -16,6 +16,10 @@ static const int showbar                 = 0;   /* 0 means no bar */
 static const int showbar                 = 1;   /* 0 means no bar */
 #endif // HOLDBAR_PATCH
 static const int topbar                  = 1;   /* 0 means bottom bar */
+#if BARPADDING_PATCH
+static const int vertpad                 = 10;  /* vertical padding of bar */
+static const int sidepad                 = 10;  /* horizontal padding of bar */
+#endif // BARPADDING_PATCH
 #if FOCUSONCLICK_PATCH
 static const int focusonwheel            = 0;
 #endif // FOCUSONCLICK_PATCH
