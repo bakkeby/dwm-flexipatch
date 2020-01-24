@@ -1245,7 +1245,9 @@ createmon(void)
 		m->pertag->showbars[i] = m->showbar;
 
 		/* swap focus and zoomswap*/
+		#if ZOOMSWAP_PATCH
 		m->pertag->prevzooms[i] = NULL;
+		#endif // ZOOMSWAP_PATCH
 		#endif // PERTAGBAR_PATCH
 	}
 	#endif // PERTAG_PATCH
