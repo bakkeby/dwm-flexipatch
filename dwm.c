@@ -2634,6 +2634,10 @@ sendmon(Client *c, Monitor *m)
 	focus(NULL);
 	arrange(NULL);
 	#endif // EXRESIZE_PATCH
+	#if SWITCHTAG_PATCH
+	if (c->switchtag)
+		c->switchtag = 0;
+	#endif // SWITCHTAG_PATCH
 }
 
 void
