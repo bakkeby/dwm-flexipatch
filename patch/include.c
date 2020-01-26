@@ -120,6 +120,9 @@
 #if TOGGLEFULLSCREEN_PATCH
 #include "togglefullscreen.c"
 #endif
+#if TRANSFER_PATCH
+#include "transfer.c"
+#endif
 #if UNFLOATVISIBLE_PATCH
 #include "unfloatvisible.c"
 #endif
