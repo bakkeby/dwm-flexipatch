@@ -547,10 +547,8 @@ applyrules(Client *c)
 			#endif // SWITCHTAG_PATCH
 		}
 	}
-	if (ch.res_class)
-		XFree(ch.res_class);
-	if (ch.res_name)
-		XFree(ch.res_name);
+	XFree(ch.res_class);
+	XFree(ch.res_name);
 	#if EMPTYVIEW_PATCH
 	if(c->tags & TAGMASK)                    c->tags = c->tags & TAGMASK;
 	else if(c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
@@ -2596,8 +2594,7 @@ scan(void)
 			&& (wa.map_state == IsViewable || getstate(wins[i]) == IconicState))
 				manage(wins[i], &wa);
 		}
-		if (wins)
-			XFree(wins);
+		XFree(wins);
 	}
 }
 
