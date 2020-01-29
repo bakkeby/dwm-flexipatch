@@ -1522,12 +1522,14 @@ drawbar(Monitor *m)
 				#endif // TITLECOLOR_PATCH
 				if (tw > 0) /* trap special handling of 0 in drw_text */
 					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
+				#if !HIDEVACANTTAGS_PATCH
 				if (c->isfloating)
 					#if ACTIVETAGINDICATORBAR_PATCH
 					drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, c->isfixed, 0);
 					#else
 					drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
 					#endif // ACTIVETAGINDICATORBAR_PATCH
+				#endif // HIDEVACANTTAGS_PATCH
 				x += tw;
 				w -= tw;
 			}
@@ -1547,9 +1549,9 @@ drawbar(Monitor *m)
 			#if CENTEREDWINDOWNAME_PATCH
 			int mid = (m->ww - TEXTW(m->sel->name)) / 2 - x;
 			#if BARPADDING_PATCH
-			drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);
-			#else
 			drw_text(drw, x, 0, w - 2*sp, bh, mid, m->sel->name, 0);
+			#else
+			drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);
 			#endif // BARPADDING_PATCH
 			#else
 			#if BARPADDING_PATCH
@@ -1562,12 +1564,14 @@ drawbar(Monitor *m)
 			XSync(dpy, False);
 			XSetErrorHandler(xerror);
 			#endif // IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
+			#if !HIDEVACANTTAGS_PATCH
 			if (m->sel->isfloating)
 				#if ACTIVETAGINDICATORBAR_PATCH
 				drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, m->sel->isfixed, 0);
 				#else
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 				#endif // ACTIVETAGINDICATORBAR_PATCH
+			#endif // HIDEVACANTTAGS_PATCH
 		} else {
 			drw_setscheme(drw, scheme[SchemeNorm]);
 			#if BARPADDING_PATCH
