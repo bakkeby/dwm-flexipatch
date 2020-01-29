@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-01-29 - Added swapfocus patch
+
 2020-01-26 - Added transfer patch
 
 2020-01-24 - Added barpadding patch (incl. statusallmons, statuspadding, statuscolors, systray, alpha, holdbar and extrabar patch compatibility). Moved patches.h to patches.def.h to mimic the config pattern of having default and personal settings.
@@ -292,6 +294,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - this patch adds "window swallowing" to dwm as known from Plan 9's windowing system rio
       - clients marked with isterminal in config.h swallow a window opened by any child process, e.g. running xclock in a terminal
       - closing the xclock window restores the terminal window in the current position
+
+   - [swapfocus](https://dwm.suckless.org/patches/swapfocus/)
+      - this patch depends on the pertag patch and makes it possible to switch focus with a single shortcut (mod-s) instead of having to think if you should use mod-j or mod-k for reaching the previously used window
 
    - [switchcol](https://dwm.suckless.org/patches/switchcol/)
       - allows you to switch focus between the master and stack columns using a single keybinding

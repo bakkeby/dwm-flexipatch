@@ -47,12 +47,6 @@ updateholdbarpos(Monitor *m)
 {
 	m->wy = m->my;
 	m->wh = m->mh;
-	// if (m->showbar) {
-	// 	m->by = m->topbar ? m->wy : m->wy + m->wh - bh;
-	// 	m->wy = m->topbar ? m->wy - bh + bh : m->wy;
-	// } else {
-	// 	m->by = -bh;
-	// }
 	#if EXTRABAR_PATCH
 	#if BARPADDING_PATCH
 	m->wh = m->wh - vertpad * m->showbar * 2 - bh * m->showbar * 2;

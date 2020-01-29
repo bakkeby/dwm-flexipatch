@@ -1945,6 +1945,9 @@ killclient(const Arg *arg)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
+	#endif // SWAPFOCUS_PATCH
 }
 
 void
@@ -3096,6 +3099,9 @@ tag(const Arg *arg)
 	if (selmon->sel && arg->ui & TAGMASK) {
 		selmon->sel->tags = arg->ui & TAGMASK;
 		focus(NULL);
+		#if SWAPFOCUS_PATCH && PERTAG_PATCH
+		selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
+		#endif // SWAPFOCUS_PATCH
 		arrange(selmon);
 		#if VIEWONTAG_PATCH
 		view(arg);
@@ -3306,6 +3312,9 @@ unfocus(Client *c, int setfocus)
 {
 	if (!c)
 		return;
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	selmon->pertag->prevclient[selmon->pertag->curtag] = c;
+	#endif // SWAPFOCUS_PATCH
 	grabbuttons(c, 0);
 	#if FLOAT_BORDER_COLOR_PATCH
 	if (c->isfloating)
@@ -3782,11 +3791,17 @@ view(const Arg *arg)
 	selmon->seltags ^= 1; /* toggle sel tagset */
 	#if PERTAG_PATCH
 	pertagview(arg);
+	#if SWAPFOCUS_PATCH
+	Client *unmodified = selmon->pertag->prevclient[selmon->pertag->curtag];
+	#endif // SWAPFOCUS_PATCH
 	#else
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
 	#endif // PERTAG_PATCH
 	focus(NULL);
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	selmon->pertag->prevclient[selmon->pertag->curtag] = unmodified;
+	#endif // SWAPFOCUS_PATCH
 	arrange(selmon);
 	#if EWMHTAGS_PATCH
 	updatecurrentdesktop();
@@ -3871,6 +3886,10 @@ zoom(const Arg *arg)
 	Client *at = NULL, *cold, *cprevious = NULL, *p;
 	#endif // ZOOMSWAP_PATCH
 
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(selmon->clients);
+	#endif // SWAPFOCUS_PATCH
+
 	if (!selmon->lt[selmon->sellt]->arrange
 	|| (selmon->sel && selmon->sel->isfloating)
 	#if ZOOMSWAP_PATCH
@@ -3895,10 +3914,18 @@ zoom(const Arg *arg)
 			#else
 			prevzoom = NULL;
 			#endif // PERTAG_PATCH
+			#if SWAPFOCUS_PATCH && PERTAG_PATCH
+			if (!c || !(c = selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(c->next)))
+			#else
 			if (!c || !(c = nexttiled(c->next)))
+			#endif // SWAPFOCUS_PATCH
 				return;
 		} else
+			#if SWAPFOCUS_PATCH && PERTAG_PATCH
+			c = selmon->pertag->prevclient[selmon->pertag->curtag] = cprevious;
+			#else
 			c = cprevious;
+			#endif // SWAPFOCUS_PATCH
 	}
 
 	cold = nexttiled(selmon->clients);
@@ -3923,7 +3950,11 @@ zoom(const Arg *arg)
 	arrange(c->mon);
 	#else
 	if (c == nexttiled(selmon->clients))
+		#if SWAPFOCUS_PATCH && PERTAG_PATCH
+		if (!c || !(c = selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(c->next)))
+		#else
 		if (!c || !(c = nexttiled(c->next)))
+		#endif // SWAPFOCUS_PATCH
 			return;
 	pop(c);
 	#endif // ZOOMSWAP_PATCH

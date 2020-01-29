@@ -436,6 +436,13 @@
  */
 #define SWALLOW_PATCH 0
 
+/* This patch depends on the pertag patch and makes it possible to switch focus with a single
+ * shortcut (mod-s) instead of having to think if you should use mod-j or mod-k for reaching
+ * the previously used window.
+ * https://dwm.suckless.org/patches/swapfocus/
+ */
+#define SWAPFOCUS_PATCH 0
+
 /* Switch focus between the master and stack columns using a single keybinding.
  * https://dwm.suckless.org/patches/switchcol/
  */

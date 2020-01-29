@@ -16,6 +16,9 @@ struct Pertag {
 	#if ZOOMSWAP_PATCH
 	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
 	#endif // ZOOMSWAP_PATCH
+	#if SWAPFOCUS_PATCH
+	Client *prevclient[LENGTH(tags) + 1];
+	#endif // SWAPFOCUS_PATCH
 };
 
 void
@@ -56,6 +59,4 @@ pertagview(const Arg *arg)
 	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
 		togglebar(NULL);
 	#endif // PERTAGBAR_PATCH
-	// strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof selmon->ltsymbol); // ??
-	// strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 }

@@ -527,6 +527,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
 	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	{ MODKEY,                       XK_s,          swapfocus,              {.i = -1 } },
+	#endif // SWAPFOCUS_PATCH
 	#if SWITCHCOL_PATCH
 	{ MODKEY,                       XK_v,          switchcol,              {0} },
 	#endif // SWITCHCOL_PATCH
@@ -644,7 +647,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
 	#endif // FULLSCREEN_PATCH
 	#if STICKY_PATCH
-	{ MODKEY,                       XK_s,          togglesticky,           {0} },
+	{ MODKEY|ShiftMask,             XK_s,          togglesticky,           {0} },
 	#endif // STICKY_PATCH
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },

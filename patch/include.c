@@ -101,7 +101,10 @@
 #endif
 #if SWALLOW_PATCH
 #include "swallow.c"
-#endif // SWALLOW_PATCH
+#endif
+#if SWAPFOCUS_PATCH && PERTAG_PATCH
+#include "swapfocus.c"
+#endif
 #if SWITCHCOL_PATCH
 #include "switchcol.c"
 #endif
