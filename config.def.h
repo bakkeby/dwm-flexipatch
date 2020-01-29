@@ -585,6 +585,10 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	#endif // VANITYGAPS_PATCH
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
+	#if SHIFTVIEW_PATCH
+	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
+	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
+  	#endif // SHIFTVIEW_PATCH
 	#if AWESOMEBAR_PATCH
 	{ MODKEY,                       XK_z,          showhideclient,         {0} },
 	#endif // AWESOMEBAR_PATCH

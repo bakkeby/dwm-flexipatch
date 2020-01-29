@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-01-29 - Added swapfocus patch
+2020-01-29 - Added swapfocus and shiftview patches
 
 2020-01-26 - Added transfer patch
 
@@ -271,6 +271,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
       - this patch allows border pixels to be changed during runtime
+
+   - [shiftview](https://github.com/chau-bao-long/dotfiles/blob/master/suckless/dwm/shiftview.diff)
+      - adds keybindings for left and right circular shift through tags
+      - also see focusadjacenttag
 
    - [sortscreens](https://www.mail-archive.com/hackers@suckless.org/msg09400.html)
       - this patch aims to address some inconsistencies when it comes to focusmon, tagmon and similar functionality by explicitly sorting screens left to right (or top to bottom in a vertical layout)
