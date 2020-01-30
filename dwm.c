@@ -694,7 +694,7 @@ buttonpress(XEvent *e)
 		#if LEFTLAYOUT_PATCH
 		x += blw;
 		if (ev->x < x) {
- 			click = ClkLtSymbol;
+			click = ClkLtSymbol;
 		} else {
 			#if HIDEVACANTTAGS_PATCH
 			for (c = m->clients; c; c = c->next)
@@ -1488,10 +1488,10 @@ drawbar(Monitor *m)
 				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0);
 				x += (1.0 / (double)n) * w;
 			}
- 		} else {
- 			drw_setscheme(drw, scheme[SchemeNorm]);
- 			drw_rect(drw, x, 0, w, bh, 1, 1);
- 		}
+		} else {
+			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_rect(drw, x, 0, w, bh, 1, 1);
+		}
 		#elif FANCYBAR_PATCH
 		if (n > 0) {
 			tw = TEXTW(m->sel->name) + lrpad;
@@ -1533,7 +1533,7 @@ drawbar(Monitor *m)
 				x += tw;
 				w -= tw;
 			}
- 		}
+		}
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		drw_rect(drw, x, 0, w, bh, 1, 1);
 		#else
@@ -1743,7 +1743,7 @@ focusstack(const Arg *arg)
 		return;
 	#if ALWAYSFULLSCREEN_PATCH
 	if (selmon->sel->isfullscreen)
- 		return;
+		return;
 	#endif // ALWAYSFULLSCREEN_PATCH
 	if (arg->i > 0) {
 		for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
@@ -2414,7 +2414,7 @@ resizemouse(const Arg *arg)
 		return;
 	#if RESIZECORNERS_PATCH
 	if (!XQueryPointer (dpy, c->win, &dummy, &dummy, &di, &di, &nx, &ny, &dui))
-	       return;
+		return;
 	horizcorner = nx < c->w / 2;
 	vertcorner = ny < c->h / 2;
 	#if DRAGMFACT_PATCH
@@ -2480,11 +2480,11 @@ resizemouse(const Arg *arg)
 				#if RESIZECORNERS_PATCH
 				resize(c, nx, ny, nw, nh, 1);
 				#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
-                /* save last known float dimensions */
-                c->sfx = nx;
-                c->sfy = ny;
-                c->sfw = nw;
-                c->sfh = nh;
+				/* save last known float dimensions */
+				c->sfx = nx;
+				c->sfy = ny;
+				c->sfw = nw;
+				c->sfh = nh;
 				#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 				#else
 				resize(c, c->x, c->y, nw, nh, 1);
@@ -3100,11 +3100,18 @@ spawn(const Arg *arg)
 void
 tag(const Arg *arg)
 {
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	unsigned int tagmask, tagindex;
+	#endif // SWAPFOCUS_PATCH
+
 	if (selmon->sel && arg->ui & TAGMASK) {
 		selmon->sel->tags = arg->ui & TAGMASK;
 		focus(NULL);
 		#if SWAPFOCUS_PATCH && PERTAG_PATCH
 		selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
+		for (tagmask = arg->ui & TAGMASK, tagindex = 1; tagmask!=0; tagmask >>= 1, tagindex++)
+			if (tagmask & 1)
+				selmon->pertag->prevclient[tagindex] = NULL;
 		#endif // SWAPFOCUS_PATCH
 		arrange(selmon);
 		#if VIEWONTAG_PATCH
@@ -3218,6 +3225,9 @@ void
 toggletag(const Arg *arg)
 {
 	unsigned int newtags;
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	unsigned int tagmask, tagindex;
+	#endif // SWAPFOCUS_PATCH
 
 	if (!selmon->sel)
 		return;
@@ -3225,6 +3235,11 @@ toggletag(const Arg *arg)
 	if (newtags) {
 		selmon->sel->tags = newtags;
 		focus(NULL);
+		#if SWAPFOCUS_PATCH && PERTAG_PATCH
+		for (tagmask = arg->ui & TAGMASK, tagindex = 1; tagmask!=0; tagmask >>= 1, tagindex++)
+			if (tagmask & 1)
+				selmon->pertag->prevclient[tagindex] = NULL;
+		#endif // SWAPFOCUS_PATCH
 		arrange(selmon);
 	}
 	#if EWMHTAGS_PATCH
