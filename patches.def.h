@@ -538,6 +538,12 @@
  */
 #define TRANSFER_PATCH 0
 
+/* Lets you transfer all clients between the master and stack area
+ * while increasing or decreasing the master area (nmaster) accordingly.
+ * https://dwm.suckless.org/patches/transfer/
+ */
+#define TRANSFER_ALL_PATCH 0
+
 /* This patch resets isfloating on any visible windows that have it set.
  * Optionally also applies a layout.
  * https://dwm.suckless.org/patches/unfloatvisible/

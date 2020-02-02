@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-02-02 - Added fsignal patch and moved dwmc signal settings to config.def.h
+2020-02-02 - Added fsignal and transferall patches
 
 2020-01-29 - Added swapfocus and shiftview patches
 
@@ -344,6 +344,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [transfer](https://dwm.suckless.org/patches/transfer/)
       - lets you transfer the currently focused client between the master and stack area while increasing or decreasing the master area (nmaster) accordingly
+
+   - [transferall](https://dwm.suckless.org/patches/transfer/)
+      - lets you transfer all clients between the master and stack area while increasing or decreasing the master area (nmaster) accordingly
 
    - [unfloatvisible](https://dwm.suckless.org/patches/unfloatvisible/)
       - resets isfloating on any visible windows that have it set and optionally also applies a layout

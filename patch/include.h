@@ -131,6 +131,9 @@
 #if TRANSFER_PATCH
 #include "transfer.h"
 #endif
+#if TRANSFER_ALL_PATCH
+#include "transferall.h"
+#endif
 #if UNFLOATVISIBLE_PATCH
 #include "unfloatvisible.h"
 #endif

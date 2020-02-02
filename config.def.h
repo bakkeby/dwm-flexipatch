@@ -604,6 +604,9 @@ static Key keys[] = {
 	#if TRANSFER_PATCH
 	{ MODKEY,                       XK_x,          transfer,               {0} },
 	#endif // TRANSFER_PATCH
+	#if TRANSFER_ALL_PATCH
+	{ MODKEY|ControlMask,           XK_x,          transferall,            {0} },
+	#endif // TRANSFER_ALL_PATCH
 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
 	#if VANITYGAPS_PATCH
 	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
