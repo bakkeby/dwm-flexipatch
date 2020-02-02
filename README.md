@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-02-02 - Added fsignal patch and moved dwmc signal settings to config.def.h
+
 2020-01-29 - Added swapfocus and shiftview patches
 
 2020-01-26 - Added transfer patch
@@ -185,6 +187,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [focusurgent](https://dwm.suckless.org/patches/focusurgent/)
       - adds a keyboard shortcut to select the next window having the urgent flag regardless of the tag it is on
+
+   - [fsignal](https://dwm.suckless.org/patches/fsignal/)
+      - send "fake signals" to dwm for handling, using xsetroot
+      - this will not conflict with the status bar, which also is managed using xsetroot
 
    - [fullscreen](https://dwm.suckless.org/patches/fullscreen/)
       - applies the monocle layout with the focused client on top and hides the bar

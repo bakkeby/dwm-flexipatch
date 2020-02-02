@@ -28,6 +28,8 @@
 #endif
 #if DWMC_PATCH
 #include "dwmc.h"
+#elif FSIGNAL_PATCH
+#include "fsignal.h"
 #endif
 #if EWMHTAGS_PATCH
 #include "ewmhtags.h"

@@ -2260,10 +2260,12 @@ propertynotify(XEvent *e)
 	#endif // SYSTRAY_PATCH
 
 	if ((ev->window == root) && (ev->atom == XA_WM_NAME)) {
-		#if DWMC_PATCH
+		#if DWMC_PATCH || FSIGNAL_PATCH
 		if (!fake_signal())
-		#endif // DWMC_PATCH
+			updatestatus();
+		#else
 		updatestatus();
+		#endif // DWMC_PATCH / FSIGNAL_PATCH
 	} else if (ev->state == PropertyDelete) {
 		return; /* ignore */
 	} else if ((c = wintoclient(ev->window))) {

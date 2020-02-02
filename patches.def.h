@@ -135,7 +135,8 @@
 
 /* Simple dwmc client using a fork of fsignal to communicate with dwm.
  * To use this either copy the patch/dwmc shell script to somewhere in your path or
- * uncomment the following line in Makefile: #cp -f patch/dwmc ${DESTDIR}${PREFIX}/bin
+ * uncomment the following line in Makefile:
+ *    #cp -f patch/dwmc ${DESTDIR}${PREFIX}/bin
  * http://dwm.suckless.org/patches/dwmc/
  */
 #define DWMC_PATCH 0
@@ -190,6 +191,11 @@
  */
 #define FANCYBAR_PATCH 0
 
+/* This patch allows a different border color to be chosen for floating windows.
+ * https://dwm.suckless.org/patches/float_border_color/
+ */
+#define FLOAT_BORDER_COLOR_PATCH 0
+
 /* This patch provides the ability to focus the tag on the immediate left or right of the
  * currently focused tag. It also allows to send the focused window either on the left or
  * the right tag.
@@ -209,16 +215,18 @@
  */
 #define FOCUSURGENT_PATCH 0
 
-/* This patch allows a different border color to be chosen for floating windows.
- * https://dwm.suckless.org/patches/float_border_color/
- */
-#define FLOAT_BORDER_COLOR_PATCH 0
-
 /* By default, dwm responds to _NET_ACTIVE_WINDOW client messages by setting
  * the urgency bit on the named window. This patch activates the window instead.
  * https://dwm.suckless.org/patches/focusonnetactive/
  */
 #define FOCUSONNETACTIVE_PATCH 0
+
+/* Send "fake signals" to dwm for handling, using xsetroot. This will not conflict with the
+ * status bar, which also is managed using xsetroot.
+ * Also see the dwmc patch, which takes precedence over this patch.
+ * https://dwm.suckless.org/patches/fsignal/
+ */
+#define FSIGNAL_PATCH 0
 
 /* Applies the monocle layout with the focused client on top and hides the bar. When pressed
  * again it shows the bar and restores the layout that was active before going fullscreen.
