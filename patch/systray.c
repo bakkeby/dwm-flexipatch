@@ -122,7 +122,15 @@ updatesystray(void)
 	w = w ? w + systrayspacing : 1;
  	x -= w;
 	XMoveResizeWindow(dpy, systray->win, x, m->by, w, bh);
-	wc.x = x; wc.y = m->by; wc.width = w; wc.height = bh;
+	#if BARPADDING_PATCH
+	wc.x = x - sp;
+	wc.y = m->by + vp;
+	#else
+	wc.x = x;
+	wc.y = m->by;
+	#endif // BARPADDING_PATCH
+	wc.width = w;
+	wc.height = bh;
 	wc.stack_mode = Above; wc.sibling = m->barwin;
 	XConfigureWindow(dpy, systray->win, CWX|CWY|CWWidth|CWHeight|CWSibling|CWStackMode, &wc);
 	XMapWindow(dpy, systray->win);
