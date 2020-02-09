@@ -84,6 +84,9 @@
 #if SCRATCHPAD_PATCH
 #include "scratchpad.h"
 #endif
+#if SCRATCHPAD_ALT_1_PATCH
+#include "scratchpad_alt_1.h"
+#endif
 #if SELFRESTART_PATCH
 #include "selfrestart.h"
 #endif

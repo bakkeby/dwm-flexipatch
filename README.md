@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-02-09 - Added alternative scratchpad patch
+
 2020-02-02 - Added fsignal and transferall patches
 
 2020-01-29 - Added swapfocus and shiftview patches
@@ -271,6 +273,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [scratchpad](https://dwm.suckless.org/patches/scratchpad/)
       - the scratchpad patch allows you to spawn or restore a floating terminal window
+
+   - [scratchpad_alt_1](https://github.com/GasparVardanyan/dwm-scratchpad)
+      - this alternative patch enables a scratchpad feature in dwm similar to the scratchpad feature in i3wm
 
    - [selfrestart](https://dwm.suckless.org/patches/selfrestart/)
       - restart dwm without the unnecessary dependency of an external script

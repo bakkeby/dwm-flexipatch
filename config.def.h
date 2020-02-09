@@ -555,6 +555,9 @@ static const char *termcmd[]  = { "st", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 #endif // SCRATCHPAD_PATCH
+#if SCRATCHPAD_ALT_1_PATCH
+static const unsigned scratchpad_mask = 1u << sizeof tags / sizeof * tags;
+#endif // SCRATCHPAD_ALT_1_PATCH
 
 static Key keys[] = {
 	/* modifier                     key            function                argument */
@@ -695,8 +698,16 @@ static Key keys[] = {
 	#if STICKY_PATCH
 	{ MODKEY|ShiftMask,             XK_s,          togglesticky,           {0} },
 	#endif // STICKY_PATCH
+	#if SCRATCHPAD_ALT_1_PATCH
+	{ MODKEY,                       XK_0,          view,                   {.ui = ~scratchpad_mask } },
+	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~scratchpad_mask } },
+	{ MODKEY,                       XK_minus,      scratchpad_show,        {0} },
+	{ MODKEY|ShiftMask,             XK_minus,      scratchpad_hide,        {0} },
+	{ MODKEY,                       XK_equal,      scratchpad_remove,      {0} },
+	#else
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
+	#endif // SCRATCHPAD_ALT_1_PATCH
 	{ MODKEY,                       XK_comma,      focusmon,               {.i = -1 } },
 	{ MODKEY,                       XK_period,     focusmon,               {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,      tagmon,                 {.i = -1 } },
@@ -779,9 +790,9 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_KP_5,       togglemaximize,         {.i =  0} },
 	#endif // EXRESIZE_PATCH
 	#if SETBORDERPX_PATCH
-	{ MODKEY|ShiftMask,             XK_minus,      setborderpx,            {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_plus,       setborderpx,            {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_numbersign, setborderpx,            {.i = 0 } },
+	{ MODKEY|ControlMask,           XK_minus,      setborderpx,            {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_plus,       setborderpx,            {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
 	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },

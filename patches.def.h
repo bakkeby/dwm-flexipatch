@@ -293,6 +293,8 @@
  * This patch depends on an additional library lmdpclient so if you want to enable this
  * then you will also have to append -lmpdclient to the LIBS configuration in config.mk.
  * A placeholder has been added there for reference.
+ * This patch depends on the following additional library:
+ *    - libmpdclient
  * https://dwm.suckless.org/patches/mpdcontrol/
  */
 #define MDPCONTROL_PATCH 0
@@ -387,6 +389,12 @@
  */
 #define SCRATCHPAD_PATCH 0
 
+/* This alternative patch enables a scratchpad feature in dwm similar to the scratchpad
+ * feature in i3wm.
+ * https://github.com/GasparVardanyan/dwm-scratchpad
+ */
+#define SCRATCHPAD_ALT_1_PATCH 0
+
 /* Allows restarting dwm without the dependency of an external script.
  * https://dwm.suckless.org/patches/selfrestart/
  */
@@ -452,6 +460,10 @@
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (mod-s) instead of having to think if you should use mod-j or mod-k for reaching
  * the previously used window.
+ * This patch depends on the following additional libraries:
+ *    - libxcb
+ *    - Xlib-libxcb
+ *    - xcb-res
  * https://dwm.suckless.org/patches/swapfocus/
  */
 #define SWAPFOCUS_PATCH 0
