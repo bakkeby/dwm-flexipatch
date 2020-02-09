@@ -1373,7 +1373,6 @@ drawbar(Monitor *m)
 			}
 			ctmp = *ts;
 			*ts = '\0';
-			drw_text(drw, m->ww - sw + tx, 0, sw - tx, bh, 0, tp, 0);
 			drw_text(drw, m->ww - sw - stw + tx, 0, sw - tx, bh, stp, tp, 0);
 			tx += TEXTW(tp) -lrpad;
 			if (ctmp == '\0') {
@@ -1462,11 +1461,7 @@ drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // LEFTLAYOUT_PATCH
 
-	#if SYSTRAY_PATCH
 	if ((w = m->ww - sw - stw - x) > bh)
-	#else
-	if ((w = m->ww - sw - x) > bh)
-	#endif // SYSTRAY_PATCH
 	{
 		#if AWESOMEBAR_PATCH
 		if (n > 0) {
@@ -1587,11 +1582,7 @@ drawbar(Monitor *m)
 	m->bt = n;
 	m->btw = w;
 	#endif // AWESOMEBAR_PATCH
-	#if SYSTRAY_PATCH
 	drw_map(drw, m->barwin, 0, 0, m->ww - stw, bh);
-	#else
-	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
-	#endif // SYSTRAY_PATCH
 	#if EXTRABAR_PATCH
 	if (m == selmon) { /* extra status is only drawn on selected monitor */
 		drw_setscheme(drw, scheme[SchemeNorm]);
