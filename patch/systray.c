@@ -62,7 +62,11 @@ updatesystray(void)
 	Client *i;
 	Monitor *m = systraytomon(NULL);
 	unsigned int x = m->mx + m->mw;
-	unsigned int w = 1;
+	unsigned int w = 1, xpad = 0, ypad = 0;
+	#if BARPADDING_PATCH
+	xpad = sp;
+	ypad = vp;
+	#endif // BARPADDING_PATCH
 
 	if (!showsystray)
 		return;
@@ -79,11 +83,11 @@ updatesystray(void)
 			.colormap = cmap,
 			.event_mask = ButtonPressMask|ExposureMask
 		};
-		systray->win = XCreateWindow(dpy, root, x, m->by, w, bh, 0, depth,
+		systray->win = XCreateWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, depth,
 						InputOutput, visual,
 						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
 		#else
-		systray->win = XCreateSimpleWindow(dpy, root, x, m->by, w, bh, 0, 0, scheme[SchemeSel][ColBg].pixel);
+		systray->win = XCreateSimpleWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, 0, scheme[SchemeSel][ColBg].pixel);
 		#endif // ALPHA_PATCH
 		XSelectInput(dpy, systray->win, SubstructureNotifyMask);
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayOrientation], XA_CARDINAL, 32,
@@ -121,14 +125,9 @@ updatesystray(void)
 	}
 	w = w ? w + systrayspacing : 1;
  	x -= w;
-	XMoveResizeWindow(dpy, systray->win, x, m->by, w, bh);
-	#if BARPADDING_PATCH
-	wc.x = x - sp;
-	wc.y = m->by + vp;
-	#else
-	wc.x = x;
-	wc.y = m->by;
-	#endif // BARPADDING_PATCH
+	XMoveResizeWindow(dpy, systray->win, x - xpad, m->by + ypad, w, bh);
+	wc.x = x - xpad;
+	wc.y = m->by + ypad;
 	wc.width = w;
 	wc.height = bh;
 	wc.stack_mode = Above; wc.sibling = m->barwin;
