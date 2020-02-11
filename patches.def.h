@@ -585,6 +585,13 @@
  */
 #define VIEWONTAG_PATCH 0
 
+/* This patch adds the ability for dwm to read colors from the linux virtual console.
+ *    /sys/module/vt/parameters/default_{red,grn,blu}
+ * Essentially this way the colors you use in your regular tty is "mirrored" to dwm.
+ * https://dwm.suckless.org/patches/vtcolors/
+ */
+#define VTCOLORS_PATCH 0
+
 /* This patch warps the mouse cursor to the center of the currently focused window or screen
  * when the mouse cursor is (a) on a different screen or (b) on top of a different window.
  * https://dwm.suckless.org/patches/warp/

@@ -44,13 +44,16 @@ static const char dmenufont[]            = "monospace:size=10";
 
 static char normfgcolor[]                = "#bbbbbb";
 static char normbgcolor[]                = "#222222";
+#if !VTCOLORS_PATCH
 static char normbordercolor[]            = "#444444";
 #if FLOAT_BORDER_COLOR_PATCH
 static char normfloatcolor[]             = "#db8fd9";
 #endif // FLOAT_BORDER_COLOR_PATCH
+#endif // !VTCOLORS_PATCH
 
 static char selfgcolor[]                 = "#eeeeee";
 static char selbgcolor[]                 = "#005577";
+#if !VTCOLORS_PATCH
 static char selbordercolor[]             = "#005577";
 #if FLOAT_BORDER_COLOR_PATCH
 static char selfloatcolor[]              = "#005577";
@@ -91,29 +94,118 @@ static char titlebordercolor[]           = "#005577";
 static char titlefloatcolor[]            = "#005577";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // TITLECOLOR_PATCH
+#endif // VTCOLORS_PATCH
 
 #if ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const unsigned int alphas[][3] = {
 	/*                fg      bg        border     */
-	[SchemeNorm]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeNorm]      = { OPAQUE, baralpha, borderalpha },
+	[SchemeSel]       = { OPAQUE, baralpha, borderalpha },
 	#if STATUSCOLORS_PATCH
-	[SchemeWarn]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeWarn]      = { OPAQUE, baralpha, borderalpha },
 	#endif // STATUSCOLORS_PATCH
 	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
-	[SchemeUrg]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeUrg]       = { OPAQUE, baralpha, borderalpha },
 	#endif // URGENTBORDER_PATCH / STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
-	[SchemeHid]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeHid]       = { OPAQUE, baralpha, borderalpha },
 	#endif // AWESOMEBAR_PATCH
-	#if TITLECOLOR_PATCH
-	[SchemeTitle] = { OPAQUE, baralpha, borderalpha },
-	#endif // TITLECOLOR_PATCH
+	#if VTCOLORS_PATCH
+	[SchemeTagsNorm]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeTagsSel]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitleNorm] = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitleSel]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeStatus]    = { OPAQUE, baralpha, borderalpha },
+	#elif TITLECOLOR_PATCH
+	[SchemeTitle]     = { OPAQUE, baralpha, borderalpha },
+	#endif // VTCOLORS_PATCH / TITLECOLOR_PATCH
 };
 #endif // ALPHA_PATCH
-#if FLOAT_BORDER_COLOR_PATCH
+#if VTCOLORS_PATCH && FLOAT_BORDER_COLOR_PATCH
+static const char title_bg_dark[]   = "#303030";
+static const char title_bg_light[]  = "#fdfdfd";
+static const int color_ptrs[][4]    = {
+	/*                              fg         bg         border    float */
+	[SchemeNorm]                = { -1,        -1,        5,        12 },
+	[SchemeSel]                 = { -1,        -1,        11,       13 },
+	#if STATUSCOLORS_PATCH
+	[SchemeWarn]                = { -1,        1,         1,        14 },
+	#endif // STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	[SchemeUrg]                 = { 7,         9,         9,        15 },
+	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#if AWESOMEBAR_PATCH
+	[SchemeHid]                 = { 5,         0,         0,        -1 },
+	#endif // AWESOMEBAR_PATCH
+	[SchemeTagsNorm]            = { 2,         0,         0,        -1 },
+	[SchemeTagsSel]             = { 6,         5,         5,        -1 },
+	[SchemeTitleNorm]           = { 6,         -1,        -1,       -1 },
+	[SchemeTitleSel]            = { 6,         -1,        -1,       -1 },
+	[SchemeStatus]              = { 2,         0,         0,        -1 },
+};
+static char colors[][4][8]          = {
+	/*                              fg         bg         border     float     */
+	[SchemeNorm]                = { "#000000", "#000000", "#000000", "#000000" },
+	[SchemeSel]                 = { "#000000", "#000000", "#000000", "#000000" },
+	#if STATUSCOLORS_PATCH
+	[SchemeWarn]                = { "#000000", "#000000", "#000000", "#000000" },
+	#endif // STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	[SchemeUrg]                 = { "#000000", "#000000", "#000000", "#000000" },
+	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#if AWESOMEBAR_PATCH
+	[SchemeHid]                 = { "#000000", "#000000", "#000000", "#000000" },
+	#endif // AWESOMEBAR_PATCH
+	[SchemeTagsNorm]            = { "#000000", "#000000", "#000000", "#000000" },
+	[SchemeTagsSel]             = { "#000000", "#000000", "#000000", "#000000" },
+	[SchemeTitleNorm]           = { "#000000", "#000000", "#000000", "#000000" },
+	[SchemeTitleSel]            = { "#000000", "#000000", "#000000", "#000000" },
+	[SchemeStatus]              = { "#000000", "#000000", "#000000", "#000000" },
+};
+#elif VTCOLORS_PATCH
+static const char title_bg_dark[]   = "#303030";
+static const char title_bg_light[]  = "#fdfdfd";
+static const int color_ptrs[][3]    = {
+	/*                              fg         bg         border    */
+	[SchemeNorm]                = { -1,        -1,        5 },
+	[SchemeSel]                 = { -1,        -1,        11 },
+	#if STATUSCOLORS_PATCH
+	[SchemeWarn]                = { -1,        1,         1 },
+	#endif // STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	[SchemeUrg]                 = { 7,         9,         9 },
+	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#if AWESOMEBAR_PATCH
+	[SchemeHid]                 = { 5,         0,         0 },
+	#endif // AWESOMEBAR_PATCH
+	[SchemeTagsNorm]            = { 2,         0,         0 },
+	[SchemeTagsSel]             = { 6,         5,         5 },
+	[SchemeTitleNorm]           = { 6,         -1,        -1 },
+	[SchemeTitleSel]            = { 6,         -1,        -1 },
+	[SchemeStatus]              = { 2,         0,         0 },
+};
+static char colors[][3][8]          = {
+	/*                              fg         bg         border    */
+	[SchemeNorm]                = { "#000000", "#000000", "#000000" },
+	[SchemeSel]                 = { "#000000", "#000000", "#000000" },
+	#if STATUSCOLORS_PATCH
+	[SchemeWarn]                = { "#000000", "#000000", "#000000" },
+	#endif // STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	[SchemeUrg]                 = { "#000000", "#000000", "#000000" },
+	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#if AWESOMEBAR_PATCH
+	[SchemeHid]                 = { "#000000", "#000000", "#000000" },
+	#endif // AWESOMEBAR_PATCH
+	[SchemeTagsNorm]            = { "#000000", "#000000", "#000000" },
+	[SchemeTagsSel]             = { "#000000", "#000000", "#000000" },
+	[SchemeTitleNorm]           = { "#000000", "#000000", "#000000" },
+	[SchemeTitleSel]            = { "#000000", "#000000", "#000000" },
+	[SchemeStatus]              = { "#000000", "#000000", "#000000" },
+};
+#elif FLOAT_BORDER_COLOR_PATCH
 static
 #if !XRDB_PATCH
 const
@@ -135,7 +227,7 @@ char *colors[][4] = {
 	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor, titlefloatcolor },
 	#endif // TITLECOLOR_PATCH
 };
-#else
+#else // !VTCOLORS_PATCH && !FLOAT_BORDER_COLOR_PATCH
 static
 #if !XRDB_PATCH
 const
@@ -157,7 +249,7 @@ char *colors[][3] = {
 	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor },
 	#endif // TITLECOLOR_PATCH
 };
-#endif // FLOAT_BORDER_COLOR_PATCH
+#endif // VTCOLORS_PATCH / FLOAT_BORDER_COLOR_PATCH
 
 /* tagging */
 #if EWMHTAGS_PATCH
@@ -671,7 +763,7 @@ static Key keys[] = {
 	#if WINVIEW_PATCH
 	{ MODKEY,                       XK_o,          winview,                {0} },
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH
+	#if XRDB_PATCH && !VTCOLORS_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },

@@ -146,6 +146,9 @@
 #if VANITYGAPS_PATCH
 #include "vanitygaps.h"
 #endif
+#if VTCOLORS_PATCH
+#include "vtcolors.h"
+#endif
 #if WARP_PATCH
 #include "warp.h"
 #endif
@@ -155,7 +158,7 @@
 #if ZOOMSWAP_PATCH
 #include "zoomswap.h"
 #endif
-#if XRDB_PATCH
+#if XRDB_PATCH && !VTCOLORS_PATCH
 #include "xrdb.h"
 #endif
 /* Layouts */

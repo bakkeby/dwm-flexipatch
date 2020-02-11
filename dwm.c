@@ -93,9 +93,15 @@ enum {
 	#if AWESOMEBAR_PATCH
 	,SchemeHid
 	#endif // AWESOMEBAR_PATCH
-	#if TITLECOLOR_PATCH
+	#if VTCOLORS_PATCH
+	,SchemeTagsNorm
+	,SchemeTagsSel
+	,SchemeTitleNorm
+	,SchemeTitleSel
+	,SchemeStatus
+	#elif TITLECOLOR_PATCH
 	,SchemeTitle
-	#endif // TITLECOLOR_PATCH
+	#endif // VTCOLORS_PATCH
 }; /* color schemes */
 
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
@@ -1359,7 +1365,11 @@ drawbar(Monitor *m)
 	#if !STATUSALLMONS_PATCH
 	if (m == selmon) { /* status is only drawn on selected monitor */
 	#endif // STATUSALLMONS_PATCH
+		#if VTCOLORS_PATCH
+		drw_setscheme(drw, scheme[SchemeStatus]);
+		#else
 		drw_setscheme(drw, scheme[SchemeNorm]);
+		#endif // VTCOLORS_PATCH
 		#if STATUSPADDING_PATCH
 		sw = TEXTW(stext);
 		#else
@@ -1405,7 +1415,11 @@ drawbar(Monitor *m)
 	x = 0;
 	#if LEFTLAYOUT_PATCH
 	w = blw = TEXTW(m->ltsymbol);
+	#if VTCOLORS_PATCH
+	drw_setscheme(drw, scheme[SchemeTagsNorm]);
+	#else
 	drw_setscheme(drw, scheme[SchemeNorm]);
+	#endif // VTCOLORS_PATCH
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // LEFTLAYOUT_PATCH
 	#if TAGGRID_PATCH
@@ -1428,9 +1442,19 @@ drawbar(Monitor *m)
 		#endif // ALTERNATIVE_TAGS_PATCH
 		#if URGENTBORDER_PATCH
 		if (m->tagset[m->seltags] & 1 << i)
+			#if VTCOLORS_PATCH
+			drw_setscheme(drw, scheme[SchemeTagsSel]);
+			#else
 			drw_setscheme(drw, scheme[SchemeSel]);
+			#endif // VTCOLORS_PATCH
 		else
+			#if VTCOLORS_PATCH
+			drw_setscheme(drw, scheme[urg & 1 << i ? SchemeUrg : SchemeTagsNorm]);
+			#else
 			drw_setscheme(drw, scheme[urg & 1 << i ? SchemeUrg : SchemeNorm]);
+			#endif // VTCOLORS_PATCH
+		#elif VTCOLORS_PATCH
+		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeTagsSel : SchemeTagsNorm]);
 		#else // URGENTBORDER_PATCH
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
 		#endif // URGENTBORDER_PATCH
@@ -1457,7 +1481,11 @@ drawbar(Monitor *m)
 	#endif // TAGGRID_PATCH
 	#if !LEFTLAYOUT_PATCH
 	w = blw = TEXTW(m->ltsymbol);
+	#if VTCOLORS_PATCH
+	drw_setscheme(drw, scheme[SchemeTagsNorm]);
+	#else
 	drw_setscheme(drw, scheme[SchemeNorm]);
+	#endif // VTCOLORS_PATCH
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // LEFTLAYOUT_PATCH
 
@@ -1469,22 +1497,32 @@ drawbar(Monitor *m)
 				if (!ISVISIBLE(c))
 					continue;
 				if (m->sel == c)
-					#if TITLECOLOR_PATCH
+					#if VTCOLORS_PATCH
+					scm = SchemeTitleSel;
+					#elif TITLECOLOR_PATCH
 					scm = SchemeTitle;
 					#else
 					scm = SchemeSel;
-					#endif // TITLECOLOR_PATCH
+					#endif // VTCOLORS_PATCH / TITLECOLOR_PATCH
 				else if (HIDDEN(c))
 					scm = SchemeHid;
 				else
+					#if VTCOLORS_PATCH
+					scm = SchemeTitleNorm;
+					#else
 					scm = SchemeNorm;
+					#endif // VTCOLORS_PATCH
 
 				drw_setscheme(drw, scheme[scm]);
 				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0);
 				x += (1.0 / (double)n) * w;
 			}
 		} else {
+			#if VTCOLORS_PATCH
+			drw_setscheme(drw, scheme[SchemeTitleNorm]);
+			#else
 			drw_setscheme(drw, scheme[SchemeNorm]);
+			#endif // VTCOLORS_PATCH
 			drw_rect(drw, x, 0, w, bh, 1, 1);
 		}
 		#elif FANCYBAR_PATCH
@@ -1510,11 +1548,13 @@ drawbar(Monitor *m)
 					continue;
 				tw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 
-				#if TITLECOLOR_PATCH
+				#if VTCOLORS_PATCH
+				drw_setscheme(drw, scheme[m->sel == c ? SchemeTitleSel : SchemeTitleNorm]);
+				#elif TITLECOLOR_PATCH
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeTitle : SchemeNorm]);
 				#else
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
-				#endif // TITLECOLOR_PATCH
+				#endif // VTCOLORS_PATCH / TITLECOLOR_PATCH
 				if (tw > 0) /* trap special handling of 0 in drw_text */
 					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
 				#if !HIDEVACANTTAGS_PATCH
@@ -1529,15 +1569,21 @@ drawbar(Monitor *m)
 				w -= tw;
 			}
 		}
+		#if VTCOLORS_PATCH
+		drw_setscheme(drw, scheme[SchemeTitleNorm]);
+		#else
 		drw_setscheme(drw, scheme[SchemeNorm]);
+		#endif // VTCOLORS_PATCH
 		drw_rect(drw, x, 0, w, bh, 1, 1);
 		#else
 		if (m->sel) {
-			#if TITLECOLOR_PATCH
+			#if VTCOLORS_PATCH
+			drw_setscheme(drw, scheme[m == selmon ? SchemeTitleSel : SchemeTitleNorm]);
+			#elif TITLECOLOR_PATCH
 			drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : SchemeNorm]);
 			#else
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-			#endif // TITLECOLOR_PATCH
+			#endif // VTCOLORS_PATCH / TITLECOLOR_PATCH
 			#if IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 			XSetErrorHandler(xerrordummy);
 			#endif // IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
@@ -1568,7 +1614,11 @@ drawbar(Monitor *m)
 				#endif // ACTIVETAGINDICATORBAR_PATCH
 			#endif // HIDEVACANTTAGS_PATCH
 		} else {
+			#if VTCOLORS_PATCH
+			drw_setscheme(drw, scheme[SchemeTitleNorm]);
+			#else
 			drw_setscheme(drw, scheme[SchemeNorm]);
+			#endif // VTCOLORS_PATCH
 			#if BARPADDING_PATCH
 			drw_rect(drw, x, 0, w - 2 * sp, bh, 1, 1);
 			#else
@@ -1585,7 +1635,11 @@ drawbar(Monitor *m)
 	drw_map(drw, m->barwin, 0, 0, m->ww - stw, bh);
 	#if EXTRABAR_PATCH
 	if (m == selmon) { /* extra status is only drawn on selected monitor */
+		#if VTCOLORS_PATCH
+		drw_setscheme(drw, scheme[SchemeTitleNorm]);
+		#else
 		drw_setscheme(drw, scheme[SchemeNorm]);
+		#endif // VTCOLORS_PATCH
 		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0);
 		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
 	}
@@ -2922,6 +2976,16 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
+	#if VTCOLORS_PATCH
+	get_vt_colors();
+	if (get_luminance(colors[SchemeTagsNorm][ColBg]) > 50) {
+		strcpy(colors[SchemeTitleNorm][ColBg], title_bg_light);
+		strcpy(colors[SchemeTitleSel][ColBg], title_bg_light);
+	} else {
+		strcpy(colors[SchemeTitleNorm][ColBg], title_bg_dark);
+		strcpy(colors[SchemeTitleSel][ColBg], title_bg_dark);
+	}
+	#endif // VTCOLORS_PATCH
 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
 	for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i],
@@ -3983,6 +4047,7 @@ main(int argc, char *argv[])
 			die(help());
 		else if (!strcmp("-fn", argv[i])) /* font set */
 			fonts[0] = argv[++i];
+		#if !VTCOLORS_PATCH
 		else if (!strcmp("-nb", argv[i])) /* normal background color */
 			colors[SchemeNorm][1] = argv[++i];
 		else if (!strcmp("-nf", argv[i])) /* normal foreground color */
@@ -3991,6 +4056,7 @@ main(int argc, char *argv[])
 			colors[SchemeSel][1] = argv[++i];
 		else if (!strcmp("-sf", argv[i])) /* selected foreground color */
 			colors[SchemeSel][0] = argv[++i];
+		#endif // !VTCOLORS_PATCH
 		#if NODMENU_PATCH
 		else if (!strcmp("-df", argv[i])) /* dmenu font */
 			dmenucmd[2] = argv[++i];
@@ -4002,7 +4068,6 @@ main(int argc, char *argv[])
 			dmenucmd[8] = argv[++i];
 		else if (!strcmp("-dsf", argv[i])) /* dmenu selected foreground color */
 			dmenucmd[10] = argv[++i];
-		else die(help());
 		#else
 		else if (!strcmp("-df", argv[i])) /* dmenu font */
 			dmenucmd[4] = argv[++i];
@@ -4014,8 +4079,8 @@ main(int argc, char *argv[])
 			dmenucmd[10] = argv[++i];
 		else if (!strcmp("-dsf", argv[i])) /* dmenu selected foreground color */
 			dmenucmd[12] = argv[++i];
-		else die(help());
 		#endif // NODMENU_PATCH
+		else die(help());
 	#else
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
@@ -4031,10 +4096,10 @@ main(int argc, char *argv[])
 		die("dwm: cannot get xcb connection\n");
 	#endif // SWALLOW_PATCH
 	checkotherwm();
-	#if XRDB_PATCH
+	#if XRDB_PATCH && !VTCOLORS_PATCH
 	XrmInitialize();
 	loadxrdb();
-	#endif
+	#endif // XRDB_PATCH && !VTCOLORS_PATCH
 
 	setup();
 #ifdef __OpenBSD__

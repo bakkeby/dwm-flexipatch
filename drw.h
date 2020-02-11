@@ -54,18 +54,24 @@ void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned in
 void drw_clr_create(
 	Drw *drw,
 	Clr *dest,
+	#if VTCOLORS_PATCH
+	const char clrname[]
+	#else
 	const char *clrname
+	#endif // VTCOLORS_PATCH
 	#if ALPHA_PATCH
 	, unsigned int alpha
 	#endif // ALPHA_PATCH
 );
 Clr *drw_scm_create(
 	Drw *drw,
-	#if XRDB_PATCH
+	#if VTCOLORS_PATCH
+	char clrnames[][8],
+	#elif XRDB_PATCH
 	char *clrnames[],
 	#else
 	const char *clrnames[],
-	#endif // XRDB_PATCH
+	#endif // VTCOLORS_PATCH / XRDB_PATCH
 	#if ALPHA_PATCH
 	const unsigned int alphas[],
 	#endif // ALPHA_PATCH

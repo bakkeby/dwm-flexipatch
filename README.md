@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-02-11 - Added swaptags patch
+2020-02-11 - Added swaptags and vtcolor patches
 
 2020-02-09 - Added alternative scratchpad patch
 
@@ -372,6 +372,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [viewontag](https://dwm.suckless.org/patches/viewontag/)
       - follow a window to the tag it is being moved to
+
+   - [vtcolor](https://dwm.suckless.org/patches/vtcolors/)
+      - this patch adds the ability for dwm to read colors from the linux virtual console essentially allowing you to use the same color scheme as your regular tty
 
    - [warp](https://dwm.suckless.org/patches/warp/)
       - warps the mouse cursor to the center of the currently focused window or screen when the mouse cursor is (a) on a different screen or (b) on top of a different window
