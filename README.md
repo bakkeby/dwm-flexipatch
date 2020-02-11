@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-02-11 - Added swaptags patch
+
 2020-02-09 - Added alternative scratchpad patch
 
 2020-02-02 - Added fsignal and transferall patches
@@ -312,6 +314,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [swapfocus](https://dwm.suckless.org/patches/swapfocus/)
       - this patch depends on the pertag patch and makes it possible to switch focus with a single shortcut (mod-s) instead of having to think if you should use mod-j or mod-k for reaching the previously used window
+
+   - [swaptags](https://dwm.suckless.org/patches/swaptags/)
+      - allows swapping the contents of the currently selected tag with another tag by using keyboard shortcuts
 
    - [switchcol](https://dwm.suckless.org/patches/switchcol/)
       - allows you to switch focus between the master and stack columns using a single keybinding

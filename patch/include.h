@@ -113,6 +113,9 @@
 #if SWAPFOCUS_PATCH && PERTAG_PATCH
 #include "swapfocus.h"
 #endif
+#if SWAPTAGS_PATCH
+#include "swaptags.h"
+#endif
 #if SWITCHCOL_PATCH
 #include "switchcol.h"
 #endif

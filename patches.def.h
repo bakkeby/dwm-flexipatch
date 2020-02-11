@@ -468,6 +468,12 @@
  */
 #define SWAPFOCUS_PATCH 0
 
+/* This patch allows swapping the contents of the currently selected tag with another tag using
+ * keyboard shortcuts.
+ * https://dwm.suckless.org/patches/swaptags/
+ */
+#define SWAPTAGS_PATCH 0
+
 /* Switch focus between the master and stack columns using a single keybinding.
  * https://dwm.suckless.org/patches/switchcol/
  */
