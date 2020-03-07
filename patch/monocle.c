@@ -1,3 +1,21 @@
+#if VANITYGAPS_PATCH && VANITYGAPS_MONOCLE_PATCH
+void
+monocle(Monitor *m)
+{
+	unsigned int n;
+	int oh, ov, ih, iv;
+	Client *c;
+
+	getgaps(m, &oh, &ov, &ih, &iv, &n);
+
+	#if !MONOCLESYMBOL_PATCH
+	if (n > 0) /* override layout symbol */
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
+	#endif // MONOCLESYMBOL_PATCH
+	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
+		resize(c, m->wx + ov, m->wy + oh, m->ww - 2 * c->bw - 2 * ov, m->wh - 2 * c->bw - 2 * oh, 0);
+}
+#else
 void
 monocle(Monitor *m)
 {
@@ -16,3 +34,4 @@ monocle(Monitor *m)
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
 		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
 }
+#endif // VANITYGAPS_PATCH

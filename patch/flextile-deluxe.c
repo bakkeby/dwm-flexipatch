@@ -545,13 +545,13 @@ flextile(Monitor *m)
 	if (n == 0)
 		return;
 
-	#if VANITYGAPS_PATCH
+	#if VANITYGAPS_PATCH && !VANITYGAPS_MONOCLE_PATCH
 	/* No outer gap if full screen monocle */
 	if (abs(m->ltaxis[MASTER]) == MONOCLE && (abs(m->ltaxis[LAYOUT]) == NO_SPLIT || n <= m->nmaster)) {
 		oh = 0;
 		ov = 0;
 	}
-	#endif // VANITYGAPS_PATCH
+	#endif // VANITYGAPS_PATCH && !VANITYGAPS_MONOCLE_PATCH
 
 	(&flexlayouts[abs(m->ltaxis[LAYOUT])])->arrange(m, m->wx + ov, m->wy + oh, m->wh - 2*oh, m->ww - 2*ov, ih, iv, n);
 	return;
