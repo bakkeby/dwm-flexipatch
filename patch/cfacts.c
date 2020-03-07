@@ -26,7 +26,7 @@ getfacts(Monitor *m, float *mf, float *sf)
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
-		if (!m->nmaster || n < m->nmaster)
+		if (m->nmaster && n < m->nmaster)
 			mfacts += c->cfact;
 		else
 			sfacts += c->cfact;

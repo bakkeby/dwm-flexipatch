@@ -17,14 +17,14 @@ tile(Monitor *m)
 
 	sx = mx = m->wx + ov;
 	sy = my = m->wy + oh;
-	sh = mh = m->wh - 2*oh - ih * (MIN(n, m->nmaster) - 1);
+	mh = m->wh - 2*oh - ih * (MIN(n, m->nmaster) - 1);
+	sh = m->wh - 2*oh - ih * (n - m->nmaster - 1);
 	sw = mw = m->ww - 2*ov;
 
 	if (m->nmaster && n > m->nmaster) {
 		sw = (mw - iv) * (1 - m->mfact);
 		mw = (mw - iv) * m->mfact;
 		sx = mx + mw + iv;
-		sh = m->wh - 2*oh - ih * (n - m->nmaster - 1);
 	}
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
@@ -53,14 +53,14 @@ tile(Monitor *m)
 
 	sx = mx = m->wx + ov;
 	sy = my = m->wy + oh;
-	sh = mh = m->wh - 2*oh - ih * (MIN(n, m->nmaster) - 1);
+	mh = m->wh - 2*oh - ih * (MIN(n, m->nmaster) - 1);
+	sh = m->wh - 2*oh - ih * (n - m->nmaster - 1);
 	sw = mw = m->ww - 2*ov;
 
 	if (m->nmaster && n > m->nmaster) {
 		sw = (mw - iv) * (1 - m->mfact);
 		mw = (mw - iv) * m->mfact;
 		sx = mx + mw + iv;
-		sh = m->wh - 2*oh - ih * (n - m->nmaster - 1);
 	}
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
