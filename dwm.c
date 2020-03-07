@@ -1255,6 +1255,10 @@ createmon(void)
 		m->pertag->prevzooms[i] = NULL;
 		#endif // ZOOMSWAP_PATCH
 		#endif // PERTAGBAR_PATCH
+
+		#if VANITYGAPS_PATCH
+		m->pertag->enablegaps[i] = 1;
+		#endif // VANITYGAPS_PATCH
 	}
 	#endif // PERTAG_PATCH
 	return m;

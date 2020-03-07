@@ -13,12 +13,15 @@ struct Pertag {
 	#if PERTAGBAR_PATCH
 	Bool showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
 	#endif // PERTAGBAR_PATCH
-	#if ZOOMSWAP_PATCH
-	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
-	#endif // ZOOMSWAP_PATCH
 	#if SWAPFOCUS_PATCH
 	Client *prevclient[LENGTH(tags) + 1];
 	#endif // SWAPFOCUS_PATCH
+	#if ZOOMSWAP_PATCH
+	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
+	#endif // ZOOMSWAP_PATCH
+	#if VANITYGAPS_PATCH
+	int enablegaps[LENGTH(tags) + 1];
+	#endif // VANITYGAPS_PATCH
 };
 
 void
