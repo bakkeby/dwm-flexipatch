@@ -795,7 +795,7 @@ static Key keys[] = {
 	#if TOGGLEFULLSCREEN_PATCH
 	{ MODKEY,                       XK_y,          togglefullscreen,       {0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
-	#if FAKEFULLSCREEN_CLIENT_PATCH
+	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 	{ MODKEY|ShiftMask,             XK_y,          togglefakefullscreen,   {0} },
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#if FULLSCREEN_PATCH

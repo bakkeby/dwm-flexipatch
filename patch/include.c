@@ -37,7 +37,7 @@
 #if EXRESIZE_PATCH
 #include "exresize.c"
 #endif
-#if FAKEFULLSCREEN_CLIENT_PATCH
+#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 #include "fakefullscreenclient.c"
 #endif
 #if FOCUSADJACENTTAG_PATCH

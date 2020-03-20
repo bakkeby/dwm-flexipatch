@@ -172,6 +172,7 @@
 /* Only allow clients to "fullscreen" into the space currently given to them.
  * As an example, this will allow you to view a fullscreen video in your browser on
  * one half of the screen, while having the other half available for other tasks.
+ * This patch takes precedence over the fakefullscreen client patch below.
  * https://dwm.suckless.org/patches/fakefullscreen/
  */
 #define FAKEFULLSCREEN_PATCH 0

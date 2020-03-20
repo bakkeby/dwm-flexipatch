@@ -159,7 +159,7 @@ struct Client {
 	unsigned int switchtag;
 	#endif // SWITCHTAG_PATCH
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
-	#if FAKEFULLSCREEN_CLIENT_PATCH
+	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 	int fakefullscreen;
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#if EXRESIZE_PATCH
@@ -1745,7 +1745,7 @@ focus(Client *c)
 	#if LOSEFULLSCREEN_PATCH
 	Client *at;
 	for (at = selmon->clients; at; at = at->next)
-		#if FAKEFULLSCREEN_CLIENT_PATCH
+		#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 		if (at != c && at->isfullscreen && !at->fakefullscreen && ISVISIBLE(at))
 			setfullscreen(at, 0);
 		#else
