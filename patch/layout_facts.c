@@ -20,9 +20,9 @@ getfacts(Monitor *m, int msize, int ssize, float *mf, float *sf, int *mr, int *s
 			stotal += ssize * (c->cfact / sfacts);
 
 	*mf = mfacts; // total factor of master area
-	*sf = sfacts; // total factor of slave area
+	*sf = sfacts; // total factor of stack area
 	*mr = msize - mtotal; // the remainder (rest) of pixels after a cfacts master split
-	*sr = ssize - stotal; // the remainder (rest) of pixels after a cfacts slave split
+	*sr = ssize - stotal; // the remainder (rest) of pixels after a cfacts stack split
 }
 #else
 void
@@ -44,8 +44,8 @@ getfacts(Monitor *m, int msize, int ssize, float *mf, float *sf, int *mr, int *s
 			stotal += ssize / sfacts;
 
 	*mf = mfacts; // total factor of master area
-	*sf = sfacts; // total factor of slave area
+	*sf = sfacts; // total factor of stack area
 	*mr = msize - mtotal; // the remainder (rest) of pixels after an even master split
-	*sr = ssize - stotal; // the remainder (rest) of pixels after an even slave split
+	*sr = ssize - stotal; // the remainder (rest) of pixels after an even stack split
 }
 #endif // CFACTS_PATCH
