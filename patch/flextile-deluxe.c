@@ -35,12 +35,13 @@ static const TileArranger flextiles[] = {
 	{ arrange_spiral },
 };
 
-static float
-getfactsforrange(Monitor *m, int an, int ai)
+static void
+getfactsforrange(Monitor *m, int an, int ai, int size, int *rest, float *fact)
 {
 	int i;
 	float facts;
 	Client *c;
+	int total = 0;
 
 	facts = 0;
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
@@ -51,7 +52,16 @@ getfactsforrange(Monitor *m, int an, int ai)
 			facts += 1;
 			#endif // CFACTS_PATCH
 
-	return facts;
+	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if (i >= ai && i < (ai + an))
+			#if CFACTS_PATCH
+			total += size * (c->cfact / facts);
+			#else
+			total += size / sfacts;
+			#endif // CFACTS_PATCH
+
+	*rest = size - total;
+	*fact = facts;
 }
 
 static void
@@ -302,27 +312,29 @@ layout_floating_master_fixed(Monitor *m, int x, int y, int h, int w, int ih, int
 		mw = w * 0.9;
 		mh = h * m->mfact;
 	}
-	x += (w - mw) / 2;
-	y += (h - mh) / 2;
+	x = x + (w - mw) / 2;
+	y = y + (h - mh) / 2;
 
 	(&flextiles[m->ltaxis[MASTER]])->arrange(m, x, y, mh, mw, ih, iv, n, m->nmaster, 0);
+	reattachstack(m, m->nmaster, 0);
+	restack(m);
 }
 
 static void
 arrange_left_to_right(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
 {
-	int i;
+	int i, rest;
 	float facts, fact = 1;
 	Client *c;
 
 	w -= iv * (an - 1);
-	facts = getfactsforrange(m, an, ai);
+	getfactsforrange(m, an, ai, w, &rest, &facts);
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i >= ai && i < (ai + an)) {
 			#if CFACTS_PATCH
 			fact = c->cfact;
 			#endif // CFACTS_PATCH
-			resize(c, x, y, w * (fact / facts) - (2*c->bw), h - (2*c->bw), 0);
+			resize(c, x, y, w * (fact / facts) + ((i - ai) < rest ? 1 : 0) - (2*c->bw), h - (2*c->bw), 0);
 			x += WIDTH(c) + iv;
 		}
 	}
@@ -331,18 +343,18 @@ arrange_left_to_right(Monitor *m, int x, int y, int h, int w, int ih, int iv, in
 static void
 arrange_top_to_bottom(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
 {
-	int i;
+	int i, rest;
 	float facts, fact = 1;
 	Client *c;
 
 	h -= ih * (an - 1);
-	facts = getfactsforrange(m, an, ai);
+	getfactsforrange(m, an, ai, h, &rest, &facts);
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i >= ai && i < (ai + an)) {
 			#if CFACTS_PATCH
 			fact = c->cfact;
 			#endif // CFACTS_PATCH
-			resize(c, x, y, w - (2*c->bw), h * (fact / facts) - (2*c->bw), 0);
+			resize(c, x, y, w - (2*c->bw), h * (fact / facts) + ((i - ai) < rest ? 1 : 0) - (2*c->bw), 0);
 			y += HEIGHT(c) + ih;
 		}
 	}
@@ -655,4 +667,17 @@ incnstack(const Arg *arg)
 	selmon->nstack = MAX(selmon->nstack + arg->i, 0);
 	#endif // PERTAG_PATCH
 	arrange(selmon);
+}
+
+void
+reattachstack(Monitor *m, int an, int ai)
+{
+	unsigned int i;
+	Client *c;
+
+	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if (i >= ai && i < (ai + an)) {
+			detachstack(c);
+			attachstack(c);
+		}
 }

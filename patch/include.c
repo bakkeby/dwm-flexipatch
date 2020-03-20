@@ -162,6 +162,9 @@
 #include "xrdb.c"
 #endif
 /* Layouts */
+#if BSTACK_LAYOUT || BSTACKHORIZ_LAYOUT || CENTEREDMASTER_LAYOUT || CENTEREDFLOATINGMASTER_LAYOUT || COLUMNS_LAYOUT || DECK_LAYOUT || TILE_LAYOUT
+#include "layout_facts.c"
+#endif
 #if BSTACK_LAYOUT
 #include "bstack.c"
 #endif
