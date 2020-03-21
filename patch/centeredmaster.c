@@ -107,9 +107,9 @@ centeredmaster(Monitor *m)
 		if (!m->nmaster || n < m->nmaster)
 			mtotal += mh / mfacts;
 		else if ((n - m->nmaster) % 2)
-			ltotal += lh / sfacts;
+			ltotal += lh / lfacts;
 		else
-			rtotal += rh / lfacts;
+			rtotal += rh / rfacts;
 	#endif // CFACTS_PATCH
 
 	mrest = mh - mtotal;

@@ -57,7 +57,7 @@ getfactsforrange(Monitor *m, int an, int ai, int size, int *rest, float *fact)
 			#if CFACTS_PATCH
 			total += size * (c->cfact / facts);
 			#else
-			total += size / sfacts;
+			total += size / facts;
 			#endif // CFACTS_PATCH
 
 	*rest = size - total;

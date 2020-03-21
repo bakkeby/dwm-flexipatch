@@ -83,9 +83,9 @@ centeredfloatingmaster(Monitor *m)
 		} else {
 			/* stack clients are stacked horizontally */
 			#if CFACTS_PATCH
-			resize(c, sx, sy, sw * (c->cfact / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), sh - (2*c->bw), 0);
+			resize(c, sx, sy, (sw / sfacts) * c->cfact + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), sh - (2*c->bw), 0);
 			#else
-			resize(c, sx, sy, sw * (c->cfact / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), sh - (2*c->bw), 0);
+			resize(c, sx, sy, (sw / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), sh - (2*c->bw), 0);
 			#endif // CFACTS_PATCH
 			#if VANITYGAPS_PATCH
 			sx += WIDTH(c) + iv;
