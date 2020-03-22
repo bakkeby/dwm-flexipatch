@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-03-21 - Reworked a series of layouts to re-allocate remaining pixels following an even (or cfacts) split with the aim of presenting a pixel perfect layout. This affects the following layouts: tile, bstack, bstackhoriz, centered master, centered floating master, columns, deck, and corresponding flextile-deluxe layouts
+
 2020-02-11 - Added swaptags and vtcolor patches
 
 2020-02-09 - Added alternative scratchpad patch
