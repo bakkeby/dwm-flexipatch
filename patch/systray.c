@@ -87,7 +87,16 @@ updatesystray(void)
 						InputOutput, visual,
 						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
 		#else
-		systray->win = XCreateSimpleWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, 0, scheme[SchemeSel][ColBg].pixel);
+		XSetWindowAttributes wa = {
+			.override_redirect = True,
+			.background_pixel = scheme[SchemeNorm][ColBg].pixel,
+			.border_pixel = 0,
+			.colormap = DefaultColormap(dpy, screen),
+			.event_mask = ButtonPressMask|ExposureMask
+		};
+		systray->win = XCreateWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, DefaultDepth(dpy, screen),
+						InputOutput, DefaultVisual(dpy, screen),
+						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
 		#endif // ALPHA_PATCH
 		XSelectInput(dpy, systray->win, SubstructureNotifyMask);
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayOrientation], XA_CARDINAL, 32,
