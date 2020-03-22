@@ -1658,6 +1658,7 @@ drawbars(void)
 	#if SYSTRAY_PATCH
 	if (showsystray) {
 		/* Clear status bar to avoid artifacts beneath systray icons */
+		drw_setscheme(drw, scheme[SchemeNorm]);
 		drw_rect(drw, 0, 0, selmon->ww, bh, 1, 1);
 		drw_map(drw, selmon->barwin, 0, 0, selmon->ww, bh);
 	}

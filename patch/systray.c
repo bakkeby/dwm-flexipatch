@@ -75,23 +75,18 @@ updatesystray(void)
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))
 			die("fatal: could not malloc() %u bytes\n", sizeof(Systray));
 
+		wa.override_redirect = True;
+		wa.event_mask = ButtonPressMask|ExposureMask;
+		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
+		wa.border_pixel = 0;
 		#if ALPHA_PATCH
-		XSetWindowAttributes wa = {
-			.override_redirect = True,
-			.background_pixel = scheme[SchemeNorm][ColBg].pixel,
-			.border_pixel = 0,
-			.colormap = cmap,
-			.event_mask = ButtonPressMask|ExposureMask
-		};
+		wa.colormap = cmap;
 		systray->win = XCreateWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, depth,
 						InputOutput, visual,
 						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
 		#else
-		systray->win = XCreateSimpleWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, 0, scheme[SchemeSel][ColBg].pixel);
-		wa.event_mask        = ButtonPressMask | ExposureMask;
-		wa.override_redirect = True;
-		wa.background_pixel  = scheme[SchemeNorm][ColBg].pixel;
-		XChangeWindowAttributes(dpy, systray->win, CWEventMask|CWOverrideRedirect|CWBackPixel, &wa);
+		systray->win = XCreateSimpleWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
+		XChangeWindowAttributes(dpy, systray->win, CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWEventMask, &wa);
 		#endif // ALPHA_PATCH
 		XSelectInput(dpy, systray->win, SubstructureNotifyMask);
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayOrientation], XA_CARDINAL, 32,
@@ -115,6 +110,8 @@ updatesystray(void)
 			return;
 		}
 	}
+
+	drw_setscheme(drw, scheme[SchemeNorm]);
 	for (w = 0, i = systray->icons; i; i = i->next) {
 		/* make sure the background color stays the same */
 		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
