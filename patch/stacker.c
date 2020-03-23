@@ -4,6 +4,7 @@ focusstack(const Arg *arg)
 	int i = stackpos(arg);
 	Client *c, *p;
 
+	snprintf(selmon->ltsymbol, sizeof selmon->ltsymbol, "%d", n);
 	if (i < 0)
  		return;
 
@@ -59,14 +60,14 @@ stackpos(const Arg *arg)
 		return i;
 	}
 	else if (ISINC(arg->i)) {
-		if(!selmon->sel)
+		if (!selmon->sel)
 			return -1;
 		for (i = 0, c = selmon->clients; c != selmon->sel; i += ISVISIBLE(c) ? 1 : 0, c = c->next);
 		for (n = i; c; n += ISVISIBLE(c) ? 1 : 0, c = c->next);
 		return MOD(i + GETINC(arg->i), n);
 	}
 	else if (arg->i < 0) {
-		for(i = 0, c = selmon->clients; c; i += ISVISIBLE(c) ? 1 : 0, c = c->next);
+		for (i = 0, c = selmon->clients; c; i += ISVISIBLE(c) ? 1 : 0, c = c->next);
 		return MAX(i + arg->i, 0);
 	}
 	else
