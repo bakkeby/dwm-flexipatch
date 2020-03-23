@@ -629,6 +629,17 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 #endif // COMBO_PATCH / SWAPTAGS_PATCH
 
+#if STACKER_PATCH
+#define STACKKEYS(MOD,ACTION) \
+	{ MOD, XK_j,     ACTION##stack, {.i = INC(+1) } }, \
+	{ MOD, XK_k,     ACTION##stack, {.i = INC(-1) } }, \
+	{ MOD, XK_s,     ACTION##stack, {.i = PREVSEL } }, \
+	{ MOD, XK_w,     ACTION##stack, {.i = 0 } }, \
+	{ MOD, XK_e,     ACTION##stack, {.i = 1 } }, \
+	{ MOD, XK_a,     ACTION##stack, {.i = 2 } }, \
+	{ MOD, XK_z,     ACTION##stack, {.i = -1 } },
+#endif // STACKER_PATCH
+
 #if HOLDBAR_PATCH
 #define HOLDKEY 0 // replace 0 with the keysym to activate holdbar
 #endif // HOLDBAR_PATCH
@@ -673,8 +684,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_grave,      togglescratch,          {.v = scratchpadcmd } },
 	#endif // SCRATCHPAD_PATCH
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
+	#if STACKER_PATCH
+	STACKKEYS(MODKEY,                              focus)
+	STACKKEYS(MODKEY|ShiftMask,                    push)
+	#else
 	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
 	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
+	#endif // STACKER_PATCH
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
 	{ MODKEY,                       XK_s,          swapfocus,              {.i = -1 } },
 	#endif // SWAPFOCUS_PATCH
@@ -741,7 +757,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
   	#endif // SHIFTVIEW_PATCH
 	#if AWESOMEBAR_PATCH
-	{ MODKEY,                       XK_z,          showhideclient,         {0} },
+	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
 	#endif // AWESOMEBAR_PATCH
 	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
 	#if KILLUNSEL_PATCH

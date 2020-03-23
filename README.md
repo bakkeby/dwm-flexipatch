@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-03-23 - Added stacker patch
+
 2020-03-21 - Reworked a series of layouts to re-allocate remaining pixels following an even (or cfacts) split with the aim of presenting a pixel perfect layout. This affects the following layouts: tile, bstack, bstackhoriz, centered master, centered floating master, columns, deck, and corresponding flextile-deluxe layouts
 
 2020-02-11 - Added swaptags and vtcolor patches
@@ -296,6 +298,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [spawn_cwd](https://dwm.suckless.org/patches/spawn_cwd/)
       - spawns programs from currently focused client's working directory
+
+   - [stacker](https://dwm.suckless.org/patches/stacker/)
+      - provides comprehensive utilities for managing the client stack
 
    - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
       - this patch draws and updates the statusbar on all monitors

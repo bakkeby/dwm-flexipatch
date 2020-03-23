@@ -424,6 +424,16 @@
  */
 #define SPAWNCMD_PATCH 0
 
+/* This patch provides comprehensive utilities for managing the client stack, providing
+ * keyboard shortcuts for focusing or placing a client at specific positions in the stack.
+ * Note that the default keybindings for this patch have been changed in dwm-flexipatch
+ * due to the many conflicts with other patches. As it provides similar functionality to the
+ * swapfocus patch it also uses the MOD+s shortcut to focus the previously selected client,
+ * thus note a conflict between these two patches.
+ * https://dwm.suckless.org/patches/stacker/
+ */
+#define STACKER_PATCH 0
+
 /* This patch draws and updates the statusbar on all monitors.
  * https://dwm.suckless.org/patches/statusallmons/
  */
@@ -459,7 +469,7 @@
 #define SWALLOW_PATCH 0
 
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
- * shortcut (mod-s) instead of having to think if you should use mod-j or mod-k for reaching
+ * shortcut (MOD+s) instead of having to think if you should use MOD+j or MOD+k for reaching
  * the previously used window.
  * This patch depends on the following additional libraries:
  *    - libxcb

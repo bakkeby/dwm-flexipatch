@@ -101,6 +101,9 @@
 #include "sortscreens.c"
 #endif // XINERAMA
 #endif
+#if STACKER_PATCH
+#include "stacker.c"
+#endif
 #if STICKY_PATCH
 #include "sticky.c"
 #endif
