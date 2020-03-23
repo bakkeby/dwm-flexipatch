@@ -1,4 +1,4 @@
-typedef struct {
+atypedef struct {
 	void (*arrange)(Monitor *, int, int, int, int, int, int, int);
 } LayoutArranger;
 
@@ -316,7 +316,8 @@ layout_floating_master_fixed(Monitor *m, int x, int y, int h, int w, int ih, int
 	y = y + (h - mh) / 2;
 
 	(&flextiles[m->ltaxis[MASTER]])->arrange(m, x, y, mh, mw, ih, iv, n, m->nmaster, 0);
-	reattachstack(m, m->nmaster, 0);
+	if (n > 1)
+		reattachstack(m, m->nmaster, 0);
 	restack(m);
 }
 

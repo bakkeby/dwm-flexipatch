@@ -78,8 +78,10 @@ centeredfloatingmaster(Monitor *m)
 			#else
 			mx += WIDTH(c);
 			#endif
-			detachstack(c);
-			attachstack(c);
+			if (n > 1) {
+				detachstack(c);
+				attachstack(c);
+			}
 		} else {
 			/* stack clients are stacked horizontally */
 			#if CFACTS_PATCH
