@@ -4,7 +4,6 @@ focusstack(const Arg *arg)
 	int i = stackpos(arg);
 	Client *c, *p;
 
-	snprintf(selmon->ltsymbol, sizeof selmon->ltsymbol, "%d", n);
 	if (i < 0)
  		return;
 
