@@ -2,7 +2,6 @@ static void flextile(Monitor *m);
 static void mirrorlayout(const Arg *arg);
 static void rotatelayoutaxis(const Arg *arg);
 static void incnstack(const Arg *arg);
-static void reattachstack(Monitor *m, int ai, int an);
 
 /* Symbol handlers */
 static void setflexsymbols(Monitor *m, unsigned int n);

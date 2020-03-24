@@ -1,4 +1,4 @@
-atypedef struct {
+typedef struct {
 	void (*arrange)(Monitor *, int, int, int, int, int, int, int);
 } LayoutArranger;
 
@@ -316,9 +316,6 @@ layout_floating_master_fixed(Monitor *m, int x, int y, int h, int w, int ih, int
 	y = y + (h - mh) / 2;
 
 	(&flextiles[m->ltaxis[MASTER]])->arrange(m, x, y, mh, mw, ih, iv, n, m->nmaster, 0);
-	if (n > 1)
-		reattachstack(m, m->nmaster, 0);
-	restack(m);
 }
 
 static void
@@ -668,17 +665,4 @@ incnstack(const Arg *arg)
 	selmon->nstack = MAX(selmon->nstack + arg->i, 0);
 	#endif // PERTAG_PATCH
 	arrange(selmon);
-}
-
-void
-reattachstack(Monitor *m, int an, int ai)
-{
-	unsigned int i;
-	Client *c;
-
-	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
-		if (i >= ai && i < (ai + an)) {
-			detachstack(c);
-			attachstack(c);
-		}
 }
