@@ -9,8 +9,10 @@ dragcfact(const Arg *arg)
 
 	if (!(c = selmon->sel))
 		return;
-	if (c->isfloating) /* no support rezising floating windows */
+	if (c->isfloating) {
+		resizemouse(arg);
 		return;
+	}
 	#if !FAKEFULLSCREEN_PATCH
 	#if FAKEFULLSCREEN_CLIENT_PATCH
 	if (c->isfullscreen && !c->fakefullscreen) /* no support resizing fullscreen windows by mouse */
