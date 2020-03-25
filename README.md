@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-03-25 - Added dragcfact patch
+
 2020-03-23 - Added stacker patch
 
 2020-03-21 - Reworked a series of layouts to re-allocate remaining pixels following an even (or cfacts) split with the aim of presenting a pixel perfect layout. This affects the following layouts: tile, bstack, bstackhoriz, centered master, centered floating master, columns, deck, and corresponding flextile-deluxe layouts
@@ -145,6 +147,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [dmenumatchtop](https://dwm.suckless.org/patches/dmenumatchtop)
       - updates the position of dmenu to match that of the bar
       - i.e. if topbar is 0 then dmenu will appear at the bottom and if 1 then dmenu will appear at the top
+
+   - dragcfact
+      - lets you resize clients' size (i.e. modify cfact) by holding modkey + shift and dragging the mouse
 
    - [dragmfact](https://dwm.suckless.org/patches/dragmfact/)
       - lets you resize the split in the tile layout (i.e. modify mfact) by holding the modkey and dragging the mouse

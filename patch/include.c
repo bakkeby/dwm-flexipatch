@@ -26,6 +26,9 @@
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.c"
 #endif
+#if DRAGCFACT_PATCH && CFACTS_PATCH
+#include "dragcfact.c"
+#endif
 #if DWMC_PATCH
 #include "dwmc.c"
 #elif FSIGNAL_PATCH
