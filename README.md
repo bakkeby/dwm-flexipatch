@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-03-27 - Revamped the dragmfact patch to support both horizontal and vertical layout splits as well as centered master variants
+
 2020-03-25 - Added dragcfact patch
 
 2020-03-23 - Added stacker patch
@@ -149,10 +151,11 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - i.e. if topbar is 0 then dmenu will appear at the bottom and if 1 then dmenu will appear at the top
 
    - dragcfact
-      - lets you resize clients' size (i.e. modify cfact) by holding modkey + shift and dragging the mouse
+      - lets you resize clients' size (i.e. modify cfact) by holding modkey + shift + right-click and dragging the mouse
 
    - [dragmfact](https://dwm.suckless.org/patches/dragmfact/)
-      - lets you resize the split in the tile layout (i.e. modify mfact) by holding the modkey and dragging the mouse
+      - lets you resize the split in layouts (i.e. modify mfact) by holding the modkey + shift + left-click and dragging the mouse
+      - this is a bespoke patch that supports vertical and horizontal layout splits as well as centered master variants
 
    - [dwmc](http://dwm.suckless.org/patches/dwmc/)
       - a simple dwmc client using a fork of fsignal to communicate with dwm

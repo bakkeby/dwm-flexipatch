@@ -29,6 +29,9 @@
 #if DRAGCFACT_PATCH && CFACTS_PATCH
 #include "dragcfact.h"
 #endif
+#if DRAGMFACT_PATCH
+#include "dragmfact.h"
+#endif
 #if DWMC_PATCH
 #include "dwmc.h"
 #elif FSIGNAL_PATCH

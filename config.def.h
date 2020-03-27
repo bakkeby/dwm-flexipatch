@@ -954,6 +954,9 @@ static Button buttons[] = {
 	#if DRAGCFACT_PATCH && CFACTS_PATCH
 	{ ClkClientWin,         MODKEY|ShiftMask,    Button3,        dragcfact,      {0} },
 	#endif // DRAGCFACT_PATCH
+	#if DRAGMFACT_PATCH
+	{ ClkClientWin,         MODKEY|ShiftMask,    Button1,        dragmfact,      {0} },
+	#endif // DRAGMFACT_PATCH
 	{ ClkTagBar,            0,                   Button1,        view,           {0} },
 	{ ClkTagBar,            0,                   Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,              Button1,        tag,            {0} },
