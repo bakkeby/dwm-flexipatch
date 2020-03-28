@@ -29,6 +29,8 @@ static const TileArranger flextiles[] = {
 	{ arrange_left_to_right },
 	{ arrange_monocle },
 	{ arrange_gapplessgrid },
+	{ arrange_gapplessgrid_alt1 },
+	{ arrange_gapplessgrid_alt2 },
 	{ arrange_gridmode },
 	{ arrange_horizgrid },
 	{ arrange_dwindle },
@@ -325,6 +327,9 @@ arrange_left_to_right(Monitor *m, int x, int y, int h, int w, int ih, int iv, in
 	float facts, fact = 1;
 	Client *c;
 
+	if (ai + an > n)
+		an = n - ai;
+
 	w -= iv * (an - 1);
 	getfactsforrange(m, an, ai, w, &rest, &facts);
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
@@ -344,6 +349,9 @@ arrange_top_to_bottom(Monitor *m, int x, int y, int h, int w, int ih, int iv, in
 	int i, rest;
 	float facts, fact = 1;
 	Client *c;
+
+	if (ai + an > n)
+		an = n - ai;
 
 	h -= ih * (an - 1);
 	getfactsforrange(m, an, ai, h, &rest, &facts);
@@ -396,8 +404,7 @@ arrange_gridmode(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, 
 static void
 arrange_horizgrid(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
 {
-	int ntop, nbottom, i;
-	Client *c;
+	int ntop, nbottom, rh, rest;
 
 	/* Exception when there is only one client; don't split into two rows */
 	if (an == 1) {
@@ -407,28 +414,10 @@ arrange_horizgrid(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 
 	ntop = an / 2;
 	nbottom = an - ntop;
-	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
-		if (i >= ai && i < (ai + an)) {
-			if ((i - ai) < ntop)
-				resize(
-					c,
-					x + (i - ai) * ((w - iv*(ntop - 1)) / ntop + iv),
-					y,
-					(w - iv*(ntop - 1)) / ntop - (2*c->bw),
-					(h - ih) / 2 - (2*c->bw),
-					False
-				);
-			else
-				resize(
-					c,
-					x + (i - ai - ntop) * ((w - iv*(nbottom - 1)) / nbottom + iv),
-					y + ih + (h - ih) / 2,
-					(w - iv*(nbottom - 1)) / nbottom - (2*c->bw),
-					(h - ih) / 2 - (2*c->bw),
-					False
-				);
-		}
-	}
+	rh = (h - ih) / 2;
+	rest = h - ih - rh * 2;
+	arrange_left_to_right(m, x, y, rh + rest, w, ih, iv, n, ntop, ai);
+	arrange_left_to_right(m, x, y + rh + ih + rest, rh, w, ih, iv, n, nbottom, ai + ntop);
 }
 
 static void
@@ -463,6 +452,46 @@ arrange_gapplessgrid(Monitor *m, int x, int y, int h, int w, int ih, int iv, int
 				cn++;
 			}
 		}
+	}
+}
+
+/* This version of gappless grid fills rows first */
+static void
+arrange_gapplessgrid_alt1(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
+{
+	int i, cols, rows, rest, ch;
+
+	/* grid dimensions */
+	for (cols = 1; cols <= an/2; cols++)
+		if (cols*cols >= an)
+			break;
+	rows = (cols && (cols - 1) * cols >= an) ? cols - 1 : cols;
+	ch = (h - ih * (rows - 1)) / (rows ? rows : 1);
+	rest = (h - ih * (rows - 1)) - ch * rows;
+
+	for (i = 0; i < rows; i++) {
+		arrange_left_to_right(m, x, y, ch + (i < rest ? 1 : 0), w, ih, iv, n, cols, ai + i*cols);
+		y += ch + (i < rest ? 1 : 0) + ih;
+	}
+}
+
+/* This version of gappless grid fills columns first */
+static void
+arrange_gapplessgrid_alt2(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
+{
+	int i, cols, rows, rest, cw;
+
+	/* grid dimensions */
+	for (rows = 0; rows <= an/2; rows++)
+		if (rows*rows >= an)
+			break;
+	cols = (rows && (rows - 1) * rows >= an) ? rows - 1 : rows;
+	cw = (w - iv * (cols - 1)) / (cols ? cols : 1);
+	rest = (w - iv * (cols - 1)) - cw * cols;
+
+	for (i = 0; i < cols; i++) {
+		arrange_top_to_bottom(m, x, y, h, cw + (i < rest ? 1 : 0), ih, iv, n, rows, ai + i*rows);
+		x += cw + (i < rest ? 1 : 0) + iv;
 	}
 }
 
