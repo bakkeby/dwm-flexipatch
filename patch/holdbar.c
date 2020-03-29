@@ -20,6 +20,16 @@ holdbar(const Arg *arg)
 void
 keyrelease(XEvent *e)
 {
+	if (XEventsQueued(dpy, QueuedAfterReading)) {
+		XEvent ne;
+		XPeekEvent(dpy, &ne);
+
+		if (ne.type == KeyPress && ne.xkey.time == e->xkey.time &&
+				ne.xkey.keycode == e->xkey.keycode) {
+			XNextEvent(dpy, &ne);
+			return;
+		}
+	}
 	if (e->xkey.keycode == XKeysymToKeycode(dpy, HOLDKEY)) {
 		selmon->showbar = 0;
 		updateholdbarpos(selmon);
