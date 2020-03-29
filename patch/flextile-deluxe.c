@@ -380,7 +380,7 @@ arrange_monocle(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, i
 static void
 arrange_gridmode(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
 {
-	int i, cols, rows, ch, cw, cx, cy; // counters
+	int i, cols, rows, ch, cw, cx, cy, cc, cr, chrest, cwrest; // counters
 	Client *c;
 
 	/* grid dimensions */
@@ -392,11 +392,15 @@ arrange_gridmode(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, 
 	/* window geoms (cell height/width) */
 	ch = (h - ih * (rows - 1)) / (rows ? rows : 1);
 	cw = (w - iv * (cols - 1)) / (cols ? cols : 1);
+	chrest = h - ih * (rows - 1) - ch * rows;
+	cwrest = w - iv * (cols - 1) - cw * cols;
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i >= ai && i < (ai + an)) {
-			cx = x + ((i - ai) / rows) * (cw + iv);
-			cy = y + ((i - ai) % rows) * (ch + ih);
-			resize(c, cx, cy, cw - 2*c->bw, ch - 2*c->bw, False);
+			cc = ((i - ai) / rows); // client column number
+			cr = ((i - ai) % rows); // client row number
+			cx = x + cc * (cw + iv) + MIN(cc, cwrest);
+			cy = y + cr * (ch + ih) + MIN(cr, chrest);
+			resize(c, cx, cy, cw + (cc < cwrest ? 1 : 0) - 2*c->bw, ch + (cr < chrest ? 1 : 0) - 2*c->bw, False);
 		}
 	}
 }
