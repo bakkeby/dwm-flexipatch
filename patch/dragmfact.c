@@ -28,28 +28,28 @@ dragmfact(const Arg *arg)
 	if (!m->lt[m->sellt]->arrange          // floating
 		|| (m->nmaster && n <= m->nmaster) // no master
 		#if MONOCLE_LAYOUT
-		|| m->lt[m->sellt]->arrange == monocle
+		|| m->lt[m->sellt]->arrange == &monocle
 		#endif // MONOCLE_LAYOUT
 		#if GRIDMODE_LAYOUT
-		|| m->lt[m->sellt]->arrange == grid
+		|| m->lt[m->sellt]->arrange == &grid
 		#endif // GRIDMODE_LAYOUT
 		#if HORIZGRID_LAYOUT
-		|| m->lt[m->sellt]->arrange == horizgrid
+		|| m->lt[m->sellt]->arrange == &horizgrid
 		#endif // HORIZGRID_LAYOUT
 		#if GAPPLESSGRID_LAYOUT
-		|| m->lt[m->sellt]->arrange == gaplessgrid
+		|| m->lt[m->sellt]->arrange == &gaplessgrid
 		#endif // GAPPLESSGRID_LAYOUT
 		#if NROWGRID_LAYOUT
-		|| m->lt[m->sellt]->arrange == nrowgrid
+		|| m->lt[m->sellt]->arrange == &nrowgrid
 		#endif // NROWGRID_LAYOUT
 		#if FLEXTILE_DELUXE_LAYOUT
-		|| (m->lt[m->sellt]->arrange == flextile && m->ltaxis[LAYOUT] == NO_SPLIT)
+		|| (m->lt[m->sellt]->arrange == &flextile && m->ltaxis[LAYOUT] == NO_SPLIT)
 		#endif // FLEXTILE_DELUXE_LAYOUT
 	)
 		return;
 
 	#if FLEXTILE_DELUXE_LAYOUT
-	if (m->lt[m->sellt]->arrange == flextile) {
+	if (m->lt[m->sellt]->arrange == &flextile) {
 		int layout = m->ltaxis[LAYOUT];
 		if (layout < 0) {
 			mirror = 1;
@@ -74,19 +74,19 @@ dragmfact(const Arg *arg)
 	}
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	#if CENTEREDMASTER_LAYOUT
-	else if (m->lt[m->sellt]->arrange == centeredmaster)
+	else if (m->lt[m->sellt]->arrange == &centeredmaster)
 		center = 1;
 	#endif // CENTEREDMASTER_LAYOUT
 	#if CENTEREDFLOATINGMASTER_LAYOUT
-	else if (m->lt[m->sellt]->arrange == centeredfloatingmaster)
+	else if (m->lt[m->sellt]->arrange == &centeredfloatingmaster)
 		center = 1;
 	#endif // CENTEREDFLOATINGMASTER_LAYOUT
 	#if BSTACK_LAYOUT
-	else if (m->lt[m->sellt]->arrange == bstack)
+	else if (m->lt[m->sellt]->arrange == &bstack)
 		horizontal = 1;
 	#endif // BSTACK_LAYOUT
 	#if BSTACKHORIZ_LAYOUT
-	else if (m->lt[m->sellt]->arrange == bstackhoriz)
+	else if (m->lt[m->sellt]->arrange == &bstackhoriz)
 		horizontal = 1;
 	#endif // BSTACKHORIZ_LAYOUT
 

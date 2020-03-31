@@ -57,7 +57,8 @@ dragcfact(const Arg *arg)
 				fact = (float) -4.0 * dist_y / c->mon->wh;
 			}
 
-			setcfact(&((Arg) { .f = fact }));
+			if (fact)
+				setcfact(&((Arg) { .f = fact }));
 
 			prev_x = ev.xmotion.x;
 			prev_y = ev.xmotion.y;
