@@ -382,6 +382,13 @@
  */
 #define ROTATESTACK_PATCH 0
 
+/* This patch adds rounded corners to client windows in dwm.
+ * You need to uncomment the corresponding line in config.mk to include the -lXext library
+ * when including this patch. You will also want to set "borderpx = 0;" in your config.h.
+ * https://github.com/mitchweaver/suckless/blob/master/dwm/patches_mitch/mitch-06-rounded_corners-db6093f6ec1bb884f7540f2512935b5254750b30.patch
+ */
+#define ROUNDED_CORNERS_PATCH 0
+
 /* This patch saves size and position of every floating window before it is forced
  * into tiled mode. If the window is made floating again then the old dimensions
  * will be restored.

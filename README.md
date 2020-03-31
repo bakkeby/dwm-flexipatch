@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-03-31 - Added the rounded corners patch
+
 2020-03-27 - Revamped the dragmfact patch to support both horizontal and vertical layout splits as well as centered master variants
 
 2020-03-25 - Added dragcfact patch
@@ -280,6 +282,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
       - let's you rotate through the stack using keyboard shortcuts
+
+   - [roundedcorners](https://github.com/mitchweaver/suckless/blob/master/dwm/patches_mitch/mitch-06-rounded_corners-db6093f6ec1bb884f7540f2512935b5254750b30.patch)
+      - adds rounded corners to client windows
 
    - [savefloats](https://dwm.suckless.org/patches/save_floats/)
       - saves size and position of every floating window before it is forced into tiled mode

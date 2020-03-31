@@ -652,6 +652,11 @@ arrangemon(Monitor *m)
 	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
+	#if ROUNDED_CORNERS_PATCH
+	Client *c;
+	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
+		drawroundedcorners(c);
+	#endif // ROUNDED_CORNERS_PATCH
 }
 
 void
@@ -2261,6 +2266,9 @@ movemouse(const Arg *arg)
 				resize(c, nx, ny, c->w, c->h, 1);
 			#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 			}
+			#if ROUNDED_CORNERS_PATCH
+			drawroundedcorners(c);
+			#endif // ROUNDED_CORNERS_PATCH
 			break;
 		}
 	} while (ev.type != ButtonRelease);
@@ -2270,6 +2278,9 @@ movemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
+	#if ROUNDED_CORNERS_PATCH
+	drawroundedcorners(c);
+	#endif // ROUNDED_CORNERS_PATCH
 }
 
 Client *
@@ -2526,6 +2537,9 @@ resizemouse(const Arg *arg)
 				c->sfh = nh;
 				#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 				#endif // RESIZECORNERS_PATCH
+				#if ROUNDED_CORNERS_PATCH
+				drawroundedcorners(c);
+				#endif // ROUNDED_CORNERS_PATCH
 			}
 			break;
 		}

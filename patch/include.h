@@ -87,6 +87,9 @@
 #if ROTATESTACK_PATCH
 #include "rotatestack.h"
 #endif
+#if ROUNDED_CORNERS_PATCH
+#include "roundedcorners.h"
+#endif
 #if SCRATCHPAD_PATCH
 #include "scratchpad.h"
 #endif

@@ -23,12 +23,15 @@ FREETYPEINC = /usr/include/freetype2
 # Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
 #LMPDCLIENT = -lmpdclient
 
+# Uncomment this for the rounded corners patch / ROUNDED_CORNERS_PATCH
+#XEXTLIB = -lXext
+
 # Uncomment this for the swallow patch / SWALLOW_PATCH
 #LXCBLIBS = -lX11-xcb -lxcb -lxcb-res
 
 # includes and libs
 INCS = -I${X11INC} -I${FREETYPEINC}
-LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} -lXrender ${LMPDCLIENT} ${LXCBLIBS}
+LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} -lXrender ${LMPDCLIENT} ${LXCBLIBS} ${XEXTLIB}
 
 
 # flags
