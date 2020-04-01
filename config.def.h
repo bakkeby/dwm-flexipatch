@@ -1,7 +1,12 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
+#if ROUNDED_CORNERS_PATCH
+static const unsigned int borderpx       = 0;   /* border pixel of windows */
+static const int corner_radius           = 10;
+#else
 static const unsigned int borderpx       = 1;   /* border pixel of windows */
+#endif // ROUNDED_CORNERS_PATCH
 static const unsigned int snap           = 32;  /* snap pixel */
 #if VANITYGAPS_PATCH
 static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
@@ -36,9 +41,6 @@ static const int showsystray             = 1;   /* 0 means no systray */
 #if ONLYQUITONEMPTY_PATCH
 static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
 #endif // ONLYQUITONEMPTY_PATCH
-#if ROUNDED_CORNERS_PATCH
-static const int corner_radius          = 10;
-#endif // ROUNDED_CORNERS_PATCH
 #if EXTRABAR_PATCH
 static const char statussep              = ';';      /* separator between status bars */
 #endif // EXTRABAR_PATCH
