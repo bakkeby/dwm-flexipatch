@@ -19,6 +19,8 @@
 #define ACTIVETAGINDICATORBAR_PATCH 0
 
 /* The alpha patch adds transparency for the status bar.
+ * You need to uncomment the corresponding line in config.mk to use the -lXrender library
+ * when including this patch.
  * https://dwm.suckless.org/patches/alpha/
  */
 #define ALPHA_PATCH 0
@@ -296,9 +298,8 @@
 #define MAXIMIZE_PATCH 0
 
 /* Control Music Player Daemon via keybinds.
- * This patch depends on an additional library lmdpclient so if you want to enable this
- * then you will also have to append -lmpdclient to the LIBS configuration in config.mk.
- * A placeholder has been added there for reference.
+ * You need to uncomment the corresponding line in config.mk to use the -lmpdclient library
+ * when including this patch.
  * This patch depends on the following additional library:
  *    - libmpdclient
  * https://dwm.suckless.org/patches/mpdcontrol/
@@ -383,7 +384,7 @@
 #define ROTATESTACK_PATCH 0
 
 /* This patch adds rounded corners to client windows in dwm.
- * You need to uncomment the corresponding line in config.mk to include the -lXext library
+ * You need to uncomment the corresponding line in config.mk to use the -lXext library
  * when including this patch. You will also want to set "borderpx = 0;" in your config.h.
  * https://github.com/mitchweaver/suckless/blob/master/dwm/patches_mitch/mitch-06-rounded_corners-db6093f6ec1bb884f7540f2512935b5254750b30.patch
  */
@@ -476,6 +477,12 @@
  * Clients marked with isterminal in config.h swallow a window opened by any child process,
  * e.g. running xclock in a terminal. Closing the xclock window restores the terminal window
  * in the current position.
+ * This patch depends on the following additional libraries:
+ *    - libxcb
+ *    - Xlib-libxcb
+ *    - xcb-res
+ * You need to uncomment the corresponding line in config.mk to use the -lX11-xcb, -lxcb
+ * and -lxcb-res libraries when including this patch.
  * https://dwm.suckless.org/patches/swallow/
  */
 #define SWALLOW_PATCH 0
@@ -483,10 +490,6 @@
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (MOD+s) instead of having to think if you should use MOD+j or MOD+k for reaching
  * the previously used window.
- * This patch depends on the following additional libraries:
- *    - libxcb
- *    - Xlib-libxcb
- *    - xcb-res
  * https://dwm.suckless.org/patches/swapfocus/
  */
 #define SWAPFOCUS_PATCH 0
