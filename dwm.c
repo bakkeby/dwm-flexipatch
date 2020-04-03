@@ -998,13 +998,26 @@ clientmessage(XEvent *e)
 		return;
 	if (cme->message_type == netatom[NetWMState]) {
 		if (cme->data.l[1] == netatom[NetWMFullscreen]
-		|| cme->data.l[2] == netatom[NetWMFullscreen])
+		|| cme->data.l[2] == netatom[NetWMFullscreen]) {
+			#if FAKEFULLSCREEN_CLIENT_PATCH
+			if (c->fakefullscreen)
+				resizeclient(c, c->x, c->y, c->w, c->h);
+			else
+				setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
+					|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */
+					#if !FAKEFULLSCREEN_PATCH
+					&& !c->isfullscreen
+					#endif // !FAKEFULLSCREEN_PATCH
+				)));
+			#else
 			setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
 				|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */
 				#if !FAKEFULLSCREEN_PATCH
 				&& !c->isfullscreen
 				#endif // !FAKEFULLSCREEN_PATCH
 			)));
+			#endif // FAKEFULLSCREEN_CLIENT_PATCH
+		}
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
 		#if FOCUSONNETACTIVE_PATCH
 		for (i = 0; i < LENGTH(tags) && !((1 << i) & c->tags); i++);
