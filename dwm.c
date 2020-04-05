@@ -1763,17 +1763,6 @@ focus(Client *c)
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
 	selmon->sel = c;
-	#if LOSEFULLSCREEN_PATCH
-	Client *at;
-	for (at = selmon->clients; at; at = at->next)
-		#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-		if (at != c && at->isfullscreen && !at->fakefullscreen && ISVISIBLE(at))
-			setfullscreen(at, 0);
-		#else
-		if (at != c && at->isfullscreen && ISVISIBLE(at))
-			setfullscreen(at, 0);
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
-	#endif // LOSEFULLSCREEN_PATCH
 	drawbars();
 }
 
@@ -3376,6 +3365,15 @@ unfocus(Client *c, int setfocus)
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
 	selmon->pertag->prevclient[selmon->pertag->curtag] = c;
 	#endif // SWAPFOCUS_PATCH
+	#if LOSEFULLSCREEN_PATCH
+	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+	if (c->isfullscreen && !c->fakefullscreen && ISVISIBLE(c))
+		setfullscreen(c, 0);
+	#else
+	if (c->isfullscreen && ISVISIBLE(c))
+		setfullscreen(c, 0);
+	#endif // FAKEFULLSCREEN_CLIENT_PATCH
+	#endif // LOSEFULLSCREEN_PATCH
 	grabbuttons(c, 0);
 	#if FLOAT_BORDER_COLOR_PATCH
 	if (c->isfloating)
