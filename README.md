@@ -152,7 +152,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - updates the position of dmenu to match that of the bar
       - i.e. if topbar is 0 then dmenu will appear at the bottom and if 1 then dmenu will appear at the top
 
-   - dragcfact
+   - [dragcfact](https://github.com/bakkeby/patches/blob/master/dwm/dwm-cfacts-dragcfact-6.2.diff)
       - lets you resize clients' size (i.e. modify cfact) by holding modkey + shift + right-click and dragging the mouse
 
    - [dragmfact](https://dwm.suckless.org/patches/dragmfact/)
