@@ -287,7 +287,7 @@
  * It is also possible to spawn new windows (e.g. a terminal) that end up getting
  * focus while the previous window remains in fullscreen. This patch ensures that
  * in such scenarios the previous window loses fullscreen.
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-losefullscreen-6.2.diff
+ * https://github.com/bakkeby/patches/tree/master/dwm/dwm-losefullscreen-6.2.diff
  */
 #define LOSEFULLSCREEN_PATCH 0
 
@@ -516,7 +516,7 @@
  *
  * Closing that window reverts the view back to what it was before the window was opened.
  *
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff
+ * https://github.com/bakkeby/patches/tree/master/dwm/dwm-switchtag-6.2.diff
  * Also see https://dwm.suckless.org/patches/switchtotag
  */
 #define SWITCHTAG_PATCH 0
@@ -527,7 +527,7 @@
 #define TAGALL_PATCH 0
 
 /* This patch allows you to move all visible windows on a monitor to an adjacent monitor.
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff
+ * https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagallmon-6.2.diff
  */
 #define TAGALLMON_PATCH 0
 
@@ -556,13 +556,13 @@
  * monitor until you exit fullscreen view (at which point it will appear on the adjacent
  * monitor). This patch allows a fullscreen window to be moved to an adjacent monitor
  * while remaining in fullscreen.
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagmonfixfs-6.2.diff
+ * https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagmonfixfs-6.2.diff
  */
 #define TAGMONFIXFS_PATCH 0
 
 /* This patch allows you to swap all visible windows on one monitor with those of an
  * adjacent monitor.
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagswapmon-6.2.diff
+ * https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagswapmon-6.2.diff
  */
 #define TAGSWAPMON_PATCH 0
 
@@ -572,7 +572,7 @@
 #define TITLECOLOR_PATCH 0
 
 /* This patch allows you to toggle fullscreen on and off using a single shortcut key.
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff
+ * https://github.com/bakkeby/patches/tree/master/dwm/dwm-togglefullscreen-6.2.diff
  */
 #define TOGGLEFULLSCREEN_PATCH 0
 
@@ -601,8 +601,8 @@
 
 /* This patch adds configurable gaps between windows differentiating between outer, inner,
  * horizontal and vertical gaps.
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-6.2.diff
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-cfacts-6.2.diff
+ * https://github.com/bakkeby/dwm-vanitygaps/tree/master/patches/dwm-vanitygaps-6.2.diff
+ * https://github.com/bakkeby/dwm-vanitygaps/tree/master/patches/dwm-vanitygaps-cfacts-6.2.diff
  */
 #define VANITYGAPS_PATCH 0
 
@@ -635,7 +635,7 @@
  * This patch adds the role field to the rule configuration so that one can
  * differentiate between, say, Firefox "browser" vs "Preferences" vs "Manager"
  * or Google-chrome "browser" vs "pop-up".
- * https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-windowrolerule-6.2.diff
+ * https://github.com/bakkeby/patches/tree/master/dwm/dwm-windowrolerule-6.2.diff
  */
 #define WINDOWROLERULE_PATCH 0
 
