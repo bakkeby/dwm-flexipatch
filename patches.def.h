@@ -468,6 +468,12 @@
  */
 #define STICKY_PATCH 0
 
+/* This patch adds the ability to execute shell commands based on the mouse button and position
+ * when clicking the status bar. Refer to the website for usage.
+ * https://dwm.suckless.org/patches/statuscmd/
+ */
+#define STATUSCMD_PATCH 0
+
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */

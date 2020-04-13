@@ -113,6 +113,9 @@
 #if STACKER_PATCH
 #include "stacker.h"
 #endif
+#if STATUSCMD_PATCH
+#include "statuscmd.h"
+#endif
 #if STICKY_PATCH
 #include "sticky.h"
 #endif

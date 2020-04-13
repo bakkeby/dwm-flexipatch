@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-04-13 - Added statuscmd patch
+
 2020-03-31 - Added the rounded corners patch
 
 2020-03-27 - Revamped the dragmfact patch to support both horizontal and vertical layout splits as well as centered master variants
@@ -314,6 +316,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [stacker](https://dwm.suckless.org/patches/stacker/)
       - provides comprehensive utilities for managing the client stack
+
+   - [statuscmd](https://dwm.suckless.org/patches/statuscmd/)
+      -  adds the ability to execute shell commands based on the mouse button and position when clicking the status bar
 
    - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
       - this patch draws and updates the statusbar on all monitors

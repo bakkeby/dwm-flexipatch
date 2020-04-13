@@ -677,6 +677,10 @@ void
 buttonpress(XEvent *e)
 {
 	unsigned int i, x, click;
+	int padding = 0;
+	#if STATUSCMD_PATCH
+	unsigned int xc;
+	#endif // STATUSCMD_PATCH
 	#if TAGGRID_PATCH
 	unsigned int columns;
 	#endif // TAGGRID_PATCH
@@ -687,6 +691,15 @@ buttonpress(XEvent *e)
 	Client *c;
 	Monitor *m;
 	XButtonPressedEvent *ev = &e->xbutton;
+	#if STATUSCMD_PATCH
+	lastbutton = ev->button;
+	#endif // STATUSCMD_PATCH
+	#if AWESOMEBAR_PATCH || STATUSCMD_PATCH
+	padding += lrpad - 2;
+	#endif // AWESOMEBAR_PATCH | STATUSCMD_PATCH
+	#if SYSTRAY_PATCH
+	padding -= getsystraywidth();
+	#endif // SYSTRAY_PATCH
 
 	#if TAGGRID_PATCH
 	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
@@ -743,16 +756,34 @@ buttonpress(XEvent *e)
 			} else if (ev->x < x + blw)
 				click = ClkLtSymbol;
 			#endif // TAGGRID_PATCH
-			#if AWESOMEBAR_PATCH && SYSTRAY_PATCH
-			else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2 - getsystraywidth())
-			#elif AWESOMEBAR_PATCH
-			else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2)
-			#elif SYSTRAY_PATCH
-			else if (ev->x > selmon->ww - TEXTW(stext) - getsystraywidth())
-			#else
-			else if (ev->x > selmon->ww - TEXTW(stext))
-			#endif // SYSTRAY_PATCH / AWESOMEBAR_PATCH
+			else if (ev->x > selmon->ww - TEXTW(stext) + padding)
+			#if !STATUSCMD_PATCH
 				click = ClkStatusText;
+			#else
+			{
+				click = ClkStatusText;
+
+				xc = selmon->ww - TEXTW(stext) + padding;
+				char *text = rawstext;
+				int i = -1;
+				char ch;
+				statuscmdn = 0;
+				while (text[++i]) {
+					if ((unsigned char)text[i] < ' ') {
+						ch = text[i];
+						text[i] = '\0';
+						xc += TEXTW(text) - lrpad;
+						text[i] = ch;
+						text += i+1;
+						i = -1;
+						if (xc >= ev->x)
+							break;
+						if (ch <= LENGTH(statuscmds))
+							statuscmdn = ch - 1;
+					}
+				}
+			}
+			#endif // STATUSCMD_PATCH
 			#if AWESOMEBAR_PATCH
 			else {
 				x += blw;
@@ -771,9 +802,9 @@ buttonpress(XEvent *e)
 				}
 			}
 			#else
-			else
-				click = ClkWinTitle;
-			#endif // AWESOMEBAR_PATCH
+			} else
+	 			click = ClkWinTitle;
+	 		#endif // AWESOMEBAR_PATCH
 		}
 		#else // LEFTLAYOUT_PATCH
 		#if HIDEVACANTTAGS_PATCH
@@ -814,16 +845,34 @@ buttonpress(XEvent *e)
 		} else if (ev->x < x + blw)
 			click = ClkLtSymbol;
 		#endif // TAGGRID_PATCH
-		#if AWESOMEBAR_PATCH && SYSTRAY_PATCH
-		else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2 - getsystraywidth())
-		#elif AWESOMEBAR_PATCH
-		else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2)
-		#elif SYSTRAY_PATCH
-		else if (ev->x > selmon->ww - TEXTW(stext) - getsystraywidth())
-		#else
-		else if (ev->x > selmon->ww - TEXTW(stext))
-		#endif // SYSTRAY_PATCH / AWESOMEBAR_PATCH
+		else if (ev->x > selmon->ww - TEXTW(stext) + padding)
+		#if !STATUSCMD_PATCH
 			click = ClkStatusText;
+		#else
+		{
+			click = ClkStatusText;
+
+			xc = selmon->ww - TEXTW(stext) + padding;
+			char *text = rawstext;
+			int i = -1;
+			char ch;
+			statuscmdn = 0;
+			while (text[++i]) {
+				if ((unsigned char)text[i] < ' ') {
+					ch = text[i];
+					text[i] = '\0';
+					xc += TEXTW(text) - lrpad;
+					text[i] = ch;
+					text += i+1;
+					i = -1;
+					if (xc >= ev->x)
+						break;
+					if (ch <= LENGTH(statuscmds))
+						statuscmdn = ch - 1;
+				}
+			}
+		}
+		#endif // STATUSCMD_PATCH
 		#if AWESOMEBAR_PATCH
 		else {
 			x += blw;
@@ -3076,10 +3125,30 @@ sigchld(int unused)
 void
 spawn(const Arg *arg)
 {
+	#if STATUSCMD_PATCH
+	char *cmd = NULL;
+	#endif // STATUSCMD_PATCH
 	#if !NODMENU_PATCH
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 	#endif // NODMENU_PATCH
+	#if STATUSCMD_PATCH
+	#if !NODMENU_PATCH
+	else if (arg->v == statuscmd)
+	#else
+	if (arg->v == statuscmd)
+	#endif // NODMENU_PATCH
+	{
+		int len = strlen(statuscmds[statuscmdn]) + 1;
+		if (!(cmd = malloc(sizeof(char)*len + sizeof(statusexport))))
+			die("malloc:");
+		strcpy(cmd, statusexport);
+		strcat(cmd, statuscmds[statuscmdn]);
+		cmd[LENGTH(statusexport)-3] = '0' + lastbutton;
+		statuscmd[2] = cmd;
+	}
+	#endif // STATUSCMD_PATCH
+
 	#if SCRATCHPAD_PATCH
 	selmon->tagset[selmon->seltags] &= ~scratchtag;
 	#endif // SCRATCHPAD_PATCH
@@ -3126,6 +3195,9 @@ spawn(const Arg *arg)
 		perror(" failed");
 		exit(EXIT_SUCCESS);
 	}
+	#if STATUSCMD_PATCH
+	free(cmd);
+	#endif // STATUSCMD_PATCH
 }
 
 void
@@ -3765,8 +3837,17 @@ updatestatus(void)
 		} else {
 			estext[0] = '\0';
 		}
+		#if STATUSCMD_PATCH
+		copyvalidchars(stext, text);
+		#else
 		strncpy(stext, text, sizeof(stext) - 1);
+		#endif // STATUSCMD_PATCH
 	}
+	#elif STATUSCMD_PATCH
+	if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext)))
+		strcpy(stext, "dwm-"VERSION);
+	else
+		copyvalidchars(stext, rawstext);
 	#else
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);

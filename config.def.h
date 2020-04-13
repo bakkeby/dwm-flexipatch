@@ -673,6 +673,12 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { "st", NULL };
 
+#if STATUSCMD_PATCH
+/* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
+static const char *statuscmds[] = { "notify-send Mouse$BUTTON" };
+static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
+#endif // STATUSCMD_PATCH
+
 #if SCRATCHPAD_PATCH
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
@@ -952,7 +958,13 @@ static Button buttons[] = {
 	{ ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
 	#endif // AWESOMEBAR_PATCH
 	{ ClkWinTitle,          0,                   Button2,        zoom,           {0} },
+	#if STATUSCMD_PATCH
+	{ ClkStatusText,        0,                   Button1,        spawn,          {.v = statuscmd } },
+	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = statuscmd } },
+	{ ClkStatusText,        0,                   Button3,        spawn,          {.v = statuscmd } },
+	#else
 	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = termcmd } },
+	#endif // STATUSCMD_PATCH
 	{ ClkClientWin,         MODKEY,              Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
