@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-04-16 - Upgraded the scratchpad patch to the multiple scratchpads patch \[[ref](https://lists.suckless.org/hackers/2004/17205.html)\]
+2020-04-16 - Upgraded the scratchpad patch to the multiple scratchpads patch \[[ref](https://lists.suckless.org/hackers/2004/17205.html)\]. Updated the statuscolors patch with the width computation fix \[[ref](https://lists.suckless.org/hackers/2004/17207.html)\].
 
 2020-04-13 - Added statuscmd patch
 

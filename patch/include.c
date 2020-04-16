@@ -110,6 +110,9 @@
 #if STACKER_PATCH
 #include "stacker.c"
 #endif
+#if STATUSCOLORS_PATCH
+#include "statuscolors.c"
+#endif
 #if STATUSCMD_PATCH
 #include "statuscmd.c"
 #endif

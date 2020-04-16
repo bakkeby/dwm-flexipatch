@@ -1462,12 +1462,12 @@ drawbar(Monitor *m)
 		#else
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		#endif // VTCOLORS_PATCH
-		#if STATUSPADDING_PATCH
-		sw = TEXTW(stext);
-		#else
-		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-		#endif // STATUSPADDING_PATCH
 		#if STATUSCOLORS_PATCH
+		#if STATUSPADDING_PATCH
+		sw = textw_wosc(stext) + lrpad + 2;
+		#else
+		sw = textw_wosc(stext) + 2;
+		#endif // STATUSPADDING_PATCH
 		while (1) {
 			if ((unsigned int)*ts > LENGTH(colors)) {
 				ts++;
@@ -1477,14 +1477,18 @@ drawbar(Monitor *m)
 			*ts = '\0';
 			drw_text(drw, m->ww - sw - stw + tx, 0, sw - tx, bh, stp, tp, 0);
 			tx += TEXTW(tp) -lrpad;
-			if (ctmp == '\0') {
+			if (ctmp == '\0')
 				break;
-			}
 			drw_setscheme(drw, scheme[(unsigned int)(ctmp-1)]);
 			*ts = ctmp;
 			tp = ++ts;
 		}
 		#else // STATUSCOLORS_PATCH
+		#if STATUSPADDING_PATCH
+		sw = TEXTW(stext);
+		#else
+		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+		#endif // STATUSPADDING_PATCH
 		drw_text(drw, m->ww - sw - stw, 0, sw, bh, stp, stext, 0);
 		#endif // STATUSCOLORS_PATCH
 	#if !STATUSALLMONS_PATCH
