@@ -1414,7 +1414,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, sw = 0, stw = 0, stp = 0, invert;
+	int x, w, tw = 0, stw = 0, stp = 0, invert;
 	#if ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // ALTERNATIVE_TAGS_PATCH
@@ -1465,9 +1465,9 @@ drawbar(Monitor *m)
 		#endif // VTCOLORS_PATCH
 		#if STATUSCOLORS_PATCH
 		#if STATUSPADDING_PATCH
-		sw = textw_wosc(stext) + lrpad + 2;
+		tw = textw_wosc(stext) + lrpad + 2;
 		#else
-		sw = textw_wosc(stext) + 2;
+		tw = textw_wosc(stext) + 2;
 		#endif // STATUSPADDING_PATCH
 		while (1) {
 			if ((unsigned int)*ts > LENGTH(colors)) {
@@ -1476,7 +1476,7 @@ drawbar(Monitor *m)
 			}
 			ctmp = *ts;
 			*ts = '\0';
-			drw_text(drw, m->ww - sw - stw + tx, 0, sw - tx, bh, stp, tp, 0);
+			drw_text(drw, m->ww - tw - stw + tx, 0, tw - tx, bh, stp, tp, 0);
 			tx += TEXTW(tp) -lrpad;
 			if (ctmp == '\0')
 				break;
@@ -1486,11 +1486,11 @@ drawbar(Monitor *m)
 		}
 		#else // STATUSCOLORS_PATCH
 		#if STATUSPADDING_PATCH
-		sw = TEXTW(stext);
+		tw = TEXTW(stext);
 		#else
-		sw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
 		#endif // STATUSPADDING_PATCH
-		drw_text(drw, m->ww - sw - stw, 0, sw, bh, stp, stext, 0);
+		drw_text(drw, m->ww - tw - stw, 0, tw, bh, stp, stext, 0);
 		#endif // STATUSCOLORS_PATCH
 	#if !STATUSALLMONS_PATCH
 	}
@@ -1586,7 +1586,7 @@ drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // LEFTLAYOUT_PATCH
 
-	if ((w = m->ww - sw - stw - x) > bh)
+	if ((w = m->ww - tw - stw - x) > bh)
 	{
 		#if AWESOMEBAR_PATCH
 		if (n > 0) {
