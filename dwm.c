@@ -569,14 +569,16 @@ applyrules(Client *c)
 			#endif // SWITCHTAG_PATCH
 		}
 	}
-	XFree(ch.res_class);
-	XFree(ch.res_name);
+	if (ch.res_class)
+		XFree(ch.res_class);
+	if (ch.res_name)
+		XFree(ch.res_name);
 	#if EMPTYVIEW_PATCH
-	if(c->tags & TAGMASK)                    c->tags = c->tags & TAGMASK;
+	if (c->tags & TAGMASK)                    c->tags = c->tags & TAGMASK;
 	#if SCRATCHPAD_PATCH
-	else if(c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags] & ~SPTAGMASK;
+	else if (c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags] & ~SPTAGMASK;
 	#else
-	else if(c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
+	else if (c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
 	#endif // SCRATCHPAD_PATCH
 	else                                     c->tags = 1;
 	#elif SCRATCHPAD_PATCH
