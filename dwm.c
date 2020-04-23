@@ -547,7 +547,12 @@ applyrules(Client *c)
 				c->mon = m;
 
 			#if SWITCHTAG_PATCH
-			if (r->switchtag) {
+			#if SWALLOW_PATCH
+			if (r->switchtag && (c->noswallow || !termforwin(c)))
+			#else
+			if (r->switchtag)
+			#endif // SWALLOW_PATCH
+			{
 				unsigned int newtagset;
 				if (r->switchtag == 2)
 					newtagset = c->mon->tagset[c->mon->seltags] ^ c->tags;
