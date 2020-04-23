@@ -352,6 +352,7 @@ static void focusmon(const Arg *arg);
 #if !STACKER_PATCH
 static void focusstack(const Arg *arg);
 #endif // STACKER_PATCH
+static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
