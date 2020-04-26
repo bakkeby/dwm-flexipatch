@@ -11,7 +11,7 @@ struct Pertag {
 	float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
 	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
 	#if PERTAGBAR_PATCH
-	Bool showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
+	int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
 	#endif // PERTAGBAR_PATCH
 	#if SWAPFOCUS_PATCH
 	Client *prevclient[LENGTH(tags) + 1];
