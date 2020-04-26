@@ -441,15 +441,15 @@ static const Rule rules[] = {
 #if MONITOR_RULES_PATCH
 #if PERTAG_PATCH
 static const MonitorRule monrules[] = {
-	/* monitor tag   layout  mfact */
-	{  1,      -1,   2,      -1 }, // use a different layout for the second monitor
-	{  -1,     -1,   0,      -1 }, // default
+	/* monitor  tag   layout  mfact  nmaster  showbar  topbar */
+	{  1,       -1,   2,      -1,    -1,      -1,      -1     }, // use a different layout for the second monitor
+	{  -1,      -1,   0,      -1,    -1,      -1,      -1     }, // default
 };
 #else
 static const MonitorRule monrules[] = {
-	/* monitor layout  mfact */
-	{  1,      2,      -1 }, // use a different layout for the second monitor
-	{  -1,     0,      -1 }, // default
+	/* monitor  layout  mfact  nmaster  showbar  topbar */
+	{  1,       2,      -1,    -1,      -1,      -1     }, // use a different layout for the second monitor
+	{  -1,      0,      -1,    -1,      -1,      -1     }, // default
 };
 #endif // PERTAG_PATCH
 #endif // MONITOR_RULES_PATCH

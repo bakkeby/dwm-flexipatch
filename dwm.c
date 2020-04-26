@@ -317,6 +317,9 @@ typedef struct {
 	#endif // PERTAG_PATCH
 	int layout;
 	float mfact;
+	int nmaster;
+	int showbar;
+	int topbar;
 } MonitorRule;
 #endif // MONITOR_RULES_PATCH
 
@@ -1280,6 +1283,15 @@ createmon(void)
 			m->lt[0] = &layouts[mr->layout];
 			m->lt[1] = &layouts[1 % LENGTH(layouts)];
 			strncpy(m->ltsymbol, layouts[mr->layout].symbol, sizeof m->ltsymbol);
+
+			if (mr->mfact > -1)
+				m->mfact = mr->mfact;
+			if (mr->nmaster > -1)
+				m->nmaster = mr->nmaster;
+			if (mr->showbar > -1)
+				m->showbar = mr->showbar;
+			if (mr->topbar > -1)
+				m->topbar = mr->topbar;
 			break;
 		}
 	}
@@ -1301,15 +1313,26 @@ createmon(void)
 		die("fatal: could not malloc() %u bytes\n", sizeof(Pertag));
 	m->pertag->curtag = m->pertag->prevtag = 1;
 	for (i = 0; i <= LENGTH(tags); i++) {
-		/* init nmaster */
-		m->pertag->nmasters[i] = m->nmaster;
-
 		#if FLEXTILE_DELUXE_LAYOUT
 		m->pertag->nstacks[i] = m->nstack;
 		#endif // FLEXTILE_DELUXE_LAYOUT
 
+		#if !MONITOR_RULES_PATCH
+		/* init nmaster */
+		m->pertag->nmasters[i] = m->nmaster;
+
 		/* init mfacts */
 		m->pertag->mfacts[i] = m->mfact;
+
+		#if PERTAGBAR_PATCH
+		/* init showbar */
+		m->pertag->showbars[i] = m->showbar;
+		#endif // PERTAGBAR_PATCH
+		#endif // MONITOR_RULES_PATCH
+
+		#if ZOOMSWAP_PATCH
+		m->pertag->prevzooms[i] = NULL;
+		#endif // ZOOMSWAP_PATCH
 
 		/* init layouts */
 		#if MONITOR_RULES_PATCH
@@ -1318,8 +1341,11 @@ createmon(void)
 			if ((mr->monitor == -1 || mr->monitor == mc) && (mr->tag == -1 || mr->tag == i)) {
 				m->pertag->ltidxs[i][0] = &layouts[mr->layout];
 				m->pertag->ltidxs[i][1] = m->lt[0];
-				if (mr->mfact != -1)
-					m->pertag->mfacts[i] = mr->mfact;
+				m->pertag->nmasters[i] = (mr->nmaster > -1 ? mr->nmaster : m->nmaster);
+				m->pertag->mfacts[i] = (mr->mfact > -1 ? mr->mfact : m->mfact);
+				#if PERTAGBAR_PATCH
+				m->pertag->showbars[i] = (mr->showbar > -1 ? mr->showbar : m->showbar);
+				#endif // PERTAGBAR_PATCH
 				#if FLEXTILE_DELUXE_LAYOUT
 				m->pertag->ltaxis[i][LAYOUT] = m->pertag->ltidxs[i][0]->preset.layout;
 				m->pertag->ltaxis[i][MASTER] = m->pertag->ltidxs[i][0]->preset.masteraxis;
@@ -1341,16 +1367,6 @@ createmon(void)
 		#endif // FLEXTILE_DELUXE_LAYOUT
 		#endif // MONITOR_RULES_PATCH
 		m->pertag->sellts[i] = m->sellt;
-
-		#if PERTAGBAR_PATCH
-		/* init showbar */
-		m->pertag->showbars[i] = m->showbar;
-
-		/* swap focus and zoomswap*/
-		#if ZOOMSWAP_PATCH
-		m->pertag->prevzooms[i] = NULL;
-		#endif // ZOOMSWAP_PATCH
-		#endif // PERTAGBAR_PATCH
 
 		#if VANITYGAPS_PATCH
 		m->pertag->enablegaps[i] = 1;

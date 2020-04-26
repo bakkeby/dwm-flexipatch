@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-04-26 - Expanded monitor rules patch to include nmaster, showbar and topbar options
+
 2020-04-23 - Improved swallow and switchtag compatibility
 
 2020-04-16 - Upgraded the scratchpad patch to the multiple scratchpads patch \[[ref](https://lists.suckless.org/hackers/2004/17205.html)\]. Updated the statuscolors patch with the width computation fix \[[ref](https://lists.suckless.org/hackers/2004/17207.html)\].
@@ -251,7 +253,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [mdpcontrol](https://dwm.suckless.org/patches/mpdcontrol/)
       - adds keyboard bindings to control MDP (Music Player Daemon)
 
-   - monitorrules
+   - [monitorrules](https://github.com/bakkeby/patches/blob/master/dwm/dwm-monitorrules-6.2.diff)
       - adds rules per monitor, e.g. have default layouts per monitor
       - the use case for this is if the second monitor is vertical (i.e. rotated) then you may want to use a different default layout for this monitor than what is used for the main monitor (for example normal vertical split for main monitor and horizontal split for the second)
 
