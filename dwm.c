@@ -3270,11 +3270,21 @@ tagmon(const Arg *arg)
 	Client *c = selmon->sel;
 	if (!c || !mons->next)
 		return;
-	sendmon(c, dirtomon(arg->i));
 	if (c->isfullscreen) {
-		setfullscreen(c, 0);
-		setfullscreen(c, 1);
-	}
+		c->isfullscreen = 0;
+		sendmon(c, dirtomon(arg->i));
+		c->isfullscreen = 1;
+		#if FAKEFULLSCREEN_CLIENT_PATCH
+		if (!c->fakefullscreen) {
+			resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+			XRaiseWindow(dpy, c->win);
+		}
+		#elif !FAKEFULLSCREEN_PATCH
+		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+		XRaiseWindow(dpy, c->win);
+		#endif // FAKEFULLSCREEN_CLIENT_PATCH
+	} else
+		sendmon(c, dirtomon(arg->i));
 	#else
 	if (!selmon->sel || !mons->next)
 		return;
