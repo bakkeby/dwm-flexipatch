@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-04-27 - Upgraded the tagmonfixfs patch to better support moving fullscreen windows to adjacent monitors
+
 2020-04-26 - Expanded monitor rules patch to include nmaster, showbar and topbar options
 
 2020-04-23 - Improved swallow and switchtag compatibility
@@ -242,7 +244,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [leftlayout](http://dwm.suckless.org/patches/leftlayout/)
       - moves the layout symbol in the status bar to the left hand side
 
-   - [losefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-losefullscreen-6.2.diff)
+   - [losefullscreen](https://github.com/bakkeby/patches/tree/master/dwm/dwm-losefullscreen-6.2.diff)
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window
       - it is also possible to spawn new windows (e.g. a terminal) that end up getting focus while the previous window remains in fullscreen
       - this patch ensures that in such scenarios the previous window loses fullscreen
@@ -352,7 +354,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [switchcol](https://dwm.suckless.org/patches/switchcol/)
       - allows you to switch focus between the master and stack columns using a single keybinding
 
-   - [switchtag](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-switchtag-6.2.diff)
+   - [switchtag](https://github.com/bakkeby/patches/tree/master/dwm/dwm-switchtag-6.2.diff)
       - when an application opens on a specific tab this patch adds the option to also switch to that tag when the application starts
 
    - [systray](https://dwm.suckless.org/patches/systray/)
@@ -361,7 +363,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [tagall](https://dwm.suckless.org/patches/tagall/)
       - adds keyboard shortcuts to move all (or only floating) windows from one tag to another
 
-   - [tagallmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagallmon-6.2.diff)
+   - [tagallmon](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagallmon-6.2.diff)
       - move all visible windows to an adjacent monitor
 
    - [tagintostack](https://dwm.suckless.org/patches/tagintostack/)
@@ -371,16 +373,16 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [taggrid](https://dwm.suckless.org/patches/taggrid/)
       - adds an option to place tags in rows like in many other window managers
 
-   - [tagmonfixfs](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagmonfixfs-6.2.diff)
+   - [tagmonfixfs](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagmonfixfs-6.2.diff)
       - allows moving a fullscreen window to another monitor while remaining in fullscreen
 
-   - [tagswapmon](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-tagswapmon-6.2.diff)
+   - [tagswapmon](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagswapmon-6.2.diff)
       - swap all visible windows on one monitor with those of an adjacent monitor
 
    - [titlecolor](https://dwm.suckless.org/patches/titlecolor/)
       - adds a new color scheme used by the (selected) window title in the bar
 
-   - [togglefullscreen](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-togglefullscreen-6.2.diff)
+   - [togglefullscreen](https://github.com/bakkeby/patches/tree/master/dwm/dwm-togglefullscreen-6.2.diff)
       - allows you to toggle fullscreen on and off using a single shortcut key
 
    - [transfer](https://dwm.suckless.org/patches/transfer/)
@@ -398,7 +400,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [urgentborder](https://dwm.suckless.org/patches/urgentborder/)
       - this patch makes "urgent" windows have different colors
 
-   - [vanitygaps](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-vanitygaps-6.2.diff)
+   - [vanitygaps](https://github.com/bakkeby/dwm-vanitygaps/tree/master/patches/dwm-vanitygaps-6.2.diff)
       - adds configurable gaps between windows differentiating between outer, inner, horizontal and vertical gaps
 
    - [viewontag](https://dwm.suckless.org/patches/viewontag/)
@@ -410,7 +412,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [warp](https://dwm.suckless.org/patches/warp/)
       - warps the mouse cursor to the center of the currently focused window or screen when the mouse cursor is (a) on a different screen or (b) on top of a different window
 
-   - [windowrolerule](https://github.com/bakkeby/dwm-vanitygaps/blob/master/patches/dwm-windowrolerule-6.2.diff)
+   - [windowrolerule](https://github.com/bakkeby/patches/tree/master/dwm/dwm-windowrolerule-6.2.diff)
       - sometimes a single application opens different windows depending on the task at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property
       - this patch adds the role field to the rule configuration so that one can differentiate between, say, Firefox "browser" vs "Preferences" vs "Manager" or Google-chrome "browser" vs "pop-up".
 
