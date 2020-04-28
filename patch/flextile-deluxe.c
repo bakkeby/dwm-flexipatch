@@ -511,7 +511,7 @@ arrange_gapplessgrid_alt2(Monitor *m, int x, int y, int h, int w, int ih, int iv
 static void
 arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai, int s)
 {
-	int i, j, nx = x, ny = y, nw = w, nh = h, r = 1;
+	int i, j, nv, hrest = 0, wrest = 0, nx = x, ny = y, nw = w, nh = h, r = 1;
 	Client *c;
 
 	for (i = 0, j = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), j++) {
@@ -521,10 +521,15 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 					r = 0;
 				}
 				if (r && i < an - 1) {
-					if (i % 2)
-						nh = (nh - ih) / 2;
-					else
-						nw = (nw - iv) / 2;
+					if (i % 2) {
+						nv = (nh - ih) / 2;
+						hrest = nh - 2*nv - ih;
+						nh = nv;
+					} else {
+						nv = (nw - iv) / 2;
+						wrest = nw - 2*nv - iv;
+						nw = nv;
+					}
 
 					if ((i % 4) == 2 && !s)
 						nx += nw + iv;
@@ -556,7 +561,10 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 					nw = w - nw - iv;
 				i++;
 			}
-			resize(c, nx, ny, nw - 2 * c->bw, nh - 2 * c->bw, False);
+			resize(c, nx, ny, nw + wrest - 2 * c->bw, nh + hrest - 2 * c->bw, False);
+			nx += wrest;
+			ny += hrest;
+			wrest = hrest = 0;
 		}
 	}
 }
