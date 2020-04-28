@@ -427,7 +427,7 @@ arrange_horizgrid(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 static void
 arrange_gapplessgrid(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
 {
-	int i, cols, rows, cn, rn, cc; // counters
+	int i, cols, rows, ch, cw, cn, rn, cc, rrest, crest; // counters
 	Client *c;
 
 	/* grid dimensions */
@@ -437,22 +437,31 @@ arrange_gapplessgrid(Monitor *m, int x, int y, int h, int w, int ih, int iv, int
 	if (an == 5) /* set layout against the general calculation: not 1:2:2, but 2:3 */
 		cols = 2;
 	rows = an/cols;
-	cn = rn = cc = 0; // reset cell no, row no, client count
+	cn = rn = cc = 0; // reset column no, row no, client count
+
+	ch = (h - ih * (rows - 1)) / rows;
+	rrest = (h - ih * (rows - 1)) - ch * rows;
+	cw = (w - iv * (cols - 1)) / cols;
+	crest = (w - iv * (cols - 1)) - cw * cols;
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i >= ai && i < (ai + an)) {
- 			if (cc/rows + 1 > cols - an%cols)
+ 			if (cc/rows + 1 > cols - an%cols) {
 				rows = an/cols + 1;
+				ch = (h - ih * (rows - 1)) / rows;
+				rrest = (h - ih * (rows - 1)) - ch * rows;
+ 			}
 			resize(c,
-				x + cn*((w - iv*(cols - 1)) / cols + iv),
-				y + rn*((h - ih*(rows - 1)) / rows + ih),
-				(w - iv*(cols - 1)) / cols,
-				(h - ih*(rows - 1)) / rows,
+				x,
+				y + rn*(ch + ih) + MIN(rn, rrest),
+				cw + (cn < crest ? 1 : 0) - 2*c->bw,
+				ch + (rn < rrest ? 1 : 0) - 2*c->bw,
 				0);
 			rn++;
 			cc++;
 			if (rn >= rows) {
 				rn = 0;
+				x += cw + ih + (cn < crest ? 1 : 0);
 				cn++;
 			}
 		}
