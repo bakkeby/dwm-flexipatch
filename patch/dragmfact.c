@@ -16,6 +16,7 @@ dragmfact(const Arg *arg)
 	int oh, ov, ih, iv;
 	getgaps(m, &oh, &ov, &ih, &iv, &n);
 	#else
+	Client *c;
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
 	#endif // VANITYGAPS_PATCH
 
