@@ -52,12 +52,12 @@ pertagview(const Arg *arg)
 	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
 	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
 	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
-	#if FLEXTILE_DELUXE_LAYOUT && MONITOR_RULES_PATCH
+	#if FLEXTILE_DELUXE_LAYOUT
 	selmon->ltaxis[LAYOUT] = selmon->pertag->ltaxis[selmon->pertag->curtag][LAYOUT];
 	selmon->ltaxis[MASTER] = selmon->pertag->ltaxis[selmon->pertag->curtag][MASTER];
 	selmon->ltaxis[STACK]  = selmon->pertag->ltaxis[selmon->pertag->curtag][STACK];
 	selmon->ltaxis[STACK2] = selmon->pertag->ltaxis[selmon->pertag->curtag][STACK2];
-	#endif // FLEXTILE_DELUXE_LAYOUT && MONITOR_RULES_PATCH
+	#endif // FLEXTILE_DELUXE_LAYOUT
 	#if PERTAGBAR_PATCH
 	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
 		togglebar(NULL);
