@@ -810,10 +810,14 @@ static Key keys[] = {
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
 	#if FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,       {.i = 0 } },   /* flextile, 0 = layout axis */
-	{ MODKEY|ControlMask,           XK_Tab,        rotatelayoutaxis,       {.i = 1 } },   /* flextile, 1 = master axis */
-	{ MODKEY|ControlMask|ShiftMask, XK_Tab,        rotatelayoutaxis,       {.i = 2 } },   /* flextile, 2 = stack axis */
-	{ MODKEY|ControlMask|Mod1Mask,  XK_Tab,        rotatelayoutaxis,       {.i = 3 } },   /* flextile, 3 = secondary stack axis */
+	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,       {.i = +1 } },   /* flextile, 1 = layout axis */
+	{ MODKEY|ControlMask,           XK_Tab,        rotatelayoutaxis,       {.i = +2 } },   /* flextile, 2 = master axis */
+	{ MODKEY|ControlMask|ShiftMask, XK_Tab,        rotatelayoutaxis,       {.i = +3 } },   /* flextile, 3 = stack axis */
+	{ MODKEY|ControlMask|Mod1Mask,  XK_Tab,        rotatelayoutaxis,       {.i = +4 } },   /* flextile, 4 = secondary stack axis */
+	{ MODKEY|Mod5Mask,              XK_t,          rotatelayoutaxis,       {.i = -1 } },   /* flextile, 1 = layout axis */
+	{ MODKEY|Mod5Mask,              XK_Tab,        rotatelayoutaxis,       {.i = -2 } },   /* flextile, 2 = master axis */
+	{ MODKEY|Mod5Mask|ShiftMask,    XK_Tab,        rotatelayoutaxis,       {.i = -3 } },   /* flextile, 3 = stack axis */
+	{ MODKEY|Mod5Mask|Mod1Mask,     XK_Tab,        rotatelayoutaxis,       {.i = -4 } },   /* flextile, 4 = secondary stack axis */
 	{ MODKEY|ControlMask,           XK_Return,     mirrorlayout,           {0} },         /* flextile, flip master and stack areas */
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY,                       XK_space,      setlayout,              {0} },

@@ -690,17 +690,34 @@ mirrorlayout(const Arg *arg)
 void
 rotatelayoutaxis(const Arg *arg)
 {
+	int incr = (arg->i > 0 ? 1 : -1);
+	int axis = abs(arg->i) - 1;
+
 	if (!selmon->lt[selmon->sellt]->arrange)
 		return;
-	if (arg->i == 0) {
-		if (selmon->ltaxis[LAYOUT] >= 0)
-			selmon->ltaxis[LAYOUT] = selmon->ltaxis[LAYOUT] + 1 >= LAYOUT_LAST ? 0 : selmon->ltaxis[LAYOUT] + 1;
-		else
-			selmon->ltaxis[LAYOUT] = selmon->ltaxis[LAYOUT] - 1 <= -LAYOUT_LAST ? -0 : selmon->ltaxis[LAYOUT] - 1;
-	} else
-		selmon->ltaxis[arg->i] = selmon->ltaxis[arg->i] + 1 >= AXIS_LAST ? 0 : selmon->ltaxis[arg->i] + 1;
+	if (axis == LAYOUT) {
+		if (selmon->ltaxis[LAYOUT] >= 0) {
+			selmon->ltaxis[LAYOUT] += incr;
+			if (selmon->ltaxis[LAYOUT] >= LAYOUT_LAST)
+				selmon->ltaxis[LAYOUT] = 0;
+			else if (selmon->ltaxis[LAYOUT] < 0)
+				selmon->ltaxis[LAYOUT] = LAYOUT_LAST - 1;
+		} else {
+			selmon->ltaxis[LAYOUT] -= incr;
+			if (selmon->ltaxis[LAYOUT] <= -LAYOUT_LAST)
+				selmon->ltaxis[LAYOUT] = 0;
+			else if (selmon->ltaxis[LAYOUT] > 0)
+				selmon->ltaxis[LAYOUT] = -LAYOUT_LAST + 1;
+		}
+	} else {
+		selmon->ltaxis[axis] += incr;
+		if (selmon->ltaxis[axis] >= AXIS_LAST)
+			selmon->ltaxis[axis] = 0;
+		else if (selmon->ltaxis[axis] < 0)
+			selmon->ltaxis[axis] = AXIS_LAST - 1;
+	}
 	#if PERTAG_PATCH
-	selmon->pertag->ltaxis[selmon->pertag->curtag][arg->i] = selmon->ltaxis[arg->i];
+	selmon->pertag->ltaxis[selmon->pertag->curtag][axis] = selmon->ltaxis[axis];
 	#endif // PERTAG_PATCH
 	arrange(selmon);
 	setflexsymbols(selmon, 0);

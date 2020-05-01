@@ -165,7 +165,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [dragcfact](https://github.com/bakkeby/patches/blob/master/dwm/dwm-cfacts-dragcfact-6.2.diff)
       - lets you resize clients' size (i.e. modify cfact) by holding modkey + shift + right-click and dragging the mouse
 
-   - [dragmfact](https://dwm.suckless.org/patches/dragmfact/)
+   - [dragmfact](https://github.com/bakkeby/patches/blob/master/dwm/dwm-dragmfact-6.2.diff)
       - lets you resize the split in layouts (i.e. modify mfact) by holding the modkey + shift + left-click and dragging the mouse
       - this is a bespoke patch that supports vertical and horizontal layout splits as well as centered master variants
 
@@ -448,7 +448,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [fibonacci](https://dwm.suckless.org/patches/fibonacci/)
       - fibonacci (dwindle and spiral) layouts
 
-   - flextile-deluxe
+   - [flextile-deluxe](https://github.com/bakkeby/patches/blob/master/dwm/dwm-pertag-flextile_deluxe-6.2.diff)
       - a re-envisioned, flexible and over-the-top version of the original [flextile](https://dwm.suckless.org/patches/flextile/) patch supporting
          - multiple split layouts (horizontal, vertical, centered, floating, fixed)
          - tile arrangement on a per split basis (stack horizontally, stack vertically, grids, fibonacci)

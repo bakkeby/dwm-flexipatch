@@ -36,7 +36,7 @@ pertagview(const Arg *arg)
 		if (arg->ui == ~0)
 			selmon->pertag->curtag = 0;
 		else {
-			for (i=0; !(arg->ui & 1 << i); i++) ;
+			for (i = 0; !(arg->ui & 1 << i); i++) ;
 			selmon->pertag->curtag = i + 1;
 		}
 	} else {
