@@ -977,7 +977,11 @@ static Button buttons[] = {
 	{ ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
 	#endif // AWESOMEBAR_PATCH
 	{ ClkWinTitle,          0,                   Button2,        zoom,           {0} },
-	#if STATUSCMD_PATCH
+	#if STATUSCMD_PATCH && DWMBLOCKS_PATCH
+	{ ClkStatusText,        0,                   Button1,        sigdwmblocks,   {.i = 1 } },
+	{ ClkStatusText,        0,                   Button2,        sigdwmblocks,   {.i = 2 } },
+	{ ClkStatusText,        0,                   Button3,        sigdwmblocks,   {.i = 3 } },
+	#elif STATUSCMD_PATCH
 	{ ClkStatusText,        0,                   Button1,        spawn,          {.v = statuscmd } },
 	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = statuscmd } },
 	{ ClkStatusText,        0,                   Button3,        spawn,          {.v = statuscmd } },

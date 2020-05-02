@@ -32,6 +32,9 @@
 #if DRAGMFACT_PATCH
 #include "dragmfact.h"
 #endif
+#if DWMBLOCKS_PATCH && STATUSCMD_PATCH
+#include "dwmblocks.h"
+#endif
 #if DWMC_PATCH
 #include "dwmc.h"
 #elif FSIGNAL_PATCH

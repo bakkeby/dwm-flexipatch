@@ -140,6 +140,13 @@
  */
 #define DRAGMFACT_PATCH 0
 
+/* This patch depends on statuscmd patch and adds integration with a (patched) dwmblocks
+ * instance to give a clickable status bar.
+ * Patch: https://gist.github.com/danbyl/54f7c1d57fc6507242a95b71c3d8fdea
+ * dwmblocks: https://github.com/torrinfail/dwmblocks
+ */
+#define DWMBLOCKS_PATCH 0
+
 /* Simple dwmc client using a fork of fsignal to communicate with dwm.
  * To use this either copy the patch/dwmc shell script to somewhere in your path or
  * uncomment the following line in Makefile:

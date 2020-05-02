@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-05-02 - Added dwmblocks patch
+
 2020-04-27 - Upgraded the tagmonfixfs patch to better support moving fullscreen windows to adjacent monitors
 
 2020-04-26 - Expanded monitor rules patch to include nmaster, showbar and topbar options
@@ -168,6 +170,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [dragmfact](https://github.com/bakkeby/patches/blob/master/dwm/dwm-dragmfact-6.2.diff)
       - lets you resize the split in layouts (i.e. modify mfact) by holding the modkey + shift + left-click and dragging the mouse
       - this is a bespoke patch that supports vertical and horizontal layout splits as well as centered master variants
+
+   - [dwmblocks](https://gist.github.com/danbyl/54f7c1d57fc6507242a95b71c3d8fdea)
+      - signal integration to use dwm with a patched [dwmblocks](https://github.com/torrinfail/dwmblocks)
+      - combined with the statuscmd patch this gives a clickable statusbar
 
    - [dwmc](http://dwm.suckless.org/patches/dwmc/)
       - a simple dwmc client using a fork of fsignal to communicate with dwm

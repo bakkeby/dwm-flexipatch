@@ -797,7 +797,11 @@ buttonpress(XEvent *e)
 				char *text = rawstext;
 				int i = -1;
 				char ch;
+				#if DWMBLOCKS_PATCH
+				dwmblockssig = 0;
+				#else
 				statuscmdn = 0;
+				#endif // DWMBLOCKS_PATCH
 				while (text[++i]) {
 					if ((unsigned char)text[i] < ' ') {
 						ch = text[i];
@@ -808,8 +812,12 @@ buttonpress(XEvent *e)
 						i = -1;
 						if (xc >= ev->x)
 							break;
+						#if DWMBLOCKS_PATCH
+						dwmblockssig = ch;
+						#else
 						if (ch <= LENGTH(statuscmds))
 							statuscmdn = ch - 1;
+						#endif // DWMBLOCKS_PATCH
 					}
 				}
 			}
@@ -886,7 +894,11 @@ buttonpress(XEvent *e)
 			char *text = rawstext;
 			int i = -1;
 			char ch;
+			#if DWMBLOCKS_PATCH
+			dwmblockssig = 0;
+			#else
 			statuscmdn = 0;
+			#endif // DWMBLOCKS_PATCH
 			while (text[++i]) {
 				if ((unsigned char)text[i] < ' ') {
 					ch = text[i];
@@ -897,8 +909,12 @@ buttonpress(XEvent *e)
 					i = -1;
 					if (xc >= ev->x)
 						break;
+					#if DWMBLOCKS_PATCH
+					dwmblockssig = ch;
+					#else
 					if (ch <= LENGTH(statuscmds))
 						statuscmdn = ch - 1;
+					#endif // DWMBLOCKS_PATCH
 				}
 			}
 		}
