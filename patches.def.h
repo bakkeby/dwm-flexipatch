@@ -447,6 +447,11 @@
  */
 #define SHIFTVIEW_PATCH 0
 
+/* This variant of the shiftview patch adds left and right circular shift through tags,
+ * but skips tags where there are no clients.
+ */
+#define SHIFTVIEW_CLIENTS_PATCH 0
+
 /* In a multi-head setup monitor 0 is by default the primary screen, with the left and right
  * screen being monitor 1 and 2 respectively. This patch sorts screens left to right (or
  * top to bottom in a vertical layout) which aims to address some inconsistencies when it

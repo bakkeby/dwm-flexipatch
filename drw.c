@@ -242,8 +242,6 @@ drw_clr_create(
 	dest->pixel |= 0xff << 24;
 	#endif // NO_TRANSPARENT_BORDERS_PATCH
 	#endif // ALPHA_PATCH
-
-	
 }
 
 /* Wrapper to create color schemes. The caller has to call free(3) on the

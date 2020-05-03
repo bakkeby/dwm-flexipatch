@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-05-03 - Added the no transparent borders patch which removes opacity from window borders when the alpha patch is not used
+2020-05-03 - Added the shiftviewclients patch and the no transparent borders patch which removes opacity from window borders when the alpha patch is not used
 
 2020-05-02 - Added dwmblocks patch
 
@@ -328,6 +328,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [shiftview](https://github.com/chau-bao-long/dotfiles/blob/master/suckless/dwm/shiftview.diff)
       - adds keybindings for left and right circular shift through tags
       - also see focusadjacenttag
+
+   - [shiftviewclients](https://github.com/bakkeby/patches/blob/master/dwm/dwm-shiftviewclients-6.2.diff)
+      - variant of the shiftview patch which skips tags that has no clients
 
    - [sortscreens](https://www.mail-archive.com/hackers@suckless.org/msg09400.html)
       - this patch aims to address some inconsistencies when it comes to focusmon, tagmon and similar functionality by explicitly sorting screens left to right (or top to bottom in a vertical layout)

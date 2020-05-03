@@ -777,6 +777,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
 	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
   	#endif // SHIFTVIEW_PATCH
+  	#if SHIFTVIEW_CLIENTS_PATCH
+	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
+	{ MODKEY|Mod4Mask,              XK_backslash,  shiftviewclients,       { .i = +1 } },
+  	#endif // SHIFTVIEW_CLIENTS_PATCH
 	#if AWESOMEBAR_PATCH
 	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
 	#endif // AWESOMEBAR_PATCH
