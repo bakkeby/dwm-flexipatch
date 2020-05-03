@@ -343,6 +343,13 @@
  */
 #define NODMENU_PATCH 0
 
+/* When terminals have transparency then their borders also become transparent.
+ * This patch ensures that borders have no transparency. Note that this patch is
+ * only relevant if you are not using the alpha patch.
+ * https://github.com/szatanjl/dwm/commit/1529909466206016f2101457bbf37c67195714c8
+ */
+#define NO_TRANSPARENT_BORDERS_PATCH 0
+
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/

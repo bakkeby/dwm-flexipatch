@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-05-03 - Added the no transparent borders patch which removes opacity from window borders when the alpha patch is not used
+
 2020-05-02 - Added dwmblocks patch
 
 2020-04-27 - Upgraded the tagmonfixfs patch to better support moving fullscreen windows to adjacent monitors
@@ -278,6 +280,11 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [nodmenu](https://dwm.suckless.org/patches/nodmenu/)
       - enable modifying dmenu in config.def.h which resulted previously in a compilation error because two lines of code hardcode dmenu into dwm
       - allows complete removal of dmenu, should you want to do that
+
+   - [no_transparent_borders](https://github.com/szatanjl/dwm/commit/1529909466206016f2101457bbf37c67195714c8)
+      - when terminals have transparency then their borders also become transparent
+      - this patch ensures that borders have no transparency
+      - note that this patch is only relevant if you are not using the alpha patch
 
    - [onlyquitonempty](https://dwm.suckless.org/patches/onlyquitonempty/)
       - makes it so dwm will only exit via quit() if no windows are open (in order to prevent accidental loss of work)

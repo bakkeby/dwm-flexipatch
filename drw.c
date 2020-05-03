@@ -237,7 +237,13 @@ drw_clr_create(
 	                       DefaultColormap(drw->dpy, drw->screen),
 	                       clrname, dest))
 		die("error, cannot allocate color '%s'", clrname);
+
+	#if NO_TRANSPARENT_BORDERS_PATCH
+	dest->pixel |= 0xff << 24;
+	#endif // NO_TRANSPARENT_BORDERS_PATCH
 	#endif // ALPHA_PATCH
+
+	
 }
 
 /* Wrapper to create color schemes. The caller has to call free(3) on the
