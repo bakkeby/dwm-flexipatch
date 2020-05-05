@@ -721,9 +721,9 @@ buttonpress(XEvent *e)
 	Client *c;
 	Monitor *m;
 	XButtonPressedEvent *ev = &e->xbutton;
-	#if STATUSCMD_PATCH
+	#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
 	lastbutton = ev->button;
-	#endif // STATUSCMD_PATCH
+	#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
 	#if AWESOMEBAR_PATCH || STATUSCMD_PATCH
 	padding += lrpad - 2;
 	#endif // AWESOMEBAR_PATCH | STATUSCMD_PATCH
