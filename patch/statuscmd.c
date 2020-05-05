@@ -1,6 +1,8 @@
 static char rawstext[256];
 static const char statusexport[] = "export BUTTON=-;";
+#if !DWMBLOCKS_PATCH
 static int statuscmdn;
+#endif // DWMBLOCKS_PATCH
 static int lastbutton;
 
 void

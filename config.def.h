@@ -690,11 +690,11 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { "st", NULL };
 
-#if STATUSCMD_PATCH
+#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
 /* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
 static const char *statuscmds[] = { "notify-send Mouse$BUTTON" };
 static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
-#endif // STATUSCMD_PATCH
+#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
 
 #if SCRATCHPAD_ALT_1_PATCH
 static const unsigned scratchpad_mask = 1u << sizeof tags / sizeof * tags;

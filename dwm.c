@@ -3184,14 +3184,14 @@ sigchld(int unused)
 void
 spawn(const Arg *arg)
 {
-	#if STATUSCMD_PATCH
+	#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
 	char *cmd = NULL;
-	#endif // STATUSCMD_PATCH
+	#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
 	#if !NODMENU_PATCH
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 	#endif // NODMENU_PATCH
-	#if STATUSCMD_PATCH
+	#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
 	#if !NODMENU_PATCH
 	else if (arg->v == statuscmd)
 	#else
@@ -3206,7 +3206,7 @@ spawn(const Arg *arg)
 		cmd[LENGTH(statusexport)-3] = '0' + lastbutton;
 		statuscmd[2] = cmd;
 	}
-	#endif // STATUSCMD_PATCH
+	#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
 
 	if (fork() == 0) {
 		if (dpy)
@@ -3251,9 +3251,9 @@ spawn(const Arg *arg)
 		perror(" failed");
 		exit(EXIT_SUCCESS);
 	}
-	#if STATUSCMD_PATCH
+	#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
 	free(cmd);
-	#endif // STATUSCMD_PATCH
+	#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
 }
 
 void
