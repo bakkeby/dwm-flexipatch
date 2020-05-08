@@ -416,7 +416,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [urgentborder](https://dwm.suckless.org/patches/urgentborder/)
       - this patch makes "urgent" windows have different colors
 
-   - [vanitygaps](https://github.com/bakkeby/dwm-vanitygaps/tree/master/patches/dwm-vanitygaps-6.2.diff)
+   - [vanitygaps](https://github.com/bakkeby/patches/blob/master/dwm/dwm-vanitygaps-6.2.diff)
       - adds configurable gaps between windows differentiating between outer, inner, horizontal and vertical gaps
 
    - [viewontag](https://dwm.suckless.org/patches/viewontag/)
