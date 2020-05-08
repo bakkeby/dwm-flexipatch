@@ -517,7 +517,7 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 	for (i = 0, j = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), j++) {
 		if (j >= ai && j < (ai + an)) {
 			if (r) {
-				if ((i % 2 && ((nh - ih) / 2) <= (20 + 2*c->bw)) || (!(i % 2) && ((nw - iv) / 2) <= (20 + 2*c->bw))) {
+				if ((i % 2 && ((nh - ih) / 2) <= (bh + 2*c->bw)) || (!(i % 2) && ((nw - iv) / 2) <= (bh + 2*c->bw))) {
 					r = 0;
 				}
 				if (r && i < an - 1) {
@@ -542,15 +542,24 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 					else
 						ny -= nh + ih;
 				}
-				else if ((i % 4) == 1)
+				else if ((i % 4) == 1) {
 					nx += nw + iv;
-				else if ((i % 4) == 2)
+					nw += wrest;
+				}
+				else if ((i % 4) == 2) {
 					ny += nh + ih;
+					nh += hrest;
+					if (i < n - 1)
+						nw += wrest;
+				}
 				else if ((i % 4) == 3) {
-					if (s)
+					if (s) {
 						nx += nw + iv;
-					else
+						nw -= wrest;
+					} else {
+						nw -= wrest;
 						nx -= nw + iv;
+					}
 				}
 				if (i == 0)	{
 					if (an != 1)
@@ -561,10 +570,8 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 					nw = w - nw - iv;
 				i++;
 			}
-			resize(c, nx, ny, nw + wrest - 2 * c->bw, nh + hrest - 2 * c->bw, False);
-			nx += wrest;
-			ny += hrest;
-			wrest = hrest = 0;
+
+			resize(c, nx, ny, nw - 2 * c->bw, nh - 2*c->bw, False);
 		}
 	}
 }
