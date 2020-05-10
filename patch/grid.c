@@ -1,8 +1,9 @@
 #if VANITYGAPS_PATCH
-static void
+void
 grid(Monitor *m)
 {
-	unsigned int i, n, cx, cy, cw, ch, cols, rows;
+	unsigned int i, n;
+	int cx, cy, cw, ch, cc, cr, chrest, cwrest, cols, rows;
 	int oh, ov, ih, iv;
 	Client *c;
 
@@ -17,17 +18,22 @@ grid(Monitor *m)
 	/* window geoms (cell height/width) */
 	ch = (m->wh - 2*oh - ih * (rows - 1)) / (rows ? rows : 1);
 	cw = (m->ww - 2*ov - iv * (cols - 1)) / (cols ? cols : 1);
+	chrest = (m->wh - 2*oh - ih * (rows - 1)) - ch * rows;
+	cwrest = (m->ww - 2*ov - iv * (cols - 1)) - cw * cols;
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
-		cx = m->wx + (i / rows) * (cw + iv) + ov;
-		cy = m->wy + (i % rows) * (ch + ih) + oh;
-		resize(c, cx, cy, cw - 2*c->bw, ch - 2*c->bw, False);
+		cc = i / rows;
+		cr = i % rows;
+		cx = m->wx + ov + cc * (cw + iv) + MIN(cc, cwrest);
+		cy = m->wy + oh + cr * (ch + ih) + MIN(cr, chrest);
+		resize(c, cx, cy, cw + (cc < cwrest ? 1 : 0) - 2*c->bw, ch + (cr < chrest ? 1 : 0) - 2*c->bw, False);
 	}
 }
 #else
-static void
+void
 grid(Monitor *m)
 {
-	unsigned int i, n, cx, cy, cw, ch, cols, rows;
+	unsigned int i, n;
+	int cx, cy, cw, ch, cc, cr, chrest, cwrest, cols, rows;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
@@ -41,10 +47,14 @@ grid(Monitor *m)
 	/* window geoms (cell height/width) */
 	ch = m->wh / (rows ? rows : 1);
 	cw = m->ww / (cols ? cols : 1);
+	chrest = m->wh - ch * rows;
+	cwrest = m->ww - cw * cols;
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
-		cx = m->wx + (i / rows) * cw;
-		cy = m->wy + (i % rows) * ch;
-		resize(c, cx, cy, cw - 2*c->bw, ch - 2*c->bw, False);
+		cc = i / rows;
+		cr = i % rows;
+		cx = m->wx + cc * cw + MIN(cc, cwrest);
+		cy = m->wy + cr * ch + MIN(cr, chrest);
+		resize(c, cx, cy, cw + (cc < cwrest ? 1 : 0) - 2*c->bw, ch + (cr < chrest ? 1 : 0) - 2*c->bw, False);
 	}
 }
 #endif
