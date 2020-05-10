@@ -446,11 +446,11 @@ arrange_gapplessgrid(Monitor *m, int x, int y, int h, int w, int ih, int iv, int
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
 		if (i >= ai && i < (ai + an)) {
- 			if (cc/rows + 1 > cols - an%cols) {
+			if (cc/rows + 1 > cols - an%cols) {
 				rows = an/cols + 1;
 				ch = (h - ih * (rows - 1)) / rows;
 				rrest = (h - ih * (rows - 1)) - ch * rows;
- 			}
+			}
 			resize(c,
 				x,
 				y + rn*(ch + ih) + MIN(rn, rrest),
@@ -537,10 +537,14 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 						ny += nh + ih;
 				}
 				if ((i % 4) == 0) {
-					if (s)
+					if (s) {
 						ny += nh + ih;
-					else
+						nh += hrest;
+					}
+					else {
+						nh -= hrest;
 						ny -= nh + ih;
+					}
 				}
 				else if ((i % 4) == 1) {
 					nx += nw + iv;
@@ -559,11 +563,14 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 					} else {
 						nw -= wrest;
 						nx -= nw + iv;
+						nh += hrest;
 					}
 				}
 				if (i == 0)	{
-					if (an != 1)
-						nw = (w - iv) * m->mfact;
+					if (an != 1) {
+						nw = (w - iv) - (w - iv) * (1 - m->mfact);
+						wrest = 0;
+					}
 					ny = y;
 				}
 				else if (i == 1)
