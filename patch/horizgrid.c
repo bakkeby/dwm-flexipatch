@@ -4,7 +4,7 @@ horizgrid(Monitor *m) {
 	unsigned int n, i;
 	int mx = 0, my = 0, mh = 0, mw = 0;
 	int sx = 0, sy = 0, sh = 0, sw = 0;
-	int ntop, nbottom = 1;
+	int ntop;
 	float mfacts = 0, sfacts = 0;
 	int mrest, srest, mtotal = 0, stotal = 0;
 
@@ -21,7 +21,6 @@ horizgrid(Monitor *m) {
 		ntop = n;
 	else {
 		ntop = n / 2;
-		nbottom = n - ntop;
 	}
 
 	#if VANITYGAPS_PATCH
@@ -35,7 +34,7 @@ horizgrid(Monitor *m) {
 		mh = mh - ih - sh;
 		sy = my + mh + ih;
 		mw = m->ww - 2*ov - iv * (ntop - 1);
-		sw = m->ww - 2*ov - iv * (nbottom - 1);
+		sw = m->ww - 2*ov - iv * (n - ntop - 1);
 	}
 	#else
 	sx = mx = m->wx;
@@ -65,7 +64,7 @@ horizgrid(Monitor *m) {
 			stotal += sw * (c->cfact / sfacts);
 	#else
 	mfacts = ntop;
-	sfacts = nbottom;
+	sfacts = n - ntop;
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < ntop)
