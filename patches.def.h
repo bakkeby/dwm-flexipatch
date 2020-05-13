@@ -347,6 +347,7 @@
  * This patch ensures that borders have no transparency. Note that this patch is
  * only relevant if you are not using the alpha patch.
  * https://github.com/szatanjl/dwm/commit/1529909466206016f2101457bbf37c67195714c8
+ * https://dwm.suckless.org/patches/alpha/dwm-fixborders-6.2.diff
  */
 #define NO_TRANSPARENT_BORDERS_PATCH 0
 
