@@ -2,6 +2,7 @@ void
 setborderpx(const Arg *arg)
 {
 	Client *c;
+	int prev_borderpx = selmon->borderpx;
 
 	if (arg->i == 0)
 		mons->borderpx = borderpx;
@@ -11,10 +12,21 @@ setborderpx(const Arg *arg)
 		mons->borderpx += arg->i;
 
 	for (c = mons->clients; c; c = c->next)
+	{
 		if (c->bw + arg->i < 0)
 			c->bw = mons->borderpx = 0;
 		else
 			c->bw = mons->borderpx;
+		if (c->isfloating || !selmon->lt[selmon->sellt]->arrange)
+		{
+			if (arg->i != 0 && prev_borderpx + arg->i >= 0)
+				resize(c, c->x, c->y, c->w-(arg->i*2), c->h-(arg->i*2), 0);
+			else if (arg->i == 0 && prev_borderpx > borderpx)
+				resize(c, c->x + prev_borderpx - borderpx, c->y + prev_borderpx - borderpx, c->w, c->h, 0);
+			else if (arg->i == 0 && prev_borderpx < borderpx)
+				resize(c, c->x, c->y, c->w-2*(borderpx - prev_borderpx), c->h-2*(borderpx - prev_borderpx), 0);
+		}
+	}
 
 	arrange(selmon);
 }
