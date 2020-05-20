@@ -12,6 +12,10 @@ void
 combotag(const Arg *arg)
 {
 	if (selmon->sel && arg->ui & TAGMASK) {
+		#if SWITCHTAG_PATCH
+		if (selmon->sel->switchtag)
+			selmon->sel->switchtag = 0;
+		#endif // SWITCHTAG_PATCH
 		if (combo) {
 			selmon->sel->tags |= arg->ui & TAGMASK;
 		} else {

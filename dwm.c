@@ -3277,6 +3277,10 @@ tag(const Arg *arg)
 
 	if (selmon->sel && arg->ui & TAGMASK) {
 		selmon->sel->tags = arg->ui & TAGMASK;
+		#if SWITCHTAG_PATCH
+		if (selmon->sel->switchtag)
+			selmon->sel->switchtag = 0;
+		#endif // SWITCHTAG_PATCH
 		focus(NULL);
 		#if SWAPFOCUS_PATCH && PERTAG_PATCH
 		selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
