@@ -169,6 +169,13 @@
  */
 #define EWMHTAGS_PATCH 0
 
+/* This patch makes dialog, utility, toolbar, splash and modal windows float by default.
+ * This may only be a temporary patch depending on whether this is integrated in the main
+ * dwm source, and if so how.
+ * https://lists.suckless.org/hackers/2005/17318.html
+ */
+#define EWMH_WINDOWS_FLOAT_PATCH 0
+
 /* This patch allows the user to change size and placement of floating windows using only the
  * keyboard. It also allows for temporary vertical and horizontal extension of windows similar
  * to other WMs fill command.

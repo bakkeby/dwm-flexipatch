@@ -111,16 +111,20 @@ enum {
 	#endif // VTCOLORS_PATCH
 }; /* color schemes */
 
-enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
-       NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-	   #if SYSTRAY_PATCH
-       NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation,
-       NetSystemTrayVisual, NetWMWindowTypeDock, NetSystemTrayOrientationHorz,
-	   #endif // SYSTRAY_PATCH
-	   #if EWMHTAGS_PATCH
-       NetDesktopNames, NetDesktopViewport, NetNumberOfDesktops, NetCurrentDesktop,
-	   #endif // EWMHTAGS_PATCH
-       NetWMWindowTypeDialog, NetClientList, NetLast
+enum {
+	NetSupported, NetWMName, NetWMState, NetWMCheck,
+	NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+	#if SYSTRAY_PATCH
+	NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation,
+	NetSystemTrayVisual, NetWMWindowTypeDock, NetSystemTrayOrientationHorz,
+	#endif // SYSTRAY_PATCH
+	#if EWMHTAGS_PATCH
+	NetDesktopNames, NetDesktopViewport, NetNumberOfDesktops, NetCurrentDesktop,
+	#endif // EWMHTAGS_PATCH
+	#if EWMH_WINDOWS_FLOAT_PATCH
+	NetWMModal, NetWMWindowTypeUtility, NetWMWindowTypeToolbar, NetWMWindowTypeSplash,
+	#endif // EWMH_WINDOWS_FLOAT_PATCH
+	NetWMWindowTypeDialog, NetClientList, NetLast
 }; /* EWMH atoms */
 
 #if WINDOWROLERULE_PATCH
@@ -3044,8 +3048,16 @@ setup(void)
 	netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
+	#if EWMH_WINDOWS_FLOAT_PATCH
+	netatom[NetWMModal] = XInternAtom(dpy, "_NET_WM_STATE_MODAL", False);
+	#endif // EWMH_WINDOWS_FLOAT_PATCH
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+	#if EWMH_WINDOWS_FLOAT_PATCH
+	netatom[NetWMWindowTypeUtility] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_UTILITY", False);
+	netatom[NetWMWindowTypeToolbar] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_TOOLBAR", False);
+	netatom[NetWMWindowTypeSplash] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_SPLASH", False);
+	#endif // EWMH_WINDOWS_FLOAT_PATCH
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
 	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
@@ -3947,9 +3959,20 @@ updatewindowtype(Client *c)
 
 	if (state == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
-	if (wtype == netatom[NetWMWindowTypeDialog]) {
+
+	#if EWMH_WINDOWS_FLOAT_PATCH
+	if (wtype == netatom[NetWMWindowTypeDialog] ||
+	    wtype == netatom[NetWMWindowTypeUtility] ||
+	    wtype == netatom[NetWMWindowTypeToolbar] ||
+	    wtype == netatom[NetWMWindowTypeSplash] ||
+	    state == netatom[NetWMModal])
+	#else
+	if (wtype == netatom[NetWMWindowTypeDialog])
+	#endif //EWMH_WINDOWS_FLOAT_PATCH
+	{
 		#if CENTER_PATCH
-		c->iscentered = 1;
+		if (c->x == c->mon->mx && c->y == c->mon->my)
+			c->iscentered = 1;
 		#endif // CENTER_PATCH
 		c->isfloating = 1;
 	}
