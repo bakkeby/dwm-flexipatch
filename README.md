@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-05-21 - Added the moveresize patch
+2020-05-21 - Added the moveplace and moveresize patches
 
 2020-05-03 - Added the shiftviewclients patch and the no transparent borders patch which removes opacity from window borders when the alpha patch is not used
 

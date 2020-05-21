@@ -70,6 +70,9 @@
 #if MDPCONTROL_PATCH
 #include "mdpcontrol.c"
 #endif
+#if MOVEPLACE_PATCH
+#include "moveplace.c"
+#endif
 #if MOVERESIZE_PATCH
 #include "moveresize.c"
 #endif

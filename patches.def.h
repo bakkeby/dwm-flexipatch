@@ -334,6 +334,13 @@
  */
 #define MONOCLESYMBOL_PATCH 0
 
+/* Makes a window floating and 1/3rd the height and 1/3rd the width of the screen and is
+ * positioned in either the center or one of the 8 cardinal directions depending on which
+ * key is pressed.
+ * https://dwm.suckless.org/patches/moveplace/
+ */
+#define MOVEPLACE_PATCH 0
+
 /* This patch allows you to move and resize dwm's clients using keyboard bindings.
  * https://dwm.suckless.org/patches/moveresize/
  */

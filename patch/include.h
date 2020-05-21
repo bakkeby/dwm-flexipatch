@@ -73,6 +73,9 @@
 #if MDPCONTROL_PATCH
 #include "mdpcontrol.h"
 #endif
+#if MOVEPLACE_PATCH
+#include "moveplace.h"
+#endif
 #if MOVERESIZE_PATCH
 #include "moveresize.h"
 #endif
