@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-05-21 - Added the moveresize patch
+
 2020-05-03 - Added the shiftviewclients patch and the no transparent borders patch which removes opacity from window borders when the alpha patch is not used
 
 2020-05-02 - Added dwmblocks patch
@@ -270,6 +272,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [monoclesymbol](https://dwm.suckless.org/patches/monoclesymbol/)
       - always display the the monocle-symbol as defined in config.h if the monocle-layout is activated
       - do not display the number of open clients in the current tag
+
+   - [moveresize](https://dwm.suckless.org/patches/moveresize/)
+      - allows you to move and resize dwm's clients using keyboard bindings
 
    - [movestack](https://dwm.suckless.org/patches/movestack/)
       - allows you to move clients around in the stack and swap them with the master
