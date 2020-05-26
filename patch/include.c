@@ -122,6 +122,9 @@
 #if STACKER_PATCH
 #include "stacker.c"
 #endif
+#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+#include "status2d.c"
+#endif
 #if STATUSCOLORS_PATCH
 #include "statuscolors.c"
 #endif

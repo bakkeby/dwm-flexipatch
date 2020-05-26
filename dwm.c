@@ -435,9 +435,17 @@ static void zoom(const Arg *arg);
 
 /* variables */
 static const char broken[] = "broken";
+#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+static char stext[1024];
+#else
 static char stext[256];
+#endif // STATUS2D_PATCH
 #if EXTRABAR_PATCH
+#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+static char estext[1024];
+#else
 static char estext[256];
+#endif // STATUS2D_PATCH
 #endif // EXTRABAR_PATCH
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
@@ -1002,7 +1010,11 @@ cleanup(void)
 	#endif // SYSTRAY_PATCH
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
+	#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+	for (i = 0; i < LENGTH(colors) + 1; i++)
+	#else
 	for (i = 0; i < LENGTH(colors); i++)
+	#endif // STATUS2D_PATCH
 		free(scheme[i]);
 	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
@@ -1490,11 +1502,7 @@ drawbar(Monitor *m)
 
 	#if SYSTRAY_PATCH
 	if (showsystray && m == systraytomon(m))
-		#if BARPADDING_PATCH
-		stw = getsystraywidth() + 2 * sp;
-		#else
-		stw = getsystraywidth();
-		#endif // BARPADDING_PATCH
+		stw += getsystraywidth();
 	#endif // SYSTRAY_PATCH
 
 	/* draw status first so it can be overdrawn by tags later */
@@ -1520,13 +1528,15 @@ drawbar(Monitor *m)
 			ctmp = *ts;
 			*ts = '\0';
 			drw_text(drw, m->ww - tw - stw + tx, 0, tw - tx, bh, stp, tp, 0);
-			tx += TEXTW(tp) -lrpad;
+			tx += TEXTW(tp) - lrpad;
 			if (ctmp == '\0')
 				break;
 			drw_setscheme(drw, scheme[(unsigned int)(ctmp-1)]);
 			*ts = ctmp;
 			tp = ++ts;
 		}
+		#elif STATUS2D_PATCH
+		tw = m->ww - drawstatusbar(m, bh, stext, stw, stp);
 		#else // STATUSCOLORS_PATCH
 		#if STATUSPADDING_PATCH
 		tw = TEXTW(stext);
@@ -3074,18 +3084,22 @@ setup(void)
 		strcpy(colors[SchemeTitleSel][ColBg], title_bg_dark);
 	}
 	#endif // VTCOLORS_PATCH
+	#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
+	#if ALPHA_PATCH
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], alphas[0], ColCount);
+	#else
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], ColCount);
+	#endif // ALPHA_PATCH | FLOAT_BORDER_COLOR_PATCH
+	#else
 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+	#endif // STATUS2D_PATCH
 	for (i = 0; i < LENGTH(colors); i++)
-		scheme[i] = drw_scm_create(drw, colors[i],
 		#if ALPHA_PATCH
-		alphas[i],
-		#endif // ALPHA_PATCH
-		#if FLOAT_BORDER_COLOR_PATCH
-		4
+		scheme[i] = drw_scm_create(drw, colors[i], alphas[i], ColCount);
 		#else
-		3
-		#endif // FLOAT_BORDER_COLOR_PATCH
-		);
+		scheme[i] = drw_scm_create(drw, colors[i], ColCount);
+		#endif // ALPHA_PATCH
 	#if SYSTRAY_PATCH
 	/* init system tray */
 	if (showsystray)
@@ -3907,7 +3921,11 @@ updatestatus(void)
 	Monitor* m;
 	#endif // STATUSALLMONS_PATCH
 	#if EXTRABAR_PATCH
+	#if STATUS2D_PATCH
+	char text[1024];
+	#else
 	char text[512];
+	#endif // STATUS2D_PATCH
 	if (!gettextprop(root, XA_WM_NAME, text, sizeof(text))) {
 		strcpy(stext, "dwm-"VERSION);
 		estext[0] = '\0';

@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-05-26 - Added the status2d patch (with alpha, systray, statuspadding and dwmblocks compatibility, no statuscolors or extrabar compatibility)
+
 2020-05-21 - Added the moveplace and moveresize patches
 
 2020-05-03 - Added the shiftviewclients patch and the no transparent borders patch which removes opacity from window borders when the alpha patch is not used
@@ -347,7 +349,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - provides comprehensive utilities for managing the client stack
 
    - [statuscmd](https://dwm.suckless.org/patches/statuscmd/)
-      -  adds the ability to execute shell commands based on the mouse button and position when clicking the status bar
+      - adds the ability to execute shell commands based on the mouse button and position when clicking the status bar
+
+   - [status2d](https://dwm.suckless.org/patches/status2d/)
+      - allows colors and rectangle drawing in the dwm status bar
 
    - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
       - this patch draws and updates the statusbar on all monitors

@@ -495,6 +495,18 @@
  */
 #define STACKER_PATCH 0
 
+/* Status2d allows colors and rectangle drawing in the dwm status bar.
+ * This patch is incompatible with the statuscolors patch which takes precedence.
+ * This patch is incompatible with the extrabar patch.
+ * NB: If using this with dwmblocks then make sure to increase CMDLENGTH in dwmblocks.c
+ * from 50 (default) to 1024.
+ * https://dwm.suckless.org/patches/status2d/
+ */
+#define STATUS2D_PATCH 0
+
+/* Supplementary patch should you want to disable alpha for the status2d section */
+#define STATUS2D_NO_ALPHA_PATCH 0
+
 /* This patch draws and updates the statusbar on all monitors.
  * https://dwm.suckless.org/patches/statusallmons/
  */
@@ -502,6 +514,7 @@
 
 /* This patch enables colored text in the status bar. It changes the way colors are defined
  * in config.h allowing multiple color combinations for use in the status script.
+ * This patch is incompatible with and takes precedence over the status2d patch.
  * https://dwm.suckless.org/patches/statuscolors/
  */
 #define STATUSCOLORS_PATCH 0

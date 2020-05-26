@@ -105,7 +105,7 @@ static char titlefloatcolor[]            = "#005577";
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const unsigned int alphas[][3] = {
-	/*                fg      bg        border     */
+	/*                    fg      bg        border     */
 	[SchemeNorm]      = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]       = { OPAQUE, baralpha, borderalpha },
 	#if STATUSCOLORS_PATCH
@@ -131,7 +131,7 @@ static const unsigned int alphas[][3] = {
 #if VTCOLORS_PATCH && FLOAT_BORDER_COLOR_PATCH
 static const char title_bg_dark[]   = "#303030";
 static const char title_bg_light[]  = "#fdfdfd";
-static const int color_ptrs[][4]    = {
+static const int color_ptrs[][ColCount] = {
 	/*                              fg         bg         border    float */
 	[SchemeNorm]                = { -1,        -1,        5,        12 },
 	[SchemeSel]                 = { -1,        -1,        11,       13 },
@@ -150,7 +150,7 @@ static const int color_ptrs[][4]    = {
 	[SchemeTitleSel]            = { 6,         -1,        -1,       -1 },
 	[SchemeStatus]              = { 2,         0,         0,        -1 },
 };
-static char colors[][4][8]          = {
+static char colors[][ColCount][8] = {
 	/*                              fg         bg         border     float     */
 	[SchemeNorm]                = { "#000000", "#000000", "#000000", "#000000" },
 	[SchemeSel]                 = { "#000000", "#000000", "#000000", "#000000" },
@@ -172,7 +172,7 @@ static char colors[][4][8]          = {
 #elif VTCOLORS_PATCH
 static const char title_bg_dark[]   = "#303030";
 static const char title_bg_light[]  = "#fdfdfd";
-static const int color_ptrs[][3]    = {
+static const int color_ptrs[][ColCount] = {
 	/*                              fg         bg         border    */
 	[SchemeNorm]                = { -1,        -1,        5 },
 	[SchemeSel]                 = { -1,        -1,        11 },
@@ -191,7 +191,7 @@ static const int color_ptrs[][3]    = {
 	[SchemeTitleSel]            = { 6,         -1,        -1 },
 	[SchemeStatus]              = { 2,         0,         0 },
 };
-static char colors[][3][8]          = {
+static char colors[][ColCount][8] = {
 	/*                              fg         bg         border    */
 	[SchemeNorm]                = { "#000000", "#000000", "#000000" },
 	[SchemeSel]                 = { "#000000", "#000000", "#000000" },
@@ -215,7 +215,7 @@ static
 #if !XRDB_PATCH
 const
 #endif // XRDB_PATCH
-char *colors[][4] = {
+char *colors[][ColCount] = {
 	/*                fg            bg            border            float          */
 	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor,  normfloatcolor },
 	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor,   selfloatcolor  },
@@ -237,7 +237,7 @@ static
 #if !XRDB_PATCH
 const
 #endif // XRDB_PATCH
-char *colors[][3] = {
+char *colors[][ColCount] = {
 	/*                fg            bg            border          */
 	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor },
 	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor  },
