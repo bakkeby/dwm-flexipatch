@@ -937,11 +937,11 @@ buttonpress(XEvent *e)
 			c = m->clients;
 
 			do {
-				if (!ISVISIBLE(c))
+				if (!c || !ISVISIBLE(c))
 					continue;
 				else
 					x += (1.0 / (double)m->bt) * m->btw;
-			} while (ev->x > x && (c = c->next));
+			} while (c && ev->x > x && (c = c->next));
 
 			if (c) {
 				click = ClkWinTitle;
