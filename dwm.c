@@ -450,6 +450,7 @@ static char estext[256];
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar geometry */
+static int tw = 0;           /* bar text width */
 static int lrpad;            /* sum of left and right padding for text */
 #if BARPADDING_PATCH
 static int vp;               /* vertical padding for bar */
@@ -764,99 +765,7 @@ buttonpress(XEvent *e)
 		if (ev->x < x) {
 			click = ClkLtSymbol;
 		} else {
-			#if HIDEVACANTTAGS_PATCH
-			for (c = m->clients; c; c = c->next)
-				occ |= c->tags == 255 ? 0 : c->tags;
-			#endif // HIDEVACANTTAGS_PATCH
-			#if TAGGRID_PATCH
-			if (drawtagmask & DRAWCLASSICTAGS)
-			#endif // TAGGRID_PATCH
-			do {
-				#if HIDEVACANTTAGS_PATCH
-				/* do not reserve space for vacant tags */
-				if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
-					continue;
-				#endif // HIDEVACANTTAGS_PATCH
-				x += TEXTW(tags[i]);
-			} while (ev->x >= x && ++i < LENGTH(tags));
-			if (i < LENGTH(tags)) {
-				click = ClkTagBar;
-				arg.ui = 1 << i;
-			#if TAGGRID_PATCH
-			} else if (ev->x < x + columns * bh / tagrows && (drawtagmask & DRAWTAGGRID)) {
-				click = ClkTagBar;
-				i = (ev->x - x) / (bh / tagrows);
-				i = i + columns * (ev->y / (bh / tagrows));
-				if (i >= LENGTH(tags)) {
-					i = LENGTH(tags) - 1;
-				}
-				arg.ui = 1 << i;
-			}
-			else if (ev->x < x + blw + columns * bh / tagrows)
-				click = ClkLtSymbol;
-			#else // TAGGRID_PATCH
-			} else if (ev->x < x + blw)
-				click = ClkLtSymbol;
-			#endif // TAGGRID_PATCH
-			else if (ev->x > selmon->ww - TEXTW(stext) + padding)
-			#if !STATUSCMD_PATCH
-				click = ClkStatusText;
-			#else
-			{
-				click = ClkStatusText;
-
-				xc = selmon->ww - TEXTW(stext) + padding;
-				char *text = rawstext;
-				int i = -1;
-				char ch;
-				#if DWMBLOCKS_PATCH
-				dwmblockssig = 0;
-				#else
-				statuscmdn = 0;
-				#endif // DWMBLOCKS_PATCH
-				while (text[++i]) {
-					if ((unsigned char)text[i] < ' ') {
-						ch = text[i];
-						text[i] = '\0';
-						xc += TEXTW(text) - lrpad;
-						text[i] = ch;
-						text += i+1;
-						i = -1;
-						if (xc >= ev->x)
-							break;
-						#if DWMBLOCKS_PATCH
-						dwmblockssig = ch;
-						#else
-						if (ch <= LENGTH(statuscmds))
-							statuscmdn = ch - 1;
-						#endif // DWMBLOCKS_PATCH
-					}
-				}
-			}
-			#endif // STATUSCMD_PATCH
-			#if AWESOMEBAR_PATCH
-			else {
-				x += blw;
-				c = m->clients;
-
-				do {
-					if (!ISVISIBLE(c))
-						continue;
-					else
-						x += (1.0 / (double)m->bt) * m->btw;
-				} while (ev->x > x && (c = c->next));
-
-				if (c) {
-					click = ClkWinTitle;
-					arg.v = c;
-				}
-			}
-			#else
-			} else
-	 			click = ClkWinTitle;
-	 		#endif // AWESOMEBAR_PATCH
-		}
-		#else // LEFTLAYOUT_PATCH
+		#endif // LEFTLAYOUT_PATCH
 		#if HIDEVACANTTAGS_PATCH
 		for (c = m->clients; c; c = c->next)
 			occ |= c->tags == 255 ? 0 : c->tags;
@@ -895,14 +804,13 @@ buttonpress(XEvent *e)
 		} else if (ev->x < x + blw)
 			click = ClkLtSymbol;
 		#endif // TAGGRID_PATCH
-		else if (ev->x > selmon->ww - TEXTW(stext) + padding)
+		else if (ev->x > selmon->ww - tw + padding)
 		#if !STATUSCMD_PATCH
 			click = ClkStatusText;
 		#else
 		{
 			click = ClkStatusText;
-
-			xc = selmon->ww - TEXTW(stext) + padding;
+			xc = selmon->ww - tw + padding;
 			char *text = rawstext;
 			int i = -1;
 			char ch;
@@ -915,7 +823,11 @@ buttonpress(XEvent *e)
 				if ((unsigned char)text[i] < ' ') {
 					ch = text[i];
 					text[i] = '\0';
+					#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+					xc += status2dtextlength(text);
+					#else
 					xc += TEXTW(text) - lrpad;
+					#endif // STATUS2D_PATCH
 					text[i] = ch;
 					text += i+1;
 					i = -1;
@@ -952,6 +864,8 @@ buttonpress(XEvent *e)
 		else
 			click = ClkWinTitle;
 		#endif // AWESOMEBAR_PATCH
+		#if LEFTLAYOUT_PATCH
+		}
 		#endif // LEFTLAYOUT_PATCH
 	} else if ((c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
@@ -1469,7 +1383,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, stw = 0, stp = 0, invert;
+	int x, w, stw = 0, stp = 0, invert;
 	#if ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // ALTERNATIVE_TAGS_PATCH

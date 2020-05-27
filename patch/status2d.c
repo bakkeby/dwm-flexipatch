@@ -6,14 +6,18 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 	char *text;
 	char *p;
 
-	len = strlen(stext) + 1 ;
+	len = strlen(stext) + 1;
 	if (!(text = (char*) malloc(sizeof(char)*len)))
 		die("malloc");
 	p = text;
+	#if STATUSCMD_PATCH
+	copyvalidchars(text, stext);
+	#else
 	memcpy(text, stext, len);
+	#endif // STATUSCMD_PATCH
 
 	/* compute width of the status text */
-	w = stp * 2;;
+	w = stp * 2;
 	i = -1;
 	while (text[++i]) {
 		if (text[i] == '^') {
@@ -125,4 +129,47 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 	free(p);
 
 	return ret;
+}
+
+int
+status2dtextlength(char* stext)
+{
+	int i, w, len;
+	short isCode = 0;
+	char *text;
+
+	len = strlen(stext) + 1;
+	if (!(text = (char*) malloc(sizeof(char)*len)))
+		die("malloc");
+
+	#if STATUSCMD_PATCH
+	copyvalidchars(text, stext);
+	#else
+	memcpy(text, stext, len);
+	#endif // STATUSCMD_PATCH
+
+	/* compute width of the status text */
+	w = 0;
+	i = -1;
+	while (text[++i]) {
+		if (text[i] == '^') {
+			if (!isCode) {
+				isCode = 1;
+				text[i] = '\0';
+				w += TEXTW(text) - lrpad;
+				text[i] = '^';
+				if (text[++i] == 'f')
+					w += atoi(text + ++i);
+			} else {
+				isCode = 0;
+				text = text + i + 1;
+				i = -1;
+			}
+		}
+	}
+	if (!isCode)
+		w += TEXTW(text) - lrpad;
+	else
+		isCode = 0;
+	return w;
 }
