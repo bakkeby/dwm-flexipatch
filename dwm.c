@@ -1396,7 +1396,7 @@ drawbar(Monitor *m)
 	int wdelta;
 	#endif // ALTERNATIVE_TAGS_PATCH
 	#if AWESOMEBAR_PATCH
-	int n = 0, scm;
+	int n = 0, scm, remainder, tabw;
 	#elif FANCYBAR_PATCH
 	int ftw, mw, ew = 0;
 	int n = 0;
@@ -1565,6 +1565,8 @@ drawbar(Monitor *m)
 	{
 		#if AWESOMEBAR_PATCH
 		if (n > 0) {
+			remainder = w % n;
+			tabw = (1.0 / (double)n) * w + 1;
 			for (c = m->clients; c; c = c->next) {
 				if (!ISVISIBLE(c))
 					continue;
@@ -1586,8 +1588,13 @@ drawbar(Monitor *m)
 					#endif // VTCOLORS_PATCH
 
 				drw_setscheme(drw, scheme[scm]);
+				if (remainder >= 0) {
+					if (remainder == 0)
+						tabw--;
+					remainder--;
+				}
 				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0);
-				x += (1.0 / (double)n) * w;
+				x += tabw;
 			}
 		} else {
 			#if VTCOLORS_PATCH
