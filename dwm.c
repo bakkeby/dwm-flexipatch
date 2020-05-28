@@ -1395,7 +1395,7 @@ drawbar(Monitor *m)
 	#if AWESOMEBAR_PATCH
 	int n = 0, scm;
 	#elif FANCYBAR_PATCH
-	int tw, mw, ew = 0;
+	int ftw, mw, ew = 0;
 	int n = 0;
 	#endif // FANCYBAR_PATCH, AWESOMEBAR_PATCH
 	#if BARPADDING_PATCH
@@ -1596,16 +1596,16 @@ drawbar(Monitor *m)
 		}
 		#elif FANCYBAR_PATCH
 		if (n > 0) {
-			tw = TEXTW(m->sel->name) + lrpad;
-			mw = (tw >= w || n == 1) ? 0 : (w - tw) / (n - 1);
+			ftw = TEXTW(m->sel->name) + lrpad;
+			mw = (ftw >= w || n == 1) ? 0 : (w - ftw) / (n - 1);
 
 			i = 0;
 			for (c = m->clients; c; c = c->next) {
 				if (!ISVISIBLE(c) || c == m->sel)
 					continue;
-				tw = TEXTW(c->name);
-				if (tw < mw)
-					ew += (mw - tw);
+				ftw = TEXTW(c->name);
+				if (ftw < mw)
+					ew += (mw - ftw);
 				else
 					i++;
 			}
@@ -1615,7 +1615,7 @@ drawbar(Monitor *m)
 			for (c = m->clients; c; c = c->next) {
 				if (!ISVISIBLE(c))
 					continue;
-				tw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
+				ftw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 
 				#if VTCOLORS_PATCH
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeTitleSel : SchemeTitleNorm]);
@@ -1624,8 +1624,8 @@ drawbar(Monitor *m)
 				#else
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
 				#endif // VTCOLORS_PATCH / TITLECOLOR_PATCH
-				if (tw > 0) /* trap special handling of 0 in drw_text */
-					drw_text(drw, x, 0, tw, bh, lrpad / 2, c->name, 0);
+				if (ftw > 0) /* trap special handling of 0 in drw_text */
+					drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0);
 				#if !HIDEVACANTTAGS_PATCH
 				if (c->isfloating)
 					#if ACTIVETAGINDICATORBAR_PATCH
@@ -1634,8 +1634,8 @@ drawbar(Monitor *m)
 					drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
 					#endif // ACTIVETAGINDICATORBAR_PATCH
 				#endif // HIDEVACANTTAGS_PATCH
-				x += tw;
-				w -= tw;
+				x += ftw;
+				w -= ftw;
 			}
 		}
 		#if VTCOLORS_PATCH
