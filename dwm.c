@@ -737,6 +737,9 @@ buttonpress(XEvent *e)
 	#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
 	lastbutton = ev->button;
 	#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
+	#if BARPADDING_PATCH
+	padding -= sp * 2;
+	#endif // BARPADDING_PATCH
 	#if SYSTRAY_PATCH
 	padding -= getsystraywidth();
 	#endif // SYSTRAY_PATCH
