@@ -737,13 +737,9 @@ buttonpress(XEvent *e)
 	#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
 	lastbutton = ev->button;
 	#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
-	#if AWESOMEBAR_PATCH || STATUSCMD_PATCH
-	padding += lrpad - 2;
-	#endif // AWESOMEBAR_PATCH | STATUSCMD_PATCH
 	#if SYSTRAY_PATCH
 	padding -= getsystraywidth();
 	#endif // SYSTRAY_PATCH
-
 	#if TAGGRID_PATCH
 	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
 	#endif // TAGGRID_PATCH
@@ -811,11 +807,14 @@ buttonpress(XEvent *e)
 		{
 			click = ClkStatusText;
 			xc = selmon->ww - tw + padding;
+			#if STATUSPADDING_PATCH
+			xc += lrpad / 2;
+			#endif // STATUSPADDING_PATCH
 			char *text = rawstext;
 			int i = -1;
 			char ch;
 			#if DWMBLOCKS_PATCH
-			dwmblockssig = 0;
+			dwmblockssig = -1;
 			#else
 			statuscmdn = 0;
 			#endif // DWMBLOCKS_PATCH
@@ -831,16 +830,22 @@ buttonpress(XEvent *e)
 					text[i] = ch;
 					text += i+1;
 					i = -1;
-					if (xc >= ev->x)
-						break;
 					#if DWMBLOCKS_PATCH
+					if (xc >= ev->x && dwmblockssig != -1)
+						break;
 					dwmblockssig = ch;
 					#else
+					if (xc >= ev->x)
+						break;
 					if (ch <= LENGTH(statuscmds))
 						statuscmdn = ch - 1;
 					#endif // DWMBLOCKS_PATCH
 				}
 			}
+			#if DWMBLOCKS_PATCH
+			if (dwmblockssig == -1)
+				dwmblockssig = 0;
+			#endif // DWMBLOCKS_PATCH
 		}
 		#endif // STATUSCMD_PATCH
 		#if AWESOMEBAR_PATCH
