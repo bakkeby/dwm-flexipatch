@@ -150,6 +150,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 		die("no font specified.");
 	}
 
+	#if !COLOR_EMOJI_PATCH
 	/* Do not allow using color fonts. This is a workaround for a BadLength
 	 * error from Xft with color glyphs. Modelled on the Xterm workaround. See
 	 * https://bugzilla.redhat.com/show_bug.cgi?id=1498269
@@ -162,6 +163,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 		XftFontClose(drw->dpy, xfont);
 		return NULL;
 	}
+	#endif // COLOR_EMOJI_PATCH
 
 	font = ecalloc(1, sizeof(Fnt));
 	font->xfont = xfont;

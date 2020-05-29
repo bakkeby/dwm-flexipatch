@@ -110,6 +110,14 @@
  */
 #define CMDCUSTOMIZE_PATCH 0
 
+/* This patch enables color emoji in dwm by removing a workaround for a BadLength error
+ * in the Xft library when color glyphs are used.
+ * To enable this you will need an updated Xft library that can handle color glyphs otherwise
+ * dwm will crash on encountering such characters. Note that you will also need a font that
+ * provides color emojis for this to work.
+ */
+#define COLOR_EMOJI_PATCH 0
+
 /* This patch tweaks the tagging interface so that you can select multiple tags for tag
  * or view by pressing all the right keys as a combo. For example to view tags 1 and 3,
  * hold MOD and then press and hold 1 and 3 together.
