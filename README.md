@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-05-31 - Added the keymodes patch
+
 2020-05-29 - Added the color emoji patch
 
 2020-05-26 - Added the status2d patch (with alpha, systray, statuspadding and dwmblocks compatibility, no statuscolors or extrabar compatibility)
@@ -258,6 +260,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [ispermanent](https://dwm.suckless.org/patches/ispermanent/)
       - adds rule option for clients to avoid accidental termination by killclient for sticky windows
+
+   - [keymodes](https://dwm.suckless.org/patches/keymodes/)
+      - this patch adds key modes (like in vim or emacs) where chains of keyboard shortcuts can be performed
 
    - [leftlayout](http://dwm.suckless.org/patches/leftlayout/)
       - moves the layout symbol in the status bar to the left hand side

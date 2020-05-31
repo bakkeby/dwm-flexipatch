@@ -364,9 +364,17 @@ static int getrootptr(int *x, int *y);
 static long getstate(Window w);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
+#if KEYMODES_PATCH
+static void grabdefkeys(void);
+#else
 static void grabkeys(void);
+#endif // KEYMODES_PATCH
 static void incnmaster(const Arg *arg);
+#if KEYMODES_PATCH
+static void keydefpress(XEvent *e);
+#else
 static void keypress(XEvent *e);
+#endif // KEYMODES_PATCH
 static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
@@ -1987,7 +1995,11 @@ grabbuttons(Client *c, int focused)
 }
 
 void
+#if KEYMODES_PATCH
+grabdefkeys(void)
+#else
 grabkeys(void)
+#endif // KEYMODES_PATCH
 {
 	updatenumlockmask();
 	{
@@ -2028,7 +2040,11 @@ isuniquegeom(XineramaScreenInfo *unique, size_t n, XineramaScreenInfo *info)
 #endif /* XINERAMA */
 
 void
+#if KEYMODES_PATCH
+keydefpress(XEvent *e)
+#else
 keypress(XEvent *e)
+#endif // KEYMODES_PATCH
 {
 	unsigned int i;
 	KeySym keysym;

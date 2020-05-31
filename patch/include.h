@@ -64,6 +64,9 @@
 #if INPLACEROTATE_PATCH
 #include "inplacerotate.h"
 #endif
+#if KEYMODES_PATCH
+#include "keymodes.h"
+#endif
 #if KILLUNSEL_PATCH
 #include "killunsel.h"
 #endif

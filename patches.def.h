@@ -294,6 +294,12 @@
  */
 #define IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH 0
 
+/* This patch adds key modes (like in vim or emacs) where chains of keyboard shortcuts
+ * can be performed.
+ * https://dwm.suckless.org/patches/keymodes/
+ */
+#define KEYMODES_PATCH 0
+
 /* This patch adds a keybinding to kills all visible clients that are not selected.
  * https://dwm.suckless.org/patches/killunsel/
  */
