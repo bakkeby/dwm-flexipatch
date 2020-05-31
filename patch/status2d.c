@@ -108,6 +108,11 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 					while (text[++i] != ',');
 					int rh = atoi(text + ++i);
 
+					if (ry < 0)
+						ry = 0;
+					if (rx < 0)
+						rx = 0;
+
 					drw_rect(drw, rx + x, ry, rw, rh, 1, 0);
 				} else if (text[i] == 'f') {
 					x += atoi(text + ++i);
