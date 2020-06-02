@@ -1,6 +1,10 @@
 static void flextile(Monitor *m);
+static void getfactsforrange(Monitor *m, int an, int ai, int size, int *rest, float *fact);
 static void mirrorlayout(const Arg *arg);
 static void rotatelayoutaxis(const Arg *arg);
+#if DWMC_PATCH
+static void setlayoutaxisex(const Arg *arg);
+#endif // DWMC_PATCH
 static void incnstack(const Arg *arg);
 
 /* Symbol handlers */

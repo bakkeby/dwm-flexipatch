@@ -66,6 +66,27 @@ getfactsforrange(Monitor *m, int an, int ai, int size, int *rest, float *fact)
 	*fact = facts;
 }
 
+#if DWMC_PATCH
+static void
+setlayoutaxisex(const Arg *arg)
+{
+	int axis, arr;
+
+	axis = arg->i & 0x3; // lower two bytes indicates layout, master or stack1-2
+	arr = ((arg->i & 0xFC) >> 2); // remaining six upper bytes indicates arrangement
+
+	if ((axis == 0 && abs(arr) > LAYOUT_LAST)
+			|| (axis > 0 && (arr > AXIS_LAST || arr < 0)))
+		arr = 0;
+
+	selmon->ltaxis[axis] = arr;
+	#if PERTAG_PATCH
+	selmon->pertag->ltaxis[selmon->pertag->curtag][axis] = selmon->ltaxis[axis];
+	#endif // PERTAG_PATCH
+	arrange(selmon);
+}
+#endif // DWMC_PATCH
+
 static void
 layout_no_split(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n)
 {
