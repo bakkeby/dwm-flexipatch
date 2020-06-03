@@ -30,7 +30,16 @@ loadxrdb()
 				XRDB_LOAD_COLOR("dwm.selfloatcolor", selfloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
 
-				#if URGENTBORDER_PATCH
+				#if STATUSCOLORS_PATCH
+				XRDB_LOAD_COLOR("dwm.warnfgcolor", warnfgcolor);
+				XRDB_LOAD_COLOR("dwm.warnbgcolor", warnbgcolor);
+				XRDB_LOAD_COLOR("dwm.warnbordercolor", warnbordercolor);
+				#if FLOAT_BORDER_COLOR_PATCH
+				XRDB_LOAD_COLOR("dwm.warnfloatcolor", warnfloatcolor);
+				#endif // FLOAT_BORDER_COLOR_PATCH
+				#endif // STATUSCOLORS_PATCH
+
+				#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
 				XRDB_LOAD_COLOR("dwm.urgfgcolor", urgfgcolor);
 				XRDB_LOAD_COLOR("dwm.urgbgcolor", urgbgcolor);
 				XRDB_LOAD_COLOR("dwm.urgbordercolor", urgbordercolor);
