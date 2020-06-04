@@ -514,6 +514,9 @@ static Signal signals[] = {
 	{ "toggleverticalexpand",    toggleverticalexpand },
 	{ "togglemaximize",          togglemaximize },
 	#endif // EXRESIZE_PATCH
+	#if KEYMODES_PATCH
+	{ "setkeymode",              setkeymode },
+	#endif // KEYMODES_PATCH
 	#if TRANSFER_PATCH
 	{ "transfer",                transfer },
 	#endif // TRANSFER_PATCH
@@ -532,6 +535,7 @@ static Signal signals[] = {
 	{ "incrovgaps",              incrovgaps },
 	{ "togglegaps",              togglegaps },
 	{ "defaultgaps",             defaultgaps },
+	{ "setgaps",                 setgapsex },
 	#endif // VANITYGAPS_PATCH
 	{ "view",                    view },
 	{ "viewall",                 viewallex },

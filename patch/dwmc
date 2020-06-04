@@ -47,7 +47,7 @@ case $# in
 		signal $1
 		;;
 	*)
-		echo "Unknown command or missing one argument."
+		echo "Unknown command ($1) or missing one argument."
 		exit 1
 		;;
 	esac
@@ -58,6 +58,7 @@ case $# in
 	explace) ;&
 	moveplace) ;&
 	mpdchange) ;&
+	setkeymode) ;&
 	switchtag) ;&
 	togglescratch) ;&
 	view)
@@ -70,6 +71,7 @@ case $# in
 	tagex) ;&
 	toggletagex) ;&
 	setborderpx) ;&
+	setgaps) ;&
 	setlayoutex) ;&
 	setlayoutaxisex) ;&
 	swapfocus) ;&
@@ -99,13 +101,30 @@ case $# in
 		signal $1 f $2
 		;;
 	*)
-		echo "Unknown command or one too many arguments."
+		echo "Unknown command ($1) or too many arguments"
+		exit 1
+		;;
+	esac
+	;;
+5)
+	case $1 in
+	setgaps)
+		# Expects "setgaps oh ov ih iv" where -1 means to keep existing values
+		[ $2 = -1 ] && oh=128 || oh=$2
+		[ $3 = -1 ] && ov=128 || ov=$3
+		[ $4 = -1 ] && ih=128 || ih=$4
+		[ $5 = -1 ] && iv=128 || iv=$5
+		echo $(((oh << 24) + (ov << 16) + (ih << 8) + iv))
+		signal $1 i $(((oh << 24) + (ov << 16) + (ih << 8) + iv))
+		;;
+	*)
+		echo "Unknown command ($1) or too many arguments"
 		exit 1
 		;;
 	esac
 	;;
 *)
-	echo "Too many arguments."
+	echo "Unknown command ($1) or too many arguments"
 	exit 1
 	;;
 esac

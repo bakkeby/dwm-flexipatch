@@ -14,3 +14,6 @@ static void togglegaps(const Arg *arg);
 static void getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc);
 #endif
 static void setgaps(int oh, int ov, int ih, int iv);
+#if DWMC_PATCH
+static void setgapsex(const Arg *arg);
+#endif // DWMC_PATCH
