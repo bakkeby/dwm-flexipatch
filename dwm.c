@@ -514,7 +514,11 @@ static Window root, wmcheckwin;
 #include "patch/include.c"
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
+#if SCRATCHPAD_ALT_1_PATCH
+struct NumTags { char limitexceeded[LENGTH(tags) > 30 ? -1 : 1]; };
+#else
 struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
+#endif // SCRATCHPAD_ALT_1_PATCH
 
 /* function implementations */
 void
@@ -606,12 +610,17 @@ applyrules(Client *c)
 	if (c->tags & TAGMASK)                    c->tags = c->tags & TAGMASK;
 	#if SCRATCHPAD_PATCH
 	else if (c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags] & ~SPTAGMASK;
+	#elif SCRATCHPAD_ALT_1_PATCH
+	else if (c->tags != SCRATCHPAD_MASK && c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
 	#else
 	else if (c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
 	#endif // SCRATCHPAD_PATCH
 	else                                     c->tags = 1;
 	#elif SCRATCHPAD_PATCH
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : (c->mon->tagset[c->mon->seltags] & ~SPTAGMASK);
+	#elif SCRATCHPAD_ALT_1_PATCH
+	if (c->tags != SCRATCHPAD_MASK)
+		c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
 	#else
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
 	#endif // EMPTYVIEW_PATCH

@@ -825,10 +825,6 @@ static const char *statuscmds[] = { "notify-send Mouse$BUTTON" };
 static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
 #endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
 
-#if SCRATCHPAD_ALT_1_PATCH
-static const unsigned scratchpad_mask = 1u << sizeof tags / sizeof * tags;
-#endif // SCRATCHPAD_ALT_1_PATCH
-
 static Key keys[] = {
 	/* modifier                     key            function                argument */
 	#if KEYMODES_PATCH
@@ -997,8 +993,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_s,          togglesticky,           {0} },
 	#endif // STICKY_PATCH
 	#if SCRATCHPAD_ALT_1_PATCH
-	{ MODKEY,                       XK_0,          view,                   {.ui = ~scratchpad_mask } },
-	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~scratchpad_mask } },
 	{ MODKEY,                       XK_minus,      scratchpad_show,        {0} },
 	{ MODKEY|ShiftMask,             XK_minus,      scratchpad_hide,        {0} },
 	{ MODKEY,                       XK_equal,      scratchpad_remove,      {0} },

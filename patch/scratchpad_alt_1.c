@@ -4,7 +4,7 @@ static void scratchpad_hide ()
 {
 	if (selmon -> sel)
 	{
-		selmon -> sel -> tags = scratchpad_mask;
+		selmon -> sel -> tags = SCRATCHPAD_MASK;
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -36,9 +36,9 @@ static void scratchpad_show ()
 		scratchpad_show_first ();
 	else
 	{
-		if (scratchpad_last_showed -> tags != scratchpad_mask)
+		if (scratchpad_last_showed -> tags != SCRATCHPAD_MASK)
 		{
-			scratchpad_last_showed -> tags = scratchpad_mask;
+			scratchpad_last_showed -> tags = SCRATCHPAD_MASK;
 			focus(NULL);
 			arrange(selmon);
 		}
@@ -58,7 +58,7 @@ static void scratchpad_show ()
 				}
 				else
 				{
-					if (c -> tags == scratchpad_mask)
+					if (c -> tags == SCRATCHPAD_MASK)
 					{
 						found_next = 1;
 						scratchpad_show_client (c);
@@ -83,7 +83,7 @@ static void scratchpad_show_first (void)
 {
 	for (Client * c = selmon -> clients; c != NULL; c = c -> next)
 	{
-		if (c -> tags == scratchpad_mask)
+		if (c -> tags == SCRATCHPAD_MASK)
 		{
 			scratchpad_show_client (c);
 			break;
