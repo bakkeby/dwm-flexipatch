@@ -2,9 +2,9 @@ static Client * scratchpad_last_showed = NULL;
 
 static void scratchpad_hide ()
 {
-	if (selmon -> sel)
+	if (selmon->sel)
 	{
-		selmon -> sel -> tags = SCRATCHPAD_MASK;
+		selmon->sel->tags = SCRATCHPAD_MASK;
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -13,7 +13,7 @@ static void scratchpad_hide ()
 static _Bool scratchpad_last_showed_is_killed (void)
 {
 	_Bool killed = 1;
-	for (Client * c = selmon -> clients; c != NULL; c = c -> next)
+	for (Client * c = selmon->clients; c != NULL; c = c->next)
 	{
 		if (c == scratchpad_last_showed)
 		{
@@ -26,7 +26,7 @@ static _Bool scratchpad_last_showed_is_killed (void)
 
 static void scratchpad_remove ()
 {
-	if (selmon -> sel && scratchpad_last_showed != NULL && selmon -> sel == scratchpad_last_showed)
+	if (selmon->sel && scratchpad_last_showed != NULL && selmon->sel == scratchpad_last_showed)
 		scratchpad_last_showed = NULL;
 }
 
@@ -36,9 +36,9 @@ static void scratchpad_show ()
 		scratchpad_show_first ();
 	else
 	{
-		if (scratchpad_last_showed -> tags != SCRATCHPAD_MASK)
+		if (scratchpad_last_showed->tags != SCRATCHPAD_MASK)
 		{
-			scratchpad_last_showed -> tags = SCRATCHPAD_MASK;
+			scratchpad_last_showed->tags = SCRATCHPAD_MASK;
 			focus(NULL);
 			arrange(selmon);
 		}
@@ -46,7 +46,7 @@ static void scratchpad_show ()
 		{
 			_Bool found_current = 0;
 			_Bool found_next = 0;
-			for (Client * c = selmon -> clients; c != NULL; c = c -> next)
+			for (Client * c = selmon->clients; c != NULL; c = c->next)
 			{
 				if (found_current == 0)
 				{
@@ -58,7 +58,7 @@ static void scratchpad_show ()
 				}
 				else
 				{
-					if (c -> tags == SCRATCHPAD_MASK)
+					if (c->tags == SCRATCHPAD_MASK)
 					{
 						found_next = 1;
 						scratchpad_show_client (c);
@@ -74,16 +74,16 @@ static void scratchpad_show ()
 static void scratchpad_show_client (Client * c)
 {
 	scratchpad_last_showed = c;
-	c -> tags = selmon->tagset[selmon->seltags];
+	c->tags = selmon->tagset[selmon->seltags];
 	focus(c);
 	arrange(selmon);
 }
 
 static void scratchpad_show_first (void)
 {
-	for (Client * c = selmon -> clients; c != NULL; c = c -> next)
+	for (Client * c = selmon->clients; c != NULL; c = c->next)
 	{
-		if (c -> tags == SCRATCHPAD_MASK)
+		if (c->tags == SCRATCHPAD_MASK)
 		{
 			scratchpad_show_client (c);
 			break;
