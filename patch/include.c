@@ -99,7 +99,7 @@
 #if ROUNDED_CORNERS_PATCH
 #include "roundedcorners.c"
 #endif
-#if SCRATCHPAD_PATCH
+#if SCRATCHPADS_PATCH
 #include "scratchpad.c"
 #endif
 #if SCRATCHPAD_ALT_1_PATCH

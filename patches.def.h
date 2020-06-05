@@ -445,20 +445,20 @@
  */
 #define SAVEFLOATS_PATCH 0
 
-/* The scratchpad patch allows you to spawn or restore floating terminal windows.
+/* The scratchpads patch allows you to spawn or restore floating terminal windows.
  * It is typically useful when one need to do some short typing.
  * Upgraded to Christian Tenllado's multiple scratchpad version.
  * https://lists.suckless.org/hackers/2004/17205.html
- * https://dwm.suckless.org/patches/scratchpad/
+ * https://dwm.suckless.org/patches/scratchpads/
  */
-#define SCRATCHPAD_PATCH 0
+#define SCRATCHPADS_PATCH 0
 
 /* The scratchpad patch above automatically resizes and centers the scratchpad window every
  * time you spawn it. This alteration of the patch disables that so that the size and position
  * of the scratchpad window is retained when you respawn it. If you enable this then you may
  * want to also take the centered patch and enable the iscentered flag for floating scratchpads.
  */
-#define SCRATCHPAD_KEEP_POSITION_AND_SIZE_PATCH 0
+#define SCRATCHPAD_KEEP_POSITION_AND_SIZE_PATCH 1
 
 /* This alternative patch enables a scratchpad feature in dwm similar to the scratchpad
  * feature in i3wm.

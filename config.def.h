@@ -256,7 +256,7 @@ char *colors[][ColCount] = {
 };
 #endif // VTCOLORS_PATCH / FLOAT_BORDER_COLOR_PATCH
 
-#if SCRATCHPAD_PATCH
+#if SCRATCHPADS_PATCH
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spfm", "-g", "144x41", "-e", "ranger", NULL };
 const char *spcmd3[] = {"keepassxc", NULL };
@@ -266,7 +266,7 @@ static Sp scratchpads[] = {
    {"spranger",    spcmd2},
    {"keepassxc",   spcmd3},
 };
-#endif // SCRATCHPAD_PATCH
+#endif // SCRATCHPADS_PATCH
 
 /* tagging */
 #if EWMHTAGS_PATCH
@@ -430,11 +430,11 @@ static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	#if SCRATCHPAD_PATCH
+	#if SCRATCHPADS_PATCH
 	{ NULL,       "spterm",   NULL,       SPTAG(0),     1,           -1 },
 	{ NULL,       "spfm",     NULL,       SPTAG(1),     1,           -1 },
 	{ NULL,       "keepassxc",NULL,       SPTAG(2),     0,           -1 },
-	#endif // SCRATCHPAD_PATCH
+	#endif // SCRATCHPADS_PATCH
 	#endif
 };
 
@@ -595,9 +595,9 @@ static Signal signals[] = {
 	{ "toggleverticalmax",       toggleverticalmax },
 	{ "togglemax",               togglemax },
 	#endif // MAXIMIZE_PATCH
-	#if SCRATCHPAD_PATCH
+	#if SCRATCHPADS_PATCH
 	{ "togglescratch",           togglescratch },
-	#endif // SCRATCHPAD_PATCH
+	#endif // SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ "unfloatvisible",          unfloatvisible },
 	#endif // UNFLOATVISIBLE_PATCH
@@ -971,11 +971,11 @@ static Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_k,          toggleverticalmax,      {0} },
 	{ MODKEY|ControlMask,           XK_m,          togglemax,              {0} },
 	#endif // MAXIMIZE_PATCH
-	#if SCRATCHPAD_PATCH
+	#if SCRATCHPADS_PATCH
 	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
 	{ MODKEY|ControlMask,           XK_grave,      togglescratch,          {.ui = 1 } },
 	{ MODKEY|ShiftMask,             XK_grave,      togglescratch,          {.ui = 2 } },
-	#endif // SCRATCHPAD_PATCH
+	#endif // SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
