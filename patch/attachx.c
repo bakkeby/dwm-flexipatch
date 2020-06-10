@@ -24,7 +24,7 @@ attachx(Client *c)
 		return;
 	}
 	#elif ATTACHBELOW_PATCH
-	if (!(c->mon->sel == NULL || c->mon->sel->isfloating)) {
+	if (!(c->mon->sel == NULL || c->mon->sel == c || c->mon->sel->isfloating)) {
 		c->next = c->mon->sel->next;
 		c->mon->sel->next = c;
 		return;
