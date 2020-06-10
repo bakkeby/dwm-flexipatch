@@ -512,6 +512,8 @@
 /* This patch allows the status text to be fixed to the bar on a specific
  * monitor rather than being drawn on the focused monitor.
  * The statusallmons patch takes precedence over this patch.
+ * NB: If used together with the systray patch then consider setting
+ * systraypinning to statmonval+1.
  * https://dwm.suckless.org/patches/staticstatus/
  */
 #define STATICSTATUS_PATCH 0

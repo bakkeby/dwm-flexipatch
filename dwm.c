@@ -1756,7 +1756,7 @@ drawbars(void)
 	Monitor *m;
 
 	#if SYSTRAY_PATCH
-	if (showsystray) {
+	if (showsystray && systraypinning == 0) {
 		/* Clear status bar to avoid artifacts beneath systray icons */
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		drw_rect(drw, 0, 0, selmon->ww, bh, 1, 1);
