@@ -458,7 +458,7 @@
  * of the scratchpad window is retained when you respawn it. If you enable this then you may
  * want to also take the centered patch and enable the iscentered flag for floating scratchpads.
  */
-#define SCRATCHPAD_KEEP_POSITION_AND_SIZE_PATCH 1
+#define SCRATCHPAD_KEEP_POSITION_AND_SIZE_PATCH 0
 
 /* This alternative patch enables a scratchpad feature in dwm similar to the scratchpad
  * feature in i3wm.
