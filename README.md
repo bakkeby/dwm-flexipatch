@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-06-10 - Added the staticstatus patch
+
 2020-05-31 - Added the keymodes patch
 
 2020-05-29 - Added the color emoji patch
@@ -358,6 +360,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [stacker](https://dwm.suckless.org/patches/stacker/)
       - provides comprehensive utilities for managing the client stack
+
+   - [staticstatus](https://dwm.suckless.org/patches/staticstatus/)
+      - allows the status text to be fixed to the bar on a specific monitor rather than being drawn on the focused monitor
 
    - [statuscmd](https://dwm.suckless.org/patches/statuscmd/)
       - adds the ability to execute shell commands based on the mouse button and position when clicking the status bar

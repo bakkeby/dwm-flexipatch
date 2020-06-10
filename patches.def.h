@@ -509,6 +509,13 @@
  */
 #define STACKER_PATCH 0
 
+/* This patch allows the status text to be fixed to the bar on a specific
+ * monitor rather than being drawn on the focused monitor.
+ * The statusallmons patch takes precedence over this patch.
+ * https://dwm.suckless.org/patches/staticstatus/
+ */
+#define STATICSTATUS_PATCH 0
+
 /* Status2d allows colors and rectangle drawing in the dwm status bar.
  * This patch is incompatible with the statuscolors patch which takes precedence.
  * This patch is incompatible with the extrabar patch.

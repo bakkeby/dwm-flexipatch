@@ -248,6 +248,7 @@ struct Monitor {
 	int nmaster;
 	int num;
 	int by;               /* bar geometry */
+	int tw;               /* bar text width */
 	#if EXTRABAR_PATCH
 	int eby;	          /* extra bar geometry */
 	#endif // EXTRABAR_PATCH
@@ -458,7 +459,6 @@ static char estext[256];
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar geometry */
-static int tw = 0;           /* bar text width */
 static int lrpad;            /* sum of left and right padding for text */
 #if BARPADDING_PATCH
 static int vp;               /* vertical padding for bar */
@@ -506,6 +506,9 @@ static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
+#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+static Monitor *statmon;
+#endif // STATICSTATUS_PATCH
 static Window root, wmcheckwin;
 
 /* configuration, allows nested code to access above variables */
@@ -820,13 +823,13 @@ buttonpress(XEvent *e)
 		} else if (ev->x < x + blw)
 			click = ClkLtSymbol;
 		#endif // TAGGRID_PATCH
-		else if (ev->x > selmon->ww - tw + padding)
+		else if (ev->x > selmon->ww - selmon->tw + padding)
 		#if !STATUSCMD_PATCH
 			click = ClkStatusText;
 		#else
 		{
 			click = ClkStatusText;
-			xc = selmon->ww - tw + padding;
+			xc = selmon->ww - selmon->tw + padding;
 			#if STATUSPADDING_PATCH
 			xc += lrpad / 2;
 			#endif // STATUSPADDING_PATCH
@@ -1446,7 +1449,12 @@ drawbar(Monitor *m)
 
 	/* draw status first so it can be overdrawn by tags later */
 	#if !STATUSALLMONS_PATCH
-	if (m == selmon) { /* status is only drawn on selected monitor */
+	#if STATICSTATUS_PATCH
+	if (m == statmon)
+	#else
+	if (m == selmon)
+	#endif // STATICSTATUS_PATCH
+	{ /* status is only drawn on selected monitor */
 	#endif // STATUSALLMONS_PATCH
 		#if VTCOLORS_PATCH
 		drw_setscheme(drw, scheme[SchemeStatus]);
@@ -1455,9 +1463,9 @@ drawbar(Monitor *m)
 		#endif // VTCOLORS_PATCH
 		#if STATUSCOLORS_PATCH
 		#if STATUSPADDING_PATCH
-		tw = textw_wosc(stext) + lrpad + 2;
+		m->tw = textw_wosc(stext) + lrpad + 2;
 		#else
-		tw = textw_wosc(stext) + 2;
+		m->tw = textw_wosc(stext) + 2;
 		#endif // STATUSPADDING_PATCH
 		while (1) {
 			if ((unsigned int)*ts > LENGTH(colors)) {
@@ -1466,7 +1474,7 @@ drawbar(Monitor *m)
 			}
 			ctmp = *ts;
 			*ts = '\0';
-			drw_text(drw, m->ww - tw - stw + tx, 0, tw - tx, bh, stp, tp, 0);
+			drw_text(drw, m->ww - m->tw - stw + tx, 0, m->tw - tx, bh, stp, tp, 0);
 			tx += TEXTW(tp) - lrpad;
 			if (ctmp == '\0')
 				break;
@@ -1475,14 +1483,14 @@ drawbar(Monitor *m)
 			tp = ++ts;
 		}
 		#elif STATUS2D_PATCH
-		tw = m->ww - drawstatusbar(m, bh, stext, stw, stp);
+		m->tw = m->ww - drawstatusbar(m, bh, stext, stw, stp);
 		#else // STATUSCOLORS_PATCH
 		#if STATUSPADDING_PATCH
-		tw = TEXTW(stext);
+		m->tw = TEXTW(stext);
 		#else
-		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
+		m->tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
 		#endif // STATUSPADDING_PATCH
-		drw_text(drw, m->ww - tw - stw, 0, tw, bh, stp, stext, 0);
+		drw_text(drw, m->ww - m->tw - stw, 0, m->tw, bh, stp, stext, 0);
 		#endif // STATUSCOLORS_PATCH
 	#if !STATUSALLMONS_PATCH
 	}
@@ -1578,7 +1586,7 @@ drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // LEFTLAYOUT_PATCH
 
-	if ((w = m->ww - tw - stw - x) > bh)
+	if ((w = m->ww - m->tw - stw - x) > bh)
 	{
 		#if AWESOMEBAR_PATCH
 		if (n > 0) {
@@ -3760,7 +3768,7 @@ updategeom(void)
 				else
 					mons = createmon();
 			}
-			for (i = 0, m = mons; i < nn && m; m = m->next, i++)
+			for (i = 0, m = mons; i < nn && m; m = m->next, i++) {
 				if (i >= n
 				|| unique[i].x_org != m->mx || unique[i].y_org != m->my
 				|| unique[i].width != m->mw || unique[i].height != m->mh)
@@ -3773,6 +3781,11 @@ updategeom(void)
 					m->mh = m->wh = unique[i].height;
 					updatebarpos(m);
 				}
+				#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+				if (i == statmonval)
+					statmon = m;
+				#endif // STATICSTATUS_PATCH
+			}
 		} else { /* less monitors available nn < n */
 			for (i = nn; i < n; i++) {
 				for (m = mons; m && m->next; m = m->next);
@@ -3786,6 +3799,10 @@ updategeom(void)
 				}
 				if (m == selmon)
 					selmon = mons;
+				#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+				if (m == statmon)
+					statmon = mons;
+				#endif // STATICSTATUS_PATCH
 				cleanupmon(m);
 			}
 		}
@@ -3802,6 +3819,10 @@ updategeom(void)
 			updatebarpos(mons);
 		}
 	}
+	#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+	if (!statmon)
+		statmon = mons;
+	#endif // STATICSTATUS_PATCH
 	if (dirty) {
 		selmon = mons;
 		selmon = wintomon(root);
@@ -3909,9 +3930,11 @@ updatestatus(void)
 	#if STATUSALLMONS_PATCH
 	for (m = mons; m; m = m->next)
 		drawbar(m);
+	#elif STATICSTATUS_PATCH
+	drawbar(statmon);
 	#else
 	drawbar(selmon);
-	#endif // STATUSALLMONS_PATCH
+	#endif // STATUSALLMONS_PATCH | STATICSTATUS_PATCH
 	#if SYSTRAY_PATCH
 	if (showsystray)
 		updatesystray();

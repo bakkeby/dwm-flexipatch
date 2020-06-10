@@ -32,6 +32,9 @@ static const int focusonwheel            = 0;
 static const int horizpadbar             = 2;   /* horizontal padding for statusbar */
 static const int vertpadbar              = 0;   /* vertical padding for statusbar */
 #endif // STATUSPADDING_PATCH
+#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+static const int statmonval              = 0;
+#endif // STATICSTATUS_PATCH
 #if SYSTRAY_PATCH
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
