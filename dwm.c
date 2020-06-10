@@ -3947,7 +3947,7 @@ updatewindowtype(Client *c)
 	#endif //EWMH_WINDOWS_FLOAT_PATCH
 	{
 		#if CENTER_PATCH
-		if (c->x == c->mon->mx && c->y == c->mon->my)
+		if (c->x <= c->mon->mx && c->y <= c->mon->my)
 			c->iscentered = 1;
 		#endif // CENTER_PATCH
 		c->isfloating = 1;
