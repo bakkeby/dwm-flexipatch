@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-06-11 - Added the pango patch
+
 2020-06-10 - Added the staticstatus patch
 
 2020-05-31 - Added the keymodes patch
@@ -308,6 +310,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [onlyquitonempty](https://dwm.suckless.org/patches/onlyquitonempty/)
       - makes it so dwm will only exit via quit() if no windows are open (in order to prevent accidental loss of work)
+
+   - [pango](https://dwm.suckless.org/patches/pango/)
+      - adds simple markup for status messages using pango markup
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor

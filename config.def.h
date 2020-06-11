@@ -47,7 +47,11 @@ static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no 
 #if EXTRABAR_PATCH
 static const char statussep              = ';';      /* separator between status bars */
 #endif // EXTRABAR_PATCH
+#if PANGO_PATCH
+static const char font[]                 = "monospace 10";
+#else
 static const char *fonts[]               = { "monospace:size=10" };
+#endif // PANGO_PATCH
 static const char dmenufont[]            = "monospace:size=10";
 
 static char normfgcolor[]                = "#bbbbbb";

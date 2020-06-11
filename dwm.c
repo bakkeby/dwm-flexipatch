@@ -45,6 +45,10 @@
 #include "drw.h"
 #include "util.h"
 
+#if PANGO_PATCH
+#include <pango/pango.h>
+#endif // PANGO_PATCH
+
 #if SPAWNCMD_PATCH
 #include <assert.h>
 #include <libgen.h>
@@ -83,7 +87,12 @@
 #else
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #endif // SCRATCHPADS_PATCH
+#if PANGO_PATCH
+#define TEXTW(X)                (drw_font_getwidth(drw, (X), False) + lrpad)
+#define TEXTWM(X)               (drw_font_getwidth(drw, (X), True) + lrpad)
+#else
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
+#endif // PANGO_PATCH
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
@@ -444,7 +453,7 @@ static void zoom(const Arg *arg);
 
 /* variables */
 static const char broken[] = "broken";
-#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+#if PANGO_PATCH || STATUS2D_PATCH && !STATUSCOLORS_PATCH
 static char stext[1024];
 #else
 static char stext[256];
@@ -847,6 +856,8 @@ buttonpress(XEvent *e)
 					text[i] = '\0';
 					#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
 					xc += status2dtextlength(text);
+					#elif PANGO_PATCH
+					xc += TEXTWM(text) - lrpad;
 					#else
 					xc += TEXTW(text) - lrpad;
 					#endif // STATUS2D_PATCH
@@ -960,7 +971,11 @@ cleanup(void)
 		free(scheme[i]);
 	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
+	#if PANGO_PATCH
+	drw_font_free(drw->font);
+	#else
 	drw_fontset_free(drw->fonts);
+	#endif // PANGO_PATCH
 	drw_free(drw);
 	XSync(dpy, False);
 	XSetInputFocus(dpy, PointerRoot, RevertToPointerRoot, CurrentTime);
@@ -1429,9 +1444,17 @@ drawbar(Monitor *m)
 	#endif // STATUSPADDING_PATCH
 	#if !HIDEVACANTTAGS_PATCH
 	#if !ACTIVETAGINDICATORBAR_PATCH
+	#if PANGO_PATCH
+	int boxs = drw->font->h / 9;
+	#else
 	int boxs = drw->fonts->h / 9;
+	#endif // PANGO_PATCH
 	#endif // ACTIVETAGINDICATORBAR_PATCH
+	#if PANGO_PATCH
+	int boxw = drw->font->h / 6 + 2;
+	#else
 	int boxw = drw->fonts->h / 6 + 2;
+	#endif // PANGO_PATCH
 	#endif // HIDEVACANTTAGS_PATCH
 	unsigned int i, occ = 0, urg = 0;
 	#if STATUSCOLORS_PATCH
@@ -1474,8 +1497,13 @@ drawbar(Monitor *m)
 			}
 			ctmp = *ts;
 			*ts = '\0';
+			#if PANGO_PATCH
+			drw_text(drw, m->ww - m->tw - stw + tx, 0, m->tw - tx, bh, stp, tp, 0, True);
+			tx += TEXTWM(tp) - lrpad;
+			#else
 			drw_text(drw, m->ww - m->tw - stw + tx, 0, m->tw - tx, bh, stp, tp, 0);
 			tx += TEXTW(tp) - lrpad;
+			#endif // PANGO_PATCH
 			if (ctmp == '\0')
 				break;
 			drw_setscheme(drw, scheme[(unsigned int)(ctmp-1)]);
@@ -1485,12 +1513,20 @@ drawbar(Monitor *m)
 		#elif STATUS2D_PATCH
 		m->tw = m->ww - drawstatusbar(m, bh, stext, stw, stp);
 		#else // STATUSCOLORS_PATCH
-		#if STATUSPADDING_PATCH
+		#if STATUSPADDING_PATCH && PANGO_PATCH
+		m->tw = TEXTWM(stext);
+		#elif STATUSPADDING_PATCH
 		m->tw = TEXTW(stext);
+		#elif PANGO_PATCH
+		m->tw = TEXTWM(stext) - lrpad + 2; /* 2px right padding */
 		#else
 		m->tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-		#endif // STATUSPADDING_PATCH
+		#endif // STATUSPADDING_PATCH | PANGO_PATCH
+		#if PANGO_PATCH
+		drw_text(drw, m->ww - m->tw - stw, 0, m->tw, bh, stp, stext, 0, True);
+		#else
 		drw_text(drw, m->ww - m->tw - stw, 0, m->tw, bh, stp, stext, 0);
+		#endif // PANGO_PATCH
 		#endif // STATUSCOLORS_PATCH
 	#if !STATUSALLMONS_PATCH
 	}
@@ -1517,7 +1553,11 @@ drawbar(Monitor *m)
 	#else
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	#endif // VTCOLORS_PATCH
+	#if PANGO_PATCH
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0, False);
+	#else
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	#endif // PANGO_PATCH
 	#endif // LEFTLAYOUT_PATCH
 	#if TAGGRID_PATCH
 	if (drawtagmask & DRAWCLASSICTAGS)
@@ -1555,8 +1595,12 @@ drawbar(Monitor *m)
 		#else // URGENTBORDER_PATCH
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
 		#endif // URGENTBORDER_PATCH
-		#if ALTERNATIVE_TAGS_PATCH
+		#if ALTERNATIVE_TAGS_PATCH && PANGO_PATCH
+		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert, False);
+		#elif ALTERNATIVE_TAGS_PATCH
 		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert);
+		#elif PANGO_PATCH
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert, False);
 		#else
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert);
 		#endif // ALTERNATIVE_TAGS_PATCH
@@ -1583,7 +1627,11 @@ drawbar(Monitor *m)
 	#else
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	#endif // VTCOLORS_PATCH
+	#if PANGO_PATCH
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0, False);
+	#else
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	#endif // PANGO_PATCH
 	#endif // LEFTLAYOUT_PATCH
 
 	if ((w = m->ww - m->tw - stw - x) > bh)
@@ -1618,7 +1666,11 @@ drawbar(Monitor *m)
 						tabw--;
 					remainder--;
 				}
+				#if PANGO_PATCH
+				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0, False);
+				#else
 				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0);
+				#endif // PANGO_PATCH
 				x += tabw;
 			}
 		} else {
@@ -1660,7 +1712,11 @@ drawbar(Monitor *m)
 				drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
 				#endif // VTCOLORS_PATCH / TITLECOLOR_PATCH
 				if (ftw > 0) /* trap special handling of 0 in drw_text */
+					#if PANGO_PATCH
+					drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0, False);
+					#else
 					drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0);
+					#endif // PANGO_PATCH
 				#if !HIDEVACANTTAGS_PATCH
 				if (c->isfloating)
 					#if ACTIVETAGINDICATORBAR_PATCH
@@ -1693,14 +1749,22 @@ drawbar(Monitor *m)
 			#endif // IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 			#if CENTEREDWINDOWNAME_PATCH
 			int mid = (m->ww - TEXTW(m->sel->name)) / 2 - x;
-			#if BARPADDING_PATCH
+			#if BARPADDING_PATCH && PANGO_PATCH
+			drw_text(drw, x, 0, w - 2*sp, bh, mid, m->sel->name, 0, False);
+			#elif BARPADDING_PATCH
 			drw_text(drw, x, 0, w - 2*sp, bh, mid, m->sel->name, 0);
+			#elif PANGO_PATCH
+			drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0, False);
 			#else
 			drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);
 			#endif // BARPADDING_PATCH
 			#else
-			#if BARPADDING_PATCH
+			#if BARPADDING_PATCH && PANGO_PATCH
+			drw_text(drw, x, 0, w - 2*sp, bh, lrpad / 2, m->sel->name, 0, False);
+			#elif BARPADDING_PATCH
 			drw_text(drw, x, 0, w - 2*sp, bh, lrpad / 2, m->sel->name, 0);
+			#elif PANGO_PATCH
+			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0, False);
 			#else
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			#endif // BARPADDING_PATCH
@@ -1744,7 +1808,11 @@ drawbar(Monitor *m)
 		#else
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		#endif // VTCOLORS_PATCH
+		#if PANGO_PATCH
+		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0, True);
+		#else
 		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0);
+		#endif // PANGO_PATCH
 		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
 	}
 	#endif // EXTRABAR_PATCH
@@ -2975,11 +3043,21 @@ setup(void)
 	#else
 	drw = drw_create(dpy, screen, root, sw, sh);
 	#endif // ALPHA_PATCH
+	#if PANGO_PATCH
+	if (!drw_font_create(drw, font))
+	#else
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
+	#endif // PANGO_PATCH
 		die("no fonts could be loaded.");
-	#if STATUSPADDING_PATCH
+	#if STATUSPADDING_PATCH && PANGO_PATCH
+	lrpad = drw->font->h + horizpadbar;
+	bh = drw->font->h + vertpadbar;
+	#elif STATUSPADDING_PATCH
 	lrpad = drw->fonts->h + horizpadbar;
 	bh = drw->fonts->h + vertpadbar;
+	#elif PANGO_PATCH
+	lrpad = drw->font->h;
+	bh = drw->font->h + 2;
 	#else
 	lrpad = drw->fonts->h;
 	bh = drw->fonts->h + 2;
@@ -4198,8 +4276,10 @@ main(int argc, char *argv[])
 			die("dwm-"VERSION);
 		else if (!strcmp("-h", argv[i]) || !strcmp("--help", argv[i]))
 			die(help());
+		#if !PANGO_PATCH
 		else if (!strcmp("-fn", argv[i])) /* font set */
 			fonts[0] = argv[++i];
+		#endif // PANGO_PATCH
 		#if !VTCOLORS_PATCH
 		else if (!strcmp("-nb", argv[i])) /* normal background color */
 			colors[SchemeNorm][1] = argv[++i];

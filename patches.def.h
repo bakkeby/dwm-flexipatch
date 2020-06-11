@@ -390,6 +390,27 @@
  */
 #define ONLYQUITONEMPTY_PATCH 0
 
+/* This patch adds simple markup for status messages using pango markup.
+ * This depends on the pango library v1.44 or greater.
+ * You need to uncomment the corresponding lines in config.mk to use the pango libraries
+ * when including this patch.
+ *
+ * Note that the pango patch does not protect against the BadLength error from Xft
+ * when color glyphs are used, which means that dwm will crash if color emoji is used.
+ *
+ * If you need color emoji then you may want to install this patched library from the AUR:
+ * https://aur.archlinux.org/packages/libxft-bgra/
+ *
+ * A long term fix for the libXft library is pending approval of this pull request:
+ * https://gitlab.freedesktop.org/xorg/lib/libxft/-/merge_requests/1
+ *
+ * Also see:
+ * https://developer.gnome.org/pygtk/stable/pango-markup-language.html
+ * https://lists.suckless.org/hackers/2004/17285.html
+ * https://dwm.suckless.org/patches/pango/
+ */
+#define PANGO_PATCH 0
+
 /* The pertag patch adds nmaster, mfacts and layouts per tag rather than per
  * monitor (default).
  * https://dwm.suckless.org/patches/pertag/

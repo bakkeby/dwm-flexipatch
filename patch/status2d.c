@@ -24,7 +24,11 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 			if (!isCode) {
 				isCode = 1;
 				text[i] = '\0';
+				#if PANGO_PATCH
+				w += TEXTWM(text) - lrpad;
+				#else
 				w += TEXTW(text) - lrpad;
+				#endif // PANGO_PATCH
 				text[i] = '^';
 				if (text[++i] == 'f')
 					w += atoi(text + ++i);
@@ -36,7 +40,11 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 		}
 	}
 	if (!isCode)
+		#if PANGO_PATCH
+		w += TEXTWM(text) - lrpad;
+		#else
 		w += TEXTW(text) - lrpad;
+		#endif // PANGO_PATCH
 	else
 		isCode = 0;
 	text = p;
@@ -57,8 +65,13 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 			isCode = 1;
 
 			text[i] = '\0';
+			#if PANGO_PATCH
+			w = TEXTWM(text) - lrpad;
+			drw_text(drw, x, 0, w, bh, 0, text, 0, True);
+			#else
 			w = TEXTW(text) - lrpad;
 			drw_text(drw, x, 0, w, bh, 0, text, 0);
+			#endif // PANGO_PATCH
 
 			x += w;
 
@@ -126,8 +139,13 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 	}
 
 	if (!isCode) {
+		#if PANGO_PATCH
+		w = TEXTWM(text) - lrpad;
+		drw_text(drw, x, 0, w, bh, 0, text, 0, True);
+		#else
 		w = TEXTW(text) - lrpad;
 		drw_text(drw, x, 0, w, bh, 0, text, 0);
+		#endif // PANGO_PATCH
 	}
 
 	drw_setscheme(drw, scheme[SchemeNorm]);
@@ -161,7 +179,11 @@ status2dtextlength(char* stext)
 			if (!isCode) {
 				isCode = 1;
 				text[i] = '\0';
+				#if PANGO_PATCH
+				w += TEXTWM(text) - lrpad;
+				#else
 				w += TEXTW(text) - lrpad;
+				#endif // PANGO_PATCH
 				text[i] = '^';
 				if (text[++i] == 'f')
 					w += atoi(text + ++i);
@@ -173,7 +195,11 @@ status2dtextlength(char* stext)
 		}
 	}
 	if (!isCode)
+		#if PANGO_PATCH
+		w += TEXTWM(text) - lrpad;
+		#else
 		w += TEXTW(text) - lrpad;
+		#endif // PANGO_PATCH
 	else
 		isCode = 0;
 	return w;
