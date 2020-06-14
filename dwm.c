@@ -4370,7 +4370,7 @@ main(int argc, char *argv[])
 #endif /* __OpenBSD__ */
 	scan();
 	#if AUTOSTART_PATCH
-	runAutostart();
+	runautostart();
 	#endif
 	run();
 	#if RESTARTSIG_PATCH

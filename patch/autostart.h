@@ -1,1 +1,1 @@
-static void runAutostart(void);
+static void runautostart(void);
