@@ -303,146 +303,41 @@ static const unsigned int drawtagmask = DRAWTAGGRID; /* | DRAWCLASSICTAGS to sho
 static const int tagrows = 2;
 #endif // TAGGRID_PATCH
 
+/* There are two options when it comes to per-client rules:
+ *  - a typical struct table or
+ *  - using the RULE macro
+ *
+ * A traditional struct table looks like this:
+ *    // class      instance  title  tags mask  isfloating  monitor
+ *    { "Gimp",     NULL,     NULL,  1 << 4,    0,          -1 },
+ *    { "Firefox",  NULL,     NULL,  1 << 7,    0,          -1 },
+ *
+ * The RULE macro has the default values set for each field allowing you to only
+ * specify the values that are relevant for your rule, e.g.
+ *
+ *    RULE(.class = "Gimp", .tags = 1 << 4)
+ *    RULE(.class = "Firefox", .tags = 1 << 7)
+ *
+ * One benefit of using the RULE macro with a flexipatch build is that you do not have
+ * to worry about having to fiddle with rules when enabling or disabling patches. Field
+ * names that do not apply are simply ignored by the macro.
+ *
+ * Refer to the Rule struct definition for the list of available fields depending on
+ * the patches you enable.
+ */
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 *	WM_WINDOW_ROLE(STRING) = role
 	 */
-	#if WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    iscentered   isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,           1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,           0,           0,          0,         -1 }
-	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    iscentered   isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,           1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,           0,           -1 },
-	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    iscentered   isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,           1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,           0,          0,         -1 },
-	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    iscentered   isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,           -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    iscentered   isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           0,           1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,           0,           0,          0,         -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    iscentered   isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           0,           1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,           0,           -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    iscentered   isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           0,           1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,           0,          0,         -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    iscentered   isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,           -1 },
-	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,           0,          0,         -1 },
-	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,           -1 },
-	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           0,          0,         -1 },
-	#elif WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && !ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    switchtag    isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      1,           0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    iscentered   isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,           1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,           0,           0,          0,         -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    iscentered   isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,           1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,           0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    iscentered   isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,           1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,           0,          0,         -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    iscentered   isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,           -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,           0,          0,         -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,           -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           0,          0,         -1 },
-	#elif WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH && !ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      role        instance    title         tags mask    isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       NULL,         0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       NULL,         1 << 8,      0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,           0,          0,         -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           0,          0,         -1 },
-	#elif !WINDOWROLERULE_PATCH && SWITCHTAG_PATCH && !CENTER_PATCH && !ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      instance    title       tags mask     switchtag    isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       1,           0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     iscentered   isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           0,           0,          0,         -1 },
-	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      instance    title       tags mask     iscentered   isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     iscentered   isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           0,          0,         -1 },
-	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && CENTER_PATCH && !ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     isfloating   ispermanent  isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           0,          0,         -1 },
-	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH && ISPERMANENT_PATCH && !SWALLOW_PATCH
-	/* class      instance    title       tags mask     isfloating   ispermanent  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
-	#elif !WINDOWROLERULE_PATCH && !SWITCHTAG_PATCH && !CENTER_PATCH && !ISPERMANENT_PATCH && SWALLOW_PATCH
-	/* class      instance    title       tags mask     isfloating   isterminal  noswallow  monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,          0,         -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,          0,         -1 },
-	#else
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	RULE(.class = "Gimp", .tags = 1 << 4)
+	RULE(.class = "Firefox", .tags = 1 << 7)
 	#if SCRATCHPADS_PATCH
-	{ NULL,       "spterm",   NULL,       SPTAG(0),     1,           -1 },
-	{ NULL,       "spfm",     NULL,       SPTAG(1),     1,           -1 },
-	{ NULL,       "keepassxc",NULL,       SPTAG(2),     0,           -1 },
+	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
+	RULE(.instance = "spfm", .tags = SPTAG(1), .isfloating = 1)
+	RULE(.instance = "keepassxc", .tags = SPTAG(2))
 	#endif // SCRATCHPADS_PATCH
-	#endif
 };
 
 #if MONITOR_RULES_PATCH

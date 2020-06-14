@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-06-14 - Added RULE macro to replace rules setup making the default config less of an abomination and making it simpler to include new rules based patches
+
 2020-06-11 - Added the pango patch
 
 2020-06-10 - Added the staticstatus patch
