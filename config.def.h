@@ -318,10 +318,6 @@ static const int tagrows = 2;
  *    RULE(.class = "Gimp", .tags = 1 << 4)
  *    RULE(.class = "Firefox", .tags = 1 << 7)
  *
- * One benefit of using the RULE macro with a flexipatch build is that you do not have
- * to worry about having to fiddle with rules when enabling or disabling patches. Field
- * names that do not apply are simply ignored by the macro.
- *
  * Refer to the Rule struct definition for the list of available fields depending on
  * the patches you enable.
  */

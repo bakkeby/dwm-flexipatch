@@ -322,32 +322,32 @@ typedef struct {
 	int monitor;
 } Rule;
 
-#define R_WINDOWROLERULE_(enabled) R_WINDOWROLERULE_##enabled
-#define R_WINDOWROLERULE(enabled) R_WINDOWROLERULE_(enabled)
-#define R_WINDOWROLERULE_0
-#define R_WINDOWROLERULE_1 .role = NULL,
+#define RULE(...) { .monitor = -1, ##__VA_ARGS__ },
 
-#define R_SWITCHTAG_(enabled) R_SWITCHTAG_##enabled
-#define R_SWITCHTAG(enabled) R_SWITCHTAG_(enabled)
-#define R_SWITCHTAG_0
-#define R_SWITCHTAG_1 .switchtag = 0,
-
-#define R_CENTER_(enabled) R_CENTER_##enabled
-#define R_CENTER(enabled) R_CENTER_(enabled)
-#define R_CENTER_0
-#define R_CENTER_1 .iscentered = 0,
-
-#define R_ISPERMANENT_(enabled) R_ISPERMANENT_##enabled
-#define R_ISPERMANENT(enabled) R_ISPERMANENT_(enabled)
-#define R_ISPERMANENT_0
-#define R_ISPERMANENT_1 .ispermanent = 0,
-
-#define R_SWALLOW_(enabled) R_SWALLOW_##enabled
-#define R_SWALLOW(enabled) R_SWALLOW_(enabled)
-#define R_SWALLOW_0
-#define R_SWALLOW_1 .isterminal = 0, .noswallow = 0,
-
-#define RULE(...) { .class = NULL, R_WINDOWROLERULE(WINDOWROLERULE_PATCH) .instance = NULL, .title = NULL, .wintype = NULL, .tags = 0, R_SWITCHTAG(SWITCHTAG_PATCH) R_CENTER(CENTER_PATCH) .isfloating = 0, R_ISPERMANENT(ISPERMANENT_PATCH) R_SWALLOW(SWALLOW_PATCH) .monitor = -1 },
+/* Cross patch compatibility rule macro helper macros */
+#define FLOATING , .isfloating = 1
+#if CENTER_PATCH
+#define CENTERED , .iscentered = 1
+#else
+#define CENTERED
+#endif // CENTER_PATCH
+#if ISPERMANENT_PATCH
+#define PERMANENT , .ispermanent = 1
+#else
+#define PERMANENT
+#endif // ISPERMANENT_PATCH
+#if SWALLOW_PATCH
+#define NOSWALLOW , .noswallow = 1
+#define TERMINAL , .isterminal = 1
+#else
+#define NOSWALLOW
+#define TERMINAL
+#endif // SWALLOW_PATCH
+#if SWITCHTAG_PATCH
+#define SWITCHTAG , .switchtag = 1
+#else
+#define SWITCHTAG
+#endif // SWITCHTAG_PATCH
 
 #if MONITOR_RULES_PATCH
 typedef struct {
