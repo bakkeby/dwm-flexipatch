@@ -500,6 +500,23 @@
  */
 #define SHIFTVIEW_CLIENTS_PATCH 0
 
+/* This patch makes dwm obey even "soft" sizehints for new clients. Any window
+ * that requests a specific initial size will be floated and set to that size.
+ * Unlike with "fixed size" windows, you are able to resize and/or unfloat these
+ * windows freely - only the initial state is affected.
+ * This version of the patch is honestly of limited utility since there are many
+ * clients that will abuse it.
+ * https://dwm.suckless.org/patches/sizehints/
+ */
+#define SIZEHINTS_PATCH 0
+
+/* This patch makes dwm obey even "soft" sizehints for new clients. This ruled
+ * version is essentially the same patch except it obeys the "isfloating" rule
+ * if it is available in config.h for the given client.
+ * https://dwm.suckless.org/patches/sizehints/
+ */
+#define SIZEHINTS_RULED_PATCH 0
+
 /* In a multi-head setup monitor 0 is by default the primary screen, with the left and right
  * screen being monitor 1 and 2 respectively. This patch sorts screens left to right (or
  * top to bottom in a vertical layout) which aims to address some inconsistencies when it

@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-06-15 - Added sizehints patch
+
 2020-06-14 - Added RULE macro to replace rules setup making the default config less of an abomination and making it simpler to include new rules based patches
 
 2020-06-11 - Added the pango patch
@@ -358,6 +360,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [shiftviewclients](https://github.com/bakkeby/patches/blob/master/dwm/dwm-shiftviewclients-6.2.diff)
       - variant of the shiftview patch which skips tags that has no clients
+
+   - [sizehints](https://dwm.suckless.org/patches/sizehints/)
+      - makes dwm obey even "soft" sizehints for new clients
 
    - [sortscreens](https://www.mail-archive.com/hackers@suckless.org/msg09400.html)
       - this patch aims to address some inconsistencies when it comes to focusmon, tagmon and similar functionality by explicitly sorting screens left to right (or top to bottom in a vertical layout)

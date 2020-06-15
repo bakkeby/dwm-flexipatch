@@ -120,6 +120,9 @@
 #if SHIFTVIEW_CLIENTS_PATCH
 #include "shiftviewclients.h"
 #endif
+#if SIZEHINTS_RULED_PATCH
+#include "sizehints_ruled.h"
+#endif
 #if SORTSCREENS_PATCH
 #ifdef XINERAMA
 #include "sortscreens.h"
