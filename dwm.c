@@ -79,6 +79,7 @@
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
+#define WTYPE                   "_NET_WM_WINDOW_TYPE_"
 #if SCRATCHPADS_PATCH
 #define NUMTAGS                 (LENGTH(tags) + LENGTH(scratchpads))
 #define TAGMASK                 ((1 << NUMTAGS) - 1)
@@ -130,10 +131,7 @@ enum {
 	#if EWMHTAGS_PATCH
 	NetDesktopNames, NetDesktopViewport, NetNumberOfDesktops, NetCurrentDesktop,
 	#endif // EWMHTAGS_PATCH
-	#if EWMH_WINDOWS_FLOAT_PATCH
-	NetWMModal, NetWMWindowTypeUtility, NetWMWindowTypeToolbar, NetWMWindowTypeSplash,
-	#endif // EWMH_WINDOWS_FLOAT_PATCH
-	NetWMWindowTypeDialog, NetClientList, NetLast
+	NetClientList, NetLast
 }; /* EWMH atoms */
 
 #if WINDOWROLERULE_PATCH
@@ -305,6 +303,7 @@ typedef struct {
 	#endif // WINDOWROLERULE_PATCH
 	const char *instance;
 	const char *title;
+	const char *wintype;
 	unsigned int tags;
 	#if SWITCHTAG_PATCH
 	int switchtag;
@@ -346,9 +345,9 @@ typedef struct {
 #define R_SWALLOW_(enabled) R_SWALLOW_##enabled
 #define R_SWALLOW(enabled) R_SWALLOW_(enabled)
 #define R_SWALLOW_0
-#define R_SWALLOW_1 .isterminal = 0, .noswallow = 1,
+#define R_SWALLOW_1 .isterminal = 0, .noswallow = 0,
 
-#define RULE(...) { .class = NULL, R_WINDOWROLERULE(WINDOWROLERULE_PATCH) .instance = NULL, .title = NULL, .tags = 0, R_SWITCHTAG(SWITCHTAG_PATCH) R_CENTER(CENTER_PATCH) .isfloating = 0, R_ISPERMANENT(ISPERMANENT_PATCH) R_SWALLOW(SWALLOW_PATCH) .monitor = -1 },
+#define RULE(...) { .class = NULL, R_WINDOWROLERULE(WINDOWROLERULE_PATCH) .instance = NULL, .title = NULL, .wintype = NULL, .tags = 0, R_SWITCHTAG(SWITCHTAG_PATCH) R_CENTER(CENTER_PATCH) .isfloating = 0, R_ISPERMANENT(ISPERMANENT_PATCH) R_SWALLOW(SWALLOW_PATCH) .monitor = -1 },
 
 #if MONITOR_RULES_PATCH
 typedef struct {
@@ -466,7 +465,6 @@ static void updatenumlockmask(void);
 static void updatesizehints(Client *c);
 static void updatestatus(void);
 static void updatetitle(Client *c);
-static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
 static Client *wintoclient(Window w);
@@ -564,6 +562,7 @@ void
 applyrules(Client *c)
 {
 	const char *class, *instance;
+	Atom wintype;
 	#if WINDOWROLERULE_PATCH
 	char role[64];
 	#endif // WINDOWROLERULE_PATCH
@@ -578,6 +577,7 @@ applyrules(Client *c)
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
+	wintype  = getatomprop(c, netatom[NetWMWindowType]);
 	#if WINDOWROLERULE_PATCH
 	gettextprop(c->win, wmatom[WMWindowRole], role, sizeof(role));
 	#endif // WINDOWROLERULE_PATCH
@@ -589,7 +589,8 @@ applyrules(Client *c)
 		#if WINDOWROLERULE_PATCH
 		&& (!r->role || strstr(role, r->role))
 		#endif // WINDOWROLERULE_PATCH
-		&& (!r->instance || strstr(instance, r->instance)))
+		&& (!r->instance || strstr(instance, r->instance))
+		&& (!r->wintype || wintype == XInternAtom(dpy, r->wintype, False)))
 		{
 			#if CENTER_PATCH
 			c->iscentered = r->iscentered;
@@ -2260,8 +2261,8 @@ manage(Window w, XWindowAttributes *wa)
 	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
 	#endif // FLOAT_BORDER_COLOR_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
-	updatewindowtype(c);
-	updatesizehints(c);
+	if (getatomprop(c, netatom[NetWMState]) == netatom[NetWMFullscreen])
+		setfullscreen(c, 1);
 	updatewmhints(c);
 	#if CENTER_PATCH
 	if (c->iscentered) {
@@ -2533,8 +2534,6 @@ propertynotify(XEvent *e)
 			if (c == c->mon->sel)
 				drawbar(c->mon);
 		}
-		if (ev->atom == netatom[NetWMWindowType])
-			updatewindowtype(c);
 	}
 }
 
@@ -3126,16 +3125,7 @@ setup(void)
 	netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
-	#if EWMH_WINDOWS_FLOAT_PATCH
-	netatom[NetWMModal] = XInternAtom(dpy, "_NET_WM_STATE_MODAL", False);
-	#endif // EWMH_WINDOWS_FLOAT_PATCH
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
-	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
-	#if EWMH_WINDOWS_FLOAT_PATCH
-	netatom[NetWMWindowTypeUtility] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_UTILITY", False);
-	netatom[NetWMWindowTypeToolbar] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_TOOLBAR", False);
-	netatom[NetWMWindowTypeSplash] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_SPLASH", False);
-	#endif // EWMH_WINDOWS_FLOAT_PATCH
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
 	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
@@ -4054,33 +4044,6 @@ updatetitle(Client *c)
 		gettextprop(c->win, XA_WM_NAME, c->name, sizeof c->name);
 	if (c->name[0] == '\0') /* hack to mark broken clients */
 		strcpy(c->name, broken);
-}
-
-void
-updatewindowtype(Client *c)
-{
-	Atom state = getatomprop(c, netatom[NetWMState]);
-	Atom wtype = getatomprop(c, netatom[NetWMWindowType]);
-
-	if (state == netatom[NetWMFullscreen])
-		setfullscreen(c, 1);
-
-	#if EWMH_WINDOWS_FLOAT_PATCH
-	if (wtype == netatom[NetWMWindowTypeDialog] ||
-	    wtype == netatom[NetWMWindowTypeUtility] ||
-	    wtype == netatom[NetWMWindowTypeToolbar] ||
-	    wtype == netatom[NetWMWindowTypeSplash] ||
-	    state == netatom[NetWMModal])
-	#else
-	if (wtype == netatom[NetWMWindowTypeDialog])
-	#endif //EWMH_WINDOWS_FLOAT_PATCH
-	{
-		#if CENTER_PATCH
-		if (c->x <= c->mon->mx && c->y <= c->mon->my)
-			c->iscentered = 1;
-		#endif // CENTER_PATCH
-		c->isfloating = 1;
-	}
 }
 
 void

@@ -308,9 +308,9 @@ static const int tagrows = 2;
  *  - using the RULE macro
  *
  * A traditional struct table looks like this:
- *    // class      instance  title  tags mask  isfloating  monitor
- *    { "Gimp",     NULL,     NULL,  1 << 4,    0,          -1 },
- *    { "Firefox",  NULL,     NULL,  1 << 7,    0,          -1 },
+ *    // class      instance  title  wintype  tags mask  isfloating  monitor
+ *    { "Gimp",     NULL,     NULL,  NULL,    1 << 4,    0,          -1 },
+ *    { "Firefox",  NULL,     NULL,  NULL,    1 << 7,    0,          -1 },
  *
  * The RULE macro has the default values set for each field allowing you to only
  * specify the values that are relevant for your rule, e.g.
@@ -330,7 +330,12 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 *	WM_WINDOW_ROLE(STRING) = role
+	 *	_NET_WM_WINDOW_TYPE(ATOM) = wintype
 	 */
+	RULE(.wintype = WTYPE "DIALOG", .floating = 1)
+	RULE(.wintype = WTYPE "UTILITY", .floating = 1)
+	RULE(.wintype = WTYPE "TOOLBAR", .floating = 1)
+	RULE(.wintype = WTYPE "SPLASH", .floating = 1)
 	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "Firefox", .tags = 1 << 7)
 	#if SCRATCHPADS_PATCH
