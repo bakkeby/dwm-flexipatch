@@ -463,8 +463,8 @@ static Signal signals[] = {
 	#if STICKY_PATCH
 	{ "togglesticky",            togglesticky },
 	#endif // STICKY_PATCH
-	{ "setborderpx",             setborderpx },
 	#if SETBORDERPX_PATCH
+	{ "setborderpx",             setborderpx },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
 	{ "cyclelayout",             cyclelayout },
