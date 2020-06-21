@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-06-21 - Added floatpos patch
+
 2020-06-19 - Added tagothermonitor patch
 
 2020-06-15 - Added sizehints patch
@@ -231,6 +233,12 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [floatbordercolor](https://dwm.suckless.org/patches/float_border_color/)
       - this patch allows a different border color to be chosen for floating windows
+
+   - [floatpos](https://github.com/bakkeby/patches/wiki/floatpos)
+      - adds a float rule allowing the size and position of floating windows to be specified
+      - control the size and position of floating windows similar to exresize, moveresize, moveplace patches
+      - specify size and position using absolute, relative or fixed co-ordinates or
+      - position floating windows in a grid-like manner
 
    - [focusadjacenttag](https://dwm.suckless.org/patches/focusadjacenttag/)
       - provides the ability to focus the tag on the immediate left or right of the currently focused tag

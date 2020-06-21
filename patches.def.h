@@ -219,6 +219,17 @@
  */
 #define FLOAT_BORDER_COLOR_PATCH 0
 
+/* This patch adds a float rule allowing the size and position of floating windows to be specified
+ * It also allows the size and position of floating windows to be controlled similar to the
+ * exresize, moveresize, and moveplace patches.
+ * The size and position can be specified using absolute, relative or fixed co-ordinates and
+ * https://github.com/bakkeby/patches/wiki/floatpos/
+ */
+#define FLOATPOS_PATCH 0
+
+/* Add-on functionality for the above: make the float positions respect outer (vanity)gaps. */
+#define FLOATPOS_RESPECT_GAPS_PATCH 0
+
 /* This patch provides the ability to focus the tag on the immediate left or right of the
  * currently focused tag. It also allows to send the focused window either on the left or
  * the right tag.

@@ -319,6 +319,9 @@ typedef struct {
 	int isterminal;
 	int noswallow;
 	#endif // SWALLOW_PATCH
+	#if FLOATPOS_PATCH
+	const char *floatpos;
+	#endif // FLOATPOS_PATCH
 	int monitor;
 } Rule;
 
@@ -610,6 +613,11 @@ applyrules(Client *c)
 				c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
 			}
 			#endif // SCRATCHPADS_PATCH | SCRATCHPAD_KEEP_POSITION_AND_SIZE_PATCH
+			#if FLOATPOS_PATCH
+			if (c->isfloating && r->floatpos)
+				setfloatpos(c, r->floatpos);
+			#endif // FLOATPOS_PATCH
+
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
@@ -2230,6 +2238,13 @@ manage(Window w, XWindowAttributes *wa)
 		c->tags = t->tags;
 	} else {
 		c->mon = selmon;
+		#if FLOATPOS_PATCH
+		#if SETBORDERPX_PATCH
+		c->bw = c->mon->borderpx;
+		#else
+		c->bw = borderpx;
+		#endif // SETBORDERPX_PATCH
+		#endif // FLOATPOS_PATCH
 		applyrules(c);
 		#if SWALLOW_PATCH
 		term = termforwin(c);
@@ -2244,11 +2259,13 @@ manage(Window w, XWindowAttributes *wa)
 	/* only fix client y-offset, if the client center might cover the bar */
 	c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
 		&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
+	#if !FLOATPOS_PATCH
 	#if SETBORDERPX_PATCH
 	c->bw = c->mon->borderpx;
 	#else
 	c->bw = borderpx;
 	#endif // SETBORDERPX_PATCH
+	#endif // FLOATPOS_PATCH
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
@@ -2266,8 +2283,8 @@ manage(Window w, XWindowAttributes *wa)
 	updatewmhints(c);
 	#if CENTER_PATCH
 	if (c->iscentered) {
-		c->x = c->mon->mx + (c->mon->mw - WIDTH(c)) / 2;
-		c->y = c->mon->my + (c->mon->mh - HEIGHT(c)) / 2;
+		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+		c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
 	}
 	#endif // CENTER_PATCH
 	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH

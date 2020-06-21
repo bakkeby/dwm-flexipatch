@@ -46,6 +46,9 @@
 #if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 #include "fakefullscreenclient.c"
 #endif
+#if FLOATPOS_PATCH
+#include "floatpos.c"
+#endif
 #if FOCUSADJACENTTAG_PATCH
 #include "focusadjacenttag.c"
 #endif
