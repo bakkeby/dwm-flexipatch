@@ -432,6 +432,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [tagmonfixfs](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagmonfixfs-6.2.diff)
       - allows moving a fullscreen window to another monitor while remaining in fullscreen
 
+   - [tagothermonitor](https://dwm.suckless.org/patches/tagothermonitor/)
+      - adds functions and keybindings to tag a window to a desired tag on an adjacent monitor
+
    - [tagswapmon](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagswapmon-6.2.diff)
       - swap all visible windows on one monitor with those of an adjacent monitor
 

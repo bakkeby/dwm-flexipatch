@@ -10,8 +10,4 @@ static void toggleviewex(const Arg *arg);
 static void tagex(const Arg *arg);
 static void toggletagex(const Arg *arg);
 static void tagallex(const Arg *arg);
-#if TAGOTHERMONITOR_PATCH
-static void tagnextmonex(const Arg *arg);
-static void tagprevmonex(const Arg *arg);
-#endif
 static int fake_signal(void);
