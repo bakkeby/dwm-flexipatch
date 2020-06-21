@@ -14,13 +14,13 @@ moveplace(const Arg *arg)
 	ny = (arg->ui / 3) -1;
 	if (nx < 0)
 		nx = selmon->wx;
-	else if(nx > 0)
+	else if (nx > 0)
 		nx = selmon->wx + selmon->ww - nw - c->bw*2;
 	else
 		nx = selmon->wx + selmon->ww/2 - nw/2 - c->bw;
 	if (ny <0)
 		ny = selmon->wy;
-	else if(ny > 0)
+	else if (ny > 0)
 		ny = selmon->wy + selmon->wh - nh - c->bw*2;
 	else
 		ny = selmon->wy + selmon->wh/2 - nh/2 - c->bw;
