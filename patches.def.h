@@ -82,6 +82,11 @@
  */
 #define AWESOMEBAR_PATCH 0
 
+/* Allows the bar height to be explicitly set rather than being derived from font.
+ * https://dwm.suckless.org/patches/bar_height/
+ */
+#define BAR_HEIGHT_PATCH 0
+
 /* This patch adds vertical and horizontal space between the statusbar and the edge of the screen.
  * https://dwm.suckless.org/patches/barpadding/
  */

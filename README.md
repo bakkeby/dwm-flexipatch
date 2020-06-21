@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-06-21 - Added floatpos patch
+2020-06-21 - Added floatpos and bar_height patches
 
 2020-06-19 - Added tagothermonitor patch
 
@@ -163,6 +163,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [awesomebar](https://dwm.suckless.org/patches/awesomebar/)
       - enhanced taskbar that allows focus / hiding / unhiding of windows by clicking on the status bar
+
+   - [bar_height](https://dwm.suckless.org/patches/bar_height/)
+      - allows the bar height to be explicitly set rather than being derived from font
 
    - [barpadding](https://dwm.suckless.org/patches/barpadding/)
       - adds vertical and horizontal space between the statusbar and the edge of the screen
