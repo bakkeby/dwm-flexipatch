@@ -164,6 +164,9 @@
 #if TAGGRID_PATCH
 #include "taggrid.h"
 #endif
+#if TAGOTHERMONITOR_PATCH
+#include "tagothermonitor.h"
+#endif
 #if TAGSWAPMON_PATCH
 #include "tagswapmon.h"
 #endif

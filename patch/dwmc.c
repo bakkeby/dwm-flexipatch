@@ -40,6 +40,20 @@ tagallex(const Arg *arg)
 	tag(&((Arg){.ui = ~0}));
 }
 
+#if TAGOTHERMONITOR_PATCH
+void
+tagnextmonex(const Arg *arg)
+{
+	tagnextmon(&((Arg) { .ui = 1 << arg->ui }));
+}
+
+void
+tagprevmonex(const Arg *arg)
+{
+	tagprevmon(&((Arg) { .ui = 1 << arg->ui }));
+}
+#endif
+
 int
 fake_signal(void)
 {
