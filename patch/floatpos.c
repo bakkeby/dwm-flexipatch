@@ -36,16 +36,16 @@ setfloatpos(Client *c, const char *floatpos)
 			if (xCh == 'w' || xCh == 'W') {
 				w = x; wCh = xCh;
 				h = y; hCh = yCh;
-				x = 0; xCh = 'x';
-				y = 0; yCh = 'y';
+				x = -1; xCh = 'C';
+				y = -1; yCh = 'C';
 			} else if (xCh == 'p' || xCh == 'P') {
 				w = x; wCh = xCh;
 				h = y; hCh = yCh;
 				x = 0; xCh = 'G';
 				y = 0; yCh = 'G';
 			} else {
-				w = -1; wCh = 'C';
-				h = -1; hCh = 'C';
+				w = 0; wCh = 0;
+				h = 0; hCh = 0;
 			}
 			break;
 		case 8:
