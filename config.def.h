@@ -21,6 +21,9 @@ static const int showbar                 = 0;   /* 0 means no bar */
 static const int showbar                 = 1;   /* 0 means no bar */
 #endif // HOLDBAR_PATCH
 static const int topbar                  = 1;   /* 0 means bottom bar */
+#if STATUSBUTTON_PATCH && !LEFTLAYOUT_PATCH
+static const char buttonbar[]            = "<O>";
+#endif // STATUSBUTTON_PATCH
 #if BARPADDING_PATCH
 static const int vertpad                 = 10;  /* vertical padding of bar */
 static const int sidepad                 = 10;  /* horizontal padding of bar */
@@ -1058,9 +1061,16 @@ static Command commands[] = {
 #endif // KEYMODES_PATCH
 
 /* button definitions */
+#if STATUSBUTTON_PATCH && !LEFTLAYOUT_PATCH
+/* click can be ClkButton, ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+#else
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+#endif // STATUSBUTTON_PATCH
 static Button buttons[] = {
 	/* click                event mask           button          function        argument */
+    #if STATUSBUTTON_PATCH && !LEFTLAYOUT_PATCH
+	{ ClkButton,            0,                   Button1,        spawn,          {.v = dmenucmd } },
+    #endif // STATUSBUTTON_PATCH
 	{ ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
 	#if AWESOMEBAR_PATCH

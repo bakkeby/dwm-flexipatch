@@ -139,8 +139,13 @@ enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMWindowRole, WMLast }; /* d
 #else
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 #endif // WINDOWROLERULE_PATCH
+#if STATUSBUTTON_PATCH && !LEFTLAYOUT_PATCH
+enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkButton, ClkWinTitle,
+       ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
+#else
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
+#endif // STATUSBUTTON_PATCH
 
 typedef union {
 	int i;
@@ -822,6 +827,12 @@ buttonpress(XEvent *e)
 			click = ClkLtSymbol;
 		} else {
 		#endif // LEFTLAYOUT_PATCH
+		#if STATUSBUTTON_PATCH && !LEFTLAYOUT_PATCH
+		x += TEXTW(buttonbar);
+		if(ev->x < x) {
+			click = ClkButton;
+		} else {
+		#endif // STATUSBUTTON_PATCH
 		#if HIDEVACANTTAGS_PATCH
 		for (c = m->clients; c; c = c->next)
 			occ |= c->tags == 255 ? 0 : c->tags;
@@ -931,9 +942,9 @@ buttonpress(XEvent *e)
 		else
 			click = ClkWinTitle;
 		#endif // AWESOMEBAR_PATCH
-		#if LEFTLAYOUT_PATCH
+		#if LEFTLAYOUT_PATCH || STATUSBUTTON_PATCH
 		}
-		#endif // LEFTLAYOUT_PATCH
+		#endif // LEFTLAYOUT_PATCH || STATUSBUTTON_PATCH
 	} else if ((c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
 		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
@@ -1587,6 +1598,19 @@ drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // PANGO_PATCH
 	#endif // LEFTLAYOUT_PATCH
+	#if STATUSBUTTON_PATCH && !LEFTLAYOUT_PATCH
+	w = blw = TEXTW(buttonbar);
+	#if VTCOLORS_PATCH
+	drw_setscheme(drw, scheme[SchemeTagsNorm]);
+	#else
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	#endif // VTCOLORS_PATCH
+	#if PANGO_PATCH
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, buttonbar, 0, False);
+	#else
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, buttonbar, 0);
+	#endif // PANGO_PATCH
+	#endif // STATUSBUTTON_PATCH
 	#if TAGGRID_PATCH
 	if (drawtagmask & DRAWCLASSICTAGS)
 	#endif // TAGGRID_PATCH

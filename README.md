@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-06-22 - Added statusbutton patch
+
 2020-06-19 - Added tagothermonitor patch
 
 2020-06-15 - Added sizehints patch
@@ -386,6 +388,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
       - this patch draws and updates the statusbar on all monitors
+
+   - [statusbutton](https://dwm.suckless.org/patches/statusbutton/)
+      - Adds a clickable button to the left hand side of the statusbar.
 
    - [statuscolors](https://dwm.suckless.org/patches/statuscolors/)
       - enables colored text in the status bar allowing multiple color combinations for use in the status script

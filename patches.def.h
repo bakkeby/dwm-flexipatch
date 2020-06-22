@@ -299,6 +299,7 @@
 #define KILLUNSEL_PATCH 0
 
 /* Moves the layout symbol in the status bar to the left hand side.
+ * This takes precedence over the statusbutton patch.
  * http://dwm.suckless.org/patches/leftlayout/
  */
 #define LEFTLAYOUT_PATCH 0
@@ -565,6 +566,12 @@
  * https://dwm.suckless.org/patches/statusallmons/
  */
 #define STATUSALLMONS_PATCH 0
+
+/* This patch adds a clickable button to the left hand side of the statusbar.
+ * This patch is incompatible with the leftlayout patch which will take precedence.
+ * https://dwm.suckless.org/patches/statusbutton/
+ */
+#define STATUSBUTTON_PATCH 0
 
 /* This patch enables colored text in the status bar. It changes the way colors are defined
  * in config.h allowing multiple color combinations for use in the status script.
