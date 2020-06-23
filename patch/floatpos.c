@@ -100,10 +100,7 @@ getfloatpos(int pos, char pCh, int size, char sCh, int min_p, int max_s, int cp,
 	case 'Z': // fixed client right-hand position (position + size)
 		if (pos == -1)
 			break;
-		if (pos > max_s)
-			pos = max_s;
-		if (pos < 0)
-			pos = 0;
+		pos = MAX(MIN(pos, max_s), 0);
 		if (pCh == 'Z')
 			cs = abs((cp + cs) - (min_p + pos));
 		else if (pCh == 'C')
@@ -125,7 +122,7 @@ getfloatpos(int pos, char pCh, int size, char sCh, int min_p, int max_s, int cp,
 				break;
 			cp = min_p + delta * (size - 1);
 		} else {
-			for (i = 0; i < pos -1 && cp >= min_p + delta * i + (i > pos - rest ? i + rest - pos + 1 : 0); i++);
+			for (i = 0; i < pos && cp >= min_p + delta * i + (i > pos - rest ? i + rest - pos + 1 : 0); i++);
 			cp = min_p + delta * (MAX(MIN(i + size, pos), 1) - 1) + (i > pos - rest ? i + rest - pos + 1 : 0);
 		}
 		break;

@@ -613,14 +613,13 @@ applyrules(Client *c)
 				c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
 			}
 			#endif // SCRATCHPADS_PATCH | SCRATCHPAD_KEEP_POSITION_AND_SIZE_PATCH
+			for (m = mons; m && m->num != r->monitor; m = m->next);
+			if (m)
+				c->mon = m;
 			#if FLOATPOS_PATCH
 			if (c->isfloating && r->floatpos)
 				setfloatpos(c, r->floatpos);
 			#endif // FLOATPOS_PATCH
-
-			for (m = mons; m && m->num != r->monitor; m = m->next);
-			if (m)
-				c->mon = m;
 
 			#if SWITCHTAG_PATCH
 			#if SWALLOW_PATCH
@@ -2236,6 +2235,13 @@ manage(Window w, XWindowAttributes *wa)
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;
+		#if FLOATPOS_PATCH
+		#if SETBORDERPX_PATCH
+		c->bw = c->mon->borderpx;
+		#else
+		c->bw = borderpx;
+		#endif // SETBORDERPX_PATCH
+		#endif // FLOATPOS_PATCH
 	} else {
 		c->mon = selmon;
 		#if FLOATPOS_PATCH
@@ -2278,6 +2284,9 @@ manage(Window w, XWindowAttributes *wa)
 	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
 	#endif // FLOAT_BORDER_COLOR_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
+	#if !FLOATPOS_PATCH
+	updatesizehints(c);
+	#endif // FLOATPOS_PATCH
 	if (getatomprop(c, netatom[NetWMState]) == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
 	updatewmhints(c);
