@@ -3,7 +3,7 @@ floatpos(const Arg *arg)
 {
 	Client *c = selmon->sel;
 
-	if (!c || !c->isfloating)
+	if (!c || (selmon->lt[selmon->sellt]->arrange && !c->isfloating))
 		return;
 
 	setfloatpos(c, (char *)arg->v);
