@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-06-24 - Added resizepoint and statusbutton patches
+2020-06-24 - Added resizepoint, statusbutton and sendmon_keepfocus patches
 
 2020-06-21 - Added floatpos and bar_height patches
 
@@ -368,6 +368,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [selfrestart](https://dwm.suckless.org/patches/selfrestart/)
       - restart dwm without the unnecessary dependency of an external script
+
+   - sendmon_keepfocus
+      - minor patch that allow clients to keep focus when being sent to another monitor
 
    - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
       - this patch allows border pixels to be changed during runtime

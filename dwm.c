@@ -2897,6 +2897,9 @@ sendmon(Client *c, Monitor *m)
 	unfocus(c, 1);
 	detach(c);
 	detachstack(c);
+	#if SENDMON_KEEPFOCUS_PATCH && !EXRESIZE_PATCH
+	arrange(c->mon);
+	#endif // SENDMON_KEEPFOCUS_PATCH
 	c->mon = m;
 	#if EMPTYVIEW_PATCH
 	c->tags = (m->tagset[m->seltags] ? m->tagset[m->seltags] : 1);
@@ -2915,10 +2918,14 @@ sendmon(Client *c, Monitor *m)
 	arrange(m);
 	focus(c);
 	restack(m);
+	#elif SENDMON_KEEPFOCUS_PATCH
+	arrange(m);
+	focus(c);
+	restack(m);
 	#else
 	focus(NULL);
 	arrange(NULL);
-	#endif // EXRESIZE_PATCH
+	#endif // EXRESIZE_PATCH / SENDMON_KEEPFOCUS_PATCH
 	#if SWITCHTAG_PATCH
 	if (c->switchtag)
 		c->switchtag = 0;

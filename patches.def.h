@@ -507,6 +507,9 @@
  */
 #define SELFRESTART_PATCH 0
 
+/* This patch allow clients to keep focus when being sent to another monitor. */
+#define SENDMON_KEEPFOCUS_PATCH 0
+
 /* This patch allows border pixels to be changed during runtime.
  * https://dwm.suckless.org/patches/setborderpx/
  */
