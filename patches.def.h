@@ -588,6 +588,11 @@
  */
 #define STATUSALLMONS_PATCH 0
 
+/* This patch adds a clickable button to the left hand side of the statusbar.
+ * https://dwm.suckless.org/patches/statusbutton/
+ */
+#define STATUSBUTTON_PATCH 0
+
 /* This patch enables colored text in the status bar. It changes the way colors are defined
  * in config.h allowing multiple color combinations for use in the status script.
  * This patch is incompatible with and takes precedence over the status2d patch.

@@ -42,6 +42,9 @@ static const int vertpadbar              = 0;   /* vertical padding for statusba
 #if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
 static const int statmonval              = 0;
 #endif // STATICSTATUS_PATCH
+#if STATUSBUTTON_PATCH
+static const char buttonbar[]            = "<O>";
+#endif // STATUSBUTTON_PATCH
 #if SYSTRAY_PATCH
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -1134,9 +1137,16 @@ static Command commands[] = {
 #endif // KEYMODES_PATCH
 
 /* button definitions */
+#if STATUSBUTTON_PATCH
+/* click can be ClkButton, ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+#else
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+#endif //
 static Button buttons[] = {
 	/* click                event mask           button          function        argument */
+	#if STATUSBUTTON_PATCH
+	{ ClkButton,            0,                   Button1,        spawn,          {.v = dmenucmd } },
+	#endif // STATUSBUTTON_PATCH
 	{ ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
 	#if AWESOMEBAR_PATCH

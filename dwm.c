@@ -134,13 +134,29 @@ enum {
 	NetClientList, NetLast
 }; /* EWMH atoms */
 
-#if WINDOWROLERULE_PATCH
-enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMWindowRole, WMLast }; /* default atoms */
-#else
-enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
-#endif // WINDOWROLERULE_PATCH
-enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
-       ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
+enum {
+	WMProtocols,
+	WMDelete,
+	WMState,
+	WMTakeFocus,
+	#if WINDOWROLERULE_PATCH
+	WMWindowRole,
+	#endif // WINDOWROLERULE_PATCH
+	WMLast
+}; /* default atoms */
+
+enum {
+	#if STATUSBUTTON_PATCH
+	ClkButton,
+	#endif // STATUSBUTTON_PATCH
+	ClkTagBar,
+	ClkLtSymbol,
+	ClkStatusText,
+	ClkWinTitle,
+	ClkClientWin,
+	ClkRootWin,
+	ClkLast
+}; /* clicks */
 
 typedef union {
 	int i;
@@ -827,8 +843,17 @@ buttonpress(XEvent *e)
 		x += blw;
 		if (ev->x < x) {
 			click = ClkLtSymbol;
+		#if STATUSBUTTON_PATCH
+		} else if (ev->x < (x += TEXTW(buttonbar))) {
+			click = ClkButton;
+		#endif // STATUSBUTTON_PATCH
 		} else {
-		#endif // LEFTLAYOUT_PATCH
+		#elif STATUSBUTTON_PATCH
+		x += TEXTW(buttonbar);
+		if (ev->x < x) {
+			click = ClkButton;
+		} else {
+		#endif // LEFTLAYOUT_PATCH | STATUSBUTTON_PATCH
 		#if HIDEVACANTTAGS_PATCH
 		for (c = m->clients; c; c = c->next)
 			occ |= c->tags == 255 ? 0 : c->tags;
@@ -938,9 +963,9 @@ buttonpress(XEvent *e)
 		else
 			click = ClkWinTitle;
 		#endif // AWESOMEBAR_PATCH
-		#if LEFTLAYOUT_PATCH
+		#if LEFTLAYOUT_PATCH || STATUSBUTTON_PATCH
 		}
-		#endif // LEFTLAYOUT_PATCH
+		#endif // LEFTLAYOUT_PATCH | STATUSBUTTON_PATCH
 	} else if ((c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
 		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
@@ -1594,6 +1619,19 @@ drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 	#endif // PANGO_PATCH
 	#endif // LEFTLAYOUT_PATCH
+	#if STATUSBUTTON_PATCH
+	w = TEXTW(buttonbar);
+	#if VTCOLORS_PATCH
+	drw_setscheme(drw, scheme[SchemeTagsNorm]);
+	#else
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	#endif // VTCOLORS_PATCH
+	#if PANGO_PATCH
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, buttonbar, 0, False);
+	#else
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, buttonbar, 0);
+	#endif // PANGO_PATCH
+	#endif // STATUSBUTTON_PATCH
 	#if TAGGRID_PATCH
 	if (drawtagmask & DRAWCLASSICTAGS)
 	#endif // TAGGRID_PATCH
