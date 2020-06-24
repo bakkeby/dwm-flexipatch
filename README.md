@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-06-24 - Added resizepoint patch
+
 2020-06-21 - Added floatpos and bar_height patches
 
 2020-06-19 - Added tagothermonitor patch
@@ -340,6 +342,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [resizecorners](https://dwm.suckless.org/patches/resizecorners/)
       - by default, windows only resize from the bottom right corner
       - with this patch the mouse is warped to the nearest corner and you resize from there
+
+   - [resizepoint](https://github.com/bakkeby/patches/blob/master/dwm/dwm-resizepoint-6.2.diff)
+      - practically the same as resizecorners, but the cursor does not warp to any of the window corners
 
    - [restartsig](https://dwm.suckless.org/patches/restartsig/)
       - adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid

@@ -450,6 +450,12 @@
  */
 #define RESIZECORNERS_PATCH 0
 
+/* Practically the same as resizecorners, but the cursor does not warp to corners.
+ * This takes precedence over the resizecorners patch.
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-resizepoint-6.2.diff
+ */
+#define RESIZEPOINT_PATCH 0
+
 /* Adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid.
  * Additionally dwm can quit cleanly by using kill -TERM dwmpid.
  * https://dwm.suckless.org/patches/restartsig/

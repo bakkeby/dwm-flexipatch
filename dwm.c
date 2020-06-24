@@ -2647,13 +2647,18 @@ void
 resizemouse(const Arg *arg)
 {
 	int ocx, ocy, nw, nh;
-	#if RESIZECORNERS_PATCH
+	#if RESIZEPOINT_PATCH
+	int opx, opy, och, ocw, nx, ny;
+	int horizcorner, vertcorner;
+	unsigned int dui;
+	Window dummy;
+	#elif RESIZECORNERS_PATCH
 	int ocx2, ocy2, nx, ny;
 	int horizcorner, vertcorner;
 	int di;
 	unsigned int dui;
 	Window dummy;
-	#endif // RESIZECORNERS_PATCH
+	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
 	Client *c;
 	Monitor *m;
 	XEvent ev;
@@ -2673,14 +2678,22 @@ resizemouse(const Arg *arg)
 	restack(selmon);
 	ocx = c->x;
 	ocy = c->y;
-	#if RESIZECORNERS_PATCH
+	#if RESIZEPOINT_PATCH
+	och = c->h;
+	ocw = c->w;
+	#elif RESIZECORNERS_PATCH
 	ocx2 = c->x + c->w;
 	ocy2 = c->y + c->h;
-	#endif // RESIZECORNERS_PATCH
+	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
 	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
 		None, cursor[CurResize]->cursor, CurrentTime) != GrabSuccess)
 		return;
-	#if RESIZECORNERS_PATCH
+	#if RESIZEPOINT_PATCH
+	if (!XQueryPointer(dpy, c->win, &dummy, &dummy, &opx, &opy, &nx, &ny, &dui))
+		return;
+	horizcorner = nx < c->w / 2;
+	vertcorner  = ny < c->h / 2;
+	#elif RESIZECORNERS_PATCH
 	if (!XQueryPointer (dpy, c->win, &dummy, &dummy, &di, &di, &nx, &ny, &dui))
 		return;
 	horizcorner = nx < c->w / 2;
@@ -2690,7 +2703,7 @@ resizemouse(const Arg *arg)
 			vertcorner ? (-c->bw) : (c->h + c->bw - 1));
 	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
-	#endif // RESIZECORNERS_PATCH
+	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
 	do {
 		XMaskEvent(dpy, MOUSEMASK|ExposureMask|SubstructureRedirectMask, &ev);
 		switch(ev.type) {
@@ -2704,14 +2717,20 @@ resizemouse(const Arg *arg)
 				continue;
 			lasttime = ev.xmotion.time;
 
-			nw = MAX(ev.xmotion.x - ocx - 2 * c->bw + 1, 1);
-			nh = MAX(ev.xmotion.y - ocy - 2 * c->bw + 1, 1);
-			#if RESIZECORNERS_PATCH
+			#if RESIZEPOINT_PATCH
+			nx = horizcorner ? (ocx + ev.xmotion.x - opx) : c->x;
+			ny = vertcorner ? (ocy + ev.xmotion.y - opy) : c->y;
+			nw = MAX(horizcorner ? (ocx + ocw - nx) : (ocw + (ev.xmotion.x - opx)), 1);
+			nh = MAX(vertcorner ? (ocy + och - ny) : (och + (ev.xmotion.y - opy)), 1);
+			#elif RESIZECORNERS_PATCH
 			nx = horizcorner ? ev.xmotion.x : c->x;
 			ny = vertcorner ? ev.xmotion.y : c->y;
 			nw = MAX(horizcorner ? (ocx2 - nx) : (ev.xmotion.x - ocx - 2 * c->bw + 1), 1);
 			nh = MAX(vertcorner ? (ocy2 - ny) : (ev.xmotion.y - ocy - 2 * c->bw + 1), 1);
-			#endif // RESIZECORNERS_PATCH
+			#else
+			nw = MAX(ev.xmotion.x - ocx - 2 * c->bw + 1, 1);
+			nh = MAX(ev.xmotion.y - ocy - 2 * c->bw + 1, 1);
+			#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
 			if (c->mon->wx + nw >= selmon->wx && c->mon->wx + nw <= selmon->wx + selmon->ww
 			&& c->mon->wy + nh >= selmon->wy && c->mon->wy + nh <= selmon->wy + selmon->wh)
 			{
@@ -2720,8 +2739,8 @@ resizemouse(const Arg *arg)
 					togglefloating(NULL);
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
-				#if RESIZECORNERS_PATCH
-				resize(c, nx, ny, nw, nh, 1);
+				#if RESIZECORNERS_PATCH || RESIZEPOINT_PATCH
+				resizeclient(c, nx, ny, nw, nh);
 				#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 				/* save last known float dimensions */
 				c->sfx = nx;
@@ -2745,6 +2764,7 @@ resizemouse(const Arg *arg)
 			break;
 		}
 	} while (ev.type != ButtonRelease);
+	#if !RESIZEPOINT_PATCH
 	#if RESIZECORNERS_PATCH
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0,
 			horizcorner ? (-c->bw) : (c->w + c->bw - 1),
@@ -2752,6 +2772,7 @@ resizemouse(const Arg *arg)
 	#else
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
 	#endif // RESIZECORNERS_PATCH
+	#endif // RESIZEPOINT_PATCH
 	XUngrabPointer(dpy, CurrentTime);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
