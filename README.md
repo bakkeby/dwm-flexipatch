@@ -369,7 +369,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [selfrestart](https://dwm.suckless.org/patches/selfrestart/)
       - restart dwm without the unnecessary dependency of an external script
 
-   - sendmon_keepfocus
+   - [sendmon_keepfocus](https://github.com/bakkeby/patches/blob/master/dwm/dwm-sendmon_keepfocus-6.2.diff)
       - minor patch that allow clients to keep focus when being sent to another monitor
 
    - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
