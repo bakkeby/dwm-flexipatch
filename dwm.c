@@ -2894,6 +2894,9 @@ sendmon(Client *c, Monitor *m)
 	#endif // EXRESIZE_PATCH
 	if (c->mon == m)
 		return;
+	#if SENDMON_KEEPFOCUS_PATCH && !EXRESIZE_PATCH
+	int hadfocus = (c == selmon->sel);
+	#endif // SENDMON_KEEPFOCUS_PATCH
 	unfocus(c, 1);
 	detach(c);
 	detachstack(c);
@@ -2920,8 +2923,11 @@ sendmon(Client *c, Monitor *m)
 	restack(m);
 	#elif SENDMON_KEEPFOCUS_PATCH
 	arrange(m);
-	focus(c);
-	restack(m);
+	if (hadfocus) {
+		focus(c);
+		restack(m);
+	} else
+		focus(NULL);
 	#else
 	focus(NULL);
 	arrange(NULL);
