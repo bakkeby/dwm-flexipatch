@@ -61,7 +61,7 @@ dragmfact(const Arg *arg)
 
 		if (layout == SPLIT_HORIZONTAL || layout == SPLIT_HORIZONTAL_DUAL_STACK)
 			horizontal = 1;
-		else if (layout == SPLIT_CENTERED_VERTICAL)
+		else if (layout == SPLIT_CENTERED_VERTICAL && (n - m->nmaster) > 1)
 			center = 1;
 		else if (layout == FLOATING_MASTER) {
 			center = 1;
@@ -75,7 +75,7 @@ dragmfact(const Arg *arg)
 	}
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	#if CENTEREDMASTER_LAYOUT
-	else if (m->lt[m->sellt]->arrange == &centeredmaster)
+	else if (m->lt[m->sellt]->arrange == &centeredmaster && (n - m->nmaster) > 1)
 		center = 1;
 	#endif // CENTEREDMASTER_LAYOUT
 	#if CENTEREDFLOATINGMASTER_LAYOUT
@@ -90,10 +90,6 @@ dragmfact(const Arg *arg)
 	else if (m->lt[m->sellt]->arrange == &bstackhoriz)
 		horizontal = 1;
 	#endif // BSTACKHORIZ_LAYOUT
-
-	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
-		None, cursor[CurResize]->cursor, CurrentTime) != GrabSuccess)
-		return;
 
 	#if VANITYGAPS_PATCH
 	ay += oh;
@@ -148,6 +144,9 @@ dragmfact(const Arg *arg)
 		py = ay + ah / 2;
 	}
 
+	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
+		None, cursor[horizontal ? CurResizeVertArrow : CurResizeHorzArrow]->cursor, CurrentTime) != GrabSuccess)
+		return;
 	XWarpPointer(dpy, None, root, 0, 0, 0, 0, px, py);
 
 	do {

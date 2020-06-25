@@ -96,7 +96,25 @@
 #endif // PANGO_PATCH
 
 /* enums */
-enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
+enum {
+	#if RESIZEPOINT_PATCH || RESIZECORNERS_PATCH
+	CurResizeBR,
+	CurResizeBL,
+	CurResizeTR,
+	CurResizeTL,
+	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
+	#if DRAGMFACT_PATCH
+	CurResizeHorzArrow,
+	CurResizeVertArrow,
+	#endif // DRAGMFACT_PATCH
+	#if DRAGCFACT_PATCH
+	CurIronCross,
+	#endif // DRAGCFACT_PATCH
+	CurNormal,
+	CurResize,
+	CurMove,
+	CurLast
+}; /* cursor */
 
 enum {
 	SchemeNorm
@@ -2685,15 +2703,9 @@ void
 resizemouse(const Arg *arg)
 {
 	int ocx, ocy, nw, nh;
-	#if RESIZEPOINT_PATCH
+	#if RESIZEPOINT_PATCH || RESIZECORNERS_PATCH
 	int opx, opy, och, ocw, nx, ny;
 	int horizcorner, vertcorner;
-	unsigned int dui;
-	Window dummy;
-	#elif RESIZECORNERS_PATCH
-	int ocx2, ocy2, nx, ny;
-	int horizcorner, vertcorner;
-	int di;
 	unsigned int dui;
 	Window dummy;
 	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
@@ -2720,26 +2732,26 @@ resizemouse(const Arg *arg)
 	och = c->h;
 	ocw = c->w;
 	#elif RESIZECORNERS_PATCH
-	ocx2 = c->x + c->w;
-	ocy2 = c->y + c->h;
+	och = c->y + c->h;
+	ocw = c->x + c->w;
 	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
-	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
-		None, cursor[CurResize]->cursor, CurrentTime) != GrabSuccess)
-		return;
-	#if RESIZEPOINT_PATCH
+	#if RESIZEPOINT_PATCH || RESIZECORNERS_PATCH
 	if (!XQueryPointer(dpy, c->win, &dummy, &dummy, &opx, &opy, &nx, &ny, &dui))
 		return;
 	horizcorner = nx < c->w / 2;
 	vertcorner  = ny < c->h / 2;
-	#elif RESIZECORNERS_PATCH
-	if (!XQueryPointer (dpy, c->win, &dummy, &dummy, &di, &di, &nx, &ny, &dui))
+	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
+		None, cursor[horizcorner | (vertcorner << 1)]->cursor, CurrentTime) != GrabSuccess)
 		return;
-	horizcorner = nx < c->w / 2;
-	vertcorner = ny < c->h / 2;
+	#if RESIZECORNERS_PATCH
 	XWarpPointer (dpy, None, c->win, 0, 0, 0, 0,
 			horizcorner ? (-c->bw) : (c->w + c->bw - 1),
 			vertcorner ? (-c->bw) : (c->h + c->bw - 1));
+	#endif // RESIZECORNERS_PATCH
 	#else
+	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
+		None, cursor[CurResize]->cursor, CurrentTime) != GrabSuccess)
+		return;
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
 	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
 	do {
@@ -2763,8 +2775,8 @@ resizemouse(const Arg *arg)
 			#elif RESIZECORNERS_PATCH
 			nx = horizcorner ? ev.xmotion.x : c->x;
 			ny = vertcorner ? ev.xmotion.y : c->y;
-			nw = MAX(horizcorner ? (ocx2 - nx) : (ev.xmotion.x - ocx - 2 * c->bw + 1), 1);
-			nh = MAX(vertcorner ? (ocy2 - ny) : (ev.xmotion.y - ocy - 2 * c->bw + 1), 1);
+			nw = MAX(horizcorner ? (ocw - nx) : (ev.xmotion.x - ocx - 2 * c->bw + 1), 1);
+			nh = MAX(vertcorner ? (och - ny) : (ev.xmotion.y - ocy - 2 * c->bw + 1), 1);
 			#else
 			nw = MAX(ev.xmotion.x - ocx - 2 * c->bw + 1, 1);
 			nh = MAX(ev.xmotion.y - ocy - 2 * c->bw + 1, 1);
@@ -3232,6 +3244,19 @@ setup(void)
 	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
+	#if RESIZEPOINT_PATCH || RESIZECORNERS_PATCH
+	cursor[CurResizeBR] = drw_cur_create(drw, XC_bottom_right_corner);
+	cursor[CurResizeBL] = drw_cur_create(drw, XC_bottom_left_corner);
+	cursor[CurResizeTR] = drw_cur_create(drw, XC_top_right_corner);
+	cursor[CurResizeTL] = drw_cur_create(drw, XC_top_left_corner);
+	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
+	#if DRAGMFACT_PATCH
+	cursor[CurResizeHorzArrow] = drw_cur_create(drw, XC_sb_h_double_arrow);
+	cursor[CurResizeVertArrow] = drw_cur_create(drw, XC_sb_v_double_arrow);
+	#endif // DRAGMFACT_PATCH
+	#if DRAGCFACT_PATCH
+	cursor[CurIronCross] = drw_cur_create(drw, XC_iron_cross);
+	#endif // DRAGCFACT_PATCH
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
 	#if VTCOLORS_PATCH
