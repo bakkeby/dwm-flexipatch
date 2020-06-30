@@ -1521,13 +1521,13 @@ drawbar(Monitor *m)
 	stp = lrpad / 2;
 	#endif // STATUSPADDING_PATCH
 	#if !HIDEVACANTTAGS_PATCH
-	#if !ACTIVETAGINDICATORBAR_PATCH
+	#if !ACTIVETAGINDICATORBAR_PATCH && !ACTIVETAGINDICATORBAR_ALT1_PATCH
 	#if PANGO_PATCH
 	int boxs = drw->font->h / 9;
 	#else
 	int boxs = drw->fonts->h / 9;
 	#endif // PANGO_PATCH
-	#endif // ACTIVETAGINDICATORBAR_PATCH
+	#endif // ACTIVETAGINDICATORBAR_PATCH | ACTIVETAGINDICATORBAR_ALT1_PATCH
 	#if PANGO_PATCH
 	int boxw = drw->font->h / 6 + 2;
 	#else
@@ -1699,6 +1699,8 @@ drawbar(Monitor *m)
 		if (occ & 1 << i)
 			#if ACTIVETAGINDICATORBAR_PATCH
 			drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw,
+			#elif ACTIVETAGINDICATORBAR_ALT1_PATCH
+			drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2,
 			#else
 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
 			#endif // ACTIVETAGINDICATORBAR_PATCH
@@ -1812,6 +1814,8 @@ drawbar(Monitor *m)
 				if (c->isfloating)
 					#if ACTIVETAGINDICATORBAR_PATCH
 					drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, c->isfixed, 0);
+					#elif ACTIVETAGINDICATORBAR_ALT1_PATCH
+					drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2,
 					#else
 					drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
 					#endif // ACTIVETAGINDICATORBAR_PATCH
@@ -1868,6 +1872,8 @@ drawbar(Monitor *m)
 			if (m->sel->isfloating)
 				#if ACTIVETAGINDICATORBAR_PATCH
 				drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, m->sel->isfixed, 0);
+				#elif ACTIVETAGINDICATORBAR_ALT1_PATCH
+				drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2,
 				#else
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 				#endif // ACTIVETAGINDICATORBAR_PATCH

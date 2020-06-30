@@ -18,6 +18,11 @@
  */
 #define ACTIVETAGINDICATORBAR_PATCH 0
 
+/* Alternative patch to the activetagindicatorbar patch, adds the bar below the tag
+ * icon rather than above.
+ */
+#define ACTIVETAGINDICATORBAR_ALT1_PATCH 0
+
 /* The alpha patch adds transparency for the status bar.
  * You need to uncomment the corresponding line in config.mk to use the -lXrender library
  * when including this patch.
