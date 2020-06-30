@@ -3526,11 +3526,15 @@ tagmon(const Arg *arg)
 void
 togglebar(const Arg *arg)
 {
-	#if PERTAG_PATCH && PERTAGBAR_PATCH
+	#if HOLDBAR_PATCH && PERTAG_PATCH && PERTAGBAR_PATCH
+	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = (selmon->showbar == 2 ? 1 : !selmon->showbar);
+	#elif HOLDBAR_PATCH
+	selmon->showbar = (selmon->showbar == 2 ? 1 : !selmon->showbar);
+	#elif PERTAG_PATCH && PERTAGBAR_PATCH
 	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = !selmon->showbar;
 	#else
 	selmon->showbar = !selmon->showbar;
-	#endif // PERTAG_PATCH
+	#endif // HOLDBAR_PATCH | PERTAG_PATCH
 	updatebarpos(selmon);
 	#if BARPADDING_PATCH
 	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + sp, selmon->by + vp, selmon->ww - 2*sp, bh);

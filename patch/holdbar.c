@@ -1,7 +1,9 @@
 void
 holdbar(const Arg *arg)
 {
-	selmon->showbar = 1;
+	if (selmon->showbar)
+		return;
+	selmon->showbar = 2;
 	updateholdbarpos(selmon);
 	#if BARPADDING_PATCH
 	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + sp, selmon->by + vp, selmon->ww -  2 * sp, bh);
@@ -30,7 +32,7 @@ keyrelease(XEvent *e)
 			return;
 		}
 	}
-	if (e->xkey.keycode == XKeysymToKeycode(dpy, HOLDKEY)) {
+	if (e->xkey.keycode == XKeysymToKeycode(dpy, HOLDKEY) && selmon->showbar == 2) {
 		selmon->showbar = 0;
 		updateholdbarpos(selmon);
 		#if BARPADDING_PATCH
