@@ -838,9 +838,6 @@ buttonpress(XEvent *e)
 	#if BARPADDING_PATCH
 	padding -= sp * 2;
 	#endif // BARPADDING_PATCH
-	#if SYSTRAY_PATCH
-	padding -= getsystraywidth();
-	#endif // SYSTRAY_PATCH
 	#if TAGGRID_PATCH
 	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
 	#endif // TAGGRID_PATCH
@@ -855,6 +852,10 @@ buttonpress(XEvent *e)
 		selmon = m;
 		focus(NULL);
 	}
+	#if SYSTRAY_PATCH
+	if (showsystray && selmon == systraytomon(selmon))
+		padding -= getsystraywidth();
+	#endif // SYSTRAY_PATCH
 	if (ev->window == selmon->barwin) {
 		i = x = 0;
 		#if LEFTLAYOUT_PATCH

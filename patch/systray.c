@@ -47,8 +47,8 @@ systraytomon(Monitor *m)
 			return selmon;
 		return m == selmon ? m : NULL;
 	}
-	for (n = 1, t = mons; t && t->next; n++, t = t->next) ;
-	for (i = 1, t = mons; t && t->next && i < systraypinning; i++, t = t->next) ;
+	for (n = 1, t = mons; t && t->next; n++, t = t->next);
+	for (i = 1, t = mons; t && t->next && i < systraypinning; i++, t = t->next);
 	if (systraypinningfailfirst && n < systraypinning)
 		return mons;
 	return t;
