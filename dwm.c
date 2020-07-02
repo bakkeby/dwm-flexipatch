@@ -668,8 +668,9 @@ applyrules(Client *c)
 				else
 					newtagset = c->tags;
 
-				if (newtagset) {
-					c->switchtag = selmon->tagset[selmon->seltags];
+				/* Switch to the client's tag, but only if that tag is not already shown */
+				if (newtagset && !(newtagset & c->mon->tagset[c->mon->seltags])) {
+					c->switchtag = c->mon->tagset[c->mon->seltags];
 					c->mon->tagset[c->mon->seltags] = newtagset;
 					if (r->switchtag == 1)
 						#if PERTAG_PATCH
@@ -1167,13 +1168,18 @@ clientmessage(XEvent *e)
 		}
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
 		#if FOCUSONNETACTIVE_PATCH
-		for (i = 0; i < LENGTH(tags) && !((1 << i) & c->tags); i++);
-		if (i < LENGTH(tags)) {
-			const Arg a = {.ui = 1 << i};
+		if (c->tags & c->mon->tagset[c->mon->seltags]) {
 			selmon = c->mon;
-			view(&a);
 			focus(c);
-			restack(selmon);
+		} else {
+			for (i = 0; i < LENGTH(tags) && !((1 << i) & c->tags); i++);
+			if (i < LENGTH(tags)) {
+				const Arg a = {.ui = 1 << i};
+				selmon = c->mon;
+				view(&a);
+				focus(c);
+				restack(selmon);
+			}
 		}
 		#else
 		if (c != selmon->sel && !c->isurgent)
