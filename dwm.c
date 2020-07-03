@@ -675,7 +675,6 @@ applyrules(Client *c)
 				if (newtagset && !(c->tags & c->mon->tagset[c->mon->seltags])) {
 					if (r->switchtag == 3 || r->switchtag == 4)
 						c->switchtag = c->mon->tagset[c->mon->seltags];
-					c->mon->tagset[c->mon->seltags] = newtagset;
 					if (r->switchtag == 1 || r->switchtag == 3) {
 						#if PERTAG_PATCH
 						pertagview(&((Arg) { .ui = newtagset }));
@@ -683,8 +682,10 @@ applyrules(Client *c)
 						#else
 						view(&((Arg) { .ui = newtagset }));
 						#endif // PERTAG_PATCH
-					} else
+					} else {
+						c->mon->tagset[c->mon->seltags] = newtagset;
 						arrange(c->mon);
+					}
 				}
 			}
 			#endif // SWITCHTAG_PATCH
