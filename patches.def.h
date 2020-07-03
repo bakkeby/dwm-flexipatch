@@ -671,8 +671,10 @@
  *   0 is default behaviour
  *   1 automatically moves you to the tag of the newly opened application and
  *   2 enables the tag of the newly opened application in addition to your existing enabled tags
+ *   3 as 1, but closing that window reverts the view back to what it was previously (*)
+ *   4 as 2, but closing that window reverts the view back to what it was previously (*)
  *
- * Closing that window reverts the view back to what it was before the window was opened.
+ * (*) except if the client has been moved between tags or to another monitor
  *
  * https://github.com/bakkeby/patches/tree/master/dwm/dwm-switchtag-6.2.diff
  * Also see https://dwm.suckless.org/patches/switchtotag

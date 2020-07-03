@@ -604,6 +604,9 @@ applyrules(Client *c)
 	char role[64];
 	#endif // WINDOWROLERULE_PATCH
 	unsigned int i;
+	#if SWITCHTAG_PATCH
+	unsigned int newtagset;
+	#endif // SWITCHTAG_PATCH
 	const Rule *r;
 	Monitor *m;
 	XClassHint ch = { NULL, NULL };
@@ -662,23 +665,26 @@ applyrules(Client *c)
 			if (r->switchtag)
 			#endif // SWALLOW_PATCH
 			{
-				unsigned int newtagset;
-				if (r->switchtag == 2)
+				selmon = c->mon;
+				if (r->switchtag == 2 || r->switchtag == 4)
 					newtagset = c->mon->tagset[c->mon->seltags] ^ c->tags;
 				else
 					newtagset = c->tags;
 
 				/* Switch to the client's tag, but only if that tag is not already shown */
-				if (newtagset && !(newtagset & c->mon->tagset[c->mon->seltags])) {
-					c->switchtag = c->mon->tagset[c->mon->seltags];
+				if (newtagset && !(c->tags & c->mon->tagset[c->mon->seltags])) {
+					if (r->switchtag == 3 || r->switchtag == 4)
+						c->switchtag = c->mon->tagset[c->mon->seltags];
 					c->mon->tagset[c->mon->seltags] = newtagset;
-					if (r->switchtag == 1)
+					if (r->switchtag == 1 || r->switchtag == 3) {
 						#if PERTAG_PATCH
 						pertagview(&((Arg) { .ui = newtagset }));
+						arrange(c->mon);
 						#else
 						view(&((Arg) { .ui = newtagset }));
 						#endif // PERTAG_PATCH
-					arrange(c->mon);
+					} else
+						arrange(c->mon);
 				}
 			}
 			#endif // SWITCHTAG_PATCH
@@ -697,7 +703,7 @@ applyrules(Client *c)
 	#else
 	else if (c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
 	#endif // SCRATCHPADS_PATCH
-	else                                     c->tags = 1;
+	else                                      c->tags = 1;
 	#elif SCRATCHPADS_PATCH
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : (c->mon->tagset[c->mon->seltags] & ~SPTAGMASK);
 	#elif SCRATCHPAD_ALT_1_PATCH
@@ -3763,6 +3769,9 @@ void
 unmanage(Client *c, int destroyed)
 {
 	Monitor *m = c->mon;
+	#if SWITCHTAG_PATCH
+	unsigned int switchtag = c->switchtag;
+	#endif // SWITCHTAG_PATCH
 	XWindowChanges wc;
 
 	#if SWALLOW_PATCH
@@ -3803,8 +3812,8 @@ unmanage(Client *c, int destroyed)
 	updateclientlist();
 	arrange(m);
 	#if SWITCHTAG_PATCH
-	if (c->switchtag)
-		view(&((Arg) { .ui = c->switchtag }));
+	if (switchtag)
+		view(&((Arg) { .ui = switchtag }));
 	#endif // SWITCHTAG_PATCH
 }
 
