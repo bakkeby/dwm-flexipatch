@@ -2318,6 +2318,13 @@ manage(Window w, XWindowAttributes *wa)
 		c->bw = borderpx;
 		#endif // SETBORDERPX_PATCH
 		#endif // FLOATPOS_PATCH
+		#if CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH
+		c->x = t->x + WIDTH(t) / 2 - WIDTH(c) / 2;
+		c->y = t->y + HEIGHT(t) / 2 - HEIGHT(c) / 2;
+		#elif CENTER_TRANSIENT_WINDOWS_PATCH
+		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+		c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+		#endif // CENTER_TRANSIENT_WINDOWS_PATCH | CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH
 	} else {
 		c->mon = selmon;
 		#if FLOATPOS_PATCH

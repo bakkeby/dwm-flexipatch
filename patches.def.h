@@ -103,6 +103,23 @@
  */
 #define CENTER_PATCH 0
 
+/* A transient window is one that is meant to be short lived and is usually raised by a
+ * parent window. Such windows are typically dialog boxes and the like.
+ * It should be noted that in dwm transient windows are not subject to normal client rules
+ * and they are always floating by default.
+ * This patch centers transient windows on the screen like the center patch does. Note that
+ * the 6.2 center patch piggy-backed on the updatewindowtype function to ensure that all
+ * dialog boxes were centered, transient or not. This function was removed in relation to
+ * adding wintype as a client rule filter, hence this no longer works out of the box. This
+ * patch restores previous behaviour with the center patch.
+ */
+#define CENTER_TRANSIENT_WINDOWS_PATCH 0
+
+/* As above, except that the transient window is centered within the position of the parent
+ * window, rather than at the center of the screen. This takes precedence over the above patch.
+ */
+#define CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH 0
+
 /* This patch centers the WM_NAME of the currently selected window on the status bar.
  * Both fancybar and awesomebar patches take precedence over this patch.
  * https://dwm.suckless.org/patches/centeredwindowname/
