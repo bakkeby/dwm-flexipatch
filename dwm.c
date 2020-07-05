@@ -1619,7 +1619,7 @@ drawbar(Monitor *m)
 		#else
 		drw_text(drw, m->ww - m->tw - stw, 0, m->tw, bh, stp, stext, 0);
 		#endif // PANGO_PATCH
-		#endif // STATUSCOLORS_PATCH
+		#endif // STATUSCOLORS_PATCH | STATUS2D_PATCH
 	#if !STATUSALLMONS_PATCH
 	}
 	#endif // STATUSALLMONS_PATCH
@@ -1912,20 +1912,33 @@ drawbar(Monitor *m)
 	m->btw = w;
 	#endif // AWESOMEBAR_PATCH
 	drw_map(drw, m->barwin, 0, 0, m->ww - stw, bh);
+
 	#if EXTRABAR_PATCH
-	if (m == selmon) { /* extra status is only drawn on selected monitor */
-		#if VTCOLORS_PATCH
-		drw_setscheme(drw, scheme[SchemeTitleNorm]);
-		#else
-		drw_setscheme(drw, scheme[SchemeNorm]);
-		#endif // VTCOLORS_PATCH
-		#if PANGO_PATCH
+	#if VTCOLORS_PATCH
+	drw_setscheme(drw, scheme[SchemeTitleNorm]);
+	#else
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	#endif // VTCOLORS_PATCH
+	drw_rect(drw, 0, 0, m->ww, bh, 1, 1);
+	#if STATICSTATUS_PATCH
+	if (m == statmon)
+	#else
+	if (m == selmon)
+	#endif // STATICSTATUS_PATCH
+	{ /* extra status is only drawn on selected monitor */
+		#if STATUS2D_PATCH
+		drawstatusbar(m, bh, estext, 0, 0);
+		#elif PANGO_PATCH
 		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0, True);
 		#else
 		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0);
 		#endif // PANGO_PATCH
 		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
 	}
+	#if !STATICSTATUS_PATCH
+	else
+		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
+	#endif // STATICSTATUS_PATCH
 	#endif // EXTRABAR_PATCH
 }
 
