@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-07-05 - Extrabar compatibility improvements (staticstatus, statu2d, dwmblocks) and fix for systray randomly causing dwm to crash when first systray application starts
+2020-07-05 - Extrabar compatibility improvements (staticstatus, status2d, dwmblocks) and fix for systray randomly causing dwm to crash when first systray application starts
 
 2020-06-24 - Added resizepoint, statusbutton and sendmon_keepfocus patches
 
