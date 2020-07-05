@@ -291,7 +291,10 @@ struct Monitor {
 	int by;               /* bar geometry */
 	int tw;               /* bar text width */
 	#if EXTRABAR_PATCH
-	int eby;	          /* extra bar geometry */
+	int eby;              /* extra bar geometry */
+	#if STATUSCMD_PATCH
+	int etw;              /* extra bar text width */
+	#endif // STATUSCMD_PATCH
 	#endif // EXTRABAR_PATCH
 	#if AWESOMEBAR_PATCH
 	int btw;              /* width of tasks portion of bar */
@@ -520,13 +523,24 @@ static char stext[1024];
 #else
 static char stext[256];
 #endif // STATUS2D_PATCH
+#if STATUS2D_PATCH
+static char rawstext[1024];
+#else
+static char rawstext[512];
+#endif // STATUS2D_PATCH
 #if EXTRABAR_PATCH
 #if STATUS2D_PATCH && !STATUSCOLORS_PATCH
 static char estext[1024];
 #else
 static char estext[256];
 #endif // STATUS2D_PATCH
+#if STATUSCMD_PATCH
+static char rawestext[1024];
+#else
+static char rawestext[512];
+#endif // STATUSCMD_PATCH
 #endif // EXTRABAR_PATCH
+
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar geometry */
@@ -993,6 +1007,60 @@ buttonpress(XEvent *e)
 		#if LEFTLAYOUT_PATCH || STATUSBUTTON_PATCH
 		}
 		#endif // LEFTLAYOUT_PATCH | STATUSBUTTON_PATCH
+	#if EXTRABAR_PATCH && STATUSCMD_PATCH
+	} else if (ev->window == selmon->extrabarwin) {
+		i = x = 0;
+		padding = 0;
+		#if BARPADDING_PATCH
+		padding -= sp * 2;
+		#endif // BARPADDING_PATCH
+		if (ev->x > selmon->ww - selmon->etw + padding)
+		{
+			click = ClkStatusText;
+			xc = selmon->ww - selmon->etw + padding;
+			#if STATUSPADDING_PATCH
+			xc += lrpad / 2;
+			#endif // STATUSPADDING_PATCH
+			char *text = rawestext;
+			int i = -1;
+			char ch;
+			#if DWMBLOCKS_PATCH
+			dwmblockssig = -1;
+			#else
+			statuscmdn = 0;
+			#endif // DWMBLOCKS_PATCH
+			while (text[++i]) {
+				if ((unsigned char)text[i] < ' ') {
+					ch = text[i];
+					text[i] = '\0';
+					#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
+					xc += status2dtextlength(text);
+					#elif PANGO_PATCH
+					xc += TEXTWM(text) - lrpad;
+					#else
+					xc += TEXTW(text) - lrpad;
+					#endif // STATUS2D_PATCH
+					text[i] = ch;
+					text += i+1;
+					i = -1;
+					#if DWMBLOCKS_PATCH
+					if (xc >= ev->x && dwmblockssig != -1)
+						break;
+					dwmblockssig = ch;
+					#else
+					if (xc >= ev->x)
+						break;
+					if (ch <= LENGTH(statuscmds))
+						statuscmdn = ch - 1;
+					#endif // DWMBLOCKS_PATCH
+				}
+			}
+			#if DWMBLOCKS_PATCH
+			if (dwmblockssig == -1)
+				dwmblockssig = 0;
+			#endif // DWMBLOCKS_PATCH
+		}
+	#endif // EXTRABAR_PATCH
 	} else if ((c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
 		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
@@ -1926,12 +1994,20 @@ drawbar(Monitor *m)
 	if (m == selmon)
 	#endif // STATICSTATUS_PATCH
 	{ /* extra status is only drawn on selected monitor */
-		#if STATUS2D_PATCH
+		#if STATUSCMD_PATCH && STATUS2D_PATCH
+		m->etw = m->ww - drawstatusbar(m, bh, estext, 0, 0);
+		#elif STATUS2D_PATCH
 		drawstatusbar(m, bh, estext, 0, 0);
 		#elif PANGO_PATCH
 		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0, True);
+		#if STATUSCMD_PATCH
+		m->etw = TEXTWM(estext) - lrpad;
+		#endif // STATUSCMD_PATCH
 		#else
 		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0);
+		#if STATUSCMD_PATCH
+		m->etw = TEXTW(estext) - lrpad;
+		#endif // STATUSCMD_PATCH
 		#endif // PANGO_PATCH
 		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
 	}
@@ -4180,26 +4256,26 @@ updatestatus(void)
 	Monitor* m;
 	#endif // STATUSALLMONS_PATCH
 	#if EXTRABAR_PATCH
-	#if STATUS2D_PATCH
-	char text[1024];
-	#else
-	char text[512];
-	#endif // STATUS2D_PATCH
-	if (!gettextprop(root, XA_WM_NAME, text, sizeof(text))) {
+	if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext))) {
 		strcpy(stext, "dwm-"VERSION);
 		estext[0] = '\0';
 	} else {
-		char *e = strchr(text, statussep);
+		char *e = strchr(rawstext, statussep);
 		if (e) {
 			*e = '\0'; e++;
+			#if STATUSCMD_PATCH
+			strncpy(rawestext, e, sizeof(estext) - 1);
+			copyvalidchars(estext, rawestext);
+			#else
 			strncpy(estext, e, sizeof(estext) - 1);
+			#endif // STATUSCMD_PATCH
 		} else {
 			estext[0] = '\0';
 		}
 		#if STATUSCMD_PATCH
-		copyvalidchars(stext, text);
+		copyvalidchars(stext, rawstext);
 		#else
-		strncpy(stext, text, sizeof(stext) - 1);
+		strncpy(stext, rawstext, sizeof(stext) - 1);
 		#endif // STATUSCMD_PATCH
 	}
 	#elif STATUSCMD_PATCH

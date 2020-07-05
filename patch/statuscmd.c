@@ -1,8 +1,3 @@
-#if STATUS2D_PATCH
-static char rawstext[1024];
-#else
-static char rawstext[256];
-#endif // STATUS2D_PATCH
 #if !DWMBLOCKS_PATCH
 static const char statusexport[] = "export BUTTON=-;";
 static int statuscmdn;
