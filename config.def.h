@@ -55,7 +55,8 @@ static const int showsystray             = 1;   /* 0 means no systray */
 static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
 #endif // ONLYQUITONEMPTY_PATCH
 #if EXTRABAR_PATCH
-static const char statussep              = ';';      /* separator between status bars */
+static const char statussep              = ';'; /* separator between status bars */
+static const int ebalign                 = 0;   /* extrabar alignment: 0 - left, 1 - right, 2 - center */
 #endif // EXTRABAR_PATCH
 #if PANGO_PATCH
 static const char font[]                 = "monospace 10";

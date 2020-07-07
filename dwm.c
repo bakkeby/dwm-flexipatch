@@ -521,7 +521,7 @@ static const char broken[] = "broken";
 #if PANGO_PATCH || STATUS2D_PATCH && !STATUSCOLORS_PATCH
 static char stext[1024];
 #else
-static char stext[256];
+static char stext[512];
 #endif // STATUS2D_PATCH
 #if STATUS2D_PATCH
 static char rawstext[1024];
@@ -532,7 +532,7 @@ static char rawstext[512];
 #if STATUS2D_PATCH && !STATUSCOLORS_PATCH
 static char estext[1024];
 #else
-static char estext[256];
+static char estext[512];
 #endif // STATUS2D_PATCH
 #if STATUSCMD_PATCH
 static char rawestext[1024];
@@ -1014,10 +1014,19 @@ buttonpress(XEvent *e)
 		#if BARPADDING_PATCH
 		padding -= sp * 2;
 		#endif // BARPADDING_PATCH
-		if (ev->x > selmon->ww - selmon->etw + padding)
-		{
+		if (
+			(ebalign == 0 && ev->x >= 0 && ev->x < selmon->etw) ||
+			(ebalign == 1 && ev->x > selmon->ww - selmon->etw + padding) ||
+			(ebalign == 2 && ev->x > (selmon->ww / 2 - selmon->etw / 2 + padding)
+			              && ev->x < (selmon->ww / 2 + selmon->etw / 2 - padding))
+		) {
 			click = ClkStatusText;
-			xc = selmon->ww - selmon->etw + padding;
+			if (ebalign == 0)
+				xc = 0; // left
+			else if (ebalign == 1)
+				xc = selmon->ww - selmon->etw + padding; // right
+			else
+				xc = selmon->ww / 2 - selmon->etw / 2 + padding; // center
 			#if STATUSPADDING_PATCH
 			xc += lrpad / 2;
 			#endif // STATUSPADDING_PATCH
@@ -1149,12 +1158,12 @@ cleanupmon(Monitor *mon)
 		m->next = mon->next;
 	}
 	XUnmapWindow(dpy, mon->barwin);
-	#if EXTRABAR_PATCH
-	XUnmapWindow(dpy, mon->extrabarwin);
-	#endif // EXTRABAR_PATCH
 	XDestroyWindow(dpy, mon->barwin);
 	#if EXTRABAR_PATCH
-	XDestroyWindow(dpy, mon->extrabarwin);
+	if (mon->extrabarwin) {
+		XUnmapWindow(dpy, mon->extrabarwin);
+		XDestroyWindow(dpy, mon->extrabarwin);
+	}
 	#endif // EXTRABAR_PATCH
 	free(mon);
 }
@@ -1316,11 +1325,12 @@ configurenotify(XEvent *e)
 				XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, m->ww, bh);
 				#endif // BARPADDING_PATCH
 				#if EXTRABAR_PATCH
-				#if BARPADDING_PATCH
-				XMoveResizeWindow(dpy, m->extrabarwin, m->wx + sp, m->eby - vp, m->ww - 2 * sp, bh);
-				#else
-				XMoveResizeWindow(dpy, m->extrabarwin, m->wx, m->eby, m->ww, bh);
-				#endif // BARPADDING_PATCH
+				if (m->extrabarwin)
+					#if BARPADDING_PATCH
+					XMoveResizeWindow(dpy, m->extrabarwin, m->wx + sp, m->eby - vp, m->ww - 2 * sp, bh);
+					#else
+					XMoveResizeWindow(dpy, m->extrabarwin, m->wx, m->eby, m->ww, bh);
+					#endif // BARPADDING_PATCH
 				#endif // EXTRABAR_PATCH
 			}
 			focus(NULL);
@@ -1671,7 +1681,7 @@ drawbar(Monitor *m)
 			tp = ++ts;
 		}
 		#elif STATUS2D_PATCH
-		m->tw = m->ww - drawstatusbar(m, bh, stext, stw, stp);
+		m->tw = drawstatusbar(m, bh, stext, stw, stp, 1);
 		#else // STATUSCOLORS_PATCH
 		#if STATUSPADDING_PATCH && PANGO_PATCH
 		m->tw = TEXTWM(stext);
@@ -1982,38 +1992,55 @@ drawbar(Monitor *m)
 	drw_map(drw, m->barwin, 0, 0, m->ww - stw, bh);
 
 	#if EXTRABAR_PATCH
-	#if VTCOLORS_PATCH
-	drw_setscheme(drw, scheme[SchemeTitleNorm]);
-	#else
-	drw_setscheme(drw, scheme[SchemeNorm]);
-	#endif // VTCOLORS_PATCH
-	drw_rect(drw, 0, 0, m->ww, bh, 1, 1);
 	#if STATICSTATUS_PATCH
-	if (m == statmon)
+	if (m == statmon && m->extrabarwin)
 	#else
-	if (m == selmon)
+	if (m == selmon && m->extrabarwin)
 	#endif // STATICSTATUS_PATCH
 	{ /* extra status is only drawn on selected monitor */
-		#if STATUSCMD_PATCH && STATUS2D_PATCH
-		m->etw = m->ww - drawstatusbar(m, bh, estext, 0, 0);
-		#elif STATUS2D_PATCH
-		drawstatusbar(m, bh, estext, 0, 0);
-		#elif PANGO_PATCH
-		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0, True);
-		#if STATUSCMD_PATCH
-		m->etw = TEXTWM(estext) - lrpad;
-		#endif // STATUSCMD_PATCH
+		#if VTCOLORS_PATCH
+		drw_setscheme(drw, scheme[SchemeTitleNorm]);
 		#else
-		drw_text(drw, 0, 0, mons->ww, bh, 0, estext, 0);
-		#if STATUSCMD_PATCH
-		m->etw = TEXTW(estext) - lrpad;
-		#endif // STATUSCMD_PATCH
+		drw_setscheme(drw, scheme[SchemeNorm]);
+		#endif // VTCOLORS_PATCH
+		drw_rect(drw, 0, 0, m->ww, bh, 1, 1);
+
+		#if !STATUS2D_PATCH
+		#if PANGO_PATCH
+		w = TEXTWM(estext) - lrpad;
+		#else
+		w = TEXTW(estext) - lrpad;
 		#endif // PANGO_PATCH
+		if (ebalign == 0)
+			x = 0; // left
+		else if (ebalign == 1)
+			x = m->ww - w; // right
+		else
+			x = m->ww / 2 - w / 2; // center
+
+		#if PANGO_PATCH
+		drw_text(drw, x, 0, mons->ww, bh, 0, estext, 0, True);
+		#else
+		drw_text(drw, x, 0, mons->ww, bh, 0, estext, 0);
+		#endif // PANGO_PATCH
+		#else
+		w = drawstatusbar(m, bh, estext, 0, 0, ebalign);
+		#endif // STATUS2D_PATCH
+		#if STATUSCMD_PATCH
+		m->etw = w;
+		#endif // STATUSCMD_PATCH
 		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
 	}
 	#if !STATICSTATUS_PATCH
-	else
+	else { /* clear status on other monitors */
+		#if VTCOLORS_PATCH
+		drw_setscheme(drw, scheme[SchemeTitleNorm]);
+		#else
+		drw_setscheme(drw, scheme[SchemeNorm]);
+		#endif // VTCOLORS_PATCH
+		drw_rect(drw, 0, 0, m->ww, bh, 1, 1);
 		drw_map(drw, m->extrabarwin, 0, 0, m->ww, bh);
+	}
 	#endif // STATICSTATUS_PATCH
 	#endif // EXTRABAR_PATCH
 }
@@ -3658,14 +3685,15 @@ togglebar(const Arg *arg)
 	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
 	#endif // BARPADDING_PATCH
 	#if EXTRABAR_PATCH
-	#if BARPADDING_PATCH
-	XMoveResizeWindow(dpy, selmon->extrabarwin, selmon->wx + sp, selmon->eby - vp, selmon->ww - 2*sp, bh);
-	#else
-	XMoveResizeWindow(dpy, selmon->extrabarwin, selmon->wx, selmon->eby, selmon->ww, bh);
-	#endif // BARPADDING_PATCH
+	if (selmon->extrabarwin)
+		#if BARPADDING_PATCH
+		XMoveResizeWindow(dpy, selmon->extrabarwin, selmon->wx + sp, selmon->eby - vp, selmon->ww - 2*sp, bh);
+		#else
+		XMoveResizeWindow(dpy, selmon->extrabarwin, selmon->wx, selmon->eby, selmon->ww, bh);
+		#endif // BARPADDING_PATCH
 	#endif // EXTRABAR_PATCH
 	#if SYSTRAY_PATCH
-	if (showsystray) {
+	if (showsystray && selmon == systraytomon(selmon) ) {
 		XWindowChanges wc;
 		if (!selmon->showbar)
 			wc.y = -bh;
@@ -3954,48 +3982,48 @@ updatebars(void)
 	};
 	XClassHint ch = {"dwm", "dwm"};
 	for (m = mons; m; m = m->next) {
-		#if EXTRABAR_PATCH
 		if (!m->barwin) {
-		#else
-		if (m->barwin)
-			continue;
-		#endif // EXTRABAR_PATCH
-		w = m->ww;
-		#if SYSTRAY_PATCH
-		if (showsystray && m == systraytomon(m))
-			w -= getsystraywidth();
-		#endif // SYSTRAY_PATCH
-		#if ALPHA_PATCH
-		#if BARPADDING_PATCH
-		m->barwin = XCreateWindow(dpy, root, m->wx + sp, m->by + vp, w - 2*sp, bh, 0, depth,
-		                          InputOutput, visual,
-		                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
-		#else
-		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, depth,
-		                          InputOutput, visual,
-		                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
-		#endif // BARPADDING_PATCH
-		#else
-		#if BARPADDING_PATCH
-		m->barwin = XCreateWindow(dpy, root, m->wx + sp, m->by + vp, w - 2*sp, bh, 0, DefaultDepth(dpy, screen),
-				CopyFromParent, DefaultVisual(dpy, screen),
-				CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
-		#else
-		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, DefaultDepth(dpy, screen),
-				CopyFromParent, DefaultVisual(dpy, screen),
-				CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
-		#endif // BARPADDING_PATCH
-		#endif // ALPHA_PATCH
-		XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
-		#if SYSTRAY_PATCH
-		if (showsystray && m == systraytomon(m))
-			XMapRaised(dpy, systray->win);
-		#endif // SYSTRAY_PATCH
-		XMapRaised(dpy, m->barwin);
-		XSetClassHint(dpy, m->barwin, &ch);
-		#if EXTRABAR_PATCH
+			w = m->ww;
+			#if SYSTRAY_PATCH
+			if (showsystray && m == systraytomon(m))
+				w -= getsystraywidth();
+			#endif // SYSTRAY_PATCH
+			#if ALPHA_PATCH
+			#if BARPADDING_PATCH
+			m->barwin = XCreateWindow(dpy, root, m->wx + sp, m->by + vp, w - 2*sp, bh, 0, depth,
+			                          InputOutput, visual,
+			                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
+			#else
+			m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, depth,
+			                          InputOutput, visual,
+			                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
+			#endif // BARPADDING_PATCH
+			#else
+			#if BARPADDING_PATCH
+			m->barwin = XCreateWindow(dpy, root, m->wx + sp, m->by + vp, w - 2*sp, bh, 0, DefaultDepth(dpy, screen),
+					CopyFromParent, DefaultVisual(dpy, screen),
+					CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+			#else
+			m->barwin = XCreateWindow(dpy, root, m->wx, m->by, w, bh, 0, DefaultDepth(dpy, screen),
+					CopyFromParent, DefaultVisual(dpy, screen),
+					CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+			#endif // BARPADDING_PATCH
+			#endif // ALPHA_PATCH
+			XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
+			#if SYSTRAY_PATCH
+			if (showsystray && m == systraytomon(m))
+				XMapRaised(dpy, systray->win);
+			#endif // SYSTRAY_PATCH
+			XMapRaised(dpy, m->barwin);
+			XSetClassHint(dpy, m->barwin, &ch);
 		}
-		if (!m->extrabarwin) {
+		#if EXTRABAR_PATCH
+		#if STATICSTATUS_PATCH
+		if (m == statmon && !m->extrabarwin)
+		#else
+		if (!m->extrabarwin)
+		#endif // STATICSTATUS_PATCH
+		{
 			#if ALPHA_PATCH
 			#if BARPADDING_PATCH
 			m->extrabarwin = XCreateWindow(dpy, root, m->wx + sp, m->eby - vp, m->ww - 2*sp, bh, 0, depth,
@@ -4030,25 +4058,36 @@ updatebarpos(Monitor *m)
 	m->wy = m->my;
 	m->wh = m->mh;
 	#if EXTRABAR_PATCH
+	int num_bars;
+	#if STATICSTATUS_PATCH
+	int has_extrabar = (m == statmon);
+	#else
+	int has_extrabar = 1;
+	#endif // STATICSTATUS_PATCH
+	num_bars = m->showbar * (1 + has_extrabar);
 	#if BARPADDING_PATCH
-	m->wh = m->wh - vertpad * m->showbar * 2 - bh * m->showbar * 2;
+	m->wh = m->wh - vertpad * num_bars - bh * num_bars;
 	m->wy = m->showbar ? m->wy + bh + vertpad: m->wy;
 	if (m->showbar) {
 		m->by = m->topbar ? m->wy - bh - vertpad: m->wy + m->wh + vertpad;
-		m->eby = m->topbar ? m->wy + m->wh + vertpad: m->wy - bh - vertpad;
+		if (has_extrabar)
+			m->eby = m->topbar ? m->wy + m->wh + vertpad: m->wy - bh - vertpad;
 	} else {
 		m->by = -bh - vertpad;
-		m->eby = -bh - vertpad;
+		if (has_extrabar)
+			m->eby = -bh - vertpad;
 	}
 	#else
-	m->wh = m->wh - bh * m->showbar * 2;
+	m->wh = m->wh - bh * num_bars;
 	m->wy = m->showbar ? m->wy + bh : m->wy;
 	if (m->showbar) {
 		m->by = m->topbar ? m->wy - bh : m->wy + m->wh;
-		m->eby = m->topbar ? m->wy + m->wh : m->wy - bh;
+		if (has_extrabar)
+			m->eby = m->topbar ? m->wy + m->wh : m->wy - bh;
 	} else {
 		m->by = -bh;
-		m->eby = -bh;
+		if (has_extrabar)
+			m->eby = -bh;
 	}
 	#endif // BARPADDING_PATCH
 	#elif BARPADDING_PATCH
@@ -4115,6 +4154,10 @@ updategeom(void)
 					mons = createmon();
 			}
 			for (i = 0, m = mons; i < nn && m; m = m->next, i++) {
+				#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+				if (i == statmonval)
+					statmon = m;
+				#endif // STATICSTATUS_PATCH
 				if (i >= n
 				|| unique[i].x_org != m->mx || unique[i].y_org != m->my
 				|| unique[i].width != m->mw || unique[i].height != m->mh)
@@ -4127,10 +4170,6 @@ updategeom(void)
 					m->mh = m->wh = unique[i].height;
 					updatebarpos(m);
 				}
-				#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
-				if (i == statmonval)
-					statmon = m;
-				#endif // STATICSTATUS_PATCH
 			}
 		} else { /* less monitors available nn < n */
 			for (i = nn; i < n; i++) {

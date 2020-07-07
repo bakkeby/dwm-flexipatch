@@ -1,5 +1,5 @@
 int
-drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
+drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp, int align)
 {
 	int ret, i, w, x, len;
 	short isCode = 0;
@@ -49,8 +49,13 @@ drawstatusbar(Monitor *m, int bh, char* stext, int stw, int stp)
 		isCode = 0;
 	text = p;
 	w += 2; /* 1px padding on both sides */
-	x = m->ww - w - stw + stp;
-	ret = m->ww - w;
+	if (align == 0)
+		x = 0 + stp; // left
+	else if (align == 1)
+		x = m->ww - w - stw + stp; // right
+	else
+		x = m->ww / 2 - w / 2; // center
+	ret = w;
 
 	drw_setscheme(drw, scheme[LENGTH(colors)]);
 	drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
@@ -200,7 +205,5 @@ status2dtextlength(char* stext)
 		#else
 		w += TEXTW(text) - lrpad;
 		#endif // PANGO_PATCH
-	else
-		isCode = 0;
 	return w;
 }
