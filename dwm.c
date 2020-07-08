@@ -593,6 +593,9 @@ static Drw *drw;
 static Monitor *mons, *selmon;
 #if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
 static Monitor *statmon;
+#if EXTRABAR_PATCH
+static Monitor *statebmon;
+#endif // EXTRABAR_PATCH
 #endif // STATICSTATUS_PATCH
 static Window root, wmcheckwin;
 
@@ -1993,7 +1996,7 @@ drawbar(Monitor *m)
 
 	#if EXTRABAR_PATCH
 	#if STATICSTATUS_PATCH
-	if (m == statmon && m->extrabarwin)
+	if (m == statebmon && m->extrabarwin)
 	#else
 	if (m == selmon && m->extrabarwin)
 	#endif // STATICSTATUS_PATCH
@@ -4019,7 +4022,7 @@ updatebars(void)
 		}
 		#if EXTRABAR_PATCH
 		#if STATICSTATUS_PATCH
-		if (m == statmon && !m->extrabarwin)
+		if (m == statebmon && !m->extrabarwin)
 		#else
 		if (!m->extrabarwin)
 		#endif // STATICSTATUS_PATCH
@@ -4060,7 +4063,7 @@ updatebarpos(Monitor *m)
 	#if EXTRABAR_PATCH
 	int num_bars;
 	#if STATICSTATUS_PATCH
-	int has_extrabar = (m == statmon);
+	int has_extrabar = (m == statebmon);
 	#else
 	int has_extrabar = 1;
 	#endif // STATICSTATUS_PATCH
@@ -4157,6 +4160,10 @@ updategeom(void)
 				#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
 				if (i == statmonval)
 					statmon = m;
+				#if EXTRABAR_PATCH
+				if (i == statebmonval)
+					statebmon = m;
+				#endif // EXTRABAR_PATCH
 				#endif // STATICSTATUS_PATCH
 				if (i >= n
 				|| unique[i].x_org != m->mx || unique[i].y_org != m->my
@@ -4187,6 +4194,10 @@ updategeom(void)
 				#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
 				if (m == statmon)
 					statmon = mons;
+				#if EXTRABAR_PATCH
+				if (m == statebmon)
+					statebmon = mons;
+				#endif // EXTRABAR_PATCH
 				#endif // STATICSTATUS_PATCH
 				cleanupmon(m);
 			}
@@ -4207,6 +4218,10 @@ updategeom(void)
 	#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
 	if (!statmon)
 		statmon = mons;
+	#if EXTRABAR_PATCH
+	if (!statebmon)
+		statebmon = mons;
+	#endif // EXTRABAR_PATCH
 	#endif // STATICSTATUS_PATCH
 	if (dirty) {
 		selmon = mons;
@@ -4331,6 +4346,10 @@ updatestatus(void)
 		drawbar(m);
 	#elif STATICSTATUS_PATCH
 	drawbar(statmon);
+	#if EXTRABAR_PATCH
+	if (statmon != statebmon)
+		drawbar(statebmon);
+	#endif // EXTRABAR_PATCH
 	#else
 	drawbar(selmon);
 	#endif // STATUSALLMONS_PATCH | STATICSTATUS_PATCH

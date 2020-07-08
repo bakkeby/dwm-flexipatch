@@ -57,6 +57,9 @@ static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no 
 #if EXTRABAR_PATCH
 static const char statussep              = ';'; /* separator between status bars */
 static const int ebalign                 = 0;   /* extrabar alignment: 0 - left, 1 - right, 2 - center */
+#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+static const int statebmonval            = statmonval;
+#endif // STATICSTATUS_PATCH
 #endif // EXTRABAR_PATCH
 #if PANGO_PATCH
 static const char font[]                 = "monospace 10";
