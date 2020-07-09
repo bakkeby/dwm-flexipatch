@@ -1827,8 +1827,8 @@ drawbar(Monitor *m)
 		#if AWESOMEBAR_PATCH
 		if (n > 0) {
 			remainder = w % n;
-			tabw = (1.0 / (double)n) * w + 1;
-			for (c = m->clients; c; c = c->next) {
+			tabw = w / n;
+			for (i = 0, c = m->clients; c; c = c->next, i++) {
 				if (!ISVISIBLE(c))
 					continue;
 				if (m->sel == c)
@@ -1849,15 +1849,10 @@ drawbar(Monitor *m)
 					#endif // VTCOLORS_PATCH
 
 				drw_setscheme(drw, scheme[scm]);
-				if (remainder >= 0) {
-					if (remainder == 0)
-						tabw--;
-					remainder--;
-				}
 				#if PANGO_PATCH
-				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0, False);
+				drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0, False);
 				#else
-				drw_text(drw, x, 0, (1.0 / (double)n) * w, bh, lrpad / 2, c->name, 0);
+				drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0);
 				#endif // PANGO_PATCH
 				x += tabw;
 			}
