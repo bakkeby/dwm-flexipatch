@@ -8,11 +8,11 @@ killunsel(const Arg *arg)
 
 	for (i = selmon->clients; i; i = i->next) {
 		if (ISVISIBLE(i) && i != selmon->sel) {
-			#if SYSTRAY_PATCH
+			#if BAR_SYSTRAY_PATCH
 			if (!sendevent(i->win, wmatom[WMDelete], NoEventMask, wmatom[WMDelete], CurrentTime, 0, 0, 0))
 			#else
 			if (!sendevent(i, wmatom[WMDelete]))
-			#endif // SYSTRAY_PATCH
+			#endif // BAR_SYSTRAY_PATCH
 			{
 				XGrabServer(dpy);
 				XSetErrorHandler(xerrordummy);

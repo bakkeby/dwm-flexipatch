@@ -1,0 +1,76 @@
+#if !BAR_DWMBLOCKS_PATCH
+static const char statusexport[] = "export BUTTON=-;";
+static int statuscmdn;
+static int lastbutton;
+#endif // BAR_DWMBLOCKS_PATCH
+
+int
+click_statuscmd(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+{
+	return click_statuscmd_text(m, arg, rel_x, rel_y, rawstext);
+}
+
+#if BAR_EXTRABAR_PATCH
+int
+click_statuscmd_eb(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+{
+	return click_statuscmd_text(m, arg, rel_x, rel_y, rawestext);
+}
+#endif // BAR_EXTRABAR_PATCH
+
+int
+click_statuscmd_text(Monitor *m, Arg *arg, int rel_x, int rel_y, char *text)
+{
+	int i = -1;
+	int x = 0;
+	char ch;
+	#if BAR_DWMBLOCKS_PATCH
+	dwmblockssig = -1;
+	#else
+	statuscmdn = 0;
+	#endif // BAR_DWMBLOCKS_PATCH
+	while (text[++i]) {
+		if ((unsigned char)text[i] < ' ') {
+			ch = text[i];
+			text[i] = '\0';
+			#if BAR_STATUS2D_PATCH && !BAR_BAR_STATUSCOLORS_PATCH
+			x += status2dtextlength(text);
+			#elif BAR_PANGO_PATCH
+			x += TEXTWM(text) - lrpad;
+			#else
+			x += TEXTW(text) - lrpad;
+			#endif // STATUS2D_PATCH
+			text[i] = ch;
+			text += i+1;
+			i = -1;
+			#if BAR_DWMBLOCKS_PATCH
+			if (x >= rel_x && dwmblockssig != -1)
+				break;
+			dwmblockssig = ch;
+			#else
+			if (x >= rel_x)
+				break;
+			if (ch <= LENGTH(statuscmds))
+				statuscmdn = ch - 1;
+			#endif // BAR_DWMBLOCKS_PATCH
+		}
+	}
+	#if BAR_DWMBLOCKS_PATCH
+	if (dwmblockssig == -1)
+		dwmblockssig = 0;
+	#endif // BAR_DWMBLOCKS_PATCH
+	return ClkStatusText;
+}
+
+void
+copyvalidchars(char *text, char *rawtext)
+{
+	int i = -1, j = 0;
+
+	while (rawtext[++i]) {
+		if ((unsigned char)rawtext[i] >= ' ') {
+			text[j++] = rawtext[i];
+		}
+	}
+	text[j] = '\0';
+}

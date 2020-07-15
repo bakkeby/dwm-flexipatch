@@ -1,15 +1,33 @@
-
 static Systray *systray = NULL;
 static unsigned long systrayorientation = _NET_SYSTEM_TRAY_ORIENTATION_HORZ;
+static int systraybaridx = -1;
+static int systraybarrule = -1;
+static int systrayxpos = 0;
 
-unsigned int
-getsystraywidth()
+int
+width_systray(Monitor *m, int max_width)
 {
 	unsigned int w = 0;
 	Client *i;
+	if (!systray)
+		return 1;
 	if (showsystray)
 		for (i = systray->icons; i; w += i->w + systrayspacing, i = i->next);
 	return w ? w + systrayspacing : 0;
+}
+
+int
+draw_systray(Monitor *m, int x_pos, int w)
+{
+	systrayxpos = x_pos;
+	updatesystray();
+	return systrayxpos + w;
+}
+
+int
+click_systray(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+{
+	return -1;
 }
 
 void
@@ -37,64 +55,51 @@ resizerequest(XEvent *e)
 	}
 }
 
-Monitor *
-systraytomon(Monitor *m)
-{
-	Monitor *t;
-	int i, n;
-	if (!systraypinning) {
-		if (!m)
-			return selmon;
-		return m == selmon ? m : NULL;
-	}
-	for (n = 1, t = mons; t && t->next; n++, t = t->next);
-	for (i = 1, t = mons; t && t->next && i < systraypinning; i++, t = t->next);
-	if (systraypinningfailfirst && n < systraypinning)
-		return mons;
-	return t;
-}
-
 void
 updatesystray(void)
 {
-	XSetWindowAttributes wa;
-	XWindowChanges wc;
-	Client *i;
-	Monitor *m = systraytomon(NULL);
-	unsigned int x = m->mx + m->mw;
-	unsigned int w = 1, xpad = 0, ypad = 0;
-	#if BARPADDING_PATCH
-	xpad = sp;
-	ypad = vp;
-	#endif // BARPADDING_PATCH
-
 	if (!showsystray)
 		return;
+	XSetWindowAttributes wa;
+	Client *i;
+	Monitor *m;
+	unsigned int w = 1, r, mi;
+	const BarRule *br;
+
 	if (!systray) {
 		/* init systray */
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))
 			die("fatal: could not malloc() %u bytes\n", sizeof(Systray));
 
-		wa.override_redirect = True;
-		wa.event_mask = ButtonPressMask|ExposureMask;
-		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
-		wa.border_pixel = 0;
-		#if ALPHA_PATCH
-		wa.colormap = cmap;
-		systray->win = XCreateWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, depth,
-						InputOutput, visual,
-						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
-		#else
-		systray->win = XCreateSimpleWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
-		XChangeWindowAttributes(dpy, systray->win, CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWEventMask, &wa);
-		#endif // ALPHA_PATCH
-		XSelectInput(dpy, systray->win, SubstructureNotifyMask);
+		/* Work out which bar the systray is to be displayed on */
+		for (r = 0; r < LENGTH(barrules); r++) {
+			br = &barrules[r];
+			if (br->drawfunc == &draw_systray) {
+				systraybaridx = br->bar;
+				systraybarrule = r;
+				if (br->monitor == -1 || br->monitor == 'A')
+					m = selmon;
+				else
+					for (m = mons, mi = 0; m && mi < br->monitor && m->next; m = m->next, mi++);
+				systray->win = m->bars[systraybaridx]->win;
+				systray->mon = m;
+
+				break;
+			}
+		}
+		if (systraybaridx == -1) {
+			fprintf(stderr, "dwm: unable to obtain system tray, no draw_systray in bar rules.\n");
+			free(systray);
+			systray = NULL;
+			return;
+		}
+
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayOrientation], XA_CARDINAL, 32,
 				PropModeReplace, (unsigned char *)&systrayorientation, 1);
-		#if ALPHA_PATCH
+		#if BAR_ALPHA_PATCH
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayVisual], XA_VISUALID, 32,
 				PropModeReplace, (unsigned char *)&visual->visualid, 1);
-		#endif // ALPHA_PATCH
+		#endif // BAR_ALPHA_PATCH
 		XChangeProperty(dpy, systray->win, netatom[NetWMWindowType], XA_ATOM, 32,
 				PropModeReplace, (unsigned char *)&netatom[NetWMWindowTypeDock], 1);
 		XMapRaised(dpy, systray->win);
@@ -102,8 +107,7 @@ updatesystray(void)
 		if (XGetSelectionOwner(dpy, netatom[NetSystemTray]) == systray->win) {
 			sendevent(root, xatom[Manager], StructureNotifyMask, CurrentTime, netatom[NetSystemTray], systray->win, 0, 0);
 			XSync(dpy, False);
-		}
-		else {
+		} else {
 			fprintf(stderr, "dwm: unable to obtain system tray.\n");
 			free(systray);
 			systray = NULL;
@@ -111,34 +115,18 @@ updatesystray(void)
 		}
 	}
 
-	drw_setscheme(drw, scheme[SchemeNorm]);
 	for (w = 0, i = systray->icons; i; i = i->next) {
 		/* make sure the background color stays the same */
 		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
 		XChangeWindowAttributes(dpy, i->win, CWBackPixel, &wa);
 		XMapRaised(dpy, i->win);
 		w += systrayspacing;
-		i->x = w;
+		i->x = systrayxpos + w;
 		XMoveResizeWindow(dpy, i->win, i->x, 0, i->w, i->h);
 		w += i->w;
-		if (i->mon != m)
-			i->mon = m;
+		if (i->mon != systray->mon)
+		    i->mon = systray->mon;
 	}
-	w = w ? w + systrayspacing : 1;
- 	x -= w;
-	XMoveResizeWindow(dpy, systray->win, x - xpad, m->by + ypad, w, bh);
-	wc.x = x - xpad;
-	wc.y = m->by + ypad;
-	wc.width = w;
-	wc.height = bh;
-	wc.stack_mode = Above; wc.sibling = m->barwin;
-	XConfigureWindow(dpy, systray->win, CWX|CWY|CWWidth|CWHeight|CWSibling|CWStackMode, &wc);
-	XMapWindow(dpy, systray->win);
-	XMapSubwindows(dpy, systray->win);
-	/* redraw background */
-	XSetForeground(dpy, drw->gc, scheme[SchemeNorm][ColBg].pixel);
-	XFillRectangle(dpy, systray->win, drw->gc, 0, 0, w, bh);
-	XSync(dpy, False);
 }
 
 void

@@ -22,14 +22,18 @@ typedef struct Systray Systray;
 struct Systray {
 	Window win;
 	Client *icons;
+	Monitor *mon;
 };
+
+/* bar integration */
+static int width_systray(Monitor *m, int max_width);
+static int draw_systray(Monitor *m, int x_pos, int w);
+static int click_systray(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h);
 
 /* function declarations */
 static Atom getatomprop(Client *c, Atom prop);
-static unsigned int getsystraywidth();
 static void removesystrayicon(Client *i);
 static void resizerequest(XEvent *e);
-static Monitor *systraytomon(Monitor *m);
 static void updatesystray(void);
 static void updatesystrayicongeom(Client *i, int w, int h);
 static void updatesystrayiconstate(Client *i, XPropertyEvent *ev);

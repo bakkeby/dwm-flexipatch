@@ -15,19 +15,19 @@ static const unsigned int gappoh         = 10;  /* horiz outer gap between windo
 static const unsigned int gappov         = 30;  /* vert outer gap between windows and screen edge */
 static const int smartgaps               = 0;   /* 1 means no outer gap when there is only one window */
 #endif // VANITYGAPS_PATCH
-#if HOLDBAR_PATCH
+#if BAR_HOLDBAR_PATCH
 static const int showbar                 = 0;   /* 0 means no bar */
 #else
 static const int showbar                 = 1;   /* 0 means no bar */
-#endif // HOLDBAR_PATCH
+#endif // BAR_HOLDBAR_PATCH
 static const int topbar                  = 1;   /* 0 means bottom bar */
 #if BAR_HEIGHT_PATCH
 static const int bar_height              = 0;   /* 0 means derive from font, >= 1 explicit height */
 #endif // BAR_HEIGHT_PATCH
-#if BARPADDING_PATCH
+#if BAR_PADDING_PATCH
 static const int vertpad                 = 10;  /* vertical padding of bar */
 static const int sidepad                 = 10;  /* horizontal padding of bar */
-#endif // BARPADDING_PATCH
+#endif // BAR_PADDING_PATCH
 #if FOCUSONCLICK_PATCH
 static const int focusonwheel            = 0;
 #endif // FOCUSONCLICK_PATCH
@@ -35,73 +35,71 @@ static const int focusonwheel            = 0;
 static int floatposgrid_x                = 5;  /* float grid columns */
 static int floatposgrid_y                = 5;  /* float grid rows */
 #endif // FLOATPOS_PATCH
-#if STATUSPADDING_PATCH
+#if BAR_STATUSPADDING_PATCH
 static const int horizpadbar             = 2;   /* horizontal padding for statusbar */
 static const int vertpadbar              = 0;   /* vertical padding for statusbar */
-#endif // STATUSPADDING_PATCH
-#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+#endif // BAR_STATUSPADDING_PATCH
+#if BAR_STATICSTATUS_PATCH && !BAR_STATUSALLMONS_PATCH
 static const int statmonval              = 0;
-#endif // STATICSTATUS_PATCH
+#endif // BAR_STATICSTATUS_PATCH
 #if STATUSBUTTON_PATCH
 static const char buttonbar[]            = "<O>";
 #endif // STATUSBUTTON_PATCH
 #if SYSTRAY_PATCH
-static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
-static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray             = 1;   /* 0 means no systray */
 #endif // SYSTRAY_PATCH
 #if ONLYQUITONEMPTY_PATCH
 static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
 #endif // ONLYQUITONEMPTY_PATCH
-#if EXTRABAR_PATCH
+#if BAR_EXTRABAR_PATCH
 static const char statussep              = ';'; /* separator between status bars */
 static const int ebalign                 = 0;   /* extrabar alignment: 0 - left, 1 - right, 2 - center */
-#if STATICSTATUS_PATCH && !STATUSALLMONS_PATCH
+#if BAR_STATICSTATUS_PATCH && !BAR_STATUSALLMONS_PATCH
 static const int statebmonval            = statmonval;
-#endif // STATICSTATUS_PATCH
-#endif // EXTRABAR_PATCH
-#if PANGO_PATCH
+#endif // BAR_STATICSTATUS_PATCH
+#endif // BAR_EXTRABAR_PATCH
+#if BAR_PANGO_PATCH
 static const char font[]                 = "monospace 10";
 #else
 static const char *fonts[]               = { "monospace:size=10" };
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 static const char dmenufont[]            = "monospace:size=10";
 
 static char normfgcolor[]                = "#bbbbbb";
 static char normbgcolor[]                = "#222222";
-#if !VTCOLORS_PATCH
+#if !BAR_VTCOLORS_PATCH
 static char normbordercolor[]            = "#444444";
 #if FLOAT_BORDER_COLOR_PATCH
 static char normfloatcolor[]             = "#db8fd9";
 #endif // FLOAT_BORDER_COLOR_PATCH
-#endif // !VTCOLORS_PATCH
+#endif // !BAR_VTCOLORS_PATCH
 
 static char selfgcolor[]                 = "#eeeeee";
 static char selbgcolor[]                 = "#005577";
-#if !VTCOLORS_PATCH
+#if !BAR_VTCOLORS_PATCH
 static char selbordercolor[]             = "#005577";
 #if FLOAT_BORDER_COLOR_PATCH
 static char selfloatcolor[]              = "#005577";
 #endif // FLOAT_BORDER_COLOR_PATCH
 
-#if STATUSCOLORS_PATCH
+#if BAR_STATUSCOLORS_PATCH
 static char warnfgcolor[]                 = "#000000";
 static char warnbgcolor[]                 = "#ffff00";
 static char warnbordercolor[]             = "#ff0000";
 #if FLOAT_BORDER_COLOR_PATCH
 static char warnfloatcolor[]              = "#ffffff";
 #endif // FLOAT_BORDER_COLOR_PATCH
-#endif // STATUSCOLORS_PATCH
+#endif // BAR_STATUSCOLORS_PATCH
 
-#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 static char urgfgcolor[]                 = "#000000";
 static char urgbgcolor[]                 = "#000000";
 static char urgbordercolor[]             = "#ff0000"; // NB: patch only works with border color for now
 #if FLOAT_BORDER_COLOR_PATCH
 static char urgfloatcolor[]              = "#000000";
 #endif // FLOAT_BORDER_COLOR_PATCH
-#endif // URGENTBORDER_PATCH // STATUSCOLORS_PATCH
+#endif // URGENTBORDER_PATCH // BAR_STATUSCOLORS_PATCH
 
 #if AWESOMEBAR_PATCH
 static char hidfgcolor[]                 = "#005577";
@@ -112,56 +110,56 @@ static char hidfloatcolor[]              = "#f76e0c";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // AWESOMEBAR_PATCH
 
-#if TITLECOLOR_PATCH
+#if BAR_TITLECOLOR_PATCH
 static char titlefgcolor[]               = "#eeeeee";
 static char titlebgcolor[]               = "#005577";
 static char titlebordercolor[]           = "#005577";
 #if FLOAT_BORDER_COLOR_PATCH
 static char titlefloatcolor[]            = "#005577";
 #endif // FLOAT_BORDER_COLOR_PATCH
-#endif // TITLECOLOR_PATCH
-#endif // VTCOLORS_PATCH
+#endif // BAR_TITLECOLOR_PATCH
+#endif // BAR_VTCOLORS_PATCH
 
-#if ALPHA_PATCH
+#if BAR_ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const unsigned int alphas[][3] = {
 	/*                    fg      bg        border     */
 	[SchemeNorm]      = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]       = { OPAQUE, baralpha, borderalpha },
-	#if STATUSCOLORS_PATCH
+	#if BAR_STATUSCOLORS_PATCH
 	[SchemeWarn]      = { OPAQUE, baralpha, borderalpha },
-	#endif // STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // BAR_STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]       = { OPAQUE, baralpha, borderalpha },
-	#endif // URGENTBORDER_PATCH / STATUSCOLORS_PATCH
+	#endif // URGENTBORDER_PATCH / BAR_STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]       = { OPAQUE, baralpha, borderalpha },
 	#endif // AWESOMEBAR_PATCH
-	#if VTCOLORS_PATCH
+	#if BAR_VTCOLORS_PATCH
 	[SchemeTagsNorm]  = { OPAQUE, baralpha, borderalpha },
 	[SchemeTagsSel]   = { OPAQUE, baralpha, borderalpha },
 	[SchemeTitleNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeTitleSel]  = { OPAQUE, baralpha, borderalpha },
 	[SchemeStatus]    = { OPAQUE, baralpha, borderalpha },
-	#elif TITLECOLOR_PATCH
+	#elif BAR_TITLECOLOR_PATCH
 	[SchemeTitle]     = { OPAQUE, baralpha, borderalpha },
-	#endif // VTCOLORS_PATCH / TITLECOLOR_PATCH
+	#endif // BAR_VTCOLORS_PATCH / BAR_TITLECOLOR_PATCH
 };
-#endif // ALPHA_PATCH
-#if VTCOLORS_PATCH && FLOAT_BORDER_COLOR_PATCH
+#endif // BAR_ALPHA_PATCH
+#if BAR_VTCOLORS_PATCH && FLOAT_BORDER_COLOR_PATCH
 static const char title_bg_dark[]   = "#303030";
 static const char title_bg_light[]  = "#fdfdfd";
 static const int color_ptrs[][ColCount] = {
 	/*                              fg         bg         border    float */
 	[SchemeNorm]                = { -1,        -1,        5,        12 },
 	[SchemeSel]                 = { -1,        -1,        11,       13 },
-	#if STATUSCOLORS_PATCH
+	#if BAR_STATUSCOLORS_PATCH
 	[SchemeWarn]                = { -1,        1,         1,        14 },
-	#endif // STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // BAR_STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { 7,         9,         9,        15 },
-	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]                 = { 5,         0,         0,        -1 },
 	#endif // AWESOMEBAR_PATCH
@@ -175,12 +173,12 @@ static char colors[][ColCount][8] = {
 	/*                              fg         bg         border     float     */
 	[SchemeNorm]                = { "#000000", "#000000", "#000000", "#000000" },
 	[SchemeSel]                 = { "#000000", "#000000", "#000000", "#000000" },
-	#if STATUSCOLORS_PATCH
+	#if BAR_STATUSCOLORS_PATCH
 	[SchemeWarn]                = { "#000000", "#000000", "#000000", "#000000" },
-	#endif // STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // BAR_STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { "#000000", "#000000", "#000000", "#000000" },
-	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]                 = { "#000000", "#000000", "#000000", "#000000" },
 	#endif // AWESOMEBAR_PATCH
@@ -190,19 +188,19 @@ static char colors[][ColCount][8] = {
 	[SchemeTitleSel]            = { "#000000", "#000000", "#000000", "#000000" },
 	[SchemeStatus]              = { "#000000", "#000000", "#000000", "#000000" },
 };
-#elif VTCOLORS_PATCH
+#elif BAR_VTCOLORS_PATCH
 static const char title_bg_dark[]   = "#303030";
 static const char title_bg_light[]  = "#fdfdfd";
 static const int color_ptrs[][ColCount] = {
 	/*                              fg         bg         border    */
 	[SchemeNorm]                = { -1,        -1,        5 },
 	[SchemeSel]                 = { -1,        -1,        11 },
-	#if STATUSCOLORS_PATCH
+	#if BAR_STATUSCOLORS_PATCH
 	[SchemeWarn]                = { -1,        1,         1 },
-	#endif // STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // BAR_STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { 7,         9,         9 },
-	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]                 = { 5,         0,         0 },
 	#endif // AWESOMEBAR_PATCH
@@ -216,12 +214,12 @@ static char colors[][ColCount][8] = {
 	/*                              fg         bg         border    */
 	[SchemeNorm]                = { "#000000", "#000000", "#000000" },
 	[SchemeSel]                 = { "#000000", "#000000", "#000000" },
-	#if STATUSCOLORS_PATCH
+	#if BAR_STATUSCOLORS_PATCH
 	[SchemeWarn]                = { "#000000", "#000000", "#000000" },
-	#endif // STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // BAR_STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { "#000000", "#000000", "#000000" },
-	#endif // URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]                 = { "#000000", "#000000", "#000000" },
 	#endif // AWESOMEBAR_PATCH
@@ -240,20 +238,20 @@ char *colors[][ColCount] = {
 	/*                fg            bg            border            float          */
 	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor,  normfloatcolor },
 	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor,   selfloatcolor  },
-	#if STATUSCOLORS_PATCH
+	#if BAR_STATUSCOLORS_PATCH
 	[SchemeWarn]  = { warnfgcolor,  warnbgcolor,  warnbordercolor,  warnfloatcolor },
-	#endif // STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // BAR_STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]   = { urgfgcolor,   urgbgcolor,   urgbordercolor,   urgfloatcolor },
-	#endif // URGENTBORDER_PATCH / STATUSCOLORS_PATCH
+	#endif // URGENTBORDER_PATCH / BAR_STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor,   hidfloatcolor },
 	#endif // AWESOMEBAR_PATCH
-	#if TITLECOLOR_PATCH
+	#if BAR_TITLECOLOR_PATCH
 	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor, titlefloatcolor },
-	#endif // TITLECOLOR_PATCH
+	#endif // BAR_TITLECOLOR_PATCH
 };
-#else // !VTCOLORS_PATCH && !FLOAT_BORDER_COLOR_PATCH
+#else // !BAR_VTCOLORS_PATCH && !FLOAT_BORDER_COLOR_PATCH
 static
 #if !XRDB_PATCH
 const
@@ -262,20 +260,20 @@ char *colors[][ColCount] = {
 	/*                fg            bg            border          */
 	[SchemeNorm]  = { normfgcolor,  normbgcolor,  normbordercolor },
 	[SchemeSel]   = { selfgcolor,   selbgcolor,   selbordercolor  },
-	#if STATUSCOLORS_PATCH
+	#if BAR_STATUSCOLORS_PATCH
 	[SchemeWarn]  = { warnfgcolor,  warnbgcolor,  warnbordercolor },
-	#endif // STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+	#endif // BAR_STATUSCOLORS_PATCH
+	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]   = { urgfgcolor,   urgbgcolor,   urgbordercolor },
-	#endif // URGENTBORDER_PATCH / STATUSCOLORS_PATCH
+	#endif // URGENTBORDER_PATCH / BAR_STATUSCOLORS_PATCH
 	#if AWESOMEBAR_PATCH
 	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor  },
 	#endif // AWESOMEBAR_PATCH
-	#if TITLECOLOR_PATCH
+	#if BAR_TITLECOLOR_PATCH
 	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor },
-	#endif // TITLECOLOR_PATCH
+	#endif // BAR_TITLECOLOR_PATCH
 };
-#endif // VTCOLORS_PATCH / FLOAT_BORDER_COLOR_PATCH
+#endif // BAR_VTCOLORS_PATCH / FLOAT_BORDER_COLOR_PATCH
 
 #if SCRATCHPADS_PATCH
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
@@ -290,14 +288,14 @@ static Sp scratchpads[] = {
 #endif // SCRATCHPADS_PATCH
 
 /* tagging */
-#if EWMHTAGS_PATCH
+#if BAR_EWMHTAGS_PATCH
 static char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 #else
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-#endif // EWMHTAGS_PATCH
-#if ALTERNATIVE_TAGS_PATCH
+#endif // BAR_EWMHTAGS_PATCH
+#if BAR_ALTERNATIVE_TAGS_PATCH
 static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-#endif // ALTERNATIVE_TAGS_PATCH
+#endif // BAR_ALTERNATIVE_TAGS_PATCH
 
 #if TAGGRID_PATCH
 /* grid of tags */
@@ -495,9 +493,9 @@ static Signal signals[] = {
 	#if TAGSWAPMON_PATCH
 	{ "tagswapmon",              tagswapmon},
 	#endif // TAGSWAPMON_PATCH
-	#if ALTERNATIVE_TAGS_PATCH
+	#if BAR_ALTERNATIVE_TAGS_PATCH
 	{ "togglealttag",            togglealttag },
-	#endif // ALTERNATIVE_TAGS_PATCH
+	#endif // BAR_ALTERNATIVE_TAGS_PATCH
 	#if TOGGLEFULLSCREEN_PATCH
 	{ "togglefullscreen",        togglefullscreen },
 	#endif // TOGGLEFULLSCREEN_PATCH
@@ -522,7 +520,7 @@ static Signal signals[] = {
 	#if WINVIEW_PATCH
 	{ "winview",                 winview },
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !VTCOLORS_PATCH
+	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 	{ "xrdb",                    xrdb },
 	#endif // XRDB_PATCH
 	#if TAGOTHERMONITOR_PATCH
@@ -746,9 +744,9 @@ static const Layout layouts[] = {
 	{ MOD, XK_z,     ACTION##stack, {.i = -1 } },
 #endif // STACKER_PATCH
 
-#if HOLDBAR_PATCH
+#if BAR_HOLDBAR_PATCH
 #define HOLDKEY 0 // replace 0 with the keysym to activate holdbar
-#endif // HOLDBAR_PATCH
+#endif // BAR_HOLDBAR_PATCH
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -767,18 +765,18 @@ static const char *dmenucmd[] = {
 	"-nf", normfgcolor,
 	"-sb", selbgcolor,
 	"-sf", selfgcolor,
-	#if DMENUMATCHTOP_PATCH
+	#if BAR_DMENUMATCHTOP_PATCH
 	topbar ? NULL : "-b",
-	#endif // DMENUMATCHTOP_PATCH
+	#endif // BAR_DMENUMATCHTOP_PATCH
 	NULL
 };
 static const char *termcmd[]  = { "st", NULL };
 
-#if STATUSCMD_PATCH && !DWMBLOCKS_PATCH
+#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
 /* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
 static const char *statuscmds[] = { "notify-send Mouse$BUTTON" };
 static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
-#endif // STATUSCMD_PATCH | DWMBLOCKS_PATCH
+#endif // BAR_STATUSCMD_PATCH | DWMBLOCKS_PATCH
 
 static Key keys[] = {
 	/* modifier                     key            function                argument */
@@ -891,13 +889,13 @@ static Key keys[] = {
 	#if FOCUSURGENT_PATCH
 	{ MODKEY,                       XK_u,          focusurgent,            {0} },
 	#endif // FOCUSURGENT_PATCH
-	#if HOLDBAR_PATCH
+	#if BAR_HOLDBAR_PATCH
 	{ 0,                            HOLDKEY,       holdbar,                {0} },
-	#endif // HOLDBAR_PATCH
+	#endif // BAR_HOLDBAR_PATCH
 	#if WINVIEW_PATCH
 	{ MODKEY,                       XK_o,          winview,                {0} },
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !VTCOLORS_PATCH
+	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
@@ -995,9 +993,9 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ControlMask,  XK_comma,      tagswapmon,             {.i = +1 } },
 	{ MODKEY|Mod4Mask|ControlMask,  XK_period,     tagswapmon,             {.i = -1 } },
 	#endif // TAGSWAPMON_PATCH
-	#if ALTERNATIVE_TAGS_PATCH
+	#if BAR_ALTERNATIVE_TAGS_PATCH
 	{ MODKEY,                       XK_n,          togglealttag,           {0} },
-	#endif // ALTERNATIVE_TAGS_PATCH
+	#endif // BAR_ALTERNATIVE_TAGS_PATCH
 	#if TAGGRID_PATCH
 	{ MODKEY|ControlMask,           XK_Up,         switchtag,              { .ui = SWITCHTAG_UP    | SWITCHTAG_VIEW } },
 	{ MODKEY|ControlMask,           XK_Down,       switchtag,              { .ui = SWITCHTAG_DOWN  | SWITCHTAG_VIEW } },
@@ -1148,27 +1146,27 @@ static Command commands[] = {
 #endif //
 static Button buttons[] = {
 	/* click                event mask           button          function        argument */
-	#if STATUSBUTTON_PATCH
+	#if BAR_STATUSBUTTON_PATCH
 	{ ClkButton,            0,                   Button1,        spawn,          {.v = dmenucmd } },
-	#endif // STATUSBUTTON_PATCH
+	#endif // BAR_STATUSBUTTON_PATCH
 	{ ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
-	#if AWESOMEBAR_PATCH
+	#if BAR_AWESOMEBAR_PATCH
 	{ ClkWinTitle,          0,                   Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
-	#endif // AWESOMEBAR_PATCH
+	#endif // BAR_AWESOMEBAR_PATCH
 	{ ClkWinTitle,          0,                   Button2,        zoom,           {0} },
-	#if STATUSCMD_PATCH && DWMBLOCKS_PATCH
+	#if BAR_STATUSCMD_PATCH && BAR_DWMBLOCKS_PATCH
 	{ ClkStatusText,        0,                   Button1,        sigdwmblocks,   {.i = 1 } },
 	{ ClkStatusText,        0,                   Button2,        sigdwmblocks,   {.i = 2 } },
 	{ ClkStatusText,        0,                   Button3,        sigdwmblocks,   {.i = 3 } },
-	#elif STATUSCMD_PATCH
+	#elif BAR_STATUSCMD_PATCH
 	{ ClkStatusText,        0,                   Button1,        spawn,          {.v = statuscmd } },
 	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = statuscmd } },
 	{ ClkStatusText,        0,                   Button3,        spawn,          {.v = statuscmd } },
 	#else
 	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = termcmd } },
-	#endif // STATUSCMD_PATCH
+	#endif // BAR_STATUSCMD_PATCH
 	{ ClkClientWin,         MODKEY,              Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },

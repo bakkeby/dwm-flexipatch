@@ -2,7 +2,7 @@ This dwm 6.2 (aaad5f, 2020-07-08) side project has a different take on dwm patch
 
 For example to include the `alpha` patch then you would only need to flip this setting from 0 to 1 in [patches.h](https://github.com/bakkeby/dwm-flexipatch/blob/master/patches.def.h):
 ```c
-#define ALPHA_PATCH 1
+#define BAR_ALPHA_PATCH 1
 ```
 
 So if you have ever been curious about trying out dwm, but have been discouraged by manual patching, then this may be a good starting point to see what a "fully fledged" dwm can look like. Want to try out the `pertag` patch? Just flip a config and recompile. Once you have found out what works for you and what doesn't then you should be in a better position to choose patches should you want to start patching from scratch.

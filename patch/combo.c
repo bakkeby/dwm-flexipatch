@@ -1,12 +1,12 @@
 static int combo = 0;
 
-#if !HOLDBAR_PATCH
+#if !BAR_HOLDBAR_PATCH
 void
 keyrelease(XEvent *e)
 {
 	combo = 0;
 }
-#endif // !HOLDBAR_PATCH
+#endif // !BAR_HOLDBAR_PATCH
 
 void
 combotag(const Arg *arg)
