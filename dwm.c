@@ -168,12 +168,8 @@ enum {
 	#if BAR_STATUSBUTTON_PATCH
 	ClkButton,
 	#endif // BAR_STATUSBUTTON_PATCH
-	#if BAR_TAGS_PATCH
 	ClkTagBar,
-	#endif // BAR_TAGS_PATCH
-	#if BAR_LTSYMBOL_PATCH
 	ClkLtSymbol,
-	#endif // BAR_LTSYMBOL_PATCH
 	ClkStatusText,
 	ClkWinTitle,
 	ClkClientWin,
@@ -210,14 +206,31 @@ struct Bar {
 	int x[BARRULES]; // x position, array length == ^
 };
 
+
+typedef struct {
+	int max_width;
+} BarWidthArg;
+
+typedef struct {
+	int x;
+	int w;
+} BarDrawArg;
+
+typedef struct {
+	int rel_x;
+	int rel_y;
+	int rel_w;
+	int rel_h;
+} BarClickArg;
+
 typedef struct Monitor Monitor;
 typedef struct {
 	int monitor;
 	int bar;
 	int alignment; // see bar alignment enum
-	int (*widthfunc)(Monitor *m, int max_width);
-	int (*drawfunc)(Monitor *m, int x, int w);
-	int (*clickfunc)(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h);
+	int (*widthfunc)(Monitor *m, BarWidthArg *a);
+	int (*drawfunc)(Monitor *m, BarDrawArg *a);
+	int (*clickfunc)(Monitor *m, Arg *arg, BarClickArg *a);
 	char *name; // for debugging
 	int x, w; // position, width for internal use
 } BarRule;
@@ -552,11 +565,13 @@ static char stext[1024];
 #else
 static char stext[512];
 #endif // BAR_STATUS2D_PATCH
+#if BAR_EXTRABAR_PATCH || BAR_STATUSCMD_PATCH
 #if BAR_STATUS2D_PATCH
 static char rawstext[1024];
 #else
 static char rawstext[512];
 #endif // BAR_STATUS2D_PATCH
+#endif // BAR_EXTRABAR_PATCH | BAR_STATUSCMD_PATCH
 #if BAR_EXTRABAR_PATCH
 #if BAR_STATUS2D_PATCH && !BAR_STATUSCOLORS_PATCH
 static char estext[1024];
@@ -873,6 +888,7 @@ buttonpress(XEvent *e)
 	Monitor *m;
 	XButtonPressedEvent *ev = &e->xbutton;
 	const BarRule *br;
+	BarClickArg carg = { 0, 0, 0, 0 };
 
 	click = ClkRootWin;
 	/* focus monitor if necessary */
@@ -889,19 +905,23 @@ buttonpress(XEvent *e)
 	for (mi = 0, m = mons; m && m != selmon; m = m->next, mi++); // get the monitor index
 	for (b = 0; b < LENGTH(selmon->bars); b++) {
 		if (ev->window == selmon->bars[b]->win) {
-			fprintf(stderr, "buttonpress on bar, mi = %d\n", mi);
 			for (r = 0; r < LENGTH(barrules); r++) {
 				br = &barrules[r];
 				if (br->bar != b || (br->monitor == 'A' && m != selmon) || (br->monitor != -1 && br->monitor != mi) || br->clickfunc == NULL)
 					continue;
 				if (selmon->bars[b]->x[r] <= ev->x && ev->x <= selmon->bars[b]->x[r] + selmon->bars[b]->w[r]) {
-					click = br->clickfunc(m, &arg, ev->x - selmon->bars[b]->x[r], ev->y, selmon->bars[b]->w[r], bh);
+					carg.rel_x = ev->x - selmon->bars[b]->x[r];
+					carg.rel_y = ev->y;
+					carg.rel_w = selmon->bars[b]->w[r];
+					carg.rel_h = selmon->bars[b]->bh;
+					click = br->clickfunc(m, &arg, &carg);
+					if (click < 0)
+						return;
 					break;
 				}
 			}
 			break;
 		}
-
 	}
 
 	if (click == ClkRootWin && (c = wintoclient(ev->window))) {
@@ -915,17 +935,17 @@ buttonpress(XEvent *e)
 		XAllowEvents(dpy, ReplayPointer, CurrentTime);
 		click = ClkClientWin;
 	}
-	fprintf(stderr, "click = %d, dwmblockssig = %d, ev->button = %d, mi = %d\n", click, dwmblockssig, ev->button, mi);
-	for (i = 0; i < LENGTH(buttons); i++)
+
+	for (i = 0; i < LENGTH(buttons); i++) {
 		if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
-		&& CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
-			fprintf(stderr, "found click, b.button (%d) == ev->button (%d)\n", buttons[i].button, ev->button);
+				&& CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
 			#if BAR_AWESOMEBAR_PATCH
 			buttons[i].func((click == ClkTagBar || click == ClkWinTitle) && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
 			#else
 			buttons[i].func(click == ClkTagBar && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
 			#endif
 		}
+	}
 }
 
 void
@@ -1423,24 +1443,21 @@ void
 drawbar(Monitor *m)
 {
 	Monitor *mon;
-	int b, r, mi;
-	int ret_x, w;
+	int b, r, w, mi;
 	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
 	const BarRule *br;
 	Bar *bar;
+	BarWidthArg warg = { 0 };
+	BarDrawArg darg  = { 0, 0 };
 
 	for (mi = 0, mon = mons; mon && mon != m; mon = mon->next, mi++); // get the monitor index
 	for (b = LENGTH(m->bars) - 1; b >= 0; b--) {
-	fprintf(stderr, "drawbar, monitor m = %ld, mi = %d, b = %d\n", m, mi, b);
 		bar = m->bars[b];
-		if (!bar->win) {
-			fprintf(stderr, "%s\n", "bar->win does not exist");
+		if (!bar->win)
 			continue;
-		}
 
 		rw = lw = bar->bw;
 		rx = lx = 0;
-		fprintf(stderr, "lx = %d, lw = %d\n", lx, lw);
 
 		#if BAR_VTCOLORS_PATCH
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
@@ -1457,13 +1474,18 @@ drawbar(Monitor *m)
 			#else
 			drw_setscheme(drw, scheme[SchemeNorm]);
 			#endif // BAR_VTCOLORS_PATCH
-			if (br->alignment < BAR_ALIGN_RIGHT_LEFT) {
-				w = br->widthfunc(m, lw);
-				w = MIN(lw, w);
-			} else {
-				w = br->widthfunc(m, rw);
-				w = MIN(rw, w);
+			warg.max_width = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
+			w = br->widthfunc(m, &warg);
+			w = MIN(warg.max_width, w);
+
+			if (lw <= 0) { // if left is exhausted, switch to right side
+				lw = rw;
+				lx = rx;
+			} else if (rw <= 0) {
+				rw = lw;
+				rx = lx;
 			}
+
 			switch(br->alignment) {
 			default:
 			case BAR_ALIGN_NONE:
@@ -1523,16 +1545,9 @@ drawbar(Monitor *m)
 				rw = bar->x[r] - rx;
 				break;
 			}
-			ret_x = br->drawfunc(m, bar->x[r], bar->w[r]);
-			if (ret_x != bar->x[r] + bar->w[r])
-				fprintf(stderr, "%s - %d alignment, expected these to be the same: %d vs %d, w = %d, bx = %d\n", br->name, br->alignment, ret_x, bar->x[r] + bar->w[r], bar->w[r], bar->x[r]);
-
-			if (lw <= 0) { // if left is exhausted, switch to right side
-				lw = rw;
-				lx = rx;
-				rw = 0;
-				rx = 0;
-			}
+			darg.x = bar->x[r];
+			darg.w = bar->w[r];
+			br->drawfunc(m, &darg);
 		}
 		drw_map(drw, bar->win, 0, 0, bar->bw, bar->bh);
 	}
@@ -2897,25 +2912,8 @@ setup(void)
 		#else
 		scheme[i] = drw_scm_create(drw, colors[i], ColCount);
 		#endif // BAR_ALPHA_PATCH
-	// #if BAR_SYSTRAY_PATCH
-	// /* init system tray */
-	// if (showsystray)
-	// 	updatesystray();
-	// #endif // BAR_SYSTRAY_PATCH
-	/* init bars */
-	// Monitor *m;
-	// for (m = mons; m; m = m->next) {
-	// 	fprintf(stderr, "updating bar pos\n");
-	// 	updatebarpos(m);
-	// }
 	updatebars();
 	updatestatus();
-
-	// Monitor *m;
-	// for (m = mons; m; m = m->next)
-	// 	updatebarpos(m);
-	// for ()
-	// updatebarpos(selmon);
 
 	/* supporting window for NetWMCheck */
 	wmcheckwin = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
@@ -3440,7 +3438,6 @@ updatebars(void)
 	for (m = mons; m; m = m->next) {
 		for (b = 0; b < LENGTH(m->bars); b++) {
 			if (!m->bars[b]->win) { // TODO add static status controls to not create / show extra bar?
-				fprintf(stderr, "creating bar %d at pos x = %d, y = %d, w = %d, h = %d\n", b, m->bars[b]->bx, m->bars[b]->by, m->bars[b]->bw, m->bars[b]->bh);
 				#if BAR_ALPHA_PATCH
 				m->bars[b]->win = XCreateWindow(dpy, root, m->bars[b]->bx, m->bars[b]->by, m->bars[b]->bw, m->bars[b]->bh, 0, depth,
 				                          InputOutput, visual,
@@ -3472,26 +3469,21 @@ updatebarpos(Monitor *m)
 	int x_pad = 0;
 	#endif // BAR_PADDING_PATCH
 
-	// for (num_bars = 0; num_bars < LENGTH(m->bars) && m->bars[num_bars]->win; num_bars++);
 	num_bars = LENGTH(m->bars);
-	fprintf(stderr, "num_bars = %d\n", num_bars);
 	if (m->showbar) {
 		m->wh = m->wh - y_pad * num_bars - bh * num_bars;
 		m->wy = m->wy + bh + y_pad;
 	}
 
 	for (b = 0; b < num_bars; b++) {
-		fprintf(stderr, "setting bx to xpad %d, b = %d\n", m->mx + x_pad, b);
 		m->bars[b]->bx = m->mx + x_pad;
 		m->bars[b]->bw = m->ww - 2 * x_pad;
 		m->bars[b]->bh = bh;
 		if (m->showbar) {
-			fprintf(stderr, "eh? %d, b = %d\n", topbar == b, b);
 			m->bars[b]->by = m->topbar == b ? m->wy + m->wh : m->wy - bh;
 		} else {
 			m->bars[b]->by = -bh - y_pad;
 		}
-	fprintf(stderr, "finished with bar, bx = %d, by = %d, bw = %d, bh = %d, m = %ld\n", m->bars[b]->bx, m->bars[b]->by, m->bars[b]->bw, m->bars[b]->bh, m);
 	}
 }
 

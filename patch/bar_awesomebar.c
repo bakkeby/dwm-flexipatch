@@ -1,22 +1,22 @@
 int
-width_awesomebar(Monitor *m, int max_width)
+width_awesomebar(Monitor *m, BarWidthArg *a)
 {
-	return max_width;
+	return a->max_width;
 }
 
 int
-draw_awesomebar(Monitor *m, int x_orig, int w)
+draw_awesomebar(Monitor *m, BarDrawArg *a)
 {
 	int n = 0, scm, remainder = 0, tabw;
-	unsigned int i, x = x_orig;
+	unsigned int i, x = a->x;
 	Client *c;
 	for (c = m->clients; c; c = c->next)
 		if (ISVISIBLE(c))
 			n++;
 
 	if (n > 0) {
-		remainder = w % n;
-		tabw = w / n;
+		remainder = a->w % n;
+		tabw = a->w / n;
 		for (i = 0, c = m->clients; c; c = c->next, i++) {
 			if (!ISVISIBLE(c))
 				continue;
@@ -46,11 +46,11 @@ draw_awesomebar(Monitor *m, int x_orig, int w)
 			x += tabw;
 		}
 	}
-	return x_orig + w;
+	return a->x + a->w;
 }
 
 int
-click_awesomebar(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_awesomebar(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	int x = 0, n = 0;
 	Client *c;
@@ -65,8 +65,8 @@ click_awesomebar(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_
 		if (!c || !ISVISIBLE(c))
 			continue;
 		else
-			x += (1.0 / (double)n) * rel_w;
-	} while (c && rel_x > x && (c = c->next));
+			x += (1.0 / (double)n) * a->rel_w;
+	} while (c && a->rel_x > x && (c = c->next));
 
 	if (c) {
 		arg->v = c;

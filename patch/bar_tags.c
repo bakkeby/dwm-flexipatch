@@ -1,5 +1,5 @@
 int
-width_tags(Monitor *m, int max_width)
+width_tags(Monitor *m, BarWidthArg *a)
 {
 	int w, i;
 	for (w = 0, i = 0; i < LENGTH(tags); i++) {
@@ -13,9 +13,10 @@ width_tags(Monitor *m, int max_width)
 }
 
 int
-draw_tags(Monitor *m, int x, int w)
+draw_tags(Monitor *m, BarDrawArg *a)
 {
 	int invert;
+	int w, x = a->x;
 	#if BAR_ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // BAR_ALTERNATIVE_TAGS_PATCH
@@ -106,7 +107,7 @@ draw_tags(Monitor *m, int x, int w)
 }
 
 int
-click_tags(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_tags(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	int i = 0, x = 0;
 	do
@@ -115,7 +116,7 @@ click_tags(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
 		#else
 		x += TEXTW(tags[i]);
 		#endif
-	while (rel_x >= x && ++i < LENGTH(tags));
+	while (a->rel_x >= x && ++i < LENGTH(tags));
 	if (i < LENGTH(tags)) {
 		arg->ui = 1 << i;
 	}

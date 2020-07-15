@@ -1,11 +1,11 @@
 int
-width_wintitle(Monitor *m, int max_width)
+width_wintitle(Monitor *m, BarWidthArg *a)
 {
-	return max_width;
+	return a->max_width;
 }
 
 int
-draw_wintitle(Monitor *m, int x, int w)
+draw_wintitle(Monitor *m, BarDrawArg *a)
 {
 	#if !BAR_ACTIVETAGINDICATORBAR_PATCH && !BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
 	#if BAR_PANGO_PATCH
@@ -19,6 +19,7 @@ draw_wintitle(Monitor *m, int x, int w)
 	#else
 	int boxw = drw->fonts->h / 6 + 2;
 	#endif // BAR_PANGO_PATCH
+	int x = a->x, w = a->w;
 
 	if (m->sel) {
 		#if BAR_VTCOLORS_PATCH
@@ -33,25 +34,17 @@ draw_wintitle(Monitor *m, int x, int w)
 		#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 		#if BAR_CENTEREDWINDOWNAME_PATCH
 		int mid = (m->ww - TEXTW(m->sel->name)) / 2 - x;
-		#if BAR_PADDING_PATCH && BAR_PANGO_PATCH
-		drw_text(drw, x, 0, w - 2*sp, bh, mid, m->sel->name, 0, False);
-		#elif BAR_PADDING_PATCH
-		drw_text(drw, x, 0, w - 2*sp, bh, mid, m->sel->name, 0);
-		#elif BAR_PANGO_PATCH
+		#if BAR_PANGO_PATCH
 		drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0, False);
 		#else
 		drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);
-		#endif // BAR_PADDING_PATCH
+		#endif // BAR_PANGO_PATCH
 		#else
-		#if BAR_PADDING_PATCH && BAR_PANGO_PATCH
-		drw_text(drw, x, 0, w - 2*sp, bh, lrpad / 2, m->sel->name, 0, False);
-		#elif BAR_PADDING_PATCH
-		drw_text(drw, x, 0, w - 2*sp, bh, lrpad / 2, m->sel->name, 0);
-		#elif BAR_PANGO_PATCH
+		#if BAR_PANGO_PATCH
 		drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0, False);
 		#else
 		drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
-		#endif // BAR_PADDING_PATCH
+		#endif // BAR_PANGO_PATCH
 		#endif // BAR_CENTEREDWINDOWNAME_PATCH
 		#if BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 		XSync(dpy, False);
@@ -61,7 +54,7 @@ draw_wintitle(Monitor *m, int x, int w)
 			#if BAR_ACTIVETAGINDICATORBAR_PATCH
 			drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, m->sel->isfixed, 0);
 			#elif BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-			drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2,
+			drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2, 0);
 			#else
 			drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 			#endif // BAR_ACTIVETAGINDICATORBAR_PATCH
@@ -71,17 +64,13 @@ draw_wintitle(Monitor *m, int x, int w)
 		#else
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		#endif // BAR_VTCOLORS_PATCH
-		#if BAR_PADDING_PATCH
-		drw_rect(drw, x, 0, w - 2 * sp, bh, 1, 1);
-		#else
 		drw_rect(drw, x, 0, w, bh, 1, 1);
-		#endif // BAR_PADDING_PATCH
 	}
 	return x + w;
 }
 
 int
-click_wintitle(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_wintitle(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	return ClkWinTitle;
 }

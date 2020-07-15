@@ -5,7 +5,7 @@ static int systraybarrule = -1;
 static int systrayxpos = 0;
 
 int
-width_systray(Monitor *m, int max_width)
+width_systray(Monitor *m, BarWidthArg *a)
 {
 	unsigned int w = 0;
 	Client *i;
@@ -17,15 +17,15 @@ width_systray(Monitor *m, int max_width)
 }
 
 int
-draw_systray(Monitor *m, int x_pos, int w)
+draw_systray(Monitor *m, BarDrawArg *a)
 {
-	systrayxpos = x_pos;
+	systrayxpos = a->x;
 	updatesystray();
-	return systrayxpos + w;
+	return systrayxpos + a->w;
 }
 
 int
-click_systray(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_systray(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	return -1;
 }

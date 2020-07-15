@@ -1,13 +1,13 @@
 int
-width_fancybar(Monitor *m, int max_width)
+width_fancybar(Monitor *m, BarWidthArg *a)
 {
-	return max_width;
+	return a->max_width;
 }
 
 int
-draw_fancybar(Monitor *m, int x, int w)
+draw_fancybar(Monitor *m, BarDrawArg *a)
 {
-	int ftw, mw, ew = 0, n = 0;
+	int ftw, mw, ew = 0, n = 0, x = a->x, w = a->w;
 	unsigned int i;
 	Client *c;
 	#if !BAR_HIDEVACANTTAGS_PATCH
@@ -89,7 +89,7 @@ draw_fancybar(Monitor *m, int x, int w)
 }
 
 int
-click_fancybar(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_fancybar(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	return ClkWinTitle;
 }

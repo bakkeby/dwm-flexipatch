@@ -1,17 +1,17 @@
 int
-width_status2d(Monitor *m, int max_width)
+width_status2d(Monitor *m, BarWidthArg *a)
 {
 	return status2dtextlength(rawstext);
 }
 
 int
-draw_status2d(Monitor *m, int x, int w)
+draw_status2d(Monitor *m, BarDrawArg *a)
 {
-	return drawstatusbar(m, x, w, rawstext);
+	return drawstatusbar(m, a->x, a->w, rawstext);
 }
 
 int
-click_status2d(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_status2d(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	return ClkStatusText;
 }

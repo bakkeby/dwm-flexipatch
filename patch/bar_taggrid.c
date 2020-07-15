@@ -1,11 +1,11 @@
 int
-width_taggrid(Monitor *m, int max_width)
+width_taggrid(Monitor *m, BarWidthArg *a)
 {
 	return (bh / 2) * (LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0));
 }
 
 int
-draw_taggrid(Monitor *m, int x_pos, int w)
+draw_taggrid(Monitor *m, BarDrawArg *a)
 {
     unsigned int x, y, h, max_x, columns, occ = 0;
     int invert, i,j, k;
@@ -15,7 +15,7 @@ draw_taggrid(Monitor *m, int x_pos, int w)
 		occ |= c->tags;
 
     h = bh / tagrows;
-    x = max_x = x_pos;
+    x = max_x = a->x;
     y = 0;
     columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
 
@@ -24,7 +24,7 @@ draw_taggrid(Monitor *m, int x_pos, int w)
 
     /* We will draw LENGTH(tags) squares in tagraws raws. */
     for (j = 0, i = 0; j < tagrows; j++) {
-        x = x_pos;
+        x = a->x;
         for (k = 0; k < columns && i < LENGTH(tags); k++, i++) {
             invert = m->tagset[m->seltags] & 1 << i ? 0 : 1;
 
@@ -51,12 +51,12 @@ draw_taggrid(Monitor *m, int x_pos, int w)
 }
 
 int
-click_taggrid(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_taggrid(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	unsigned int i, columns;
 
 	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
-	i = (rel_x - 0) / (bh / tagrows) + columns * (rel_y / (bh / tagrows));
+	i = (a->rel_x - 0) / (bh / tagrows) + columns * (a->rel_y / (bh / tagrows));
 	if (i >= LENGTH(tags)) {
 		i = LENGTH(tags) - 1;
 	}

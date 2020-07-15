@@ -1,5 +1,5 @@
 int
-width_status(Monitor *m, int max_width)
+width_status(Monitor *m, BarWidthArg *a)
 {
 	#if BAR_PANGO_PATCH
 	return TEXTWM(stext) - lrpad + 2; /* 2px right padding */
@@ -9,17 +9,17 @@ width_status(Monitor *m, int max_width)
 }
 
 int
-draw_status(Monitor *m, int x, int w)
+draw_status(Monitor *m, BarDrawArg *a)
 {
 	#if BAR_PANGO_PATCH
-	return drw_text(drw, x, 0, w, bh, 0, stext, 0, True);
+	return drw_text(drw, a->x, 0, a->w, bh, 0, stext, 0, True);
 	#else
-	return drw_text(drw, x, 0, w, bh, 0, stext, 0);
+	return drw_text(drw, a->x, 0, a->w, bh, 0, stext, 0);
 	#endif // BAR_PANGO_PATCH
 }
 
 int
-click_status(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h)
+click_status(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	return ClkStatusText;
 }

@@ -26,9 +26,9 @@ struct Systray {
 };
 
 /* bar integration */
-static int width_systray(Monitor *m, int max_width);
-static int draw_systray(Monitor *m, int x_pos, int w);
-static int click_systray(Monitor *m, Arg *arg, int rel_x, int rel_y, int rel_w, int rel_h);
+static int width_systray(Monitor *m, BarWidthArg *a);
+static int draw_systray(Monitor *m, BarDrawArg *a);
+static int click_systray(Monitor *m, Arg *arg, BarClickArg *a);
 
 /* function declarations */
 static Atom getatomprop(Client *c, Atom prop);
