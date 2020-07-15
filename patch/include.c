@@ -8,6 +8,12 @@
 #if BAR_DWMBLOCKS_PATCH && BAR_STATUSCMD_PATCH
 #include "bar_dwmblocks.c"
 #endif
+#if BAR_EWMHTAGS_PATCH
+#include "bar_ewmhtags.c"
+#endif
+#if BAR_HOLDBAR_PATCH
+#include "bar_holdbar.c"
+#endif
 #if BAR_LTSYMBOL_PATCH
 #include "bar_ltsymbol.c"
 #endif
@@ -26,6 +32,9 @@
 #if BAR_STATUSCMD_PATCH
 #include "bar_statuscmd.c"
 #endif
+#if BAR_STATUSCOLORS_PATCH
+#include "bar_statuscolors.c"
+#endif
 #if BAR_TAGS_PATCH
 #include "bar_tags.c"
 #endif
@@ -43,6 +52,9 @@
 #endif
 #if BAR_SYSTRAY_PATCH
 #include "bar_systray.c"
+#endif
+#if BAR_VTCOLORS_PATCH
+#include "bar_vtcolors.c"
 #endif
 
 /* Other patches */
@@ -72,9 +84,6 @@
 #elif FSIGNAL_PATCH
 #include "fsignal.c"
 #endif
-#if BAR_EWMHTAGS_PATCH
-#include "ewmhtags.c"
-#endif
 #if EXRESIZE_PATCH
 #include "exresize.c"
 #endif
@@ -92,9 +101,6 @@
 #endif
 #if FULLSCREEN_PATCH
 #include "fullscreen.c"
-#endif
-#if BAR_HOLDBAR_PATCH
-#include "holdbar.c"
 #endif
 #if INPLACEROTATE_PATCH
 #include "inplacerotate.c"
@@ -166,9 +172,6 @@
 #if STACKER_PATCH
 #include "stacker.c"
 #endif
-#if BAR_STATUSCOLORS_PATCH
-#include "statuscolors.c"
-#endif
 #if STICKY_PATCH
 #include "sticky.c"
 #endif
@@ -190,9 +193,6 @@
 #if TAGALLMON_PATCH
 #include "tagallmon.c"
 #endif
-#if TAGGRID_PATCH
-#include "taggrid.c"
-#endif
 #if TAGOTHERMONITOR_PATCH
 #include "tagothermonitor.c"
 #endif
@@ -213,9 +213,6 @@
 #endif
 #if VANITYGAPS_PATCH
 #include "vanitygaps.c"
-#endif
-#if BAR_VTCOLORS_PATCH
-#include "vtcolors.c"
 #endif
 #if WARP_PATCH
 #include "warp.c"
