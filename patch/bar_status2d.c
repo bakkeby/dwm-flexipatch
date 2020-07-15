@@ -10,11 +10,13 @@ draw_status2d(Monitor *m, BarDrawArg *a)
 	return drawstatusbar(m, a->x, a->w, rawstext);
 }
 
+#if !BAR_DWMBLOCKS_PATCH
 int
 click_status2d(Monitor *m, Arg *arg, BarClickArg *a)
 {
 	return ClkStatusText;
 }
+#endif // BAR_DWMBLOCKS_PATCH
 
 int
 drawstatusbar(Monitor *m, int x, int ow, char* stext)
