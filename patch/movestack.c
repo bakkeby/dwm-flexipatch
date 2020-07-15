@@ -4,6 +4,8 @@ movestack(const Arg *arg)
 	Client *c = NULL, *p = NULL, *pc = NULL, *i;
 
 	if (arg->i > 0) {
+		if (!selmon->sel)
+			return;
 		/* find the client after selmon->sel */
 		for (c = selmon->sel->next; c && (!ISVISIBLE(c) || c->isfloating); c = c->next);
 		if (!c)
