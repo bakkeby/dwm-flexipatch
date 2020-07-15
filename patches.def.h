@@ -600,7 +600,6 @@
 
 /* Status2d allows colors and rectangle drawing in the dwm status bar.
  * This patch is incompatible with the statuscolors patch which takes precedence.
- * This patch is incompatible with the extrabar patch.
  * NB: If using this with dwmblocks then make sure to increase CMDLENGTH in dwmblocks.c
  * from 50 (default) to 1024.
  * https://dwm.suckless.org/patches/status2d/
@@ -784,8 +783,8 @@
 
 /* This patch adds configurable gaps between windows differentiating between outer, inner,
  * horizontal and vertical gaps.
- * https://github.com/bakkeby/dwm-vanitygaps/tree/master/patches/dwm-vanitygaps-6.2.diff
- * https://github.com/bakkeby/dwm-vanitygaps/tree/master/patches/dwm-vanitygaps-cfacts-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-vanitygaps-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-cfacts-vanitygaps-6.2.diff
  */
 #define VANITYGAPS_PATCH 0
 
