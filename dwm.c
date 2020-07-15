@@ -523,11 +523,13 @@ static char stext[1024];
 #else
 static char stext[512];
 #endif // STATUS2D_PATCH
+#if STATUSCMD_PATCH || EXTRABAR_PATCH
 #if STATUS2D_PATCH
 static char rawstext[1024];
 #else
 static char rawstext[512];
 #endif // STATUS2D_PATCH
+#endif // STATUSCMD_PATCH | EXTRABAR_PATCH
 #if EXTRABAR_PATCH
 #if STATUS2D_PATCH && !STATUSCOLORS_PATCH
 static char estext[1024];
