@@ -11,6 +11,9 @@
 #if BAR_EWMHTAGS_PATCH
 #include "bar_ewmhtags.c"
 #endif
+#if COMBO_PATCH
+#include "combo.c"
+#endif
 #if BAR_HOLDBAR_PATCH
 #include "bar_holdbar.c"
 #endif
@@ -72,9 +75,6 @@
 #endif
 #if CMDCUSTOMIZE_PATCH
 #include "cmdcustomize.c"
-#endif
-#if COMBO_PATCH
-#include "combo.c"
 #endif
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.c"
