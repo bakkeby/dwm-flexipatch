@@ -136,12 +136,12 @@
  */
 #define BAR_DMENUMATCHTOP_PATCH 0
 
-/* This patch will enable an extra status bar in dwm in a similar manner to the dualstatus
- * patch. If the primary status is at the top via topbar then the extra status bar will be
- * placed at the bottom and vice versa.
+/* Originally this was the extrabar patch, but as the handling of extra bars is now built-in
+ * only the splitting of the status by a designated separator remains. As such this has been
+ * renamed to more accurately reflect what it does - creating an extra status.
  * https://dwm.suckless.org/patches/extrabar/
  */
-#define BAR_EXTRABAR_PATCH 0
+#define BAR_EXTRASTATUS_PATCH 0
 
 /* Adds EWMH support for _NET_NUMBER_OF_DESKTOPS, _NET_CURRENT_DESKTOP, _NET_DESKTOP_NAMES
  * and _NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs

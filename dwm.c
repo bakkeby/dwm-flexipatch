@@ -564,14 +564,14 @@ static char stext[1024];
 #else
 static char stext[512];
 #endif // BAR_STATUS2D_PATCH
-#if BAR_EXTRABAR_PATCH || BAR_STATUSCMD_PATCH
+#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
 #if BAR_STATUS2D_PATCH
 static char rawstext[1024];
 #else
 static char rawstext[512];
 #endif // BAR_STATUS2D_PATCH
-#endif // BAR_EXTRABAR_PATCH | BAR_STATUSCMD_PATCH
-#if BAR_EXTRABAR_PATCH
+#endif // BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
+#if BAR_EXTRASTATUS_PATCH
 #if BAR_STATUS2D_PATCH && !BAR_STATUSCOLORS_PATCH
 static char estext[1024];
 #else
@@ -582,7 +582,7 @@ static char rawestext[1024];
 #else
 static char rawestext[512];
 #endif // BAR_STATUSCMD_PATCH
-#endif // BAR_EXTRABAR_PATCH
+#endif // BAR_EXTRASTATUS_PATCH
 
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
@@ -3667,7 +3667,7 @@ void
 updatestatus(void)
 {
 	Monitor *m;
-	#if BAR_EXTRABAR_PATCH
+	#if BAR_EXTRASTATUS_PATCH
 	if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext))) {
 		strcpy(stext, "dwm-"VERSION);
 		estext[0] = '\0';
@@ -3698,7 +3698,7 @@ updatestatus(void)
 	#else
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
-	#endif // BAR_EXTRABAR_PATCH
+	#endif // BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
 	for (m = mons; m; m = m->next)
 		drawbar(m);
 }

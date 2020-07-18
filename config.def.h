@@ -49,9 +49,9 @@ static const int showsystray             = 1;   /* 0 means no systray */
 #if ONLYQUITONEMPTY_PATCH
 static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
 #endif // ONLYQUITONEMPTY_PATCH
-#if BAR_EXTRABAR_PATCH
+#if BAR_EXTRASTATUS_PATCH
 static const char statussep              = ';'; /* separator between status bars */
-#endif // BAR_EXTRABAR_PATCH
+#endif // BAR_EXTRASTATUS_PATCH
 #if BAR_PANGO_PATCH
 static const char font[]                 = "monospace 10";
 #else
@@ -405,17 +405,17 @@ static const BarRule barrules[] = {
 	#elif BAR_WINTITLE_PATCH
 	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,     draw_wintitle,     click_wintitle,      "wintitle" },
 	#endif // BAR_AWESOMEBAR_PATCH | BAR_FANCYBAR_PATCH BAR_WINTITLE_PATCH
-	#if BAR_EXTRABAR_PATCH
+	#if BAR_EXTRASTATUS_PATCH
 	#if BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_eb,  draw_status2d_eb,  click_statuscmd_eb,  "status2d_eb" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,  draw_status2d_es,  click_statuscmd_es,  "status2d_es" },
 	#elif BAR_STATUS2D_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_eb,  draw_status2d_eb,  click_status2d,      "status2d_eb" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,  draw_status2d_es,  click_status2d,      "status2d_es" },
 	#elif BAR_STATUSCMD_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_eb,    draw_status_eb,    click_statuscmd_eb,  "status_eb" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,    draw_status_es,    click_statuscmd_es,  "status_es" },
 	#elif BAR_STATUS_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_eb,    draw_status_eb,    click_status,        "status_eb" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,    draw_status_es,    click_status,        "status_es" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
-	#endif // BAR_EXTRABAR_PATCH
+	#endif // BAR_EXTRASTATUS_PATCH
 };
 
 #if DWMC_PATCH

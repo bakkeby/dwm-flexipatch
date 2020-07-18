@@ -4,11 +4,27 @@ width_status2d(Bar *bar, BarWidthArg *a)
 	return status2dtextlength(rawstext) + lrpad;
 }
 
+#if BAR_EXTRASTATUS_PATCH
+int
+width_status2d_es(Bar *bar, BarWidthArg *a)
+{
+	return status2dtextlength(rawestext);
+}
+#endif // BAR_EXTRASTATUS_PATCH
+
 int
 draw_status2d(Bar *bar, BarDrawArg *a)
 {
 	return drawstatusbar(a->x, rawstext);
 }
+
+#if BAR_EXTRASTATUS_PATCH
+int
+draw_status2d_es(Bar *bar, BarDrawArg *a)
+{
+	return drawstatusbar(a->x, rawestext);
+}
+#endif // BAR_EXTRASTATUS_PATCH
 
 #if !BAR_STATUSCMD_PATCH
 int

@@ -10,13 +10,13 @@ click_statuscmd(Bar *bar, Arg *arg, BarClickArg *a)
 	return click_statuscmd_text(arg, a->rel_x, rawstext);
 }
 
-#if BAR_EXTRABAR_PATCH
+#if BAR_EXTRASTATUS_PATCH
 int
-click_statuscmd_eb(Bar *bar, Arg *arg, BarClickArg *a)
+click_statuscmd_es(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	return click_statuscmd_text(arg, a->rel_x, rawestext);
 }
-#endif // BAR_EXTRABAR_PATCH
+#endif // BAR_EXTRASTATUS_PATCH
 
 int
 click_statuscmd_text(Arg *arg, int rel_x, char *text)

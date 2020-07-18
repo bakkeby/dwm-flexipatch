@@ -22,15 +22,9 @@
 #endif
 #if BAR_STATUS_PATCH
 #include "bar_status.c"
-#if BAR_EXTRABAR_PATCH
-#include "bar_status_eb.c"
-#endif // BAR_EXTRABAR_PATCH
 #endif
 #if BAR_STATUS2D_PATCH
 #include "bar_status2d.c"
-#if BAR_EXTRABAR_PATCH
-#include "bar_status2d_eb.c"
-#endif // BAR_EXTRABAR_PATCH
 #endif
 #if BAR_STATUSBUTTON_PATCH
 #include "bar_statusbutton.c"
