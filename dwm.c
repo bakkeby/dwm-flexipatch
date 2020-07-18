@@ -203,7 +203,9 @@ typedef struct Bar Bar;
 struct Bar {
 	Window win;
 	Monitor *mon;
+	Bar *next;
 	int idx;
+	int topbar;
 	int bx, by, bw, bh; /* bar geometry */
 	int w[BARRULES]; // width, array length == barrules, then use r index for lookup purposes
 	int x[BARRULES]; // x position, array length == ^
@@ -355,16 +357,11 @@ struct Monitor {
 	unsigned int sellt;
 	unsigned int tagset[2];
 	int showbar;
-	int topbar;
 	Client *clients;
 	Client *sel;
 	Client *stack;
 	Monitor *next;
-	#if BAR_EXTRABAR_PATCH
-	Bar *bars[2];
-	#else
-	Bar *bars[1];
-	#endif // BAR_EXTRABAR_PATCH
+	Bar *bar;
 	const Layout *lt[2];
 	#if BAR_ALTERNATIVE_TAGS_PATCH
 	unsigned int alttag;
@@ -878,10 +875,11 @@ attachstack(Client *c)
 void
 buttonpress(XEvent *e)
 {
-	int click, i, b, r, mi;
+	int click, i, r, mi;
 	Arg arg = {0};
 	Client *c;
 	Monitor *m;
+	Bar *bar;
 	XButtonPressedEvent *ev = &e->xbutton;
 	const BarRule *br;
 	BarClickArg carg = { 0, 0, 0, 0 };
@@ -899,20 +897,20 @@ buttonpress(XEvent *e)
 	}
 
 	for (mi = 0, m = mons; m && m != selmon; m = m->next, mi++); // get the monitor index
-	for (b = 0; b < LENGTH(selmon->bars); b++) {
-		if (ev->window == selmon->bars[b]->win) {
+	for (bar = selmon->bar; bar; bar = bar->next) {
+		if (ev->window == bar->win) {
 			for (r = 0; r < LENGTH(barrules); r++) {
 				br = &barrules[r];
-				if (br->bar != b || (br->monitor == 'A' && m != selmon) || br->clickfunc == NULL)
+				if (br->bar != bar->idx || (br->monitor == 'A' && m != selmon) || br->clickfunc == NULL)
 					continue;
 				if (br->monitor != 'A' && br->monitor != -1 && br->monitor != mi)
 					continue;
-				if (selmon->bars[b]->x[r] <= ev->x && ev->x <= selmon->bars[b]->x[r] + selmon->bars[b]->w[r]) {
-					carg.rel_x = ev->x - selmon->bars[b]->x[r];
+				if (bar->x[r] <= ev->x && ev->x <= bar->x[r] + bar->w[r]) {
+					carg.rel_x = ev->x - bar->x[r];
 					carg.rel_y = ev->y;
-					carg.rel_w = selmon->bars[b]->w[r];
-					carg.rel_h = selmon->bars[b]->bh;
-					click = br->clickfunc(selmon->bars[b], &arg, &carg);
+					carg.rel_w = bar->w[r];
+					carg.rel_h = bar->bh;
+					click = br->clickfunc(bar, &arg, &carg);
 					if (click < 0)
 						return;
 					break;
@@ -1005,7 +1003,7 @@ void
 cleanupmon(Monitor *mon)
 {
 	Monitor *m;
-	int b;
+	Bar *bar;
 
 	if (mon == mons)
 		mons = mons->next;
@@ -1013,12 +1011,11 @@ cleanupmon(Monitor *mon)
 		for (m = mons; m && m->next != mon; m = m->next);
 		m->next = mon->next;
 	}
-	for (b = 0; b < LENGTH(mon->bars); b++) {
-		if (mon->bars[b]) {
-			XUnmapWindow(dpy, mon->bars[b]->win);
-			XDestroyWindow(dpy, mon->bars[b]->win);
-		}
-		free(mon->bars[b]);
+	for (bar = mon->bar; bar; bar = mon->bar) {
+		XUnmapWindow(dpy, bar->win);
+		XDestroyWindow(dpy, bar->win);
+		mon->bar = bar->next;
+		free(bar);
 	}
 	free(mon);
 }
@@ -1047,11 +1044,7 @@ clientmessage(XEvent *e)
 				return;
 			}
 
-			#if BAR_SYSTRAY_WIN_PATCH
 			c->mon = selmon;
-			#else
-			c->mon = systray->mon;
-			#endif // BAR_SYSTRAY_WIN_PATCH
 			c->next = systray->icons;
 			systray->icons = c;
 			XGetWindowAttributes(dpy, c->win, &wa);
@@ -1148,12 +1141,12 @@ void
 configurenotify(XEvent *e)
 {
 	Monitor *m;
+	Bar *bar;
 	#if !FAKEFULLSCREEN_PATCH
 	Client *c;
 	#endif // !FAKEFULLSCREEN_PATCH
 	XConfigureEvent *ev = &e->xconfigure;
 	int dirty;
-	int b;
 
 	/* TODO: updategeom handling sucks, needs to be simplified */
 	if (ev->window == root) {
@@ -1173,9 +1166,8 @@ configurenotify(XEvent *e)
 					#endif // FAKEFULLSCREEN_CLIENT_PATCH
 						resizeclient(c, m->mx, m->my, m->mw, m->mh);
 				#endif // !FAKEFULLSCREEN_PATCH
-				for (b = 0; b < LENGTH(m->bars); b++)
-					if (m->bars[b])
-						XMoveResizeWindow(dpy, m->bars[b]->win, m->bars[b]->bx, m->bars[b]->by, m->bars[b]->bw, m->bars[b]->bh);
+				for (bar = m->bar; bar; bar = bar->next)
+					XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
 			}
 			focus(NULL);
 			arrange(NULL);
@@ -1243,9 +1235,12 @@ Monitor *
 createmon(void)
 {
 	Monitor *m;
-	int i;
+	int i, n, mi, max_bars = 2, istopbar = topbar;
+
+	const BarRule *br;
+	Bar *bar;
 	#if MONITOR_RULES_PATCH
-	int mi, j;
+	int j;
 	Monitor *mon;
 	const MonitorRule *mr;
 	#endif // MONITOR_RULES_PATCH
@@ -1262,7 +1257,6 @@ createmon(void)
 	m->nstack = nstack;
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	m->showbar = showbar;
-	m->topbar = topbar;
 	#if SETBORDERPX_PATCH
 	m->borderpx = borderpx;
 	#endif // SETBORDERPX_PATCH
@@ -1273,19 +1267,8 @@ createmon(void)
 	m->gappov = gappov;
 	#endif // VANITYGAPS_PATCH
 
-	for (i = 0; i < LENGTH(m->bars); i++) {
-		fprintf(stderr, "creating bar, idx = %d\n", i);
-		m->bars[i] = ecalloc(1, sizeof(Bar));
-		m->bars[i]->mon = m;
-		m->bars[i]->idx = i;
-		fprintf(stderr, "%s\n", "finished creating bar");
-	}
-	// for (r = 0; r < LENGTH(barrules); r++) {
-
-	// for (b = 0; b < LENGTH(selmon->bars); b++) {
-
-	#if MONITOR_RULES_PATCH
 	for (mi = 0, mon = mons; mon; mon = mon->next, mi++); // monitor index
+	#if MONITOR_RULES_PATCH
 	for (j = 0; j < LENGTH(monrules); j++) {
 		mr = &monrules[j];
 		if ((mr->monitor == -1 || mr->monitor == mi)
@@ -1304,7 +1287,7 @@ createmon(void)
 			if (mr->showbar > -1)
 				m->showbar = mr->showbar;
 			if (mr->topbar > -1)
-				m->topbar = mr->topbar;
+				istopbar = mr->topbar;
 			break;
 		}
 	}
@@ -1313,6 +1296,23 @@ createmon(void)
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
 	#endif // MONITOR_RULES_PATCH
+
+	/* Derive the number of bars for this monitor based on bar rules */
+	for (n = -1, i = 0; i < LENGTH(barrules); i++) {
+		br = &barrules[i];
+		if (br->monitor == 'A' || br->monitor == -1 || br->monitor == mi)
+			n = MAX(br->bar, n);
+	}
+
+	for (i = 0; i <= n && i < max_bars; i++) {
+		bar = ecalloc(1, sizeof(Bar));
+		bar->mon = m;
+		bar->idx = i;
+		bar->next = m->bar;
+		bar->topbar = istopbar;
+		m->bar = bar;
+		istopbar = !istopbar;
+	}
 
 	#if FLEXTILE_DELUXE_LAYOUT
 	m->ltaxis[LAYOUT] = m->lt[0]->preset.layout;
@@ -1450,8 +1450,9 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	for (int b = 0; b < LENGTH(m->bars); b++)
-		drawbarwin(m->bars[b]);
+	Bar *bar;
+	for (bar = m->bar; bar; bar = bar->next)
+		drawbarwin(bar);
 }
 
 void
@@ -1499,7 +1500,7 @@ drawbarwin(Bar *bar)
 		w = br->widthfunc(bar, &warg);
 		w = MIN(warg.max_width, w);
 
-		if (lw <= 0) { // if left is exhausted, switch to right side
+		if (lw <= 0) { // if left is exhausted then switch to right side, and vice versa
 			lw = rw;
 			lx = rx;
 		} else if (rw <= 0) {
@@ -1957,7 +1958,7 @@ manage(Window w, XWindowAttributes *wa)
 		c->y = c->mon->my + c->mon->mh - HEIGHT(c);
 	c->x = MAX(c->x, c->mon->mx);
 	/* only fix client y-offset, if the client center might cover the bar */
-	c->y = MAX(c->y, ((c->mon->bars[0]->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
+	c->y = MAX(c->y, ((c->mon->bar->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
 		&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
 	#if !FLOATPOS_PATCH
 	#if SETBORDERPX_PATCH
@@ -2481,7 +2482,7 @@ restack(Monitor *m)
 		XRaiseWindow(dpy, m->sel->win);
 	if (m->lt[m->sellt]->arrange) {
 		wc.stack_mode = Below;
-		wc.sibling = m->bars[0]->win;
+		wc.sibling = m->bar->win;
 		for (c = m->stack; c; c = c->snext)
 			if (!c->isfloating && ISVISIBLE(c)) {
 				XConfigureWindow(dpy, c->win, CWSibling|CWStackMode, &wc);
@@ -3149,7 +3150,7 @@ tagmon(const Arg *arg)
 void
 togglebar(const Arg *arg)
 {
-	int b;
+	Bar *bar;
 	#if BAR_HOLDBAR_PATCH && PERTAG_PATCH && PERTAGBAR_PATCH
 	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = (selmon->showbar == 2 ? 1 : !selmon->showbar);
 	#elif BAR_HOLDBAR_PATCH
@@ -3160,9 +3161,8 @@ togglebar(const Arg *arg)
 	selmon->showbar = !selmon->showbar;
 	#endif // BAR_HOLDBAR_PATCH | PERTAG_PATCH
 	updatebarpos(selmon);
-	for (b = 0; b < LENGTH(selmon->bars); b++)
-		if (selmon->bars[b]->win)
-			XMoveResizeWindow(dpy, selmon->bars[b]->win, selmon->bars[b]->bx, selmon->bars[b]->by, selmon->bars[b]->bw, selmon->bars[b]->bh);
+	for (bar = selmon->bar; bar; bar = bar->next)
+		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
 	arrange(selmon);
 }
 
@@ -3425,7 +3425,7 @@ unmapnotify(XEvent *e)
 void
 updatebars(void)
 {
-	int b;
+	Bar *bar;
 	Monitor *m;
 	XSetWindowAttributes wa = {
 		.override_redirect = True,
@@ -3440,20 +3440,20 @@ updatebars(void)
 	};
 	XClassHint ch = {"dwm", "dwm"};
 	for (m = mons; m; m = m->next) {
-		for (b = 0; b < LENGTH(m->bars); b++) {
-			if (!m->bars[b]->win) { // TODO add static status controls to not create / show extra bar?
+		for (bar = m->bar; bar; bar = bar->next) {
+			if (!bar->win) { // TODO add static status controls to not create / show extra bar?
 				#if BAR_ALPHA_PATCH
-				m->bars[b]->win = XCreateWindow(dpy, root, m->bars[b]->bx, m->bars[b]->by, m->bars[b]->bw, m->bars[b]->bh, 0, depth,
+				bar->win = XCreateWindow(dpy, root, bar->bx, bar->by, bar->bw, bar->bh, 0, depth,
 				                          InputOutput, visual,
 				                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
 				#else
-				m->bars[b]->win = XCreateWindow(dpy, root, m->bars[b]->bx, m->bars[b]->by, m->bars[b]->bw, m->bars[b]->bh, 0, DefaultDepth(dpy, screen),
+				bar->win = XCreateWindow(dpy, root, bar->bx, bar->by, bar->bw, bar->bh, 0, DefaultDepth(dpy, screen),
 						CopyFromParent, DefaultVisual(dpy, screen),
 						CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 				#endif // BAR_ALPHA_PATCH
-				XDefineCursor(dpy, m->bars[b]->win, cursor[CurNormal]->cursor);
-				XMapRaised(dpy, m->bars[b]->win);
-				XSetClassHint(dpy, m->bars[b]->win, &ch);
+				XDefineCursor(dpy, bar->win, cursor[CurNormal]->cursor);
+				XMapRaised(dpy, bar->win);
+				XSetClassHint(dpy, bar->win, &ch);
 			}
 		}
 	}
@@ -3464,7 +3464,8 @@ updatebarpos(Monitor *m)
 {
 	m->wy = m->my;
 	m->wh = m->mh;
-	int num_bars, b;
+	int num_bars;
+	Bar *bar;
 	#if BAR_PADDING_PATCH
 	int y_pad = vertpad;
 	int x_pad = sidepad;
@@ -3473,20 +3474,22 @@ updatebarpos(Monitor *m)
 	int x_pad = 0;
 	#endif // BAR_PADDING_PATCH
 
-	num_bars = LENGTH(m->bars);
-	if (m->showbar) {
+	for (num_bars = 0, bar = m->bar; bar; bar = bar->next, num_bars++);
+	if (m->showbar)
 		m->wh = m->wh - y_pad * num_bars - bh * num_bars;
-		m->wy = m->wy + bh + y_pad;
-	}
 
-	for (b = 0; b < num_bars; b++) {
-		m->bars[b]->bx = m->mx + x_pad;
-		m->bars[b]->bw = m->ww - 2 * x_pad;
-		m->bars[b]->bh = bh;
+	for (bar = m->bar; bar; bar = bar->next) {
+		bar->bx = m->mx + x_pad;
+		bar->bw = m->ww - 2 * x_pad;
+		bar->bh = bh;
 		if (m->showbar) {
-			m->bars[b]->by = m->topbar == b ? m->wy + m->wh : m->wy - bh;
+			if (bar->topbar) {
+				m->wy = m->wy + bh + y_pad;
+				bar->by = m->wy - bh;
+			} else
+				bar->by = m->wy + m->wh;
 		} else {
-			m->bars[b]->by = -bh - y_pad;
+			bar->by = -bh - y_pad;
 		}
 	}
 }
@@ -3783,15 +3786,16 @@ wintoclient(Window w)
 Monitor *
 wintomon(Window w)
 {
-	int x, y, b;
+	int x, y;
 	Client *c;
 	Monitor *m;
+	Bar *bar;
 
 	if (w == root && getrootptr(&x, &y))
 		return recttomon(x, y, 1, 1);
 	for (m = mons; m; m = m->next)
-		for (b = 0; b < LENGTH(m->bars); b++)
-			if (w == m->bars[b]->win)
+		for (bar = m->bar; bar; bar = bar->next)
+			if (w == bar->win)
 				return m;
 	if ((c = wintoclient(w)))
 		return c->mon;
