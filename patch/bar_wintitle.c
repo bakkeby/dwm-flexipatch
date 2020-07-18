@@ -1,11 +1,11 @@
 int
-width_wintitle(Monitor *m, BarWidthArg *a)
+width_wintitle(Bar *bar, BarWidthArg *a)
 {
 	return a->max_width;
 }
 
 int
-draw_wintitle(Monitor *m, BarDrawArg *a)
+draw_wintitle(Bar *bar, BarDrawArg *a)
 {
 	#if !BAR_ACTIVETAGINDICATORBAR_PATCH && !BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
 	#if BAR_PANGO_PATCH
@@ -19,7 +19,17 @@ draw_wintitle(Monitor *m, BarDrawArg *a)
 	#else
 	int boxw = drw->fonts->h / 6 + 2;
 	#endif // BAR_PANGO_PATCH
+
+	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
+	int x = a->x + lrpad / 2, w = a->w - lrpad;
+	#elif BAR_TITLE_LEFT_PAD
+	int x = a->x + lrpad / 2, w = a->w - lrpad / 2;
+	#elif BAR_TITLE_RIGHT_PAD
+	int x = a->x, w = a->w - lrpad / 2;
+	#else
 	int x = a->x, w = a->w;
+	#endif // BAR_TITLE_LEFT_PAD | BAR_TITLE_RIGHT_PAD
+	Monitor *m = bar->mon;
 
 	if (m->sel) {
 		#if BAR_VTCOLORS_PATCH
@@ -70,7 +80,7 @@ draw_wintitle(Monitor *m, BarDrawArg *a)
 }
 
 int
-click_wintitle(Monitor *m, Arg *arg, BarClickArg *a)
+click_wintitle(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	return ClkWinTitle;
 }

@@ -1,3 +1,3 @@
-static int width_ltsymbol(Monitor *m, BarWidthArg *a);
-static int draw_ltsymbol(Monitor *m, BarDrawArg *a);
-static int click_ltsymbol(Monitor *m, Arg *arg, BarClickArg *a);
+static int width_ltsymbol(Bar *bar, BarWidthArg *a);
+static int draw_ltsymbol(Bar *bar, BarDrawArg *a);
+static int click_ltsymbol(Bar *bar, Arg *arg, BarClickArg *a);

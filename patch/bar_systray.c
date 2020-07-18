@@ -1,11 +1,8 @@
 static Systray *systray = NULL;
 static unsigned long systrayorientation = _NET_SYSTEM_TRAY_ORIENTATION_HORZ;
-static int systraybaridx = -1;
-static int systraybarrule = -1;
-static int systrayxpos = 0;
 
 int
-width_systray(Monitor *m, BarWidthArg *a)
+width_systray(Bar *bar, BarWidthArg *a)
 {
 	unsigned int w = 0;
 	Client *i;
@@ -13,87 +10,40 @@ width_systray(Monitor *m, BarWidthArg *a)
 		return 1;
 	if (showsystray)
 		for (i = systray->icons; i; w += i->w + systrayspacing, i = i->next);
-	return w ? w + systrayspacing : 0;
+	return w ? w + lrpad - systrayspacing : 0;
 }
 
 int
-draw_systray(Monitor *m, BarDrawArg *a)
-{
-	systrayxpos = a->x;
-	updatesystray();
-	return systrayxpos + a->w;
-}
-
-int
-click_systray(Monitor *m, Arg *arg, BarClickArg *a)
-{
-	return -1;
-}
-
-void
-removesystrayicon(Client *i)
-{
-	Client **ii;
-
-	if (!showsystray || !i)
-		return;
-	for (ii = &systray->icons; *ii && *ii != i; ii = &(*ii)->next);
-	if (ii)
-		*ii = i->next;
-	free(i);
-}
-
-void
-resizerequest(XEvent *e)
-{
-	XResizeRequestEvent *ev = &e->xresizerequest;
-	Client *i;
-
-	if ((i = wintosystrayicon(ev->window))) {
-		updatesystrayicongeom(i, ev->width, ev->height);
-		updatesystray();
-	}
-}
-
-void
-updatesystray(void)
+draw_systray(Bar *bar, BarDrawArg *a)
 {
 	if (!showsystray)
-		return;
+		return a->x;
+
 	XSetWindowAttributes wa;
 	Client *i;
-	Monitor *m;
-	unsigned int w = 1, r, mi;
-	const BarRule *br;
+	unsigned int w;
 
 	if (!systray) {
 		/* init systray */
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))
 			die("fatal: could not malloc() %u bytes\n", sizeof(Systray));
 
-		/* Work out which bar the systray is to be displayed on */
-		for (r = 0; r < LENGTH(barrules); r++) {
-			br = &barrules[r];
-			if (br->drawfunc == &draw_systray) {
-				systraybaridx = br->bar;
-				systraybarrule = r;
-				if (br->monitor == -1 || br->monitor == 'A')
-					m = selmon;
-				else
-					for (m = mons, mi = 0; m && mi < br->monitor && m->next; m = m->next, mi++);
-				systray->win = m->bars[systraybaridx]->win;
-				systray->mon = m;
+		wa.override_redirect = True;
+		wa.event_mask = ButtonPressMask|ExposureMask;
+		wa.border_pixel = 0;
+		#if BAR_ALPHA_PATCH
+		wa.background_pixel = 0;
+		wa.colormap = cmap;
+		systray->win = XCreateWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by, MAX(a->w + 40, 1), bar->bh, 0, depth,
+						InputOutput, visual,
+						CWOverrideRedirect|CWBorderPixel|CWBackPixel|CWColormap|CWEventMask, &wa); // CWBackPixmap
+		#else
+		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
+		systray->win = XCreateSimpleWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by, MIN(a->w, 1), bar->bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
+		XChangeWindowAttributes(dpy, systray->win, CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWEventMask, &wa);
+		#endif // BAR_ALPHA_PATCH
 
-				break;
-			}
-		}
-		if (systraybaridx == -1) {
-			fprintf(stderr, "dwm: unable to obtain system tray, no draw_systray in bar rules.\n");
-			free(systray);
-			systray = NULL;
-			return;
-		}
-
+		XSelectInput(dpy, systray->win, SubstructureNotifyMask);
 		XChangeProperty(dpy, systray->win, netatom[NetSystemTrayOrientation], XA_CARDINAL, 32,
 				PropModeReplace, (unsigned char *)&systrayorientation, 1);
 		#if BAR_ALPHA_PATCH
@@ -111,21 +61,63 @@ updatesystray(void)
 			fprintf(stderr, "dwm: unable to obtain system tray.\n");
 			free(systray);
 			systray = NULL;
-			return;
+			return a->x;
 		}
 	}
 
+	systray->bar = bar;
+
+	drw_setscheme(drw, scheme[SchemeNorm]);
 	for (w = 0, i = systray->icons; i; i = i->next) {
-		/* make sure the background color stays the same */
+		#if BAR_ALPHA_PATCH
+		wa.background_pixel = 0;
+		#else
 		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
+		#endif // BAR_ALPHA_PATCH
 		XChangeWindowAttributes(dpy, i->win, CWBackPixel, &wa);
 		XMapRaised(dpy, i->win);
-		w += systrayspacing;
-		i->x = systrayxpos + w;
+		i->x = w;
 		XMoveResizeWindow(dpy, i->win, i->x, 0, i->w, i->h);
 		w += i->w;
-		if (i->mon != systray->mon)
-		    i->mon = systray->mon;
+		if (i->next)
+			w += systrayspacing;
+		if (i->mon != bar->mon)
+			i->mon = bar->mon;
+	}
+
+	XMoveResizeWindow(dpy, systray->win, bar->bx + a->x + lrpad / 2, (w ? bar->by : -bar->by), MAX(w, 1), bar->bh);
+	return a->x + a->w;
+}
+
+int
+click_systray(Bar *bar, Arg *arg, BarClickArg *a)
+{
+	return -1;
+}
+
+void
+removesystrayicon(Client *i)
+{
+	Client **ii;
+
+	if (!showsystray || !i)
+		return;
+	for (ii = &systray->icons; *ii && *ii != i; ii = &(*ii)->next);
+	if (ii)
+		*ii = i->next;
+	free(i);
+	drawbarwin(systray->bar);
+}
+
+void
+resizerequest(XEvent *e)
+{
+	XResizeRequestEvent *ev = &e->xresizerequest;
+	Client *i;
+
+	if ((i = wintosystrayicon(ev->window))) {
+		updatesystrayicongeom(i, ev->width, ev->height);
+		drawbarwin(systray->bar);
 	}
 }
 
@@ -185,8 +177,9 @@ updatesystrayiconstate(Client *i, XPropertyEvent *ev)
 Client *
 wintosystrayicon(Window w)
 {
+	if (!systray)
+		return NULL;
 	Client *i = NULL;
-
 	if (!showsystray || !w)
 		return i;
 	for (i = systray->icons; i && i->win != w; i = i->next);

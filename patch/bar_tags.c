@@ -1,5 +1,5 @@
 int
-width_tags(Monitor *m, BarWidthArg *a)
+width_tags(Bar *bar, BarWidthArg *a)
 {
 	int w, i;
 	for (w = 0, i = 0; i < LENGTH(tags); i++) {
@@ -9,14 +9,14 @@ width_tags(Monitor *m, BarWidthArg *a)
 		w += TEXTW(tags[i]);
 		#endif // BAR_ALTERNATIVE_TAGS_PATCH
 	}
-	return w;
+	return w + lrpad;
 }
 
 int
-draw_tags(Monitor *m, BarDrawArg *a)
+draw_tags(Bar *bar, BarDrawArg *a)
 {
 	int invert;
-	int w, x = a->x;
+	int w, x = a->x + lrpad / 2;
 	#if BAR_ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // BAR_ALTERNATIVE_TAGS_PATCH
@@ -36,6 +36,7 @@ draw_tags(Monitor *m, BarDrawArg *a)
 	#endif // BAR_HIDEVACANTTAGS_PATCH
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
+	Monitor *m = bar->mon;
 
 	for (c = m->clients; c; c = c->next) {
 		#if BAR_HIDEVACANTTAGS_PATCH
@@ -107,9 +108,9 @@ draw_tags(Monitor *m, BarDrawArg *a)
 }
 
 int
-click_tags(Monitor *m, Arg *arg, BarClickArg *a)
+click_tags(Bar *bar, Arg *arg, BarClickArg *a)
 {
-	int i = 0, x = 0;
+	int i = 0, x = lrpad / 2;
 	do
 		#if BAR_ALTERNATIVE_TAGS_PATCH
 		x += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]);

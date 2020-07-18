@@ -1,26 +1,36 @@
 int
-width_awesomebar(Monitor *m, BarWidthArg *a)
+width_awesomebar(Bar *bar, BarWidthArg *a)
 {
 	return a->max_width;
 }
 
 int
-draw_awesomebar(Monitor *m, BarDrawArg *a)
+draw_awesomebar(Bar *bar, BarDrawArg *a)
 {
 	int n = 0, scm, remainder = 0, tabw;
-	unsigned int i, x = a->x;
+	unsigned int i;
+	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
+	int x = a->x + lrpad / 2, w = a->w - lrpad;
+	#elif BAR_TITLE_LEFT_PAD
+	int x = a->x + lrpad / 2, w = a->w - lrpad / 2;
+	#elif BAR_TITLE_RIGHT_PAD
+	int x = a->x, w = a->w - lrpad / 2;
+	#else
+	int x = a->x, w = a->w;
+	#endif // BAR_TITLE_LEFT_PAD | BAR_TITLE_RIGHT_PAD
+
 	Client *c;
-	for (c = m->clients; c; c = c->next)
+	for (c = bar->mon->clients; c; c = c->next)
 		if (ISVISIBLE(c))
 			n++;
 
 	if (n > 0) {
-		remainder = a->w % n;
-		tabw = a->w / n;
-		for (i = 0, c = m->clients; c; c = c->next, i++) {
+		remainder = w % n;
+		tabw = w / n;
+		for (i = 0, c = bar->mon->clients; c; c = c->next, i++) {
 			if (!ISVISIBLE(c))
 				continue;
-			if (m->sel == c)
+			if (bar->mon->sel == c)
 				#if BAR_VTCOLORS_PATCH
 				scm = SchemeTitleSel;
 				#elif BAR_TITLECOLOR_PATCH
@@ -38,10 +48,11 @@ draw_awesomebar(Monitor *m, BarDrawArg *a)
 				#endif // BAR_VTCOLORS_PATCH
 
 			drw_setscheme(drw, scheme[scm]);
+			tabw += (i < remainder ? 1 : 0);
 			#if BAR_PANGO_PATCH
-			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0, False);
+			drw_text(drw, x, 0, tabw, bh, lrpad / 2, c->name, 0, False);
 			#else
-			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0);
+			drw_text(drw, x, 0, tabw, bh, lrpad / 2, c->name, 0);
 			#endif // BAR_PANGO_PATCH
 			x += tabw;
 		}
@@ -50,16 +61,16 @@ draw_awesomebar(Monitor *m, BarDrawArg *a)
 }
 
 int
-click_awesomebar(Monitor *m, Arg *arg, BarClickArg *a)
+click_awesomebar(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	int x = 0, n = 0;
 	Client *c;
 
-	for (c = m->clients; c; c = c->next)
+	for (c = bar->mon->clients; c; c = c->next)
 		if (ISVISIBLE(c))
 			n++;
 
-	c = m->clients;
+	c = bar->mon->clients;
 
 	do {
 		if (!c || !ISVISIBLE(c))

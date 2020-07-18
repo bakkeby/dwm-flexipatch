@@ -1,11 +1,11 @@
 int
-width_status2d_eb(Monitor *m, BarWidthArg *a)
+width_status2d_eb(Bar *bar, BarWidthArg *a)
 {
 	return status2dtextlength(rawestext);
 }
 
 int
-draw_status2d_eb(Monitor *m, BarDrawArg *a)
+draw_status2d_eb(Bar *bar, BarDrawArg *a)
 {
-	return drawstatusbar(m, a->x, a->w, rawestext);
+	return drawstatusbar(a->x, rawestext);
 }

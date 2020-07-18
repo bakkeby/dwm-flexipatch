@@ -79,6 +79,14 @@
 /* Show window title in bar */
 #define BAR_WINTITLE_PATCH 1
 
+/* Title bar modules such as wintitle (default), fancybar and awesomebar
+ * do not by default add left and/or right padding as they take up the
+ * remaining space. These options allow you explicitly add padding should
+ * you need it.
+ */
+#define BAR_TITLE_RIGHT_PAD 0
+#define BAR_TITLE_LEFT_PAD 1
+
 /**
  * Bar options
  */
@@ -190,20 +198,6 @@
  * https://dwm.suckless.org/patches/pango/
  */
 #define BAR_PANGO_PATCH 0
-
-/* This patch allows the status text to be fixed to the bar on a specific
- * monitor rather than being drawn on the focused monitor.
- * The statusallmons patch takes precedence over this patch.
- * NB: If used together with the systray patch then consider setting
- * systraypinning to statmonval+1.
- * https://dwm.suckless.org/patches/staticstatus/
- */
-#define BAR_STATICSTATUS_PATCH 0
-
-/* This patch draws and updates the statusbar on all monitors.
- * https://dwm.suckless.org/patches/statusallmons/
- */
-#define BAR_STATUSALLMONS_PATCH 0
 
 /* This patch enables colored text in the status bar. It changes the way colors are defined
  * in config.h allowing multiple color combinations for use in the status script.

@@ -5,21 +5,21 @@ static int lastbutton;
 #endif // BAR_DWMBLOCKS_PATCH
 
 int
-click_statuscmd(Monitor *m, Arg *arg, BarClickArg *a)
+click_statuscmd(Bar *bar, Arg *arg, BarClickArg *a)
 {
-	return click_statuscmd_text(m, arg, a->rel_x, rawstext);
+	return click_statuscmd_text(arg, a->rel_x, rawstext);
 }
 
 #if BAR_EXTRABAR_PATCH
 int
-click_statuscmd_eb(Monitor *m, Arg *arg, BarClickArg *a)
+click_statuscmd_eb(Bar *bar, Arg *arg, BarClickArg *a)
 {
-	return click_statuscmd_text(m, arg, a->rel_x, rawestext);
+	return click_statuscmd_text(arg, a->rel_x, rawestext);
 }
 #endif // BAR_EXTRABAR_PATCH
 
 int
-click_statuscmd_text(Monitor *m, Arg *arg, int rel_x, char *text)
+click_statuscmd_text(Arg *arg, int rel_x, char *text)
 {
 	int i = -1;
 	int x = 0;

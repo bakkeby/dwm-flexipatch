@@ -1,25 +1,25 @@
 int
-width_status2d(Monitor *m, BarWidthArg *a)
+width_status2d(Bar *bar, BarWidthArg *a)
 {
-	return status2dtextlength(rawstext);
+	return status2dtextlength(rawstext) + lrpad;
 }
 
 int
-draw_status2d(Monitor *m, BarDrawArg *a)
+draw_status2d(Bar *bar, BarDrawArg *a)
 {
-	return drawstatusbar(m, a->x, a->w, rawstext);
+	return drawstatusbar(a->x, rawstext);
 }
 
-#if !BAR_DWMBLOCKS_PATCH
+#if !BAR_STATUSCMD_PATCH
 int
-click_status2d(Monitor *m, Arg *arg, BarClickArg *a)
+click_status2d(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	return ClkStatusText;
 }
-#endif // BAR_DWMBLOCKS_PATCH
+#endif // BAR_STATUSCMD_PATCH
 
 int
-drawstatusbar(Monitor *m, int x, int ow, char* stext)
+drawstatusbar(int x, char* stext)
 {
 	int i, w, len;
 	short isCode = 0;
@@ -35,6 +35,8 @@ drawstatusbar(Monitor *m, int x, int ow, char* stext)
 	#else
 	memcpy(text, stext, len);
 	#endif // BAR_STATUSCMD_PATCH
+
+	x += lrpad / 2;
 
 	/* process status text */
 	i = -1;

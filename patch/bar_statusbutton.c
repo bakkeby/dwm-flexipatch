@@ -1,11 +1,11 @@
 int
-width_stbutton(Monitor *m, BarWidthArg *a)
+width_stbutton(Bar *bar, BarWidthArg *a)
 {
 	return TEXTW(buttonbar);
 }
 
 int
-draw_stbutton(Monitor *m, BarDrawArg *a)
+draw_stbutton(Bar *bar, BarDrawArg *a)
 {
 	#if BAR_PANGO_PATCH
 	return drw_text(drw, a->x, 0, a->w, bh, lrpad / 2, buttonbar, 0, False);
@@ -15,7 +15,7 @@ draw_stbutton(Monitor *m, BarDrawArg *a)
 }
 
 int
-click_stbutton(Monitor *m, Arg *arg, BarClickArg *a)
+click_stbutton(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	return ClkButton;
 }

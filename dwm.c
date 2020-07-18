@@ -198,14 +198,16 @@ typedef union {
 	const void *v;
 } Arg;
 
+typedef struct Monitor Monitor;
 typedef struct Bar Bar;
 struct Bar {
 	Window win;
+	Monitor *mon;
+	int idx;
 	int bx, by, bw, bh; /* bar geometry */
 	int w[BARRULES]; // width, array length == barrules, then use r index for lookup purposes
 	int x[BARRULES]; // x position, array length == ^
 };
-
 
 typedef struct {
 	int max_width;
@@ -223,14 +225,13 @@ typedef struct {
 	int rel_h;
 } BarClickArg;
 
-typedef struct Monitor Monitor;
 typedef struct {
 	int monitor;
 	int bar;
 	int alignment; // see bar alignment enum
-	int (*widthfunc)(Monitor *m, BarWidthArg *a);
-	int (*drawfunc)(Monitor *m, BarDrawArg *a);
-	int (*clickfunc)(Monitor *m, Arg *arg, BarClickArg *a);
+	int (*widthfunc)(Bar *bar, BarWidthArg *a);
+	int (*drawfunc)(Bar *bar, BarDrawArg *a);
+	int (*clickfunc)(Bar *bar, Arg *arg, BarClickArg *a);
 	char *name; // for debugging
 	int x, w; // position, width for internal use
 } BarRule;
@@ -465,6 +466,7 @@ static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
+static void drawbarwin(Bar *bar);
 #if !FOCUSONCLICK_PATCH
 static void enternotify(XEvent *e);
 #endif // FOCUSONCLICK_PATCH
@@ -631,12 +633,6 @@ static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
-#if BAR_STATICSTATUS_PATCH && !BAR_STATUSALLMONS_PATCH
-static Monitor *statmon;
-#if BAR_EXTRABAR_PATCH
-static Monitor *statebmon;
-#endif // BAR_EXTRABAR_PATCH
-#endif // BAR_STATICSTATUS_PATCH
 static Window root, wmcheckwin;
 
 /* configuration, allows nested code to access above variables */
@@ -907,14 +903,16 @@ buttonpress(XEvent *e)
 		if (ev->window == selmon->bars[b]->win) {
 			for (r = 0; r < LENGTH(barrules); r++) {
 				br = &barrules[r];
-				if (br->bar != b || (br->monitor == 'A' && m != selmon) || (br->monitor != -1 && br->monitor != mi) || br->clickfunc == NULL)
+				if (br->bar != b || (br->monitor == 'A' && m != selmon) || br->clickfunc == NULL)
+					continue;
+				if (br->monitor != 'A' && br->monitor != -1 && br->monitor != mi)
 					continue;
 				if (selmon->bars[b]->x[r] <= ev->x && ev->x <= selmon->bars[b]->x[r] + selmon->bars[b]->w[r]) {
 					carg.rel_x = ev->x - selmon->bars[b]->x[r];
 					carg.rel_y = ev->y;
 					carg.rel_w = selmon->bars[b]->w[r];
 					carg.rel_h = selmon->bars[b]->bh;
-					click = br->clickfunc(m, &arg, &carg);
+					click = br->clickfunc(selmon->bars[b], &arg, &carg);
 					if (click < 0)
 						return;
 					break;
@@ -1049,7 +1047,11 @@ clientmessage(XEvent *e)
 				return;
 			}
 
+			#if BAR_SYSTRAY_WIN_PATCH
+			c->mon = selmon;
+			#else
 			c->mon = systray->mon;
+			#endif // BAR_SYSTRAY_WIN_PATCH
 			c->next = systray->icons;
 			systray->icons = c;
 			XGetWindowAttributes(dpy, c->win, &wa);
@@ -1243,8 +1245,8 @@ createmon(void)
 	Monitor *m;
 	int i;
 	#if MONITOR_RULES_PATCH
-	int mc, j;
-	Monitor *mi;
+	int mi, j;
+	Monitor *mon;
 	const MonitorRule *mr;
 	#endif // MONITOR_RULES_PATCH
 
@@ -1270,17 +1272,23 @@ createmon(void)
 	m->gappoh = gappoh;
 	m->gappov = gappov;
 	#endif // VANITYGAPS_PATCH
-	for (i = 0; i < LENGTH(m->bars); i++)
+
+	for (i = 0; i < LENGTH(m->bars); i++) {
+		fprintf(stderr, "creating bar, idx = %d\n", i);
 		m->bars[i] = ecalloc(1, sizeof(Bar));
+		m->bars[i]->mon = m;
+		m->bars[i]->idx = i;
+		fprintf(stderr, "%s\n", "finished creating bar");
+	}
 	// for (r = 0; r < LENGTH(barrules); r++) {
 
 	// for (b = 0; b < LENGTH(selmon->bars); b++) {
 
 	#if MONITOR_RULES_PATCH
-	for (mc = 0, mi = mons; mi; mi = mi->next, mc++);
+	for (mi = 0, mon = mons; mon; mon = mon->next, mi++); // monitor index
 	for (j = 0; j < LENGTH(monrules); j++) {
 		mr = &monrules[j];
-		if ((mr->monitor == -1 || mr->monitor == mc)
+		if ((mr->monitor == -1 || mr->monitor == mi)
 		#if PERTAG_PATCH
 				&& (mr->tag == -1 || mr->tag == 0)
 		#endif // PERTAG_PATCH
@@ -1343,7 +1351,7 @@ createmon(void)
 		#if MONITOR_RULES_PATCH
 		for (j = 0; j < LENGTH(monrules); j++) {
 			mr = &monrules[j];
-			if ((mr->monitor == -1 || mr->monitor == mc) && (mr->tag == -1 || mr->tag == i)) {
+			if ((mr->monitor == -1 || mr->monitor == mi) && (mr->tag == -1 || mr->tag == i)) {
 				m->pertag->ltidxs[i][0] = &layouts[mr->layout];
 				m->pertag->ltidxs[i][1] = m->lt[0];
 				m->pertag->nmasters[i] = (mr->nmaster > -1 ? mr->nmaster : m->nmaster);
@@ -1396,7 +1404,7 @@ destroynotify(XEvent *e)
 	#if BAR_SYSTRAY_PATCH
 	else if (showsystray && (c = wintosystrayicon(ev->window))) {
 		removesystrayicon(c);
-		updatesystray();
+		drawbarwin(systray->bar);
 	}
 	#endif // BAR_SYSTRAY_PATCH
 }
@@ -1442,115 +1450,8 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	Monitor *mon;
-	int b, r, w, mi;
-	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
-	const BarRule *br;
-	Bar *bar;
-	BarWidthArg warg = { 0 };
-	BarDrawArg darg  = { 0, 0 };
-
-	for (mi = 0, mon = mons; mon && mon != m; mon = mon->next, mi++); // get the monitor index
-	for (b = LENGTH(m->bars) - 1; b >= 0; b--) {
-		bar = m->bars[b];
-		if (!bar->win)
-			continue;
-
-		rw = lw = bar->bw;
-		rx = lx = 0;
-
-		#if BAR_VTCOLORS_PATCH
-		drw_setscheme(drw, scheme[SchemeTagsNorm]);
-		#else
-		drw_setscheme(drw, scheme[SchemeNorm]);
-		#endif // BAR_VTCOLORS_PATCH
-		drw_rect(drw, lx, 0, lw, bh, 1, 1);
-		for (r = 0; r < LENGTH(barrules); r++) {
-			br = &barrules[r];
-			if (br->bar != b || (br->monitor == 'A' && m != selmon) || (br->monitor != -1 && br->monitor != mi) || br->drawfunc == NULL)
-				continue;
-			#if BAR_VTCOLORS_PATCH
-			drw_setscheme(drw, scheme[SchemeTagsNorm]);
-			#else
-			drw_setscheme(drw, scheme[SchemeNorm]);
-			#endif // BAR_VTCOLORS_PATCH
-			warg.max_width = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
-			w = br->widthfunc(m, &warg);
-			w = MIN(warg.max_width, w);
-
-			if (lw <= 0) { // if left is exhausted, switch to right side
-				lw = rw;
-				lx = rx;
-			} else if (rw <= 0) {
-				rw = lw;
-				rx = lx;
-			}
-
-			switch(br->alignment) {
-			default:
-			case BAR_ALIGN_NONE:
-			case BAR_ALIGN_LEFT_LEFT:
-			case BAR_ALIGN_LEFT:
-				bar->x[r] = lx;
-				bar->w[r] = w;
-				if (lx == rx) {
-					rx += w;
-					rw -= w;
-				}
-				lx += w;
-				lw -= w;
-				break;
-			case BAR_ALIGN_LEFT_RIGHT:
-			case BAR_ALIGN_RIGHT:
-				bar->x[r] = lx + lw - w;
-				bar->w[r] = w;
-				if (lx == rx)
-					rw -= w;
-				lw -= w;
-				break;
-			case BAR_ALIGN_LEFT_CENTER:
-			case BAR_ALIGN_CENTER:
-				bar->x[r] = lx + lw / 2 - w / 2;
-				bar->w[r] = w;
-				if (lx == rx) {
-					rw = rx + rw - bar->x[r] - bar->w[r];
-					rx = bar->x[r] + bar->w[r];
-				}
-				lw = bar->x[r] - lx;
-				break;
-			case BAR_ALIGN_RIGHT_LEFT:
-				bar->x[r] = rx;
-				bar->w[r] = w;
-				if (lx == rx) {
-					lx += w;
-					lw -= w;
-				}
-				rx += w;
-				rw -= w;
-				break;
-			case BAR_ALIGN_RIGHT_RIGHT:
-				bar->x[r] = rx + rw - w;
-				bar->w[r] = w;
-				if (lx == rx)
-					lw -= w;
-				rw -= w;
-				break;
-			case BAR_ALIGN_RIGHT_CENTER:
-				bar->x[r] = rx + rw / 2 - w / 2;
-				bar->w[r] = w;
-				if (lx == rx) {
-					lw = lx + lw - bar->x[r] + bar->w[r];
-					lx = bar->x[r] + bar->w[r];
-				}
-				rw = bar->x[r] - rx;
-				break;
-			}
-			darg.x = bar->x[r];
-			darg.w = bar->w[r];
-			br->drawfunc(m, &darg);
-		}
-		drw_map(drw, bar->win, 0, 0, bar->bw, bar->bh);
-	}
+	for (int b = 0; b < LENGTH(m->bars); b++)
+		drawbarwin(m->bars[b]);
 }
 
 void
@@ -1559,6 +1460,112 @@ drawbars(void)
 	Monitor *m;
 	for (m = mons; m; m = m->next)
 		drawbar(m);
+}
+
+void
+drawbarwin(Bar *bar)
+{
+	if (!bar->win)
+		return;
+	Monitor *mon;
+	int r, w, mi;
+	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
+	const BarRule *br;
+	BarWidthArg warg = { 0 };
+	BarDrawArg darg  = { 0, 0 };
+
+	for (mi = 0, mon = mons; mon && mon != bar->mon; mon = mon->next, mi++); // get the monitor index
+	rw = lw = bar->bw;
+	rx = lx = 0;
+
+	#if BAR_VTCOLORS_PATCH
+	drw_setscheme(drw, scheme[SchemeTagsNorm]);
+	#else
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	#endif // BAR_VTCOLORS_PATCH
+	drw_rect(drw, lx, 0, lw, bh, 1, 1);
+	for (r = 0; r < LENGTH(barrules); r++) {
+		br = &barrules[r];
+		if (br->bar != bar->idx || br->drawfunc == NULL || (br->monitor == 'A' && bar->mon != selmon))
+			continue;
+		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != mi)
+			continue;
+		#if BAR_VTCOLORS_PATCH
+		drw_setscheme(drw, scheme[SchemeTagsNorm]);
+		#else
+		drw_setscheme(drw, scheme[SchemeNorm]);
+		#endif // BAR_VTCOLORS_PATCH
+		warg.max_width = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
+		w = br->widthfunc(bar, &warg);
+		w = MIN(warg.max_width, w);
+
+		if (lw <= 0) { // if left is exhausted, switch to right side
+			lw = rw;
+			lx = rx;
+		} else if (rw <= 0) {
+			rw = lw;
+			rx = lx;
+		}
+
+		switch(br->alignment) {
+		default:
+		case BAR_ALIGN_NONE:
+		case BAR_ALIGN_LEFT_LEFT:
+		case BAR_ALIGN_LEFT:
+			bar->x[r] = lx;
+			if (lx == rx) {
+				rx += w;
+				rw -= w;
+			}
+			lx += w;
+			lw -= w;
+			break;
+		case BAR_ALIGN_LEFT_RIGHT:
+		case BAR_ALIGN_RIGHT:
+			bar->x[r] = lx + lw - w;
+			if (lx == rx)
+				rw -= w;
+			lw -= w;
+			break;
+		case BAR_ALIGN_LEFT_CENTER:
+		case BAR_ALIGN_CENTER:
+			bar->x[r] = lx + lw / 2 - w / 2;
+			if (lx == rx) {
+				rw = rx + rw - bar->x[r] - w;
+				rx = bar->x[r] + w;
+			}
+			lw = bar->x[r] - lx;
+			break;
+		case BAR_ALIGN_RIGHT_LEFT:
+			bar->x[r] = rx;
+			if (lx == rx) {
+				lx += w;
+				lw -= w;
+			}
+			rx += w;
+			rw -= w;
+			break;
+		case BAR_ALIGN_RIGHT_RIGHT:
+			bar->x[r] = rx + rw - w;
+			if (lx == rx)
+				lw -= w;
+			rw -= w;
+			break;
+		case BAR_ALIGN_RIGHT_CENTER:
+			bar->x[r] = rx + rw / 2 - w / 2;
+			if (lx == rx) {
+				lw = lx + lw - bar->x[r] + w;
+				lx = bar->x[r] + w;
+			}
+			rw = bar->x[r] - rx;
+			break;
+		}
+		bar->w[r] = w;
+		darg.x = bar->x[r];
+		darg.w = bar->w[r];
+		br->drawfunc(bar, &darg);
+	}
+	drw_map(drw, bar->win, 0, 0, bar->bw, bar->bh);
 }
 
 #if !FOCUSONCLICK_PATCH
@@ -2060,7 +2067,7 @@ maprequest(XEvent *e)
 	Client *i;
 	if (showsystray && (i = wintosystrayicon(ev->window))) {
 		sendevent(i->win, netatom[Xembed], StructureNotifyMask, CurrentTime, XEMBED_WINDOW_ACTIVATE, 0, systray->win, XEMBED_EMBEDDED_VERSION);
-		updatesystray();
+		drawbarwin(systray->bar);
 	}
 	#endif // BAR_SYSTRAY_PATCH
 
@@ -2209,7 +2216,7 @@ propertynotify(XEvent *e)
 		}
 		else
 			updatesystrayiconstate(c, ev);
-		updatesystray();
+		drawbarwin(systray->bar);
 	}
 	#endif // BAR_SYSTRAY_PATCH
 
@@ -2235,11 +2242,8 @@ propertynotify(XEvent *e)
 			break;
 		case XA_WM_HINTS:
 			updatewmhints(c);
-			drawbars();
-			#if URGENTBORDER_PATCH
 			if (c->isurgent)
-				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
-			#endif // URGENTBORDER_PATCH
+				drawbars();
 			break;
 		}
 		if (ev->atom == XA_WM_NAME || ev->atom == netatom[NetWMName]) {
@@ -3413,7 +3417,7 @@ unmapnotify(XEvent *e)
 		 * _not_ destroy them. We map those windows back */
 		XMapRaised(dpy, c->win);
 		removesystrayicon(c);
-		updatesystray();
+		drawbarwin(systray->bar);
 	#endif // BAR_SYSTRAY_PATCH
 	}
 }
@@ -3534,14 +3538,6 @@ updategeom(void)
 					mons = createmon();
 			}
 			for (i = 0, m = mons; i < nn && m; m = m->next, i++) {
-				#if BAR_STATICSTATUS_PATCH && !BAR_STATUSALLMONS_PATCH
-				if (i == statmonval)
-					statmon = m;
-				#if BAR_EXTRABAR_PATCH
-				if (i == statebmonval)
-					statebmon = m;
-				#endif // BAR_EXTRABAR_PATCH
-				#endif // BAR_STATICSTATUS_PATCH
 				if (i >= n
 				|| unique[i].x_org != m->mx || unique[i].y_org != m->my
 				|| unique[i].width != m->mw || unique[i].height != m->mh)
@@ -3568,14 +3564,6 @@ updategeom(void)
 				}
 				if (m == selmon)
 					selmon = mons;
-				#if BAR_STATICSTATUS_PATCH && !BAR_STATUSALLMONS_PATCH
-				if (m == statmon)
-					statmon = mons;
-				#if BAR_EXTRABAR_PATCH
-				if (m == statebmon)
-					statebmon = mons;
-				#endif // BAR_EXTRABAR_PATCH
-				#endif // BAR_STATICSTATUS_PATCH
 				cleanupmon(m);
 			}
 		}
@@ -3592,14 +3580,6 @@ updategeom(void)
 			updatebarpos(mons);
 		}
 	}
-	#if BAR_STATICSTATUS_PATCH && !BAR_STATUSALLMONS_PATCH
-	if (!statmon)
-		statmon = mons;
-	#if BAR_EXTRABAR_PATCH
-	if (!statebmon)
-		statebmon = mons;
-	#endif // BAR_EXTRABAR_PATCH
-	#endif // BAR_STATICSTATUS_PATCH
 	if (dirty) {
 		selmon = mons;
 		selmon = wintomon(root);
@@ -3683,9 +3663,7 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
-	#if BAR_STATUSALLMONS_PATCH
-	Monitor* m;
-	#endif // BAR_STATUSALLMONS_PATCH
+	Monitor *m;
 	#if BAR_EXTRABAR_PATCH
 	if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext))) {
 		strcpy(stext, "dwm-"VERSION);
@@ -3718,18 +3696,8 @@ updatestatus(void)
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
 	#endif // BAR_EXTRABAR_PATCH
-	#if BAR_STATUSALLMONS_PATCH
 	for (m = mons; m; m = m->next)
 		drawbar(m);
-	#elif BAR_STATICSTATUS_PATCH
-	drawbar(statmon);
-	#if BAR_EXTRABAR_PATCH
-	if (statmon != statebmon)
-		drawbar(statebmon);
-	#endif // BAR_EXTRABAR_PATCH
-	#else
-	drawbar(selmon);
-	#endif // BAR_STATUSALLMONS_PATCH | BAR_STATICSTATUS_PATCH
 }
 
 void
@@ -3750,19 +3718,18 @@ updatewmhints(Client *c)
 		if (c == selmon->sel && wmh->flags & XUrgencyHint) {
 			wmh->flags &= ~XUrgencyHint;
 			XSetWMHints(dpy, c->win, wmh);
-		} else {
+		} else
 			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
-			#if URGENTBORDER_PATCH
-			if (c->isurgent) {
-				#if FLOAT_BORDER_COLOR_PATCH
-				if (c->isfloating)
-					XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColFloat].pixel);
-				else
-				#endif
-				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
-			}
-			#endif // URGENTBORDER_PATCH
+		#if URGENTBORDER_PATCH
+		if (c->isurgent) {
+			#if FLOAT_BORDER_COLOR_PATCH
+			if (c->isfloating)
+				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColFloat].pixel);
+			else
+			#endif
+			XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
 		}
+		#endif // URGENTBORDER_PATCH
 		if (wmh->flags & InputHint)
 			c->neverfocus = !wmh->input;
 		else

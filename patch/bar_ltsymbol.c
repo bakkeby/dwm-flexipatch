@@ -1,21 +1,21 @@
 int
-width_ltsymbol(Monitor *m, BarWidthArg *a)
+width_ltsymbol(Bar *bar, BarWidthArg *a)
 {
-	return TEXTW(m->ltsymbol);
+	return TEXTW(bar->mon->ltsymbol);
 }
 
 int
-draw_ltsymbol(Monitor *m, BarDrawArg *a)
+draw_ltsymbol(Bar *bar, BarDrawArg *a)
 {
 	#if BAR_PANGO_PATCH
-	return drw_text(drw, a->x, 0, a->w, bh, lrpad / 2, m->ltsymbol, 0, False);
+	return drw_text(drw, a->x, 0, a->w, bh, lrpad / 2, bar->mon->ltsymbol, 0, False);
 	#else
-	return drw_text(drw, a->x, 0, a->w, bh, lrpad / 2, m->ltsymbol, 0);
+	return drw_text(drw, a->x, 0, a->w, bh, lrpad / 2, bar->mon->ltsymbol, 0);
 	#endif // BAR_PANGO_PATCH
 }
 
 int
-click_ltsymbol(Monitor *m, Arg *arg, BarClickArg *a)
+click_ltsymbol(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	return ClkLtSymbol;
 }
