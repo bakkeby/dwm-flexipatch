@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-07-19 - Added bar_modules patch - making extrabar, leftlayout, staticstatus and statusallmons patches redundant, added powerline patch
+2020-07-19 - Added barmodules patch - making extrabar, leftlayout, staticstatus and statusallmons patches redundant, added powerline patch
 
 2020-07-18 - **Note**: Up until now building dwm-flexipath without any patches selected would have given you something more or less identical with mainstream dwm. In order to reduce complexity when it comes to maintainance future versions of dwm-flexipatch may diverge from this by making some patches non-optional. For the classic dwm-flexipatch and its many patch integration hints refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0) which will be subject to bug fixes and mainstream dwm updates as far as feasible.
 
@@ -175,7 +175,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [bar_height](https://dwm.suckless.org/patches/bar_height/)
       - allows the bar height to be explicitly set rather than being derived from font
 
-   - bar_modules
+   - [barmodules](https://github.com/bakkeby/patches/blob/master/dwm/dwm-barmodules-6.2.diff)
       - splits the dwm bar into modules allowing for re-arrangement of the bar and easier integration for new features
 
    - [barpadding](https://dwm.suckless.org/patches/barpadding/)
