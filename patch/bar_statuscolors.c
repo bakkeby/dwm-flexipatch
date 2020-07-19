@@ -12,11 +12,11 @@ textw_wosc(char *s)
 		}
 		ctmp = *ts;
 		*ts = '\0';
-		#if PANGO_PATCH
+		#if BAR_PANGO_PATCH
 		sw += drw_font_getwidth(drw, tp, True);
 		#else
 		sw += drw_fontset_getwidth(drw, tp);
-		#endif // PANGO_PATCH
+		#endif // BAR_PANGO_PATCH
 		*ts = ctmp;
 		if (ctmp == '\0')
 			break;

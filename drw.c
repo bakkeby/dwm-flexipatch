@@ -61,14 +61,14 @@ utf8decode(const char *c, long *u, size_t clen)
 
 	return len;
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
 Drw *
-#if ALPHA_PATCH
+#if BAR_ALPHA_PATCH
 drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap)
 #else
 drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h)
-#endif // ALPHA_PATCH
+#endif // BAR_ALPHA_PATCH
 {
 	Drw *drw = ecalloc(1, sizeof(Drw));
 
@@ -78,7 +78,7 @@ drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h
 	drw->w = w;
 	drw->h = h;
 
-	#if ALPHA_PATCH
+	#if BAR_ALPHA_PATCH
 	drw->visual = visual;
 	drw->depth = depth;
 	drw->cmap = cmap;
@@ -87,7 +87,7 @@ drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h
 	#else
 	drw->drawable = XCreatePixmap(dpy, root, w, h, DefaultDepth(dpy, screen));
 	drw->gc = XCreateGC(dpy, root, 0, NULL);
-	#endif // ALPHA_PATCH
+	#endif // BAR_ALPHA_PATCH
 	XSetLineAttributes(dpy, drw->gc, 1, LineSolid, CapButt, JoinMiter);
 
 	return drw;
@@ -103,11 +103,11 @@ drw_resize(Drw *drw, unsigned int w, unsigned int h)
 	drw->h = h;
 	if (drw->drawable)
 		XFreePixmap(drw->dpy, drw->drawable);
-	#if ALPHA_PATCH
+	#if BAR_ALPHA_PATCH
 	drw->drawable = XCreatePixmap(drw->dpy, drw->root, w, h, drw->depth);
 	#else
 	drw->drawable = XCreatePixmap(drw->dpy, drw->root, w, h, DefaultDepth(drw->dpy, drw->screen));
-	#endif // ALPHA_PATCH
+	#endif // BAR_ALPHA_PATCH
 }
 
 void
@@ -115,15 +115,15 @@ drw_free(Drw *drw)
 {
 	XFreePixmap(drw->dpy, drw->drawable);
 	XFreeGC(drw->dpy, drw->gc);
-	#if PANGO_PATCH
+	#if BAR_PANGO_PATCH
 	drw_font_free(drw->font);
 	#else
 	drw_fontset_free(drw->fonts);
-	#endif // PANGO_PATCH
+	#endif // BAR_PANGO_PATCH
 	free(drw);
 }
 
-#if PANGO_PATCH
+#if BAR_PANGO_PATCH
 /* This function is an implementation detail. Library users should use
  * drw_font_create instead.
  */
@@ -192,7 +192,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 		die("no font specified.");
 	}
 
-	#if !COLOR_EMOJI_PATCH
+	#if !BAR_COLOR_EMOJI_PATCH
 	/* Do not allow using color fonts. This is a workaround for a BadLength
 	 * error from Xft with color glyphs. Modelled on the Xterm workaround. See
 	 * https://bugzilla.redhat.com/show_bug.cgi?id=1498269
@@ -205,7 +205,7 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 		XftFontClose(drw->dpy, xfont);
 		return NULL;
 	}
-	#endif // COLOR_EMOJI_PATCH
+	#endif // BAR_COLOR_EMOJI_PATCH
 
 	font = ecalloc(1, sizeof(Fnt));
 	font->xfont = xfont;
@@ -215,25 +215,25 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 
 	return font;
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
 static void
 xfont_free(Fnt *font)
 {
 	if (!font)
 		return;
-	#if PANGO_PATCH
+	#if BAR_PANGO_PATCH
 	if (font->layout)
 		g_object_unref(font->layout);
 	#else
 	if (font->pattern)
 		FcPatternDestroy(font->pattern);
 	XftFontClose(font->dpy, font->xfont);
-	#endif // PANGO_PATCH
+	#endif // BAR_PANGO_PATCH
 	free(font);
 }
 
-#if PANGO_PATCH
+#if BAR_PANGO_PATCH
 Fnt*
 drw_font_create(Drw* drw, const char font[])
 {
@@ -264,9 +264,9 @@ drw_fontset_create(Drw* drw, const char *fonts[], size_t fontcount)
 	}
 	return (drw->fonts = ret);
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
-#if PANGO_PATCH
+#if BAR_PANGO_PATCH
 void
 drw_font_free(Fnt *font)
 {
@@ -282,25 +282,25 @@ drw_fontset_free(Fnt *font)
 		xfont_free(font);
 	}
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
 void
 drw_clr_create(
 	Drw *drw,
 	Clr *dest,
-	#if VTCOLORS_PATCH
+	#if BAR_VTCOLORS_PATCH
 	const char clrname[]
 	#else
 	const char *clrname
-	#endif // VTCOLORS_PATCH
-	#if ALPHA_PATCH
+	#endif // BAR_VTCOLORS_PATCH
+	#if BAR_ALPHA_PATCH
 	, unsigned int alpha
-	#endif // ALPHA_PATCH
+	#endif // BAR_ALPHA_PATCH
 ) {
 	if (!drw || !dest || !clrname)
 		return;
 
-	#if ALPHA_PATCH
+	#if BAR_ALPHA_PATCH
 	if (!XftColorAllocName(drw->dpy, drw->visual, drw->cmap,
 	                       clrname, dest))
 		die("error, cannot allocate color '%s'", clrname);
@@ -315,7 +315,7 @@ drw_clr_create(
 	#if NO_TRANSPARENT_BORDERS_PATCH
 	dest->pixel |= 0xff << 24;
 	#endif // NO_TRANSPARENT_BORDERS_PATCH
-	#endif // ALPHA_PATCH
+	#endif // BAR_ALPHA_PATCH
 }
 
 /* Wrapper to create color schemes. The caller has to call free(3) on the
@@ -323,16 +323,16 @@ drw_clr_create(
 Clr *
 drw_scm_create(
 	Drw *drw,
-	#if VTCOLORS_PATCH
+	#if BAR_VTCOLORS_PATCH
 	char clrnames[][8],
 	#elif XRDB_PATCH
 	char *clrnames[],
 	#else
 	const char *clrnames[],
-	#endif // VTCOLORS_PATCH / XRDB_PATCH
-	#if ALPHA_PATCH
+	#endif // BAR_VTCOLORS_PATCH / XRDB_PATCH
+	#if BAR_ALPHA_PATCH
 	const unsigned int alphas[],
-	#endif // ALPHA_PATCH
+	#endif // BAR_ALPHA_PATCH
 	size_t clrcount
 ) {
 	size_t i;
@@ -343,11 +343,11 @@ drw_scm_create(
 		return NULL;
 
 	for (i = 0; i < clrcount; i++)
-		#if ALPHA_PATCH
+		#if BAR_ALPHA_PATCH
 		drw_clr_create(drw, &ret[i], clrnames[i], alphas[i]);
 		#else
 		drw_clr_create(drw, &ret[i], clrnames[i]);
-		#endif // ALPHA_PATCH
+		#endif // BAR_ALPHA_PATCH
 	return ret;
 }
 
@@ -358,7 +358,7 @@ drw_setfontset(Drw *drw, Fnt *set)
 	if (drw)
 		drw->fonts = set;
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
 void
 drw_setscheme(Drw *drw, Clr *scm)
@@ -379,7 +379,7 @@ drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int
 		XDrawRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w - 1, h - 1);
 }
 
-#if PANGO_PATCH
+#if BAR_PANGO_PATCH
 int
 drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup)
 {
@@ -398,13 +398,13 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	} else {
 		XSetForeground(drw->dpy, drw->gc, drw->scheme[invert ? ColFg : ColBg].pixel);
 		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w, h);
-		#if ALPHA_PATCH
+		#if BAR_ALPHA_PATCH
 		d = XftDrawCreate(drw->dpy, drw->drawable, drw->visual, drw->cmap);
 		#else
 		d = XftDrawCreate(drw->dpy, drw->drawable,
 		                  DefaultVisual(drw->dpy, drw->screen),
 		                  DefaultColormap(drw->dpy, drw->screen));
-		#endif // ALPHA_PATCH
+		#endif // BAR_ALPHA_PATCH
 		x += lpad;
 		w -= lpad;
 	}
@@ -471,13 +471,13 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	} else {
 		XSetForeground(drw->dpy, drw->gc, drw->scheme[invert ? ColFg : ColBg].pixel);
 		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w, h);
-		#if ALPHA_PATCH
+		#if BAR_ALPHA_PATCH
 		d = XftDrawCreate(drw->dpy, drw->drawable, drw->visual, drw->cmap);
 		#else
 		d = XftDrawCreate(drw->dpy, drw->drawable,
 		                  DefaultVisual(drw->dpy, drw->screen),
 		                  DefaultColormap(drw->dpy, drw->screen));
-		#endif // ALPHA_PATCH
+		#endif // BAR_ALPHA_PATCH
 		x += lpad;
 		w -= lpad;
 	}
@@ -579,7 +579,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 
 	return x + (render ? w : 0);
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
 void
 drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)
@@ -591,7 +591,7 @@ drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)
 	XSync(drw->dpy, False);
 }
 
-#if PANGO_PATCH
+#if BAR_PANGO_PATCH
 unsigned int
 drw_font_getwidth(Drw *drw, const char *text, Bool markup)
 {
@@ -607,9 +607,9 @@ drw_fontset_getwidth(Drw *drw, const char *text)
 		return 0;
 	return drw_text(drw, 0, 0, 0, 0, 0, text, 0);
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
-#if PANGO_PATCH
+#if BAR_PANGO_PATCH
 void
 drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup)
 {
@@ -644,7 +644,7 @@ drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w,
 	if (h)
 		*h = font->h;
 }
-#endif // PANGO_PATCH
+#endif // BAR_PANGO_PATCH
 
 Cur *
 drw_cur_create(Drw *drw, int shape)

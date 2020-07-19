@@ -1,18 +1,68 @@
-/* Patches */
-#if ALPHA_PATCH
-#include "alpha.c"
+/* Bar functionality */
+#if BAR_ALPHA_PATCH
+#include "bar_alpha.c"
 #endif
-#if ALTERNATIVE_TAGS_PATCH
-#include "alternativetags.c"
+#if BAR_ALTERNATIVE_TAGS_PATCH
+#include "bar_alternativetags.c"
 #endif
+#if BAR_DWMBLOCKS_PATCH && BAR_STATUSCMD_PATCH
+#include "bar_dwmblocks.c"
+#endif
+#if BAR_EWMHTAGS_PATCH
+#include "bar_ewmhtags.c"
+#endif
+#if COMBO_PATCH
+#include "combo.c"
+#endif
+#if BAR_HOLDBAR_PATCH
+#include "bar_holdbar.c"
+#endif
+#if BAR_LTSYMBOL_PATCH
+#include "bar_ltsymbol.c"
+#endif
+#if BAR_STATUS_PATCH
+#include "bar_status.c"
+#endif
+#if BAR_STATUS2D_PATCH
+#include "bar_status2d.c"
+#endif
+#if BAR_STATUSBUTTON_PATCH
+#include "bar_statusbutton.c"
+#endif
+#if BAR_STATUSCMD_PATCH
+#include "bar_statuscmd.c"
+#endif
+#if BAR_STATUSCOLORS_PATCH
+#include "bar_statuscolors.c"
+#endif
+#if BAR_TAGS_PATCH
+#include "bar_tags.c"
+#endif
+#if BAR_TAGGRID_PATCH
+#include "bar_taggrid.c"
+#endif
+#if BAR_WINTITLE_PATCH
+#include "bar_wintitle.c"
+#endif
+#if BAR_FANCYBAR_PATCH
+#include "bar_fancybar.c"
+#endif
+#if BAR_AWESOMEBAR_PATCH
+#include "bar_awesomebar.c"
+#endif
+#if BAR_SYSTRAY_PATCH
+#include "bar_systray.c"
+#endif
+#if BAR_VTCOLORS_PATCH
+#include "bar_vtcolors.c"
+#endif
+
+/* Other patches */
 #if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 #include "attachx.c"
 #endif
 #if AUTOSTART_PATCH
 #include "autostart.c"
-#endif
-#if AWESOMEBAR_PATCH
-#include "awesomebar.c"
 #endif
 #if CFACTS_PATCH
 #include "cfacts.c"
@@ -20,25 +70,16 @@
 #if CMDCUSTOMIZE_PATCH
 #include "cmdcustomize.c"
 #endif
-#if COMBO_PATCH
-#include "combo.c"
-#endif
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.c"
 #endif
 #if DRAGCFACT_PATCH && CFACTS_PATCH
 #include "dragcfact.c"
 #endif
-#if DWMBLOCKS_PATCH && STATUSCMD_PATCH
-#include "dwmblocks.c"
-#endif
 #if DWMC_PATCH
 #include "dwmc.c"
 #elif FSIGNAL_PATCH
 #include "fsignal.c"
-#endif
-#if EWMHTAGS_PATCH
-#include "ewmhtags.c"
 #endif
 #if EXRESIZE_PATCH
 #include "exresize.c"
@@ -57,9 +98,6 @@
 #endif
 #if FULLSCREEN_PATCH
 #include "fullscreen.c"
-#endif
-#if HOLDBAR_PATCH
-#include "holdbar.c"
 #endif
 #if INPLACEROTATE_PATCH
 #include "inplacerotate.c"
@@ -131,20 +169,8 @@
 #if STACKER_PATCH
 #include "stacker.c"
 #endif
-#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
-#include "status2d.c"
-#endif
-#if STATUSCOLORS_PATCH
-#include "statuscolors.c"
-#endif
-#if STATUSCMD_PATCH
-#include "statuscmd.c"
-#endif
 #if STICKY_PATCH
 #include "sticky.c"
-#endif
-#if SYSTRAY_PATCH
-#include "systray.c"
 #endif
 #if SWALLOW_PATCH
 #include "swallow.c"
@@ -163,9 +189,6 @@
 #endif
 #if TAGALLMON_PATCH
 #include "tagallmon.c"
-#endif
-#if TAGGRID_PATCH
-#include "taggrid.c"
 #endif
 #if TAGOTHERMONITOR_PATCH
 #include "tagothermonitor.c"
@@ -188,9 +211,6 @@
 #if VANITYGAPS_PATCH
 #include "vanitygaps.c"
 #endif
-#if VTCOLORS_PATCH
-#include "vtcolors.c"
-#endif
 #if WARP_PATCH
 #include "warp.c"
 #endif
@@ -200,7 +220,7 @@
 #if ZOOMSWAP_PATCH
 #include "zoomswap.c"
 #endif
-#if XRDB_PATCH && !VTCOLORS_PATCH
+#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 #include "xrdb.c"
 #endif
 #if DRAGMFACT_PATCH
@@ -211,44 +231,44 @@
 #include "layout_facts.c"
 #endif
 #if BSTACK_LAYOUT
-#include "bstack.c"
+#include "layout_bstack.c"
 #endif
 #if BSTACKHORIZ_LAYOUT
-#include "bstackhoriz.c"
+#include "layout_bstackhoriz.c"
 #endif
 #if CENTEREDMASTER_LAYOUT
-#include "centeredmaster.c"
+#include "layout_centeredmaster.c"
 #endif
 #if CENTEREDFLOATINGMASTER_LAYOUT
-#include "centeredfloatingmaster.c"
+#include "layout_centeredfloatingmaster.c"
 #endif
 #if COLUMNS_LAYOUT
-#include "columns.c"
+#include "layout_columns.c"
 #endif
 #if DECK_LAYOUT
-#include "deck.c"
+#include "layout_deck.c"
 #endif
 #if FIBONACCI_DWINDLE_LAYOUT || FIBONACCI_SPIRAL_LAYOUT
-#include "fibonacci.c"
+#include "layout_fibonacci.c"
 #endif
 #if FLEXTILE_DELUXE_LAYOUT
-#include "flextile-deluxe.c"
+#include "layout_flextile-deluxe.c"
 #endif
 #if GAPPLESSGRID_LAYOUT
-#include "gapplessgrid.c"
+#include "layout_gapplessgrid.c"
 #endif
 #if GRIDMODE_LAYOUT
-#include "grid.c"
+#include "layout_grid.c"
 #endif
 #if HORIZGRID_LAYOUT
-#include "horizgrid.c"
+#include "layout_horizgrid.c"
 #endif
 #if MONOCLE_LAYOUT
-#include "monocle.c"
+#include "layout_monocle.c"
 #endif
 #if NROWGRID_LAYOUT
-#include "nrowgrid.c"
+#include "layout_nrowgrid.c"
 #endif
 #if TILE_LAYOUT
-#include "tile.c"
+#include "layout_tile.c"
 #endif

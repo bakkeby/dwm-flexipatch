@@ -10,31 +10,222 @@
  * here for grouping purposes.
  */
 
-/* Patches */
-
-/* This patch changes the rectangle indicating if a tag is used by a client into a bar
- * above the tag name for better visibility.
- * https://dwm.suckless.org/patches/activetagindicatorbar/
+/**
+ * Bar modules
  */
-#define ACTIVETAGINDICATORBAR_PATCH 0
 
-/* Alternative patch to the activetagindicatorbar patch, adds the bar below the tag
- * icon rather than above.
+/* Enhanced taskbar that shows the titles of all visible windows in the status bar
+ * and allows focus / hiding / unhiding of windows by clicking on the status bar.
+ * Awesomebar takes precedence over fancybar.
+ * https://dwm.suckless.org/patches/awesomebar/
  */
-#define ACTIVETAGINDICATORBAR_ALT1_PATCH 0
+#define BAR_AWESOMEBAR_PATCH 0
+
+/* This patch depends on statuscmd patch and adds integration with a (patched) dwmblocks
+ * instance to give a clickable status bar.
+ * Patch: https://gist.github.com/danbyl/54f7c1d57fc6507242a95b71c3d8fdea
+ * dwmblocks: https://github.com/torrinfail/dwmblocks
+ */
+#define BAR_DWMBLOCKS_PATCH 0
+
+/* This patch shows the titles of all visible windows in the status bar
+ * (as opposed to showing only the selected one).
+ * Awesomebar takes precedence over fancybar. Fancybar takes precedence over
+ * the centeredwindowname patch.
+ * https://dwm.suckless.org/patches/fancybar/
+ */
+#define BAR_FANCYBAR_PATCH 0
+
+/* Show layout symbol in bar */
+#define BAR_LTSYMBOL_PATCH 1
+
+/* This patch adds an option to place tags in rows like in many other window managers.
+ * https://dwm.suckless.org/patches/taggrid/
+ */
+#define BAR_TAGGRID_PATCH 0
+
+/* Show status in bar */
+#define BAR_STATUS_PATCH 1
+
+/* This patch adds a clickable button to the left hand side of the statusbar.
+ * https://dwm.suckless.org/patches/statusbutton/
+ */
+#define BAR_STATUSBUTTON_PATCH 0
+
+/* This patch adds the ability to execute shell commands based on the mouse button and position
+ * when clicking the status bar. Refer to the website for usage.
+ * https://dwm.suckless.org/patches/statuscmd/
+ */
+#define BAR_STATUSCMD_PATCH 0
+
+/* Status2d allows colors and rectangle drawing in your dwm status bar.
+ * This patch is incompatible with the statuscolors patch which takes precedence.
+ * This patch is incompatible with the extrabar patch.
+ * https://dwm.suckless.org/patches/status2d/
+ */
+#define BAR_STATUS2D_PATCH 0
+
+/* Supplementary patch should you want to disable alpha for the status2d section */
+#define BAR_STATUS2D_NO_ALPHA_PATCH 0
+
+/* The systray patch adds systray for the status bar.
+ * https://dwm.suckless.org/patches/systray/
+ */
+#define BAR_SYSTRAY_PATCH 0
+
+/* Show tag symbols in bar */
+#define BAR_TAGS_PATCH 1
+
+/* Show window title in bar */
+#define BAR_WINTITLE_PATCH 1
+
+/* Title bar modules such as wintitle (default), fancybar and awesomebar
+ * do not by default add left and/or right padding as they take up the
+ * remaining space. These options allow you explicitly add padding should
+ * you need it.
+ */
+#define BAR_TITLE_RIGHT_PAD 0
+#define BAR_TITLE_LEFT_PAD 1
+
+/**
+ * Bar options
+ */
 
 /* The alpha patch adds transparency for the status bar.
  * You need to uncomment the corresponding line in config.mk to use the -lXrender library
  * when including this patch.
  * https://dwm.suckless.org/patches/alpha/
  */
-#define ALPHA_PATCH 0
+#define BAR_ALPHA_PATCH 0
 
 /* This patch introduces alternative tags which can be switched on the fly for the
  * sole purpose of providing visual aid.
  * https://dwm.suckless.org/patches/alternativetags/
  */
-#define ALTERNATIVE_TAGS_PATCH 0
+#define BAR_ALTERNATIVE_TAGS_PATCH 0
+
+/* This patch changes the rectangle indicating if a tag is used by a client into a bar
+ * above the tag name for better visibility.
+ * https://dwm.suckless.org/patches/activetagindicatorbar/
+ */
+#define BAR_ACTIVETAGINDICATORBAR_PATCH 0
+
+/* Alternative patch to the activetagindicatorbar patch, adds the bar below the tag
+ * icon rather than above.
+ */
+#define BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH 0
+
+/* This patch centers the WM_NAME of the currently selected window on the status bar.
+ * Both fancybar and awesomebar patches take precedence over this patch.
+ * This patch only applies when the BAR_WINTITLE_PATCH module is used.
+ * https://dwm.suckless.org/patches/centeredwindowname/
+ */
+#define BAR_CENTEREDWINDOWNAME_PATCH 0
+
+/* This patch enables color emoji in dwm by removing a workaround for a BadLength error
+ * in the Xft library when color glyphs are used.
+ * To enable this you will need an updated Xft library that can handle color glyphs otherwise
+ * dwm will crash on encountering such characters. Note that you will also need a font that
+ * provides color emojis for this to work.
+ */
+#define BAR_COLOR_EMOJI_PATCH 0
+
+/* Updates the position of dmenu to match that of the bar. I.e. if topbar is 0 then dmenu
+ * will appear at the bottom and if 1 then dmenu will appear at the top.
+ * https://dwm.suckless.org/patches/dmenumatchtop
+ */
+#define BAR_DMENUMATCHTOP_PATCH 0
+
+/* Originally this was the extrabar patch, but as the handling of extra bars is now built-in
+ * only the splitting of the status by a designated separator remains. As such this has been
+ * renamed to more accurately reflect what it does - creating an extra status.
+ * https://dwm.suckless.org/patches/extrabar/
+ */
+#define BAR_EXTRASTATUS_PATCH 0
+
+/* Adds EWMH support for _NET_NUMBER_OF_DESKTOPS, _NET_CURRENT_DESKTOP, _NET_DESKTOP_NAMES
+ * and _NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs
+ * that request workspace information. For example polybar's xworkspaces module.
+ * https://dwm.suckless.org/patches/ewmhtags/
+ */
+#define BAR_EWMHTAGS_PATCH 0
+
+/* Allows the bar height to be explicitly set rather than being derived from font.
+ * https://dwm.suckless.org/patches/bar_height/
+ */
+#define BAR_HEIGHT_PATCH 0
+
+/* This patch prevents dwm from drawing tags with no clients (i.e. vacant) on the bar.
+ * https://dwm.suckless.org/patches/hide_vacant_tags/
+ */
+#define BAR_HIDEVACANTTAGS_PATCH 0
+
+/* With this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
+ * and the bar will now overlay the display.
+ * http://dwm.suckless.org/patches/holdbar/
+ */
+#define BAR_HOLDBAR_PATCH 0
+
+/* Sometimes dwm crashes when it cannot render some glyphs in window titles (usually emoji).
+ * This patch is essentially a hack to ignore any errors when drawing text on the status bar.
+ * https://groups.google.com/forum/m/#!topic/wmii/7bncCahYIww
+ * https://docs.google.com/viewer?a=v&pid=forums&srcid=MDAwODA2MTg0MDQyMjE0OTgzMzMBMDQ3ODQzODkyMTU3NTAyMTMxNTYBX2RUMVNtOUtDQUFKATAuMQEBdjI&authuser=0
+ */
+#define BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH 0
+
+/* This patch adds vertical and horizontal space between the statusbar and the edge of the screen.
+ * https://dwm.suckless.org/patches/barpadding/
+ */
+#define BAR_PADDING_PATCH 0
+
+/* This patch adds simple markup for status messages using pango markup.
+ * This depends on the pango library v1.44 or greater.
+ * You need to uncomment the corresponding lines in config.mk to use the pango libraries
+ * when including this patch.
+ *
+ * Note that the pango patch does not protect against the BadLength error from Xft
+ * when color glyphs are used, which means that dwm will crash if color emoji is used.
+ *
+ * If you need color emoji then you may want to install this patched library from the AUR:
+ * https://aur.archlinux.org/packages/libxft-bgra/
+ *
+ * A long term fix for the libXft library is pending approval of this pull request:
+ * https://gitlab.freedesktop.org/xorg/lib/libxft/-/merge_requests/1
+ *
+ * Also see:
+ * https://developer.gnome.org/pygtk/stable/pango-markup-language.html
+ * https://lists.suckless.org/hackers/2004/17285.html
+ * https://dwm.suckless.org/patches/pango/
+ */
+#define BAR_PANGO_PATCH 0
+
+/* This patch enables colored text in the status bar. It changes the way colors are defined
+ * in config.h allowing multiple color combinations for use in the status script.
+ * This patch is incompatible with and takes precedence over the status2d patch.
+ * https://dwm.suckless.org/patches/statuscolors/
+ */
+#define BAR_STATUSCOLORS_PATCH 0
+
+/* This patch adds configuration options for horizontal and vertical padding in the status bar.
+ * https://dwm.suckless.org/patches/statuspadding/
+ */
+#define BAR_STATUSPADDING_PATCH 0
+
+/* Adds a new color scheme used by the (selected) window title in the bar.
+ * https://dwm.suckless.org/patches/titlecolor/
+ */
+#define BAR_TITLECOLOR_PATCH 0
+
+/* This patch adds the ability for dwm to read colors from the linux virtual console.
+ *    /sys/module/vt/parameters/default_{red,grn,blu}
+ * Essentially this way the colors you use in your regular tty is "mirrored" to dwm.
+ * https://dwm.suckless.org/patches/vtcolors/
+ */
+#define BAR_VTCOLORS_PATCH 0
+
+/***
+ * Other patches
+ */
 
 /* This patch prevents the focus to drift from the active fullscreen client when
  * using focusstack().
@@ -80,23 +271,6 @@
  */
 #define AUTORESIZE_PATCH 0
 
-/* Enhanced taskbar that shows the titles of all visible windows in the status bar
- * and allows focus / hiding / unhiding of windows by clicking on the status bar.
- * Awesomebar takes precedence over fancybar.
- * https://dwm.suckless.org/patches/awesomebar/
- */
-#define AWESOMEBAR_PATCH 0
-
-/* Allows the bar height to be explicitly set rather than being derived from font.
- * https://dwm.suckless.org/patches/bar_height/
- */
-#define BAR_HEIGHT_PATCH 0
-
-/* This patch adds vertical and horizontal space between the statusbar and the edge of the screen.
- * https://dwm.suckless.org/patches/barpadding/
- */
-#define BARPADDING_PATCH 0
-
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
  * This patch takes precedence over centeredwindowname and fancybar patches.
  * https://dwm.suckless.org/patches/center/
@@ -120,12 +294,6 @@
  */
 #define CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH 0
 
-/* This patch centers the WM_NAME of the currently selected window on the status bar.
- * Both fancybar and awesomebar patches take precedence over this patch.
- * https://dwm.suckless.org/patches/centeredwindowname/
- */
-#define CENTEREDWINDOWNAME_PATCH 0
-
 /* This patch provides the ability to assign different weights to clients in their
  * respective stack in tiled layout.
  * https://dwm.suckless.org/patches/cfacts/
@@ -136,14 +304,6 @@
  * https://dwm.suckless.org/patches/cmdcustomize/
  */
 #define CMDCUSTOMIZE_PATCH 0
-
-/* This patch enables color emoji in dwm by removing a workaround for a BadLength error
- * in the Xft library when color glyphs are used.
- * To enable this you will need an updated Xft library that can handle color glyphs otherwise
- * dwm will crash on encountering such characters. Note that you will also need a font that
- * provides color emojis for this to work.
- */
-#define COLOR_EMOJI_PATCH 0
 
 /* This patch tweaks the tagging interface so that you can select multiple tags for tag
  * or view by pressing all the right keys as a combo. For example to view tags 1 and 3,
@@ -157,12 +317,6 @@
  */
 #define CYCLELAYOUTS_PATCH 0
 
-/* Updates the position of dmenu to match that of the bar. I.e. if topbar is 0 then dmenu
- * will appear at the bottom and if 1 then dmenu will appear at the top.
- * https://dwm.suckless.org/patches/dmenumatchtop
- */
-#define DMENUMATCHTOP_PATCH 0
-
 /* Similarly to the dragmfact patch this allows you to click and drag clients to change the
  * cfact to adjust the client's size in the stack. This patch depends on the cfacts patch.
  */
@@ -174,13 +328,6 @@
  * https://dwm.suckless.org/patches/dragmfact/
  */
 #define DRAGMFACT_PATCH 0
-
-/* This patch depends on statuscmd patch and adds integration with a (patched) dwmblocks
- * instance to give a clickable status bar.
- * Patch: https://gist.github.com/danbyl/54f7c1d57fc6507242a95b71c3d8fdea
- * dwmblocks: https://github.com/torrinfail/dwmblocks
- */
-#define DWMBLOCKS_PATCH 0
 
 /* Simple dwmc client using a fork of fsignal to communicate with dwm.
  * To use this either copy the patch/dwmc shell script to somewhere in your path or
@@ -197,26 +344,12 @@
  */
 #define EMPTYVIEW_PATCH 0
 
-/* Adds EWMH support for _NET_NUMBER_OF_DESKTOPS, _NET_CURRENT_DESKTOP, _NET_DESKTOP_NAMES
- * and _NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs
- * that request workspace information. For example polybar's xworkspaces module.
- * https://dwm.suckless.org/patches/ewmhtags/
- */
-#define EWMHTAGS_PATCH 0
-
 /* This patch allows the user to change size and placement of floating windows using only the
  * keyboard. It also allows for temporary vertical and horizontal extension of windows similar
  * to other WMs fill command.
  * https://dwm.suckless.org/patches/exresize/
  */
 #define EXRESIZE_PATCH 0
-
-/* This patch will enable an extra status bar in dwm in a similar manner to the dualstatus
- * patch. If the primary status is at the top via topbar then the extra status bar will be
- * placed at the bottom and vice versa.
- * https://dwm.suckless.org/patches/extrabar/
- */
-#define EXTRABAR_PATCH 0
 
 /* Only allow clients to "fullscreen" into the space currently given to them.
  * As an example, this will allow you to view a fullscreen video in your browser on
@@ -232,14 +365,6 @@
  * rather than applying to all clients globally.
  */
 #define FAKEFULLSCREEN_CLIENT_PATCH 0
-
-/* This patch shows the titles of all visible windows in the status bar
- * (as opposed to showing only the selected one).
- * Awesomebar takes precedence over fancybar. Fancybar takes precedence over
- * the centeredwindowname patch.
- * https://dwm.suckless.org/patches/fancybar/
- */
-#define FANCYBAR_PATCH 0
 
 /* This patch allows a different border color to be chosen for floating windows.
  * https://dwm.suckless.org/patches/float_border_color/
@@ -296,17 +421,6 @@
  */
 #define FULLSCREEN_PATCH 0
 
-/* This patch prevents dwm from drawing tags with no clients (i.e. vacant) on the bar.
- * https://dwm.suckless.org/patches/hide_vacant_tags/
- */
-#define HIDEVACANTTAGS_PATCH 0
-
-/* With this patch dwm's built-in status bar is only shown when HOLDKEY is pressed
- * and the bar will now overlay the display.
- * http://dwm.suckless.org/patches/holdbar/
- */
-#define HOLDBAR_PATCH 0
-
 /* This patch provides a keybinding to rotate all clients in the currently selected
  * area (master or stack) without affecting the other area.
  * https://dwm.suckless.org/patches/inplacerotate/
@@ -317,13 +431,6 @@
  * https://dwm.suckless.org/patches/ispermanent/
  */
 #define ISPERMANENT_PATCH 0
-
-/* Sometimes dwm crashes when it cannot render some glyphs in window titles (usually emoji).
- * This patch is essentially a hack to ignore any errors when drawing text on the status bar.
- * https://groups.google.com/forum/m/#!topic/wmii/7bncCahYIww
- * https://docs.google.com/viewer?a=v&pid=forums&srcid=MDAwODA2MTg0MDQyMjE0OTgzMzMBMDQ3ODQzODkyMTU3NTAyMTMxNTYBX2RUMVNtOUtDQUFKATAuMQEBdjI&authuser=0
- */
-#define IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH 0
 
 /* This patch adds key modes (like in vim or emacs) where chains of keyboard shortcuts
  * can be performed.
@@ -336,17 +443,12 @@
  */
 #define KILLUNSEL_PATCH 0
 
-/* Moves the layout symbol in the status bar to the left hand side.
- * http://dwm.suckless.org/patches/leftlayout/
- */
-#define LEFTLAYOUT_PATCH 0
-
 /* By default in dwm it is possible to make an application fullscreen, then use
  * the focusstack keybindings to focus on other windows beneath the current window.
  * It is also possible to spawn new windows (e.g. a terminal) that end up getting
  * focus while the previous window remains in fullscreen. This patch ensures that
  * in such scenarios the previous window loses fullscreen.
- * https://github.com/bakkeby/patches/tree/master/dwm/dwm-losefullscreen-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-losefullscreen-6.2.diff
  */
 #define LOSEFULLSCREEN_PATCH 0
 
@@ -421,27 +523,6 @@
  */
 #define ONLYQUITONEMPTY_PATCH 0
 
-/* This patch adds simple markup for status messages using pango markup.
- * This depends on the pango library v1.44 or greater.
- * You need to uncomment the corresponding lines in config.mk to use the pango libraries
- * when including this patch.
- *
- * Note that the pango patch does not protect against the BadLength error from Xft
- * when color glyphs are used, which means that dwm will crash if color emoji is used.
- *
- * If you need color emoji then you may want to install this patched library from the AUR:
- * https://aur.archlinux.org/packages/libxft-bgra/
- *
- * A long term fix for the libXft library is pending approval of this pull request:
- * https://gitlab.freedesktop.org/xorg/lib/libxft/-/merge_requests/1
- *
- * Also see:
- * https://developer.gnome.org/pygtk/stable/pango-markup-language.html
- * https://lists.suckless.org/hackers/2004/17285.html
- * https://dwm.suckless.org/patches/pango/
- */
-#define PANGO_PATCH 0
-
 /* The pertag patch adds nmaster, mfacts and layouts per tag rather than per
  * monitor (default).
  * https://dwm.suckless.org/patches/pertag/
@@ -465,6 +546,11 @@
  * https://dwm.suckless.org/patches/push/
  */
 #define PUSH_NO_MASTER_PATCH 0
+
+/* Resets the layout and mfact if there is only one visible client.
+ * https://dwm.suckless.org/patches/resetlayout/
+ */
+#define RESETLAYOUT_PATCH 0
 
 /* By default, windows only resize from the bottom right corner. With this
  * patch the mouse is warped to the nearest corner and you resize from there.
@@ -503,20 +589,13 @@
  */
 #define SAVEFLOATS_PATCH 0
 
-/* The scratchpads patch allows you to spawn or restore floating terminal windows.
+/* The scratchpad patch allows you to spawn or restore floating terminal windows.
  * It is typically useful when one need to do some short typing.
  * Upgraded to Christian Tenllado's multiple scratchpad version.
  * https://lists.suckless.org/hackers/2004/17205.html
  * https://dwm.suckless.org/patches/scratchpads/
  */
 #define SCRATCHPADS_PATCH 0
-
-/* The scratchpad patch above automatically resizes and centers the scratchpad window every
- * time you spawn it. This alteration of the patch disables that so that the size and position
- * of the scratchpad window is retained when you respawn it. If you enable this then you may
- * want to also take the centered patch and enable the iscentered flag for floating scratchpads.
- */
-#define SCRATCHPAD_KEEP_POSITION_AND_SIZE_PATCH 0
 
 /* This alternative patch enables a scratchpad feature in dwm similar to the scratchpad
  * feature in i3wm.
@@ -589,81 +668,26 @@
  */
 #define STACKER_PATCH 0
 
-/* This patch allows the status text to be fixed to the bar on a specific
- * monitor rather than being drawn on the focused monitor.
- * The statusallmons patch takes precedence over this patch.
- * NB: If used together with the systray patch then consider setting
- * systraypinning to statmonval+1.
- * https://dwm.suckless.org/patches/staticstatus/
- */
-#define STATICSTATUS_PATCH 0
-
-/* Status2d allows colors and rectangle drawing in the dwm status bar.
- * This patch is incompatible with the statuscolors patch which takes precedence.
- * NB: If using this with dwmblocks then make sure to increase CMDLENGTH in dwmblocks.c
- * from 50 (default) to 1024.
- * https://dwm.suckless.org/patches/status2d/
- */
-#define STATUS2D_PATCH 0
-
-/* Supplementary patch should you want to disable alpha for the status2d section */
-#define STATUS2D_NO_ALPHA_PATCH 0
-
-/* This patch draws and updates the statusbar on all monitors.
- * https://dwm.suckless.org/patches/statusallmons/
- */
-#define STATUSALLMONS_PATCH 0
-
-/* This patch adds a clickable button to the left hand side of the statusbar.
- * https://dwm.suckless.org/patches/statusbutton/
- */
-#define STATUSBUTTON_PATCH 0
-
-/* This patch enables colored text in the status bar. It changes the way colors are defined
- * in config.h allowing multiple color combinations for use in the status script.
- * This patch is incompatible with and takes precedence over the status2d patch.
- * https://dwm.suckless.org/patches/statuscolors/
- */
-#define STATUSCOLORS_PATCH 0
-
-/* This patch adds configuration options for horizontal and vertical padding in the status bar.
- * https://dwm.suckless.org/patches/statuspadding/
- */
-#define STATUSPADDING_PATCH 0
-
 /* Adds toggleable keyboard shortcut to make a client 'sticky', i.e. visible on all tags.
  * https://dwm.suckless.org/patches/sticky/
  */
 #define STICKY_PATCH 0
 
-/* This patch adds the ability to execute shell commands based on the mouse button and position
- * when clicking the status bar. Refer to the website for usage.
- * https://dwm.suckless.org/patches/statuscmd/
- */
-#define STATUSCMD_PATCH 0
-
-/* The systray patch adds systray for the status bar.
- * https://dwm.suckless.org/patches/systray/
- */
-#define SYSTRAY_PATCH 0
-
 /* This patch adds "window swallowing" to dwm as known from Plan 9's windowing system rio.
  * Clients marked with isterminal in config.h swallow a window opened by any child process,
  * e.g. running xclock in a terminal. Closing the xclock window restores the terminal window
  * in the current position.
- * This patch depends on the following additional libraries:
- *    - libxcb
- *    - Xlib-libxcb
- *    - xcb-res
- * You need to uncomment the corresponding line in config.mk to use the -lX11-xcb, -lxcb
- * and -lxcb-res libraries when including this patch.
  * https://dwm.suckless.org/patches/swallow/
  */
 #define SWALLOW_PATCH 0
 
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
- * shortcut (MOD+s) instead of having to think if you should use MOD+j or MOD+k for reaching
+ * shortcut (MOD+s) instead of having to think if you should use mod-j or mod-k for reaching
  * the previously used window.
+ * This patch depends on the following additional libraries:
+ *    - libxcb
+ *    - Xlib-libxcb
+ *    - xcb-res
  * https://dwm.suckless.org/patches/swapfocus/
  */
 #define SWAPFOCUS_PATCH 0
@@ -692,7 +716,7 @@
  *
  * (*) except if the client has been moved between tags or to another monitor
  *
- * https://github.com/bakkeby/patches/tree/master/dwm/dwm-switchtag-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-switchtag-6.2.diff
  * Also see https://dwm.suckless.org/patches/switchtotag
  */
 #define SWITCHTAG_PATCH 0
@@ -703,14 +727,9 @@
 #define TAGALL_PATCH 0
 
 /* This patch allows you to move all visible windows on a monitor to an adjacent monitor.
- * https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagallmon-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-tagallmon-6.2.diff
  */
 #define TAGALLMON_PATCH 0
-
-/* This patch adds an option to place tags in rows like in many other window managers.
- * https://dwm.suckless.org/patches/taggrid/
- */
-#define TAGGRID_PATCH 0
 
 /* This patch makes new clients attach into the stack area when you toggle a new tag into
  * view. This means your master area will remain unchanged when toggling views.
@@ -732,7 +751,7 @@
  * monitor until you exit fullscreen view (at which point it will appear on the adjacent
  * monitor). This patch allows a fullscreen window to be moved to an adjacent monitor
  * while remaining in fullscreen.
- * https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagmonfixfs-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-tagmonfixfs-6.2.diff
  */
 #define TAGMONFIXFS_PATCH 0
 
@@ -744,17 +763,12 @@
 
 /* This patch allows you to swap all visible windows on one monitor with those of an
  * adjacent monitor.
- * https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagswapmon-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-tagswapmon-6.2.diff
  */
 #define TAGSWAPMON_PATCH 0
 
-/* Adds a new color scheme used by the (selected) window title in the bar.
- * https://dwm.suckless.org/patches/titlecolor/
- */
-#define TITLECOLOR_PATCH 0
-
 /* This patch allows you to toggle fullscreen on and off using a single shortcut key.
- * https://github.com/bakkeby/patches/tree/master/dwm/dwm-togglefullscreen-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-togglefullscreen-6.2.diff
  */
 #define TOGGLEFULLSCREEN_PATCH 0
 
@@ -799,13 +813,6 @@
  */
 #define VIEWONTAG_PATCH 0
 
-/* This patch adds the ability for dwm to read colors from the linux virtual console.
- *    /sys/module/vt/parameters/default_{red,grn,blu}
- * Essentially this way the colors you use in your regular tty is "mirrored" to dwm.
- * https://dwm.suckless.org/patches/vtcolors/
- */
-#define VTCOLORS_PATCH 0
-
 /* This patch warps the mouse cursor to the center of the currently focused window or screen
  * when the mouse cursor is (a) on a different screen or (b) on top of a different window.
  * https://dwm.suckless.org/patches/warp/
@@ -817,7 +824,7 @@
  * This patch adds the role field to the rule configuration so that one can
  * differentiate between, say, Firefox "browser" vs "Preferences" vs "Manager"
  * or Google-chrome "browser" vs "pop-up".
- * https://github.com/bakkeby/patches/tree/master/dwm/dwm-windowrolerule-6.2.diff
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-windowrolerule-6.2.diff
  */
 #define WINDOWROLERULE_PATCH 0
 
@@ -839,7 +846,9 @@
  */
 #define ZOOMSWAP_PATCH 0
 
-/* Layouts */
+/**
+ * Layouts
+ */
 
 /* Bottomstack layout.
  * https://dwm.suckless.org/patches/bottomstack/

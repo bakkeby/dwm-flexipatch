@@ -34,7 +34,7 @@ xinitvisual()
 
 	XFree(infos);
 
-	if (! visual) {
+	if (!visual) {
 		visual = DefaultVisual(dpy, screen);
 		depth = DefaultDepth(dpy, screen);
 		cmap = DefaultColormap(dpy, screen);

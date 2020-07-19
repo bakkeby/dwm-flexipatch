@@ -1,27 +1,71 @@
-/* Patches */
-#if ALPHA_PATCH
-#include "alpha.h"
+/* Bar functionality */
+#if BAR_ALPHA_PATCH
+#include "bar_alpha.h"
 #endif
-#if ALTERNATIVE_TAGS_PATCH
-#include "alternativetags.h"
+#if BAR_ALTERNATIVE_TAGS_PATCH
+#include "bar_alternativetags.h"
 #endif
+#if BAR_DWMBLOCKS_PATCH && BAR_STATUSCMD_PATCH
+#include "bar_dwmblocks.h"
+#endif
+#if BAR_EWMHTAGS_PATCH
+#include "bar_ewmhtags.h"
+#endif
+#if COMBO_PATCH
+#include "combo.h"
+#endif
+#if BAR_HOLDBAR_PATCH
+#include "bar_holdbar.h"
+#endif
+#if BAR_LTSYMBOL_PATCH
+#include "bar_ltsymbol.h"
+#endif
+#if BAR_STATUS_PATCH
+#include "bar_status.h"
+#endif
+#if BAR_STATUS2D_PATCH
+#include "bar_status2d.h"
+#endif
+#if BAR_STATUSBUTTON_PATCH
+#include "bar_statusbutton.h"
+#endif
+#if BAR_STATUSCMD_PATCH
+#include "bar_statuscmd.h"
+#endif
+#if BAR_TAGS_PATCH
+#include "bar_tags.h"
+#endif
+#if BAR_TAGGRID_PATCH
+#include "bar_taggrid.h"
+#endif
+#if BAR_WINTITLE_PATCH
+#include "bar_wintitle.h"
+#endif
+#if BAR_FANCYBAR_PATCH
+#include "bar_fancybar.h"
+#endif
+#if BAR_AWESOMEBAR_PATCH
+#include "bar_awesomebar.h"
+#endif
+#if BAR_SYSTRAY_PATCH
+#include "bar_systray.h"
+#endif
+#if BAR_VTCOLORS_PATCH
+#include "bar_vtcolors.h"
+#endif
+
+/* Other patches */
 #if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 #include "attachx.h"
 #endif
 #if AUTOSTART_PATCH
 #include "autostart.h"
 #endif
-#if AWESOMEBAR_PATCH
-#include "awesomebar.h"
-#endif
 #if CFACTS_PATCH
 #include "cfacts.h"
 #endif
 #if CMDCUSTOMIZE_PATCH
 #include "cmdcustomize.h"
-#endif
-#if COMBO_PATCH
-#include "combo.h"
 #endif
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.h"
@@ -32,16 +76,10 @@
 #if DRAGMFACT_PATCH
 #include "dragmfact.h"
 #endif
-#if DWMBLOCKS_PATCH && STATUSCMD_PATCH
-#include "dwmblocks.h"
-#endif
 #if DWMC_PATCH
 #include "dwmc.h"
 #elif FSIGNAL_PATCH
 #include "fsignal.h"
-#endif
-#if EWMHTAGS_PATCH
-#include "ewmhtags.h"
 #endif
 #if EXRESIZE_PATCH
 #include "exresize.h"
@@ -60,9 +98,6 @@
 #endif
 #if FULLSCREEN_PATCH
 #include "fullscreen.h"
-#endif
-#if HOLDBAR_PATCH
-#include "holdbar.h"
 #endif
 #if INPLACEROTATE_PATCH
 #include "inplacerotate.h"
@@ -134,17 +169,8 @@
 #if STACKER_PATCH
 #include "stacker.h"
 #endif
-#if STATUS2D_PATCH && !STATUSCOLORS_PATCH
-#include "status2d.h"
-#endif
-#if STATUSCMD_PATCH
-#include "statuscmd.h"
-#endif
 #if STICKY_PATCH
 #include "sticky.h"
-#endif
-#if SYSTRAY_PATCH
-#include "systray.h"
 #endif
 #if SWALLOW_PATCH
 #include "swallow.h"
@@ -163,9 +189,6 @@
 #endif
 #if TAGALLMON_PATCH
 #include "tagallmon.h"
-#endif
-#if TAGGRID_PATCH
-#include "taggrid.h"
 #endif
 #if TAGOTHERMONITOR_PATCH
 #include "tagothermonitor.h"
@@ -188,9 +211,6 @@
 #if VANITYGAPS_PATCH
 #include "vanitygaps.h"
 #endif
-#if VTCOLORS_PATCH
-#include "vtcolors.h"
-#endif
 #if WARP_PATCH
 #include "warp.h"
 #endif
@@ -200,49 +220,49 @@
 #if ZOOMSWAP_PATCH
 #include "zoomswap.h"
 #endif
-#if XRDB_PATCH && !VTCOLORS_PATCH
+#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 #include "xrdb.h"
 #endif
 /* Layouts */
 #if BSTACK_LAYOUT
-#include "bstack.h"
+#include "layout_bstack.h"
 #endif
 #if BSTACKHORIZ_LAYOUT
-#include "bstackhoriz.h"
+#include "layout_bstackhoriz.h"
 #endif
 #if CENTEREDMASTER_LAYOUT
-#include "centeredmaster.h"
+#include "layout_centeredmaster.h"
 #endif
 #if CENTEREDFLOATINGMASTER_LAYOUT
-#include "centeredfloatingmaster.h"
+#include "layout_centeredfloatingmaster.h"
 #endif
 #if COLUMNS_LAYOUT
-#include "columns.h"
+#include "layout_columns.h"
 #endif
 #if DECK_LAYOUT
-#include "deck.h"
+#include "layout_deck.h"
 #endif
 #if FIBONACCI_DWINDLE_LAYOUT || FIBONACCI_SPIRAL_LAYOUT
-#include "fibonacci.h"
+#include "layout_fibonacci.h"
 #endif
 #if FLEXTILE_DELUXE_LAYOUT
-#include "flextile-deluxe.h"
+#include "layout_flextile-deluxe.h"
 #endif
 #if GAPPLESSGRID_LAYOUT
-#include "gapplessgrid.h"
+#include "layout_gapplessgrid.h"
 #endif
 #if GRIDMODE_LAYOUT
-#include "grid.h"
+#include "layout_grid.h"
 #endif
 #if HORIZGRID_LAYOUT
-#include "horizgrid.h"
+#include "layout_horizgrid.h"
 #endif
 #if MONOCLE_LAYOUT
-#include "monocle.h"
+#include "layout_monocle.h"
 #endif
 #if NROWGRID_LAYOUT
-#include "nrowgrid.h"
+#include "layout_nrowgrid.h"
 #endif
 #if TILE_LAYOUT
-#include "tile.h"
+#include "layout_tile.h"
 #endif

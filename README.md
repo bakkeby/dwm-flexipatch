@@ -2,7 +2,7 @@ This dwm 6.2 (aaad5f, 2020-07-08) side project has a different take on dwm patch
 
 For example to include the `alpha` patch then you would only need to flip this setting from 0 to 1 in [patches.h](https://github.com/bakkeby/dwm-flexipatch/blob/master/patches.def.h):
 ```c
-#define ALPHA_PATCH 1
+#define BAR_ALPHA_PATCH 1
 ```
 
 So if you have ever been curious about trying out dwm, but have been discouraged by manual patching, then this may be a good starting point to see what a "fully fledged" dwm can look like. Want to try out the `pertag` patch? Just flip a config and recompile. Once you have found out what works for you and what doesn't then you should be in a better position to choose patches should you want to start patching from scratch.
@@ -14,6 +14,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 ---
 
 ### Changelog:
+
+2020-07-19 - Added bar_modules patch - making extrabar, leftlayout, staticstatus and statusallmons patches redundant
 
 2020-07-18 - **Note**: Up until now building dwm-flexipath without any patches selected would have given you something more or less identical with mainstream dwm. In order to reduce complexity when it comes to maintainance future versions of dwm-flexipatch may diverge from this by making some patches non-optional. For the classic dwm-flexipatch and its many patch integration hints refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0) which will be subject to bug fixes and mainstream dwm updates as far as feasible.
 
@@ -173,6 +175,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [bar_height](https://dwm.suckless.org/patches/bar_height/)
       - allows the bar height to be explicitly set rather than being derived from font
 
+   - bar_modules
+      - splits the dwm bar into modules allowing for re-arrangement of the bar and easier integration for new features
+
    - [barpadding](https://dwm.suckless.org/patches/barpadding/)
       - adds vertical and horizontal space between the statusbar and the edge of the screen
 
@@ -224,9 +229,12 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - this patch allows the user to change size and placement of floating windows using only the keyboard
       - it also allows for temporary vertical and horizontal extension of windows similar to other WMs fill command
 
-   - [extrabar](https://dwm.suckless.org/patches/extrabar/)
-      - enables an extra status bar in dwm in a similar manner to the dualstatus patch
-      - if the primary status is at the top via topbar then the extra status bar will be placed at the bottom and vice versa
+   - [-extrabar-](https://dwm.suckless.org/patches/extrabar/)
+      - -enables an extra status bar in dwm in a similar manner to the dualstatus patch-
+      - -if the primary status is at the top via topbar then the extra status bar will be placed at the bottom and vice versa-
+
+   - extrastatus
+      - formerly extrabar - now only splits the status into to statuses by using a status separator
 
    - [fakefullscreen](https://dwm.suckless.org/patches/fakefullscreen/)
       - only allow clients to "fullscreen" into the space currently given to them
@@ -291,8 +299,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [keymodes](https://dwm.suckless.org/patches/keymodes/)
       - this patch adds key modes (like in vim or emacs) where chains of keyboard shortcuts can be performed
 
-   - [leftlayout](http://dwm.suckless.org/patches/leftlayout/)
-      - moves the layout symbol in the status bar to the left hand side
+   - [-leftlayout-](http://dwm.suckless.org/patches/leftlayout/)
+      - -moves the layout symbol in the status bar to the left hand side-
 
    - [losefullscreen](https://github.com/bakkeby/patches/tree/master/dwm/dwm-losefullscreen-6.2.diff)
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window
@@ -398,14 +406,14 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [stacker](https://dwm.suckless.org/patches/stacker/)
       - provides comprehensive utilities for managing the client stack
 
-   - [staticstatus](https://dwm.suckless.org/patches/staticstatus/)
-      - allows the status text to be fixed to the bar on a specific monitor rather than being drawn on the focused monitor
+   - [-staticstatus-](https://dwm.suckless.org/patches/staticstatus/)
+      - -allows the status text to be fixed to the bar on a specific monitor rather than being drawn on the focused monitor-
 
    - [status2d](https://dwm.suckless.org/patches/status2d/)
       - allows colors and rectangle drawing in the dwm status bar
 
-   - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
-      - this patch draws and updates the statusbar on all monitors
+   - [-statusallmons-](https://dwm.suckless.org/patches/statuspadding/)
+      - -this patch draws and updates the statusbar on all monitors-
 
    - [statusbutton](https://dwm.suckless.org/patches/statusbutton/)
       - adds a clickable button to the left hand side of the statusbar

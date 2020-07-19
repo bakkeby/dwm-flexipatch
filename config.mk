@@ -20,13 +20,13 @@ FREETYPEINC = /usr/include/freetype2
 # OpenBSD (uncomment)
 #FREETYPEINC = ${X11INC}/freetype2
 
-# Uncomment this for the alpha patch / ALPHA_PATCH
+# Uncomment this for the alpha patch / BAR_ALPHA_PATCH
 #XRENDER = -lXrender
 
 # Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
 #MPDCLIENT = -lmpdclient
 
-# Uncomment for the pango patch / PANGO_PATCH
+# Uncomment for the pango patch / BAR_PANGO_PATCH
 #PANGOINC = `pkg-config --cflags xft pango pangoxft`
 #PANGOLIB = `pkg-config --libs xft pango pangoxft`
 

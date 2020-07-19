@@ -30,16 +30,16 @@ loadxrdb()
 				XRDB_LOAD_COLOR("dwm.selfloatcolor", selfloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
 
-				#if STATUSCOLORS_PATCH
+				#if BAR_STATUSCOLORS_PATCH
 				XRDB_LOAD_COLOR("dwm.warnfgcolor", warnfgcolor);
 				XRDB_LOAD_COLOR("dwm.warnbgcolor", warnbgcolor);
 				XRDB_LOAD_COLOR("dwm.warnbordercolor", warnbordercolor);
 				#if FLOAT_BORDER_COLOR_PATCH
 				XRDB_LOAD_COLOR("dwm.warnfloatcolor", warnfloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
-				#endif // STATUSCOLORS_PATCH
+				#endif // BAR_STATUSCOLORS_PATCH
 
-				#if URGENTBORDER_PATCH || STATUSCOLORS_PATCH
+				#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 				XRDB_LOAD_COLOR("dwm.urgfgcolor", urgfgcolor);
 				XRDB_LOAD_COLOR("dwm.urgbgcolor", urgbgcolor);
 				XRDB_LOAD_COLOR("dwm.urgbordercolor", urgbordercolor);
@@ -57,14 +57,14 @@ loadxrdb()
 				#endif // FLOAT_BORDER_COLOR_PATCH
 				#endif // AWESOMEBAR_PATCH
 
-				#if TITLECOLOR_PATCH
+				#if BAR_TITLECOLOR_PATCH
 				XRDB_LOAD_COLOR("dwm.titlefgcolor", titlefgcolor);
 				XRDB_LOAD_COLOR("dwm.titlebgcolor", titlebgcolor);
 				XRDB_LOAD_COLOR("dwm.titlebordercolor", titlebordercolor);
 				#if FLOAT_BORDER_COLOR_PATCH
 				XRDB_LOAD_COLOR("dwm.titlefloatcolor", titlefloatcolor);
 				#endif // FLOAT_BORDER_COLOR_PATCH
-				#endif // TITLECOLOR_PATCH
+				#endif // BAR_TITLECOLOR_PATCH
 			}
 		}
 	}
@@ -79,9 +79,9 @@ xrdb(const Arg *arg)
 	int i;
 	for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i],
-		#if ALPHA_PATCH
+		#if BAR_ALPHA_PATCH
 		alphas[i],
-		#endif // ALPHA_PATCH
+		#endif // BAR_ALPHA_PATCH
 		#if FLOAT_BORDER_COLOR_PATCH
 		4
 		#else
