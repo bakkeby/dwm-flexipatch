@@ -12,15 +12,15 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	#endif // BAR_ACTIVETAGINDICATORBAR_PATCH | BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
 	int boxw = drw->fonts->h / 6 + 2;
 
-	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
+	#if BAR_TITLE_LEFT_PAD_PATCH && BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
-	#elif BAR_TITLE_LEFT_PAD
+	#elif BAR_TITLE_LEFT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad / 2;
-	#elif BAR_TITLE_RIGHT_PAD
+	#elif BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x, w = a->w - lrpad / 2;
 	#else
 	int x = a->x, w = a->w;
-	#endif // BAR_TITLE_LEFT_PAD | BAR_TITLE_RIGHT_PAD
+	#endif // BAR_TITLE_LEFT_PAD_PATCH | BAR_TITLE_RIGHT_PAD_PATCH
 	Monitor *m = bar->mon;
 
 	if (m->sel) {

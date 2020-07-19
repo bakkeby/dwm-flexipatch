@@ -109,8 +109,8 @@
  * remaining space. These options allow you explicitly add padding should
  * you need it.
  */
-#define BAR_TITLE_RIGHT_PAD 0
-#define BAR_TITLE_LEFT_PAD 1
+#define BAR_TITLE_RIGHT_PAD_PATCH 0
+#define BAR_TITLE_LEFT_PAD_PATCH 1
 
 /**
  * Bar options
