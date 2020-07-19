@@ -2,7 +2,18 @@ int
 width_tags(Bar *bar, BarWidthArg *a)
 {
 	int w, i;
+	#if BAR_HIDEVACANTTAGS_PATCH
+	Client *c;
+	unsigned int occ = 0;
+	for (c = bar->mon->clients; c; c = c->next)
+		occ |= c->tags == 255 ? 0 : c->tags;
+	#endif // BAR_HIDEVACANTTAGS_PATCH
+
 	for (w = 0, i = 0; i < LENGTH(tags); i++) {
+		#if BAR_HIDEVACANTTAGS_PATCH
+		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
+			continue;
+		#endif // BAR_HIDEVACANTTAGS_PATCH
 		#if BAR_ALTERNATIVE_TAGS_PATCH
 		w += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]);
 		#else
@@ -111,13 +122,24 @@ int
 click_tags(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	int i = 0, x = lrpad / 2;
-	do
+	#if BAR_HIDEVACANTTAGS_PATCH
+	Client *c;
+	unsigned int occ = 0;
+	for (c = bar->mon->clients; c; c = c->next)
+		occ |= c->tags == 255 ? 0 : c->tags;
+	#endif // BAR_HIDEVACANTTAGS_PATCH
+
+	do {
+		#if BAR_HIDEVACANTTAGS_PATCH
+		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
+			continue;
+		#endif // BAR_HIDEVACANTTAGS_PATCH
 		#if BAR_ALTERNATIVE_TAGS_PATCH
 		x += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]);
 		#else
 		x += TEXTW(tags[i]);
 		#endif
-	while (a->rel_x >= x && ++i < LENGTH(tags));
+	} while (a->rel_x >= x && ++i < LENGTH(tags));
 	if (i < LENGTH(tags)) {
 		arg->ui = 1 << i;
 	}
