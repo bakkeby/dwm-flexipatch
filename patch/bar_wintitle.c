@@ -8,17 +8,9 @@ int
 draw_wintitle(Bar *bar, BarDrawArg *a)
 {
 	#if !BAR_ACTIVETAGINDICATORBAR_PATCH && !BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-	#if BAR_PANGO_PATCH
-	int boxs = drw->font->h / 9;
-	#else
 	int boxs = drw->fonts->h / 9;
-	#endif // BAR_PANGO_PATCH
 	#endif // BAR_ACTIVETAGINDICATORBAR_PATCH | BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-	#if BAR_PANGO_PATCH
-	int boxw = drw->font->h / 6 + 2;
-	#else
 	int boxw = drw->fonts->h / 6 + 2;
-	#endif // BAR_PANGO_PATCH
 
 	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
 	int x = a->x + lrpad / 2, w = a->w - lrpad;

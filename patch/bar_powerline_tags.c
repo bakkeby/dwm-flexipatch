@@ -1,7 +1,8 @@
 int
-width_tags(Bar *bar, BarWidthArg *a)
+width_pwrl_tags(Bar *bar, BarWidthArg *a)
 {
 	int w, i;
+	int plw = drw->fonts->h / 2 + 1;
 	#if BAR_HIDEVACANTTAGS_PATCH
 	Client *c;
 	unsigned int occ = 0;
@@ -15,33 +16,31 @@ width_tags(Bar *bar, BarWidthArg *a)
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
 		#if BAR_ALTERNATIVE_TAGS_PATCH
-		w += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]);
+		w += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]) + plw;
 		#else
-		w += TEXTW(tags[i]);
+		w += TEXTW(tags[i]) + plw;
 		#endif // BAR_ALTERNATIVE_TAGS_PATCH
 	}
 	return w + lrpad;
 }
 
 int
-draw_tags(Bar *bar, BarDrawArg *a)
+draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 {
+	int x, w;
 	int invert;
-	int w, x = a->x + lrpad / 2;
-	#if BAR_ALTERNATIVE_TAGS_PATCH
-	int wdelta;
-	#endif // BAR_ALTERNATIVE_TAGS_PATCH
+	int plw = drw->fonts->h / 2 + 1;
+	unsigned int i, occ = 0, urg = 0;
+	Client *c;
+	Clr *prevscheme, *nxtscheme;
 	#if !BAR_HIDEVACANTTAGS_PATCH
 	#if !BAR_ACTIVETAGINDICATORBAR_PATCH && !BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
 	int boxs = drw->fonts->h / 9;
 	#endif // BAR_ACTIVETAGINDICATORBAR_PATCH | BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
 	int boxw = drw->fonts->h / 6 + 2;
 	#endif // BAR_HIDEVACANTTAGS_PATCH
-	unsigned int i, occ = 0, urg = 0;
-	Client *c;
-	Monitor *m = bar->mon;
 
-	for (c = m->clients; c; c = c->next) {
+	for (c = bar->mon->clients; c; c = c->next) {
 		#if BAR_HIDEVACANTTAGS_PATCH
 		occ |= c->tags == 255 ? 0 : c->tags;
 		#else
@@ -50,11 +49,12 @@ draw_tags(Bar *bar, BarDrawArg *a)
 		if (c->isurgent)
 			urg |= c->tags;
 	}
-
+	x = a->x;
+	prevscheme = scheme[SchemeNorm];
 	for (i = 0; i < LENGTH(tags); i++) {
 		#if BAR_HIDEVACANTTAGS_PATCH
 		/* do not draw vacant tags */
-		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
 		#if URGENTBORDER_PATCH
@@ -63,36 +63,15 @@ draw_tags(Bar *bar, BarDrawArg *a)
 		invert = urg & 1 << i;
 		#endif // URGENTBORDER_PATCH
 		w = TEXTW(tags[i]);
-		#if BAR_ALTERNATIVE_TAGS_PATCH
-		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
-		#endif // BAR_ALTERNATIVE_TAGS_PATCH
-		#if URGENTBORDER_PATCH
-		if (m->tagset[m->seltags] & 1 << i)
-			#if BAR_VTCOLORS_PATCH
-			drw_setscheme(drw, scheme[SchemeTagsSel]);
-			#else
-			drw_setscheme(drw, scheme[SchemeSel]);
-			#endif // BAR_VTCOLORS_PATCH
-		else
-			#if BAR_VTCOLORS_PATCH
-			drw_setscheme(drw, scheme[urg & 1 << i ? SchemeUrg : SchemeTagsNorm]);
-			#else
-			drw_setscheme(drw, scheme[urg & 1 << i ? SchemeUrg : SchemeNorm]);
-			#endif // BAR_VTCOLORS_PATCH
-		#elif BAR_VTCOLORS_PATCH
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeTagsSel : SchemeTagsNorm]);
-		#else // URGENTBORDER_PATCH
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		#endif // URGENTBORDER_PATCH
-		#if BAR_ALTERNATIVE_TAGS_PATCH && BAR_PANGO_PATCH
-		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert, False);
-		#elif BAR_ALTERNATIVE_TAGS_PATCH
-		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert);
-		#elif BAR_PANGO_PATCH
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert, False);
+		drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeNorm]));
+		#if BAR_POWERLINE_TAGS_SLASH_PATCH
+		drw_arrow(drw, x, 0, plw, bh, 1, 1);
 		#else
+		drw_arrow(drw, x, 0, plw, bh, 1, 1);
+		#endif // BAR_POWERLINE_TAGS_SLASH_PATCH
+		x += plw;
+		drw_setscheme(drw, nxtscheme);
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert);
-		#endif // BAR_ALTERNATIVE_TAGS_PATCH
 		#if !BAR_HIDEVACANTTAGS_PATCH
 		if (occ & 1 << i)
 			#if BAR_ACTIVETAGINDICATORBAR_PATCH
@@ -102,18 +81,27 @@ draw_tags(Bar *bar, BarDrawArg *a)
 			#else
 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
 			#endif // BAR_ACTIVETAGINDICATORBAR_PATCH
-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i, invert);
+				bar->mon == selmon && selmon->sel && selmon->sel->tags & 1 << i, invert);
 		#endif // BAR_HIDEVACANTTAGS_PATCH
 		x += w;
+		prevscheme = nxtscheme;
 	}
+	nxtscheme = scheme[SchemeNorm];
 
-	return x;
+	drw_settrans(drw, prevscheme, nxtscheme);
+	#if BAR_POWERLINE_TAGS_SLASH_PATCH
+	drw_arrow(drw, x, 0, plw, bh, 1, 1);
+	#else
+	drw_arrow(drw, x, 0, plw, bh, 1, 0);
+	#endif // BAR_POWERLINE_TAGS_SLASH_PATCH
+	return a->x + a->w;
 }
 
 int
-click_tags(Bar *bar, Arg *arg, BarClickArg *a)
+click_pwrl_tags(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	int i = 0, x = lrpad / 2;
+	int plw = drw->fonts->h / 2 + 1;
 	#if BAR_HIDEVACANTTAGS_PATCH
 	Client *c;
 	unsigned int occ = 0;
@@ -127,9 +115,9 @@ click_tags(Bar *bar, Arg *arg, BarClickArg *a)
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
 		#if BAR_ALTERNATIVE_TAGS_PATCH
-		x += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]);
+		x += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]) + plw;
 		#else
-		x += TEXTW(tags[i]);
+		x += TEXTW(tags[i]) + plw;
 		#endif
 	} while (a->rel_x >= x && ++i < LENGTH(tags));
 	if (i < LENGTH(tags)) {

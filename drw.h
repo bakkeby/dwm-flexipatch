@@ -41,11 +41,7 @@ typedef struct {
 	Drawable drawable;
 	GC gc;
 	Clr *scheme;
-	#if BAR_PANGO_PATCH
-	Fnt *font;
-	#else
 	Fnt *fonts;
-	#endif // BAR_PANGO_PATCH
 } Drw;
 
 /* Drawable abstraction */
@@ -107,6 +103,9 @@ void drw_cur_free(Drw *drw, Cur *cursor);
 void drw_setfontset(Drw *drw, Fnt *set);
 #endif // BAR_PANGO_PATCH
 void drw_setscheme(Drw *drw, Clr *scm);
+#if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
+void drw_settrans(Drw *drw, Clr *psc, Clr *nsc);
+#endif // BAR_POWERLINE_TAGS_PATCH | BAR_POWERLINE_STATUS_PATCH
 
 /* Drawing functions */
 void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert);
@@ -115,6 +114,9 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
 #else
 int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert);
 #endif // BAR_PANGO_PATCH
+#if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
+void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash);
+#endif // BAR_POWERLINE_TAGS_PATCH | BAR_POWERLINE_STATUS_PATCH
 
 /* Map functions */
 void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);

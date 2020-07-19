@@ -20,6 +20,12 @@
 #if BAR_LTSYMBOL_PATCH
 #include "bar_ltsymbol.c"
 #endif
+#if BAR_POWERLINE_STATUS_PATCH
+#include "bar_powerline_status.c"
+#endif
+#if BAR_POWERLINE_TAGS_PATCH
+#include "bar_powerline_tags.c"
+#endif
 #if BAR_STATUS_PATCH
 #include "bar_status.c"
 #endif

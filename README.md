@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-07-19 - Added bar_modules patch - making extrabar, leftlayout, staticstatus and statusallmons patches redundant
+2020-07-19 - Added bar_modules patch - making extrabar, leftlayout, staticstatus and statusallmons patches redundant, added powerline patch
 
 2020-07-18 - **Note**: Up until now building dwm-flexipath without any patches selected would have given you something more or less identical with mainstream dwm. In order to reduce complexity when it comes to maintainance future versions of dwm-flexipatch may diverge from this by making some patches non-optional. For the classic dwm-flexipatch and its many patch integration hints refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0) which will be subject to bug fixes and mainstream dwm updates as far as feasible.
 
@@ -347,6 +347,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor
+
+   - [powerline](https://gitlab.com/udiboy1209-suckless/dwm/-/commit/071f5063e8ac4280666828179f92788d893eea40#4b1a539194be7467cefbda22f675a3b7c19ceca7)
+      - adds drawing of powerline arrows (and diagonal lines) for both the status bar and the tags
 
    - [push](https://dwm.suckless.org/patches/push/)
       - this patch provides a way to move clients up and down inside the client list

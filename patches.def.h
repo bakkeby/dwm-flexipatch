@@ -39,6 +39,31 @@
 /* Show layout symbol in bar */
 #define BAR_LTSYMBOL_PATCH 1
 
+/* Adds powerline arrows for the status.
+ * This uses statuscolors logic for choosing colors for the powerline. As these markers
+ * are also control characters there is no explicit statuscmd support for this patch.
+ *
+ * Powerline separators are defined as:
+ *    |\xXX  (creates a hard edge)
+ *    <\xXX  (creates a less than arrow)
+ *    /\xXX  (creates a diagonal line)
+ *
+ * Examples:
+ *    xsetroot -name "$(echo -e '<\x01a<\x02b<\x03c')"
+ *    xsetroot -name "$(echo -e '/\x01d/\x02d/\x03f')"
+ *
+ * https://gitlab.com/udiboy1209-suckless/dwm/-/commit/071f5063e8ac4280666828179f92788d893eea40#4b1a539194be7467cefbda22f675a3b7c19ceca7
+ * https://dwm.suckless.org/patches/statuscolors/
+ */
+#define BAR_POWERLINE_STATUS_PATCH 0
+
+/* Adds powerline arrows for the tags.
+ * https://gitlab.com/udiboy1209-suckless/dwm/-/commit/071f5063e8ac4280666828179f92788d893eea40#4b1a539194be7467cefbda22f675a3b7c19ceca7
+ */
+#define BAR_POWERLINE_TAGS_PATCH 0
+/* Alters the tags powerline to use forward slash instead of arrows */
+#define BAR_POWERLINE_TAGS_SLASH_PATCH 0
+
 /* This patch adds an option to place tags in rows like in many other window managers.
  * https://dwm.suckless.org/patches/taggrid/
  */

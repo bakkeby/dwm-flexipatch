@@ -132,10 +132,13 @@ enum {
 	#if BAR_VTCOLORS_PATCH
 	,SchemeTagsNorm
 	,SchemeTagsSel
+	,SchemeStatus
+	#endif
+	#if BAR_VTCOLORS_PATCH || BAR_POWERLINE_STATUS_PATCH
 	,SchemeTitleNorm
 	,SchemeTitleSel
-	,SchemeStatus
-	#elif BAR_TITLECOLOR_PATCH
+	#endif // BAR_POWERLINE_STATUS_PATCH
+	#if BAR_TITLECOLOR_PATCH
 	,SchemeTitle
 	#endif // BAR_VTCOLORS_PATCH
 }; /* color schemes */
@@ -579,9 +582,7 @@ static char estext[512];
 #endif // BAR_STATUS2D_PATCH
 #if BAR_STATUSCMD_PATCH
 static char rawestext[1024];
-#else
-static char rawestext[512];
-#endif // BAR_STATUSCMD_PATCH
+#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 #endif // BAR_EXTRASTATUS_PATCH
 
 static int screen;
@@ -2820,15 +2821,9 @@ setup(void)
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
 	#endif // BAR_PANGO_PATCH
 		die("no fonts could be loaded.");
-	#if BAR_STATUSPADDING_PATCH && BAR_PANGO_PATCH
-	lrpad = drw->font->h + horizpadbar;
-	bh = drw->font->h + vertpadbar;
-	#elif BAR_STATUSPADDING_PATCH
+	#if BAR_STATUSPADDING_PATCH
 	lrpad = drw->fonts->h + horizpadbar;
 	bh = drw->fonts->h + vertpadbar;
-	#elif BAR_PANGO_PATCH
-	lrpad = drw->font->h;
-	bh = drw->font->h + 2;
 	#else
 	lrpad = drw->fonts->h;
 	#if BAR_HEIGHT_PATCH
@@ -2916,6 +2911,16 @@ setup(void)
 		#else
 		scheme[i] = drw_scm_create(drw, colors[i], ColCount);
 		#endif // BAR_ALPHA_PATCH
+	#if BAR_POWERLINE_STATUS_PATCH
+	statusscheme = ecalloc(LENGTH(statuscolors), sizeof(Clr *));
+	for (i = 0; i < LENGTH(statuscolors); i++)
+		#if BAR_ALPHA_PATCH
+		statusscheme[i] = drw_scm_create(drw, statuscolors[i], alphas[0], ColCount);
+		#else
+		statusscheme[i] = drw_scm_create(drw, statuscolors[i], ColCount);
+		#endif // BAR_ALPHA_PATCH
+	#endif // BAR_POWERLINE_STATUS_PATCH
+
 	updatebars();
 	updatestatus();
 

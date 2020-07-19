@@ -375,45 +375,52 @@ static const MonitorRule monrules[] = {
  *    name - does nothing, intended for visual clue and for logging / debugging
  */
 static const BarRule barrules[] = {
-	/* monitor  bar    alignment         widthfunc           drawfunc           clickfunc            name */
+	/* monitor  bar    alignment         widthfunc              drawfunc              clickfunc           name */
 	#if BAR_STATUSBUTTON_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_stbutton,     draw_stbutton,     click_stbutton,      "statusbutton" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_stbutton,        draw_stbutton,        click_stbutton,     "statusbutton" },
 	#endif // BAR_STATUSBUTTON_PATCH
+	#if BAR_POWERLINE_TAGS_PATCH
+	{ 0,       0,     BAR_ALIGN_LEFT,    width_pwrl_tags,       draw_pwrl_tags,       click_pwrl_tags,    "powerline_tags" },
+	#endif // BAR_POWERLINE_TAGS_PATCH
 	#if BAR_TAGS_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,         draw_tags,         click_tags,          "tags" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,            draw_tags,            click_tags,         "tags" },
 	#endif // BAR_TAGS_PATCH
 	#if BAR_TAGGRID_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_taggrid,      draw_taggrid,      click_taggrid,       "taggrid" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_taggrid,         draw_taggrid,         click_taggrid,      "taggrid" },
 	#endif // BAR_TAGGRID_PATCH
 	#if BAR_LTSYMBOL_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,     draw_ltsymbol,     click_ltsymbol,      "layout" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
 	#endif // BAR_LTSYMBOL_PATCH
 	#if BAR_SYSTRAY_PATCH
-	{  0,       0,     BAR_ALIGN_RIGHT,  width_systray,      draw_systray,      click_systray,       "systray" },
+	{  0,       0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
 	#endif // BAR_SYSTRAY_PATCH
 	#if BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,     draw_status2d,     click_statuscmd,     "status2d" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_statuscmd,    "status2d" },
 	#elif BAR_STATUS2D_PATCH
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,     draw_status2d,     click_status2d,      "status2d" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_status2d,     "status2d" },
+	#elif BAR_POWERLINE_STATUS_PATCH
+	{ 0,       0,     BAR_ALIGN_RIGHT,   width_pwrl_status,     draw_pwrl_status,     click_pwrl_status,  "powerline_status" },
 	#elif BAR_STATUS_PATCH
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,       draw_status,       click_status,        "status" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,          draw_status,          click_status,       "status" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 	#if BAR_AWESOMEBAR_PATCH
-	{ -1,       0,     BAR_ALIGN_NONE,   width_awesomebar,   draw_awesomebar,   click_awesomebar,    "awesomebar" },
+	{ -1,       0,     BAR_ALIGN_NONE,   width_awesomebar,      draw_awesomebar,      click_awesomebar,   "awesomebar" },
 	#elif BAR_FANCYBAR_PATCH
-	{ -1,       0,     BAR_ALIGN_NONE,   width_fancybar,     draw_fancybar,     click_fancybar,      "fancybar" },
+	{ -1,       0,     BAR_ALIGN_NONE,   width_fancybar,        draw_fancybar,        click_fancybar,     "fancybar" },
 	#elif BAR_WINTITLE_PATCH
-	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,     draw_wintitle,     click_wintitle,      "wintitle" },
+	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
 	#endif // BAR_AWESOMEBAR_PATCH | BAR_FANCYBAR_PATCH BAR_WINTITLE_PATCH
 	#if BAR_EXTRASTATUS_PATCH
 	#if BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,  draw_status2d_es,  click_statuscmd_es,  "status2d_es" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,     draw_status2d_es,     click_statuscmd_es, "status2d_es" },
 	#elif BAR_STATUS2D_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,  draw_status2d_es,  click_status2d,      "status2d_es" },
-	#elif BAR_STATUSCMD_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,    draw_status_es,    click_statuscmd_es,  "status_es" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,     draw_status2d_es,     click_status2d,     "status2d_es" },
+	#elif BAR_POWERLINE_STATUS_PATCH
+	{ 0,       1,     BAR_ALIGN_RIGHT,   width_pwrl_status_es,  draw_pwrl_status_es,  click_pwrl_status,  "powerline_status" },
+	#elif BAR_STATUSCMD_PATCH && BAR_STATUS_PATCH
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,       draw_status_es,       click_statuscmd_es, "status_es" },
 	#elif BAR_STATUS_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,    draw_status_es,    click_status,        "status_es" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,       draw_status_es,       click_status,       "status_es" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 	#endif // BAR_EXTRASTATUS_PATCH
 };

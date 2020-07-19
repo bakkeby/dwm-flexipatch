@@ -17,6 +17,9 @@ static const unsigned char utfbyte[UTF_SIZ + 1] = {0x80,    0, 0xC0, 0xE0, 0xF0}
 static const unsigned char utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
 static const long utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
+#if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
+Clr transcheme[3];
+#endif // BAR_POWERLINE_TAGS_PATCH | BAR_POWERLINE_STATUS_PATCH
 
 static long
 utf8decodebyte(const char c, size_t *i)
@@ -367,6 +370,17 @@ drw_setscheme(Drw *drw, Clr *scm)
 		drw->scheme = scm;
 }
 
+#if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
+void
+drw_settrans(Drw *drw, Clr *psc, Clr *nsc)
+{
+	if (drw) {
+		transcheme[0] = psc[ColBg]; transcheme[1] = nsc[ColBg]; transcheme[2] = psc[ColBorder];
+		drw->scheme = transcheme;
+	}
+}
+#endif // BAR_POWERLINE_TAGS_PATCH | BAR_POWERLINE_STATUS_PATCH
+
 void
 drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert)
 {
@@ -425,15 +439,15 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 					; /* NOP */
 
 			if (render) {
-				ty = y + (h - drw->font->h) / 2;
+				ty = y + (h - drw->fonts->h) / 2;
 				if (markup)
-					pango_layout_set_markup(drw->font->layout, buf, len);
+					pango_layout_set_markup(drw->fonts->layout, buf, len);
 				else
-					pango_layout_set_text(drw->font->layout, buf, len);
+					pango_layout_set_text(drw->fonts->layout, buf, len);
 				pango_xft_render_layout(d, &drw->scheme[invert ? ColBg : ColFg],
-					drw->font->layout, x * PANGO_SCALE, ty * PANGO_SCALE);
+					drw->fonts->layout, x * PANGO_SCALE, ty * PANGO_SCALE);
 				if (markup) /* clear markup attributes */
-					pango_layout_set_attributes(drw->font->layout, NULL);
+					pango_layout_set_attributes(drw->fonts->layout, NULL);
 			}
 			x += ew;
 			w -= ew;
@@ -580,6 +594,39 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	return x + (render ? w : 0);
 }
 #endif // BAR_PANGO_PATCH
+
+#if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
+void
+drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash)
+{
+	if (!drw || !drw->scheme)
+		return;
+
+	/* direction=1 draws right arrow */
+	x = direction ? x : x + w;
+	w = direction ? w : -w;
+	/* slash=1 draws slash instead of arrow */
+	unsigned int hh = slash ? (direction ? 0 : h) : h/2;
+
+	XPoint points[] = {
+		{x    , y      },
+		{x + w, y + hh },
+		{x    , y + h  },
+	};
+
+	XPoint bg[] = {
+		{x    , y    },
+		{x + w, y    },
+		{x + w, y + h},
+		{x    , y + h},
+	};
+
+	XSetForeground(drw->dpy, drw->gc, drw->scheme[ColBg].pixel);
+	XFillPolygon(drw->dpy, drw->drawable, drw->gc, bg, 4, Convex, CoordModeOrigin);
+	XSetForeground(drw->dpy, drw->gc, drw->scheme[ColFg].pixel);
+	XFillPolygon(drw->dpy, drw->drawable, drw->gc, points, 3, Nonconvex, CoordModeOrigin);
+}
+#endif // BAR_POWERLINE_TAGS_PATCH | BAR_POWERLINE_STATUS_PATCH
 
 void
 drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)

@@ -12,13 +12,8 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 	Client *c;
 	Monitor *m = bar->mon;
 
-	#if BAR_PANGO_PATCH
-	int boxs = drw->font->h / 9;
-	int boxw = drw->font->h / 6 + 2;
-	#else
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
-	#endif // BAR_PANGO_PATCH
 	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
 	#elif BAR_TITLE_LEFT_PAD

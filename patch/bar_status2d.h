@@ -9,5 +9,5 @@ static int draw_status2d_es(Bar *bar, BarDrawArg *a);
 #if !BAR_STATUSCMD_PATCH
 static int click_status2d(Bar *bar, Arg *arg, BarClickArg *a);
 #endif // BAR_STATUSCMD_PATCH
-static int drawstatusbar(int x, char* text);
-static int status2dtextlength(char* stext);
+static int drawstatusbar(int x, char *text);
+static int status2dtextlength(char *stext);
