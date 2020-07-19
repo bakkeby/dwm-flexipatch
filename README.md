@@ -229,9 +229,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - this patch allows the user to change size and placement of floating windows using only the keyboard
       - it also allows for temporary vertical and horizontal extension of windows similar to other WMs fill command
 
-   - [-extrabar-](https://dwm.suckless.org/patches/extrabar/)
-      - -enables an extra status bar in dwm in a similar manner to the dualstatus patch-
-      - -if the primary status is at the top via topbar then the extra status bar will be placed at the bottom and vice versa-
+   - [~extrabar~](https://dwm.suckless.org/patches/extrabar/)
+      - ~enables an extra status bar in dwm in a similar manner to the dualstatus patch~
+      - ~if the primary status is at the top via topbar then the extra status bar will be placed at the bottom and vice versa~
 
    - extrastatus
       - formerly extrabar - now only splits the status into to statuses by using a status separator
@@ -299,8 +299,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [keymodes](https://dwm.suckless.org/patches/keymodes/)
       - this patch adds key modes (like in vim or emacs) where chains of keyboard shortcuts can be performed
 
-   - [-leftlayout-](http://dwm.suckless.org/patches/leftlayout/)
-      - -moves the layout symbol in the status bar to the left hand side-
+   - [~leftlayout~](http://dwm.suckless.org/patches/leftlayout/)
+      - ~moves the layout symbol in the status bar to the left hand side~
 
    - [losefullscreen](https://github.com/bakkeby/patches/tree/master/dwm/dwm-losefullscreen-6.2.diff)
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window
@@ -409,14 +409,14 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [stacker](https://dwm.suckless.org/patches/stacker/)
       - provides comprehensive utilities for managing the client stack
 
-   - [-staticstatus-](https://dwm.suckless.org/patches/staticstatus/)
-      - -allows the status text to be fixed to the bar on a specific monitor rather than being drawn on the focused monitor-
+   - [~staticstatus~](https://dwm.suckless.org/patches/staticstatus/)
+      - ~allows the status text to be fixed to the bar on a specific monitor rather than being drawn on the focused monitor~
 
    - [status2d](https://dwm.suckless.org/patches/status2d/)
       - allows colors and rectangle drawing in the dwm status bar
 
-   - [-statusallmons-](https://dwm.suckless.org/patches/statuspadding/)
-      - -this patch draws and updates the statusbar on all monitors-
+   - [~statusallmons~](https://dwm.suckless.org/patches/statuspadding/)
+      - ~this patch draws and updates the statusbar on all monitors~
 
    - [statusbutton](https://dwm.suckless.org/patches/statusbutton/)
       - adds a clickable button to the left hand side of the statusbar
