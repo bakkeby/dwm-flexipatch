@@ -77,14 +77,15 @@ updatesystray(void)
 
 		wa.override_redirect = True;
 		wa.event_mask = ButtonPressMask|ExposureMask;
-		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
 		wa.border_pixel = 0;
 		#if ALPHA_PATCH
+		wa.background_pixel = 0;
 		wa.colormap = cmap;
 		systray->win = XCreateWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, depth,
 						InputOutput, visual,
 						CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
 		#else
+		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
 		systray->win = XCreateSimpleWindow(dpy, root, x - xpad, m->by + ypad, w, bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
 		XChangeWindowAttributes(dpy, systray->win, CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWEventMask, &wa);
 		#endif // ALPHA_PATCH
@@ -114,7 +115,11 @@ updatesystray(void)
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	for (w = 0, i = systray->icons; i; i = i->next) {
 		/* make sure the background color stays the same */
+		#if ALPHA_PATCH
+		wa.background_pixel = 0;
+		#else
 		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
+		#endif // ALPHA_PATCH
 		XChangeWindowAttributes(dpy, i->win, CWBackPixel, &wa);
 		XMapRaised(dpy, i->win);
 		w += systrayspacing;
