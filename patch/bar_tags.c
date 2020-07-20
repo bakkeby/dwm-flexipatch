@@ -20,14 +20,14 @@ width_tags(Bar *bar, BarWidthArg *a)
 		w += TEXTW(tags[i]);
 		#endif // BAR_ALTERNATIVE_TAGS_PATCH
 	}
-	return w + lrpad;
+	return w;
 }
 
 int
 draw_tags(Bar *bar, BarDrawArg *a)
 {
 	int invert;
-	int w, x = a->x + lrpad / 2;
+	int w, x = a->x;
 	#if BAR_ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // BAR_ALTERNATIVE_TAGS_PATCH
