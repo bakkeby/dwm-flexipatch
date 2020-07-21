@@ -884,7 +884,6 @@ buttonpress(XEvent *e)
 	XButtonPressedEvent *ev = &e->xbutton;
 	const BarRule *br;
 	BarClickArg carg = { 0, 0, 0, 0 };
-
 	click = ClkRootWin;
 	/* focus monitor if necessary */
 	if ((m = wintomon(ev->window)) && m != selmon
@@ -1063,7 +1062,7 @@ clientmessage(XEvent *e)
 			XSelectInput(dpy, c->win, StructureNotifyMask | PropertyChangeMask | ResizeRedirectMask);
 			XReparentWindow(dpy, c->win, systray->win, 0, 0);
 			/* use parents background color */
-			swa.background_pixel  = scheme[SchemeNorm][ColBg].pixel;
+			swa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
 			XChangeWindowAttributes(dpy, c->win, CWBackPixel, &swa);
 			sendevent(c->win, netatom[Xembed], StructureNotifyMask, CurrentTime, XEMBED_EMBEDDED_NOTIFY, 0 , systray->win, XEMBED_EMBEDDED_VERSION);
 			XSync(dpy, False);
@@ -3478,23 +3477,25 @@ updatebarpos(Monitor *m)
 	int x_pad = 0;
 	#endif // BAR_PADDING_PATCH
 
-	for (num_bars = 0, bar = m->bar; bar; bar = bar->next, num_bars++);
-	if (m->showbar)
-		m->wh = m->wh - y_pad * num_bars - bh * num_bars;
+	if (!m->showbar) {
+		for (bar = m->bar; bar; bar = bar->next)
+			bar->by = -bh - y_pad;
+		return;
+	}
+
+	for (num_bars = 0, bar = m->bar; bar; bar = bar->next, num_bars++)
+		if (bar->topbar)
+			m->wy = m->my + bh + y_pad;
+	m->wh = m->wh - y_pad * num_bars - bh * num_bars;
 
 	for (bar = m->bar; bar; bar = bar->next) {
 		bar->bx = m->mx + x_pad;
 		bar->bw = m->ww - 2 * x_pad;
 		bar->bh = bh;
-		if (m->showbar) {
-			if (bar->topbar) {
-				m->wy = m->wy + bh + y_pad;
-				bar->by = m->wy - bh;
-			} else
-				bar->by = m->wy + m->wh;
-		} else {
-			bar->by = -bh - y_pad;
-		}
+		if (bar->topbar)
+			bar->by = m->wy - bh;
+		else
+			bar->by = m->wy + m->wh;
 	}
 }
 
