@@ -3492,10 +3492,7 @@ updatebarpos(Monitor *m)
 		bar->bx = m->mx + x_pad;
 		bar->bw = m->ww - 2 * x_pad;
 		bar->bh = bh;
-		if (bar->topbar)
-			bar->by = m->wy - bh;
-		else
-			bar->by = m->wy + m->wh;
+		bar->by = (bar->topbar ? m->wy - bh : m->wy + m->wh);
 	}
 }
 
