@@ -175,7 +175,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [bar_height](https://dwm.suckless.org/patches/bar_height/)
       - allows the bar height to be explicitly set rather than being derived from font
 
-   - [barmodules](https://github.com/bakkeby/patches/blob/master/dwm/dwm-barmodules-6.2.diff)
+   - [barmodules](https://github.com/bakkeby/patches/wiki/barmodules/)
       - splits the dwm bar into modules allowing for re-arrangement of the bar and easier integration for new features
 
    - [barpadding](https://dwm.suckless.org/patches/barpadding/)
@@ -204,10 +204,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - updates the position of dmenu to match that of the bar
       - i.e. if topbar is 0 then dmenu will appear at the bottom and if 1 then dmenu will appear at the top
 
-   - [dragcfact](https://github.com/bakkeby/patches/blob/master/dwm/dwm-cfacts-dragcfact-6.2.diff)
+   - [dragcfact](https://github.com/bakkeby/patches/wiki/dragcfact/)
       - lets you resize clients' size (i.e. modify cfact) by holding modkey + shift + right-click and dragging the mouse
 
-   - [dragmfact](https://github.com/bakkeby/patches/blob/master/dwm/dwm-dragmfact-6.2.diff)
+   - [dragmfact](https://github.com/bakkeby/patches/wiki/dragmfact/)
       - lets you resize the split in layouts (i.e. modify mfact) by holding the modkey + shift + left-click and dragging the mouse
       - this is a bespoke patch that supports vertical and horizontal layout splits as well as centered master variants
 
@@ -240,7 +240,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - only allow clients to "fullscreen" into the space currently given to them
       - as an example, this will allow you to view a fullscreen video in your browser on one half of the screen, while having the other half available for other tasks
 
-   - [fakefullscreenclient](https://github.com/bakkeby/patches/blob/master/dwm/dwm-fakefullscreenclient-6.2.diff)
+   - [fakefullscreenclient]https://github.com/bakkeby/patches/wiki/fakefullscreenclient/)
       - similarly to the fakefullscreen patch this patch only allows clients to "fullscreen" into the space currently given to them
       - as an example, this will allow you to view a fullscreen video in your browser on one half of the screen, while having the other half available for other tasks
       - the "twist" with this patch is that fake fullscreen can be toggled on a per client basis rather than applying to all clients globally
@@ -251,7 +251,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [floatbordercolor](https://dwm.suckless.org/patches/float_border_color/)
       - this patch allows a different border color to be chosen for floating windows
 
-   - [floatpos](https://github.com/bakkeby/patches/wiki/floatpos)
+   - [floatpos](https://github.com/bakkeby/patches/wiki/floatpos/)
       - adds a float rule allowing the size and position of floating windows to be specified
       - control the size and position of floating windows similar to exresize, moveresize, moveplace patches
       - specify size and position using absolute, relative or fixed co-ordinates or
@@ -302,7 +302,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [~leftlayout~](http://dwm.suckless.org/patches/leftlayout/)
       - ~moves the layout symbol in the status bar to the left hand side~
 
-   - [losefullscreen](https://github.com/bakkeby/patches/tree/master/dwm/dwm-losefullscreen-6.2.diff)
+   - [losefullscreen](https://github.com/bakkeby/patches/wiki/losefullscreen/)
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window
       - it is also possible to spawn new windows (e.g. a terminal) that end up getting focus while the previous window remains in fullscreen
       - this patch ensures that in such scenarios the previous window loses fullscreen
@@ -313,7 +313,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [mdpcontrol](https://dwm.suckless.org/patches/mpdcontrol/)
       - adds keyboard bindings to control MDP (Music Player Daemon)
 
-   - [monitorrules](https://github.com/bakkeby/patches/blob/master/dwm/dwm-monitorrules-6.2.diff)
+   - [monitorrules](https://github.com/bakkeby/patches/wiki/monitorrules/)
       - adds rules per monitor, e.g. have default layouts per monitor
       - the use case for this is if the second monitor is vertical (i.e. rotated) then you may want to use a different default layout for this monitor than what is used for the main monitor (for example normal vertical split for main monitor and horizontal split for the second)
 
@@ -358,7 +358,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - by default, windows only resize from the bottom right corner
       - with this patch the mouse is warped to the nearest corner and you resize from there
 
-   - [resizepoint](https://github.com/bakkeby/patches/blob/master/dwm/dwm-resizepoint-6.2.diff)
+   - [resizepoint](https://github.com/bakkeby/patches/wiki/resizepoint/)
       - practically the same as resizecorners, but the cursor does not warp to any of the window corners
 
    - [restartsig](https://dwm.suckless.org/patches/restartsig/)
@@ -384,7 +384,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [selfrestart](https://dwm.suckless.org/patches/selfrestart/)
       - restart dwm without the unnecessary dependency of an external script
 
-   - [sendmon_keepfocus](https://github.com/bakkeby/patches/blob/master/dwm/dwm-sendmon_keepfocus-6.2.diff)
+   - [sendmon_keepfocus](https://github.com/bakkeby/patches/wiki/sendmon_keepfocus/)
       - minor patch that allow clients to keep focus when being sent to another monitor
 
    - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
@@ -394,8 +394,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - adds keybindings for left and right circular shift through tags
       - also see focusadjacenttag
 
-   - [shiftviewclients](https://github.com/bakkeby/patches/blob/master/dwm/dwm-shiftviewclients-6.2.diff)
-      - variant of the shiftview patch which skips tags that has no clients
+   - [shiftviewclients](https://github.com/bakkeby/patches/wiki/shiftviewclients/)
+      - variant of the shiftview patch which skips tags that have no clients
 
    - [sizehints](https://dwm.suckless.org/patches/sizehints/)
       - makes dwm obey even "soft" sizehints for new clients
@@ -447,8 +447,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [switchcol](https://dwm.suckless.org/patches/switchcol/)
       - allows you to switch focus between the master and stack columns using a single keybinding
 
-   - [switchtag](https://github.com/bakkeby/patches/tree/master/dwm/dwm-switchtag-6.2.diff)
+   - [switchtag](https://github.com/bakkeby/patches/wiki/switchtag/)
       - when an application opens on a specific tab this patch adds the option to also switch to that tag when the application starts
+      - optionally, the previous view can also be restored when the client is closed
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
@@ -456,7 +457,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [tagall](https://dwm.suckless.org/patches/tagall/)
       - adds keyboard shortcuts to move all (or only floating) windows from one tag to another
 
-   - [tagallmon](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagallmon-6.2.diff)
+   - [tagallmon](https://github.com/bakkeby/patches/wiki/tagallmon/)
       - move all visible windows to an adjacent monitor
 
    - [tagintostack](https://dwm.suckless.org/patches/tagintostack/)
@@ -466,19 +467,19 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [taggrid](https://dwm.suckless.org/patches/taggrid/)
       - adds an option to place tags in rows like in many other window managers
 
-   - [tagmonfixfs](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagmonfixfs-6.2.diff)
+   - [tagmonfixfs](https://github.com/bakkeby/patches/wiki/tagmonfixfs/)
       - allows moving a fullscreen window to another monitor while remaining in fullscreen
 
    - [tagothermonitor](https://dwm.suckless.org/patches/tagothermonitor/)
       - adds functions and keybindings to tag a window to a desired tag on an adjacent monitor
 
-   - [tagswapmon](https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagswapmon-6.2.diff)
+   - [tagswapmon](https://github.com/bakkeby/patches/wiki/tagswapmon/)
       - swap all visible windows on one monitor with those of an adjacent monitor
 
    - [titlecolor](https://dwm.suckless.org/patches/titlecolor/)
       - adds a new color scheme used by the (selected) window title in the bar
 
-   - [togglefullscreen](https://github.com/bakkeby/patches/tree/master/dwm/dwm-togglefullscreen-6.2.diff)
+   - [togglefullscreen](https://github.com/bakkeby/patches/wiki/togglefullscreen/)
       - allows you to toggle fullscreen on and off using a single shortcut key
 
    - [transfer](https://dwm.suckless.org/patches/transfer/)
@@ -508,7 +509,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [warp](https://dwm.suckless.org/patches/warp/)
       - warps the mouse cursor to the center of the currently focused window or screen when the mouse cursor is (a) on a different screen or (b) on top of a different window
 
-   - [windowrolerule](https://github.com/bakkeby/patches/tree/master/dwm/dwm-windowrolerule-6.2.diff)
+   - [windowrolerule](https://github.com/bakkeby/patches/wiki/windowrolerule/)
       - sometimes a single application opens different windows depending on the task at hand and this is often reflected in the WM_WINDOW_ROLE(STRING) x property
       - this patch adds the role field to the rule configuration so that one can differentiate between, say, Firefox "browser" vs "Preferences" vs "Manager" or Google-chrome "browser" vs "pop-up".
 
