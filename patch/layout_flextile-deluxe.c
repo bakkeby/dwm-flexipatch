@@ -73,7 +73,7 @@ setlayoutaxisex(const Arg *arg)
 	int axis, arr;
 
 	axis = arg->i & 0x3; // lower two bytes indicates layout, master or stack1-2
-	arr = ((arg->i & 0xFC) >> 2); // remaining six upper bytes indicates arrangement
+	arr = ((arg->i & 0xFC) >> 2); // remaining six upper bytes indicate arrangement
 
 	if ((axis == 0 && abs(arr) > LAYOUT_LAST)
 			|| (axis > 0 && (arr > AXIS_LAST || arr < 0)))

@@ -545,7 +545,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [fibonacci](https://dwm.suckless.org/patches/fibonacci/)
       - fibonacci (dwindle and spiral) layouts
 
-   - [flextile-deluxe](https://github.com/bakkeby/patches/blob/master/dwm/dwm-pertag-flextile_deluxe-6.2.diff)
+   - [flextile-deluxe](https://github.com/bakkeby/patches/wiki/flextile-deluxe/)
       - a re-envisioned, flexible and over-the-top version of the original [flextile](https://dwm.suckless.org/patches/flextile/) patch supporting
          - multiple split layouts (horizontal, vertical, centered, floating, fixed)
          - tile arrangement on a per split basis (stack horizontally, stack vertically, grids, fibonacci)
