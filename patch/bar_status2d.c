@@ -1,28 +1,44 @@
 int
 width_status2d(Bar *bar, BarWidthArg *a)
 {
+	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
 	return status2dtextlength(rawstext) + lrpad;
+	#else
+	return status2dtextlength(stext) + lrpad;
+	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
 }
 
 #if BAR_EXTRASTATUS_PATCH
 int
 width_status2d_es(Bar *bar, BarWidthArg *a)
 {
-	return status2dtextlength(rawestext);
+	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
+	return status2dtextlength(rawestext) + lrpad;
+	#else
+	return status2dtextlength(estext) + lrpad;
+	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
 }
 #endif // BAR_EXTRASTATUS_PATCH
 
 int
 draw_status2d(Bar *bar, BarDrawArg *a)
 {
+	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
 	return drawstatusbar(a->x, rawstext);
+	#else
+	return drawstatusbar(a->x, stext);
+	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
 }
 
 #if BAR_EXTRASTATUS_PATCH
 int
 draw_status2d_es(Bar *bar, BarDrawArg *a)
 {
+	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
 	return drawstatusbar(a->x, rawestext);
+	#else
+	return drawstatusbar(a->x, estext);
+	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
 }
 #endif // BAR_EXTRASTATUS_PATCH
 
