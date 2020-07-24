@@ -102,16 +102,22 @@ static char hidbordercolor[]             = "#005577";
 static char hidfloatcolor[]              = "#f76e0c";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // BAR_AWESOMEBAR_PATCH
-
-#if BAR_TITLECOLOR_PATCH
-static char titlefgcolor[]               = "#eeeeee";
-static char titlebgcolor[]               = "#005577";
-static char titlebordercolor[]           = "#005577";
-#if FLOAT_BORDER_COLOR_PATCH
-static char titlefloatcolor[]            = "#005577";
-#endif // FLOAT_BORDER_COLOR_PATCH
-#endif // BAR_TITLECOLOR_PATCH
 #endif // BAR_VTCOLORS_PATCH
+
+#if BAR_POWERLINE_STATUS_PATCH || (BAR_TITLECOLOR_PATCH && !BAR_VTCOLORS_PATCH)
+static char titlefgcolor[]               = "#FFF7D4";
+static char titlebgcolor[]               = "#330000";
+static char titlebordercolor[]           = "#330000";
+#if FLOAT_BORDER_COLOR_PATCH
+static char titlefloatcolor[]            = "#f76e0c";
+#endif // FLOAT_BORDER_COLOR_PATCH
+static char titleselfgcolor[]            = "#FFF7D4";
+static char titleselbgcolor[]            = "#c278b6";
+static char titleselbordercolor[]        = "#330000";
+#if FLOAT_BORDER_COLOR_PATCH
+static char titleselfloatcolor[]         = "#FF0000";
+#endif // FLOAT_BORDER_COLOR_PATCH
+#endif // BAR_POWERLINE_STATUS_PATCH | BAR_TITLECOLOR_PATCH
 
 #if BAR_ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
@@ -267,6 +273,28 @@ char *colors[][ColCount] = {
 	#endif // BAR_TITLECOLOR_PATCH
 };
 #endif // BAR_VTCOLORS_PATCH / FLOAT_BORDER_COLOR_PATCH
+
+#if BAR_POWERLINE_STATUS_PATCH
+static
+#if !XRDB_PATCH
+const
+#endif // XRDB_PATCH
+char *statuscolors[][ColCount] = {
+#if FLOAT_BORDER_COLOR_PATCH
+	/*                    fg               bg               border               float */
+	[SchemeNorm]      = { normfgcolor,     normbgcolor,     normbordercolor,     normfloatcolor     },
+	[SchemeSel]       = { selfgcolor,      selbgcolor,      selbordercolor,      selfloatcolor      },
+	[SchemeTitleNorm] = { titlefgcolor,    titlebgcolor,    titlebordercolor,    titlefloatcolor    },
+	[SchemeTitleSel]  = { titleselfgcolor, titleselbgcolor, titleselbordercolor, titleselfloatcolor },
+#else
+	/*                    fg               bg               border   */
+	[SchemeNorm]      = { normfgcolor,     normbgcolor,     normbordercolor },
+	[SchemeSel]       = { selfgcolor,      selbgcolor,      selbordercolor  },
+	[SchemeTitleNorm] = { titlefgcolor,    titlebgcolor,    titlebordercolor },
+	[SchemeTitleSel]  = { titleselfgcolor, titleselbgcolor, titleselbordercolor },
+#endif // FLOAT_BORDER_COLOR_PATCH
+};
+#endif // BAR_POWERLINE_STATUS_PATCH
 
 #if SCRATCHPADS_PATCH
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
