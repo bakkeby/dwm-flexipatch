@@ -1235,7 +1235,7 @@ Monitor *
 createmon(void)
 {
 	Monitor *m, *mon;
-	int i, n, mi, max_bars = 2, istopbar = topbar;
+	int i, n, mi, max_bars = 2, istopbar = topbar, layout;
 
 	const BarRule *br;
 	Bar *bar;
@@ -1272,12 +1272,14 @@ createmon(void)
 		mr = &monrules[j];
 		if ((mr->monitor == -1 || mr->monitor == mi)
 		#if PERTAG_PATCH
-				&& (mr->tag == -1 || mr->tag == 0)
+				&& (mr->tag <= 0 || (m->tagset[0] & (1 << (mr->tag - 1))))
 		#endif // PERTAG_PATCH
 		) {
-			m->lt[0] = &layouts[mr->layout];
+			layout = MAX(mr->layout, 0);
+			layout = MIN(layout, LENGTH(layouts) - 1);
+			m->lt[0] = &layouts[layout];
 			m->lt[1] = &layouts[1 % LENGTH(layouts)];
-			strncpy(m->ltsymbol, layouts[mr->layout].symbol, sizeof m->ltsymbol);
+			strncpy(m->ltsymbol, layouts[layout].symbol, sizeof m->ltsymbol);
 
 			if (mr->mfact > -1)
 				m->mfact = mr->mfact;
@@ -1351,7 +1353,9 @@ createmon(void)
 		for (j = 0; j < LENGTH(monrules); j++) {
 			mr = &monrules[j];
 			if ((mr->monitor == -1 || mr->monitor == mi) && (mr->tag == -1 || mr->tag == i)) {
-				m->pertag->ltidxs[i][0] = &layouts[mr->layout];
+				layout = MAX(mr->layout, 0);
+				layout = MIN(layout, LENGTH(layouts) - 1);
+				m->pertag->ltidxs[i][0] = &layouts[layout];
 				m->pertag->ltidxs[i][1] = m->lt[0];
 				m->pertag->nmasters[i] = (mr->nmaster > -1 ? mr->nmaster : m->nmaster);
 				m->pertag->mfacts[i] = (mr->mfact > -1 ? mr->mfact : m->mfact);
@@ -3477,6 +3481,12 @@ updatebarpos(Monitor *m)
 	int x_pad = 0;
 	#endif // BAR_PADDING_PATCH
 
+	for (bar = m->bar; bar; bar = bar->next) {
+		bar->bx = m->mx + x_pad;
+		bar->bw = m->ww - 2 * x_pad;
+		bar->bh = bh;
+	}
+
 	if (!m->showbar) {
 		for (bar = m->bar; bar; bar = bar->next)
 			bar->by = -bh - y_pad;
@@ -3488,12 +3498,8 @@ updatebarpos(Monitor *m)
 			m->wy = m->my + bh + y_pad;
 	m->wh = m->wh - y_pad * num_bars - bh * num_bars;
 
-	for (bar = m->bar; bar; bar = bar->next) {
-		bar->bx = m->mx + x_pad;
-		bar->bw = m->ww - 2 * x_pad;
-		bar->bh = bh;
+	for (bar = m->bar; bar; bar = bar->next)
 		bar->by = (bar->topbar ? m->wy - bh : m->wy + m->wh);
-	}
 }
 
 void
