@@ -57,7 +57,6 @@ drawstatusbar(int x, char* stext)
 	short isCode = 0;
 	char *text;
 	char *p;
-
 	len = strlen(stext) + 1;
 	if (!(text = (char*) malloc(sizeof(char)*len)))
 		die("malloc");
@@ -69,6 +68,9 @@ drawstatusbar(int x, char* stext)
 	#endif // BAR_STATUSCMD_PATCH
 
 	x += lrpad / 2;
+	drw_setscheme(drw, scheme[LENGTH(colors)]);
+	drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
+	drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
 
 	/* process status text */
 	i = -1;
@@ -162,7 +164,6 @@ drawstatusbar(int x, char* stext)
 	free(p);
 
 	drw_setscheme(drw, scheme[SchemeNorm]);
-
 	return x;
 }
 
