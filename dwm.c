@@ -1048,7 +1048,6 @@ clientmessage(XEvent *e)
 			c->next = systray->icons;
 			systray->icons = c;
 			XGetWindowAttributes(dpy, c->win, &wa);
-
 			c->x = c->oldx = c->y = c->oldy = 0;
 			c->w = c->oldw = wa.width;
 			c->h = c->oldh = wa.height;
@@ -1609,13 +1608,8 @@ expose(XEvent *e)
 void
 focus(Client *c)
 {
-	#if BAR_AWESOMEBAR_PATCH
-	if (!c || !ISVISIBLE(c) || HIDDEN(c))
-		for (c = selmon->stack; c && (!ISVISIBLE(c) || HIDDEN(c)); c = c->snext);
-	#else
 	if (!c || !ISVISIBLE(c))
 		for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
-	#endif // BAR_AWESOMEBAR_PATCH
 	if (selmon->sel && selmon->sel != c)
 		unfocus(selmon->sel, 0);
 	if (c) {
@@ -1682,6 +1676,21 @@ focusstack(const Arg *arg)
 	if (selmon->sel->isfullscreen)
 		return;
 	#endif // ALWAYSFULLSCREEN_PATCH
+	#if BAR_AWESOMEBAR_PATCH
+	if (arg->i > 0) {
+		for (c = selmon->sel->next; c && (!ISVISIBLE(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);
+		if (!c)
+			for (c = selmon->clients; c && (!ISVISIBLE(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);
+	} else {
+		for (i = selmon->clients; i != selmon->sel; i = i->next)
+			if (ISVISIBLE(i) && !(arg->i == -1 && HIDDEN(i)))
+				c = i;
+		if (!c)
+			for (; i; i = i->next)
+				if (ISVISIBLE(i) && !(arg->i == -1 && HIDDEN(i)))
+					c = i;
+	}
+	#else
 	if (arg->i > 0) {
 		for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
 		if (!c)
@@ -1695,6 +1704,7 @@ focusstack(const Arg *arg)
 				if (ISVISIBLE(i))
 					c = i;
 	}
+	#endif // BAR_AWESOMEBAR_PATCH
 	if (c) {
 		focus(c);
 		restack(selmon);
