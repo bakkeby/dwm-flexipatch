@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-08-02 - Added reorganizetags patch
+
 2020-07-19 - Added barmodules patch - making extrabar, leftlayout, staticstatus and statusallmons patches redundant, added powerline patch
 
 2020-07-18 - **Note**: Up until now building dwm-flexipath without any patches selected would have given you something more or less identical with mainstream dwm. In order to reduce complexity when it comes to maintainance future versions of dwm-flexipatch may diverge from this by making some patches non-optional. For the classic dwm-flexipatch and its many patch integration hints refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0) which will be subject to bug fixes and mainstream dwm updates as far as feasible.
@@ -353,6 +355,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [push](https://dwm.suckless.org/patches/push/)
       - this patch provides a way to move clients up and down inside the client list
+
+   - [reorganizetags](https://dwm.suckless.org/patches/reorganizetags/)
+      - shifts all clients per tag to leftmost unoccupied tags
+      - e.g. if clients A, B, C are tagged on tags 1, 5, 9 respectively, when reorganized they will now be on tag 1, 2, and 3
 
    - [resizecorners](https://dwm.suckless.org/patches/resizecorners/)
       - by default, windows only resize from the bottom right corner

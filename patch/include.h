@@ -137,6 +137,9 @@
 #elif PUSH_PATCH
 #include "push.h"
 #endif
+#if REORGANIZETAGS_PATCH
+#include "reorganizetags.h"
+#endif
 #if RESTARTSIG_PATCH
 #include "restartsig.h"
 #endif
