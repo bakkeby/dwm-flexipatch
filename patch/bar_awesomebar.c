@@ -89,6 +89,7 @@ click_awesomebar(Bar *bar, Arg *arg, BarClickArg *a)
 void
 hide(Client *c) {
 
+	Client *n;
 	if (!c || HIDDEN(c))
 		return;
 
@@ -108,7 +109,16 @@ hide(Client *c) {
 	XSelectInput(dpy, w, ca.your_event_mask);
 	XUngrabServer(dpy);
 
-	focus(c->snext);
+	if (c->isfloating || !c->mon->lt[c->mon->sellt]->arrange) {
+		for (n = c->snext; n && (!ISVISIBLE(n) || HIDDEN(n)); n = n->snext);
+		if (!n)
+			for (n = c->mon->stack; n && (!ISVISIBLE(n) || HIDDEN(n)); n = n->snext);
+	} else {
+		n = nexttiled(c);
+		if (!n)
+			n = nexttiled(c->mon->clients);
+	}
+	focus(n);
 	arrange(c->mon);
 }
 
