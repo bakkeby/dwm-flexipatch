@@ -116,7 +116,7 @@ hide(Client *c) {
 	} else {
 		n = nexttiled(c);
 		if (!n)
-			n = nexttiled(c->mon->clients);
+			n = prevtiled(c);
 	}
 	focus(n);
 	arrange(c->mon);
@@ -147,6 +147,16 @@ togglewin(const Arg *arg)
 		focus(c);
 		restack(selmon);
 	}
+}
+
+Client *
+prevtiled(Client *c)
+{
+	Client *p, *i;
+	for (p = NULL, i = c->mon->clients; c && i != c; i = i->next)
+		if (ISVISIBLE(i) && !HIDDEN(i))
+			p = i;
+	return p;
 }
 
 void
