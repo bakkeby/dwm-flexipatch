@@ -1,1 +1,1 @@
-static Client *prevtiled(Client *c);
+static Client *findbefore(Client *c);

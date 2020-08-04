@@ -3886,7 +3886,7 @@ zoom(const Arg *arg)
 		#else
 		p = prevzoom;
 		#endif // PERTAG_PATCH
-		at = prevtiled(p);
+		at = findbefore(p);
 		if (at)
 			cprevious = nexttiled(at->next);
 		if (!cprevious || cprevious != p) {
@@ -3911,7 +3911,7 @@ zoom(const Arg *arg)
 
 	cold = nexttiled(selmon->clients);
 	if (c != cold && !at)
-		at = prevtiled(c);
+		at = findbefore(c);
 	detach(c);
 	attach(c);
 	/* swap windows instead of pushing the previous one down */
