@@ -337,6 +337,12 @@
  */
 #define COMBO_PATCH 0
 
+/* Allow dwm to execute commands from autostart array in your config.h file. When dwm exits
+ * then all processes from autostart array will be killed.
+ * https://dwm.suckless.org/patches/cool_autostart/
+ */
+#define COOL_AUTOSTART_PATCH 0
+
 /* The cyclelayouts patch lets you cycle through all your layouts.
  * https://dwm.suckless.org/patches/cyclelayouts/
  */

@@ -73,6 +73,9 @@
 #if CMDCUSTOMIZE_PATCH
 #include "cmdcustomize.h"
 #endif
+#if COOL_AUTOSTART_PATCH
+#include "cool_autostart.h"
+#endif
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.h"
 #endif

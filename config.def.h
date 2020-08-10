@@ -302,6 +302,13 @@ char *statuscolors[][ColCount] = {
 };
 #endif // BAR_POWERLINE_STATUS_PATCH
 
+#if COOL_AUTOSTART_PATCH
+static const char *const autostart[] = {
+	"st", NULL,
+	NULL /* terminate */
+};
+#endif // COOL_AUTOSTART_PATCH
+
 #if SCRATCHPADS_PATCH
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spfm", "-g", "144x41", "-e", "ranger", NULL };

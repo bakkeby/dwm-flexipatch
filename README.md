@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-08-10 - Added cool autostart patch
+
 2020-08-02 - Added reorganizetags patch
 
 2020-07-19 - Added barmodules patch - making extrabar, leftlayout, staticstatus and statusallmons patches redundant, added powerline patch
@@ -198,6 +200,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [combo](https://dwm.suckless.org/patches/combo/)
       - allows you to select multiple tags by pressing all the right keys as a combo, e.g. hold MOD and press and hold 1 and 3 together to view those two tags
+
+   - [cool_autostart](https://dwm.suckless.org/patches/cool_autostart/)
+      - allows dwm to execute commands from an array in the config.h file
+      - when dwm exits all processes from the autostart array will be killed automatically
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts

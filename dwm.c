@@ -2274,13 +2274,21 @@ propertynotify(XEvent *e)
 void
 quit(const Arg *arg)
 {
+	#if COOL_AUTOSTART_PATCH
+	size_t i;
+	#endif // COOL_AUTOSTART_PATCH
 	#if ONLYQUITONEMPTY_PATCH
 	unsigned int n;
 	Window *junk = malloc(1);
 
 	XQueryTree(dpy, root, junk, junk, &junk, &n);
 
-	if (n <= quit_empty_window_count) {
+	#if COOL_AUTOSTART_PATCH
+	if (n - autostart_len <= quit_empty_window_count)
+	#else
+	if (n <= quit_empty_window_count)
+	#endif // COOL_AUTOSTART_PATCH
+	{
 		#if RESTARTSIG_PATCH
 		if (arg->i)
 			restart = 1;
@@ -2298,6 +2306,16 @@ quit(const Arg *arg)
 	#endif // RESTARTSIG_PATCH
 	running = 0;
 	#endif // ONLYQUITONEMPTY_PATCH
+
+	#if COOL_AUTOSTART_PATCH
+	/* kill child processes */
+	for (i = 0; i < autostart_len; i++) {
+		if (0 < autostart_pids[i]) {
+			kill(autostart_pids[i], SIGTERM);
+			waitpid(autostart_pids[i], NULL, 0);
+		}
+	}
+	#endif // COOL_AUTOSTART_PATCH
 }
 
 Monitor *
@@ -3031,9 +3049,29 @@ showhide(Client *c)
 void
 sigchld(int unused)
 {
+	#if COOL_AUTOSTART_PATCH
+	pid_t pid;
+	#endif // COOL_AUTOSTART_PATCH
 	if (signal(SIGCHLD, sigchld) == SIG_ERR)
 		die("can't install SIGCHLD handler:");
+	#if COOL_AUTOSTART_PATCH
+	while (0 < (pid = waitpid(-1, NULL, WNOHANG))) {
+		pid_t *p, *lim;
+
+		if (!(p = autostart_pids))
+			continue;
+		lim = &p[autostart_len];
+
+		for (; p < lim; p++) {
+			if (*p == pid) {
+				*p = -1;
+				break;
+			}
+		}
+	}
+	#else
 	while (0 < waitpid(-1, NULL, WNOHANG));
+	#endif // COOL_AUTOSTART_PATCH
 }
 
 void
@@ -4009,7 +4047,9 @@ main(int argc, char *argv[])
 	XrmInitialize();
 	loadxrdb();
 	#endif // XRDB_PATCH && !BAR_VTCOLORS_PATCH
-
+	#if COOL_AUTOSTART_PATCH
+	autostart_exec();
+	#endif // COOL_AUTOSTART_PATCH
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)
