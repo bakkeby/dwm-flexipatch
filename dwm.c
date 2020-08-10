@@ -333,6 +333,15 @@ typedef struct {
 	#endif // FLEXTILE_DELUXE_LAYOUT
 } Layout;
 
+#if INSETS_PATCH
+typedef struct {
+	int x;
+	int y;
+	int w;
+	int h;
+} Inset;
+#endif // INSETS_PATCH
+
 #if PERTAG_PATCH
 typedef struct Pertag Pertag;
 #endif // PERTAG_PATCH
@@ -372,6 +381,9 @@ struct Monitor {
 	#if PERTAG_PATCH
 	Pertag *pertag;
 	#endif // PERTAG_PATCH
+	#if INSETS_PATCH
+	Inset inset;
+	#endif // INSETS_PATCH
 };
 
 typedef struct {
@@ -1387,6 +1399,9 @@ createmon(void)
 		#endif // VANITYGAPS_PATCH
 	}
 	#endif // PERTAG_PATCH
+	#if INSETS_PATCH
+	m->inset = default_inset;
+	#endif // INSETS_PATCH
 	return m;
 }
 
@@ -3516,7 +3531,9 @@ updatebars(void)
 void
 updatebarpos(Monitor *m)
 {
+	m->wx = m->mx;
 	m->wy = m->my;
+	m->ww = m->mw;
 	m->wh = m->mh;
 	int num_bars;
 	Bar *bar;
@@ -3528,8 +3545,17 @@ updatebarpos(Monitor *m)
 	int x_pad = 0;
 	#endif // BAR_PADDING_PATCH
 
+	#if INSETS_PATCH
+	// Custom insets
+	Inset inset = m->inset;
+	m->wx += inset.x;
+	m->wy += inset.y;
+	m->ww -= inset.w + inset.x;
+	m->wh -= inset.h + inset.y;
+	#endif // INSETS_PATCH
+
 	for (bar = m->bar; bar; bar = bar->next) {
-		bar->bx = m->mx + x_pad;
+		bar->bx = m->wx + x_pad;
 		bar->bw = m->ww - 2 * x_pad;
 		bar->bh = bh;
 	}
@@ -3542,7 +3568,7 @@ updatebarpos(Monitor *m)
 
 	for (num_bars = 0, bar = m->bar; bar; bar = bar->next, num_bars++)
 		if (bar->topbar)
-			m->wy = m->my + bh + y_pad;
+			m->wy = m->wy + bh + y_pad;
 	m->wh = m->wh - y_pad * num_bars - bh * num_bars;
 
 	for (bar = m->bar; bar; bar = bar->next)

@@ -403,6 +403,15 @@ static const MonitorRule monrules[] = {
 #endif // PERTAG_PATCH
 #endif // MONITOR_RULES_PATCH
 
+#if INSETS_PATCH
+static const Inset default_inset = {
+	.x = 0,
+	.y = 30,
+	.w = 0,
+	.h = 0,
+};
+#endif // INSETS_PATCH
+
 /* Bar rules allow you to configure what is shown where on the bar, as well as
  * introducing your own bar modules.
  *
@@ -944,6 +953,9 @@ static Key keys[] = {
 	#if REORGANIZETAGS_PATCH
 	{ MODKEY|ControlMask,           XK_r,          reorganizetags,         {0} },
 	#endif // REORGANIZETAGS_PATCH
+	#if INSETS_PATCH
+	{ MODKEY|ShiftMask|ControlMask, XK_a,          updateinset,            {.v = &default_inset } },
+	#endif // INSETS_PATCH
 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
 	#if VANITYGAPS_PATCH
 	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },

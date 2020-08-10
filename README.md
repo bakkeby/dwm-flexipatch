@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-08-10 - Added cool autostart patch
+2020-08-10 - Added cool autostart and insets patches
 
 2020-08-02 - Added reorganizetags patch
 
@@ -300,6 +300,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [inplacerotate](https://dwm.suckless.org/patches/inplacerotate/)
       - allows rotation of all clients in the master or stack area without affecting the other area
+
+   - [insets](https://dwm.suckless.org/patches/insets/)
+      - lets custom insets from each edge of the screen to be defined
+      - an example use case would be to make space for an external bar
 
    - [ispermanent](https://dwm.suckless.org/patches/ispermanent/)
       - adds rule option for clients to avoid accidental termination by killclient for sticky windows

@@ -111,6 +111,9 @@
 #if INPLACEROTATE_PATCH
 #include "inplacerotate.h"
 #endif
+#if INSETS_PATCH
+#include "insets.h"
+#endif
 #if KEYMODES_PATCH
 #include "keymodes.h"
 #endif

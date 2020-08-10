@@ -458,6 +458,12 @@
  */
 #define INPLACEROTATE_PATCH 0
 
+/* This patch lets you define custom insets from each edge of the screen. One use case would be
+ * to arrange space for an external bar.
+ * https://dwm.suckless.org/patches/insets/
+ */
+#define INSETS_PATCH 0
+
 /* Adds rule option for clients to avoid accidental termination by killclient for sticky windows.
  * https://dwm.suckless.org/patches/ispermanent/
  */
