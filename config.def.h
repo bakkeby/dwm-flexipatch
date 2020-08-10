@@ -15,6 +15,12 @@ static const unsigned int gappoh         = 10;  /* horiz outer gap between windo
 static const unsigned int gappov         = 30;  /* vert outer gap between windows and screen edge */
 static const int smartgaps               = 0;   /* 1 means no outer gap when there is only one window */
 #endif // VANITYGAPS_PATCH
+#if AUTOSTART_PATCH
+static const char autostartblocksh[]     = "autostart_blocking.sh";
+static const char autostartsh[]          = "autostart.sh";
+static const char dwmdir[]               = "dwm";
+static const char localshare[]           = ".local/share";
+#endif // AUTOSTART_PATCH
 #if BAR_HOLDBAR_PATCH
 static const int showbar                 = 0;   /* 0 means no bar */
 #else

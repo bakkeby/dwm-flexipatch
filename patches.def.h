@@ -282,9 +282,9 @@
  */
 #define ATTACHBOTTOM_PATCH 0
 
-/* This patch will make dwm run "~/.config/dwm/autostart_blocking.sh" and
- * "~/.config/dwm/autostart.sh &" before entering the handler loop. One or
- * both of these files can be ommited. Note the path inside .config rather
+/* This patch will make dwm run "~/.local/share/dwm/autostart_blocking.sh" and
+ * "~/.local/share/dwm/autostart.sh &" before entering the handler loop. One or
+ * both of these files can be ommited. Note the path inside .local/share rather
  * than the original ~/.dwm folder.
  * https://dwm.suckless.org/patches/autostart/
  */
