@@ -962,7 +962,6 @@ cleanup(void)
 	Layout foo = { "", NULL };
 	Monitor *m;
 	size_t i;
-
 	view(&a);
 	selmon->lt[selmon->sellt] = &foo;
 	for (m = mons; m; m = m->next)
@@ -972,9 +971,11 @@ cleanup(void)
 	while (mons)
 		cleanupmon(mons);
 	#if BAR_SYSTRAY_PATCH
-	if (showsystray) {
-		XUnmapWindow(dpy, systray->win);
-		XDestroyWindow(dpy, systray->win);
+	if (showsystray && systray) {
+		if (systray->win) {
+			XUnmapWindow(dpy, systray->win);
+			XDestroyWindow(dpy, systray->win);
+		}
 		free(systray);
 	}
 	#endif // BAR_SYSTRAY_PATCH
@@ -988,11 +989,6 @@ cleanup(void)
 		free(scheme[i]);
 	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
-	#if BAR_PANGO_PATCH
-	drw_font_free(drw->font);
-	#else
-	drw_fontset_free(drw->fonts);
-	#endif // BAR_PANGO_PATCH
 	drw_free(drw);
 	XSync(dpy, False);
 	XSetInputFocus(dpy, PointerRoot, RevertToPointerRoot, CurrentTime);
