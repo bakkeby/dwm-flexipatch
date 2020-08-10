@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-08-10 - Added cool autostart and insets patches
+2020-08-10 - Added cool autostart, insets and steam patches
 
 2020-08-02 - Added reorganizetags patch
 
@@ -445,6 +445,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [statuspadding](https://dwm.suckless.org/patches/statuspadding/)
       - adds configuration options for horizontal and vertical padding in the status bar
+
+   - [steam](https://github.com/bakkeby/patches/wiki/steam)
+      - a minor patch that works around the issue of floating Steam windows jumping around the screen when they receive focus
 
    - [sticky](https://dwm.suckless.org/patches/sticky/)
       - adds toggleable keyboard shortcut to make a client 'sticky', i.e. visible on all tags

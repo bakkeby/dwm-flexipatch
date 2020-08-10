@@ -294,6 +294,9 @@ struct Client {
 	int isterminal, noswallow;
 	pid_t pid;
 	#endif // SWALLOW_PATCH
+	#if STEAM_PATCH
+	int issteam;
+	#endif // STEAM_PATCH
 	#if STICKY_PATCH
 	int issticky;
 	#endif // STICKY_PATCH
@@ -684,6 +687,11 @@ applyrules(Client *c)
 	#if WINDOWROLERULE_PATCH
 	gettextprop(c->win, wmatom[WMWindowRole], role, sizeof(role));
 	#endif // WINDOWROLERULE_PATCH
+
+	#if STEAM_PATCH
+	if (strstr(class, "Steam") || strstr(class, "steam_app_"))
+		c->issteam = 1;
+	#endif // STEAM_PATCH
 
 	for (i = 0; i < LENGTH(rules); i++) {
 		r = &rules[i];
@@ -1198,6 +1206,18 @@ configurerequest(XEvent *e)
 			c->bw = ev->border_width;
 		else if (c->isfloating || !selmon->lt[selmon->sellt]->arrange) {
 			m = c->mon;
+			#if STEAM_PATCH
+			if (!c->issteam) {
+				if (ev->value_mask & CWX) {
+					c->oldx = c->x;
+					c->x = m->mx + ev->x;
+				}
+				if (ev->value_mask & CWY) {
+					c->oldy = c->y;
+					c->y = m->my + ev->y;
+				}
+			}
+			#else
 			if (ev->value_mask & CWX) {
 				c->oldx = c->x;
 				c->x = m->mx + ev->x;
@@ -1206,6 +1226,7 @@ configurerequest(XEvent *e)
 				c->oldy = c->y;
 				c->y = m->my + ev->y;
 			}
+			#endif // STEAM_PATCH
 			if (ev->value_mask & CWWidth) {
 				c->oldw = c->w;
 				c->w = ev->width;

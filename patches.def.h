@@ -717,6 +717,17 @@
  */
 #define STACKER_PATCH 0
 
+/* Steam, and steam windows (games), trigger a ConfigureNotify request every time the window
+ * gets focus. More so, the configure event passed along from Steam tends to have the wrong
+ * x and y co-ordinates which can make the window, if floating, jump around the screen.
+ *
+ * This patch works around this age-old issue by ignoring the x and y co-ordinates for
+ * ConfigureNotify requests relating to Steam windows.
+ *
+ * https://github.com/bakkeby/patches/wiki/steam
+ */
+#define STEAM_PATCH 0
+
 /* Adds toggleable keyboard shortcut to make a client 'sticky', i.e. visible on all tags.
  * https://dwm.suckless.org/patches/sticky/
  */
