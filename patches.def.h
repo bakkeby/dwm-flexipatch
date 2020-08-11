@@ -348,6 +348,15 @@
  */
 #define CYCLELAYOUTS_PATCH 0
 
+/* Make dwm respect _MOTIF_WM_HINTS property, and not draw borders around windows requesting
+ * for it. Some applications use this property to notify window managers to not draw window
+ * decorations.
+ * Not respecting this property leads to issues with applications that draw their own borders,
+ * like chromium (with "Use system title bar and borders" turned off) or vlc in fullscreen mode.
+ * https://dwm.suckless.org/patches/decoration_hints/
+ */
+#define DECORATION_HINTS_PATCH 0
+
 /* Similarly to the dragmfact patch this allows you to click and drag clients to change the
  * cfact to adjust the client's size in the stack. This patch depends on the cfacts patch.
  */

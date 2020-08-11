@@ -2033,6 +2033,9 @@ manage(Window w, XWindowAttributes *wa)
 	if (getatomprop(c, netatom[NetWMState]) == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
 	updatewmhints(c);
+	#if DECORATION_HINTS_PATCH
+	updatemotifhints(c);
+	#endif // DECORATION_HINTS_PATCH
 	#if CENTER_PATCH
 	if (c->iscentered) {
 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
@@ -2300,6 +2303,10 @@ propertynotify(XEvent *e)
 			if (c == c->mon->sel)
 				drawbar(c->mon);
 		}
+		#if DECORATION_HINTS_PATCH
+		if (ev->atom == motifatom)
+			updatemotifhints(c);
+		#endif // DECORATION_HINTS_PATCH
 	}
 }
 
@@ -2933,6 +2940,9 @@ setup(void)
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
+	#if DECORATION_HINTS_PATCH
+	motifatom = XInternAtom(dpy, "_MOTIF_WM_HINTS", False);
+	#endif // DECORATION_HINTS_PATCH
 	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);

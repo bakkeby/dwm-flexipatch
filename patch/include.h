@@ -79,6 +79,9 @@
 #if CYCLELAYOUTS_PATCH
 #include "cyclelayouts.h"
 #endif
+#if DECORATION_HINTS_PATCH
+#include "decorationhints.h"
+#endif
 #if DRAGCFACT_PATCH && CFACTS_PATCH
 #include "dragcfact.h"
 #endif

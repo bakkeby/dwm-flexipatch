@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-08-11 - Added decoration hints patch
+
 2020-08-10 - Added cool autostart, insets and steam patches
 
 2020-08-02 - Added reorganizetags patch
@@ -207,6 +209,11 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [cyclelayouts](https://dwm.suckless.org/patches/cyclelayouts/)
       - lets you cycle through all your layouts
+
+   - [decoration_hints](https://dwm.suckless.org/patches/decoration_hints/)
+      - make dwm respect \_MOTIF\_WM\_HINTS property, and not draw borders around windows requesting for it
+      - some applications use this property to notify window managers to not draw window decorations
+      - not respecting this property leads to issues with applications that draw their own borders, like chromium (with "Use system title bar and borders" turned off) or vlc in fullscreen mode
 
    - [dmenumatchtop](https://dwm.suckless.org/patches/dmenumatchtop)
       - updates the position of dmenu to match that of the bar
