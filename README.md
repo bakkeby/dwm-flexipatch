@@ -276,6 +276,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - provides the ability to focus the tag on the immediate left or right of the currently focused tag
       - it also allows to send the focused window either on the left or the right tag
 
+   - [focusmaster](https://dwm.suckless.org/patches/focusmaster/)
+      - a simple patch that just puts focus back to the master client
+
    - [focusonclick](https://dwm.suckless.org/patches/focusonclick/)
       - this patch makes you switch focus only by mouse click and not sloppy (focus follows mouse pointer)
 

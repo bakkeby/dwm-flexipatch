@@ -105,6 +105,9 @@
 #if FOCUSADJACENTTAG_PATCH
 #include "focusadjacenttag.c"
 #endif
+#if FOCUSMASTER_PATCH
+#include "focusmaster.c"
+#endif
 #if FOCUSURGENT_PATCH
 #include "focusurgent.c"
 #endif

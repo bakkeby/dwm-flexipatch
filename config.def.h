@@ -895,6 +895,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
+	#if FOCUSMASTER_PATCH
+	{ MODKEY|ControlMask,           XK_space,      focusmaster,            {0} },
+	#endif // FOCUSMASTER_PATCH
 	#if STACKER_PATCH
 	STACKKEYS(MODKEY,                              focus)
 	STACKKEYS(MODKEY|ShiftMask,                    push)
