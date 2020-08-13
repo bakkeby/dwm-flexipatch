@@ -41,6 +41,9 @@
 #if BAR_STATUSCOLORS_PATCH
 #include "bar_statuscolors.c"
 #endif
+#if BAR_TABGROUPS_PATCH
+#include "bar_tabgroups.c"
+#endif
 #if BAR_TAGS_PATCH
 #include "bar_tags.c"
 #endif
@@ -61,6 +64,9 @@
 #endif
 #if BAR_VTCOLORS_PATCH
 #include "bar_vtcolors.c"
+#endif
+#if BAR_WINTITLEACTIONS_PATCH
+#include "bar_wintitleactions.c"
 #endif
 
 /* Other patches */

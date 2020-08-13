@@ -38,6 +38,9 @@
 #if BAR_STATUSCMD_PATCH
 #include "bar_statuscmd.h"
 #endif
+#if BAR_TABGROUPS_PATCH
+#include "bar_tabgroups.h"
+#endif
 #if BAR_TAGS_PATCH
 #include "bar_tags.h"
 #endif
@@ -58,6 +61,9 @@
 #endif
 #if BAR_VTCOLORS_PATCH
 #include "bar_vtcolors.h"
+#endif
+#if BAR_WINTITLEACTIONS_PATCH
+#include "bar_wintitleactions.h"
 #endif
 
 /* Other patches */

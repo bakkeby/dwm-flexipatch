@@ -48,13 +48,12 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 				#endif // BAR_VTCOLORS_PATCH
 
 			drw_setscheme(drw, scheme[scm]);
-			tabw += (i < remainder ? 1 : 0);
 			#if BAR_PANGO_PATCH
-			drw_text(drw, x, 0, tabw, bh, lrpad / 2, c->name, 0, False);
+			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0, False);
 			#else
-			drw_text(drw, x, 0, tabw, bh, lrpad / 2, c->name, 0);
+			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0);
 			#endif // BAR_PANGO_PATCH
-			x += tabw;
+			x += tabw + (i < remainder ? 1 : 0);
 		}
 	}
 	return a->x + a->w;
@@ -84,94 +83,4 @@ click_awesomebar(Bar *bar, Arg *arg, BarClickArg *a)
 		return ClkWinTitle;
 	}
 	return -1;
-}
-
-void
-hide(Client *c) {
-
-	Client *n;
-	if (!c || HIDDEN(c))
-		return;
-
-	Window w = c->win;
-	static XWindowAttributes ra, ca;
-
-	// more or less taken directly from blackbox's hide() function
-	XGrabServer(dpy);
-	XGetWindowAttributes(dpy, root, &ra);
-	XGetWindowAttributes(dpy, w, &ca);
-	// prevent UnmapNotify events
-	XSelectInput(dpy, root, ra.your_event_mask & ~SubstructureNotifyMask);
-	XSelectInput(dpy, w, ca.your_event_mask & ~StructureNotifyMask);
-	XUnmapWindow(dpy, w);
-	setclientstate(c, IconicState);
-	XSelectInput(dpy, root, ra.your_event_mask);
-	XSelectInput(dpy, w, ca.your_event_mask);
-	XUngrabServer(dpy);
-
-	if (c->isfloating || !c->mon->lt[c->mon->sellt]->arrange) {
-		for (n = c->snext; n && (!ISVISIBLE(n) || HIDDEN(n)); n = n->snext);
-		if (!n)
-			for (n = c->mon->stack; n && (!ISVISIBLE(n) || HIDDEN(n)); n = n->snext);
-	} else {
-		n = nexttiled(c);
-		if (!n)
-			n = prevtiled(c);
-	}
-	focus(n);
-	arrange(c->mon);
-}
-
-void
-show(Client *c)
-{
-	if (!c || !HIDDEN(c))
-		return;
-
-	XMapWindow(dpy, c->win);
-	setclientstate(c, NormalState);
-	arrange(c->mon);
-}
-
-void
-togglewin(const Arg *arg)
-{
-	Client *c = (Client*)arg->v;
-	if (!c)
-		return;
-	if (c == selmon->sel)
-		hide(c);
-	else {
-		if (HIDDEN(c))
-			show(c);
-		focus(c);
-		restack(selmon);
-	}
-}
-
-Client *
-prevtiled(Client *c)
-{
-	Client *p, *i;
-	for (p = NULL, i = c->mon->clients; c && i != c; i = i->next)
-		if (ISVISIBLE(i) && !HIDDEN(i))
-			p = i;
-	return p;
-}
-
-void
-showhideclient(const Arg *arg)
-{
-	Client *c = (Client*)arg->v;
-	if (!c)
-		c = selmon->sel;
-	if (!c)
-		return;
-
-	if (HIDDEN(c)) {
-		show(c);
-		restack(selmon);
-	} else {
-		hide(c);
-	}
 }

@@ -73,9 +73,6 @@
 #else
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #endif // ATTACHASIDE_PATCH
-#if BAR_AWESOMEBAR_PATCH
-#define HIDDEN(C)               ((getstate(C->win) == IconicState))
-#endif // BAR_AWESOMEBAR_PATCH
 #define LENGTH(X)               (sizeof X / sizeof X[0])
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
@@ -118,29 +115,33 @@ enum {
 }; /* cursor */
 
 enum {
-	SchemeNorm
-	,SchemeSel
+	SchemeNorm,
+	SchemeSel,
 	#if BAR_STATUSCOLORS_PATCH
-	,SchemeWarn
+	SchemeWarn,
 	#endif // BAR_STATUSCOLORS_PATCH
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	,SchemeUrg
+	SchemeUrg,
 	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
-	,SchemeHid
-	#endif // BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
+	SchemeHid,
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if BAR_VTCOLORS_PATCH
-	,SchemeTagsNorm
-	,SchemeTagsSel
-	,SchemeStatus
+	SchemeTagsNorm,
+	SchemeTagsSel,
+	SchemeStatus,
 	#endif
 	#if BAR_VTCOLORS_PATCH || BAR_POWERLINE_STATUS_PATCH
-	,SchemeTitleNorm
-	,SchemeTitleSel
+	SchemeTitleNorm,
+	SchemeTitleSel,
 	#endif // BAR_POWERLINE_STATUS_PATCH
 	#if BAR_TITLECOLOR_PATCH
-	,SchemeTitle
+	SchemeTitle,
 	#endif // BAR_VTCOLORS_PATCH
+	#if BAR_TABGROUPS_PATCH
+	SchemeTabActive,
+	SchemeTabInactive,
+	#endif // BAR_TABGROUPS_PATCH
 }; /* color schemes */
 
 enum {
@@ -955,11 +956,11 @@ buttonpress(XEvent *e)
 	for (i = 0; i < LENGTH(buttons); i++) {
 		if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
 				&& CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
-			#if BAR_AWESOMEBAR_PATCH
+			#if BAR_WINTITLEACTIONS_PATCH
 			buttons[i].func((click == ClkTagBar || click == ClkWinTitle) && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
 			#else
 			buttons[i].func(click == ClkTagBar && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
-			#endif
+			#endif // BAR_WINTITLEACTIONS_PATCH
 		}
 	}
 }
@@ -1708,7 +1709,7 @@ focusstack(const Arg *arg)
 	if (selmon->sel->isfullscreen)
 		return;
 	#endif // ALWAYSFULLSCREEN_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	if (arg->i > 0) {
 		for (c = selmon->sel->next; c && (!ISVISIBLE(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);
 		if (!c)
@@ -1736,7 +1737,7 @@ focusstack(const Arg *arg)
 				if (ISVISIBLE(i))
 					c = i;
 	}
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	if (c) {
 		focus(c);
 		restack(selmon);
@@ -2076,22 +2077,22 @@ manage(Window w, XWindowAttributes *wa)
 		(unsigned char *) &(c->win), 1);
 	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw, c->y, c->w, c->h); /* some windows require this */
 
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	if (!HIDDEN(c))
 		setclientstate(c, NormalState);
 	#else
 	setclientstate(c, NormalState);
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	if (c->mon == selmon)
 		unfocus(selmon->sel, 0);
 	c->mon->sel = c;
 	arrange(c->mon);
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	if (!HIDDEN(c))
 		XMapWindow(dpy, c->win);
 	#else
 	XMapWindow(dpy, c->win);
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if SWALLOW_PATCH
 	if (term)
 		swallow(term, c);
@@ -2234,11 +2235,11 @@ movemouse(const Arg *arg)
 Client *
 nexttiled(Client *c)
 {
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	for (; c && (c->isfloating || !ISVISIBLE(c) || HIDDEN(c)); c = c->next);
 	#else
 	for (; c && (c->isfloating || !ISVISIBLE(c)); c = c->next);
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	return c;
 }
 
@@ -3953,7 +3954,13 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 void
 zoom(const Arg *arg)
 {
+	#if BAR_WINTITLEACTIONS_PATCH
+	Client *c = (Client*)arg->v;
+	if (!c)
+		c = selmon->sel;
+	#else
 	Client *c = selmon->sel;
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if ZOOMSWAP_PATCH
 	Client *at = NULL, *cold, *cprevious = NULL, *p;
 	#endif // ZOOMSWAP_PATCH

@@ -15,7 +15,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-08-11 - Added decoration hints patch
+2020-08-13 - Added bartabgroups patch
+
+2020-08-11 - Added decoration hints and focusmaster patches
 
 2020-08-10 - Added cool autostart, insets and steam patches
 
@@ -186,6 +188,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [barpadding](https://dwm.suckless.org/patches/barpadding/)
       - adds vertical and horizontal space between the statusbar and the edge of the screen
+
+   - [bartabgroups](https://dwm.suckless.org/patches/bartabgroups/)
+      - turns the titlebar area into a mfact-respecting tab-bar showing each client's title
 
    - [center](https://dwm.suckless.org/patches/center/)
       - adds an iscentered rule to automatically center clients on the current monitor

@@ -64,6 +64,11 @@
 /* Alters the tags powerline to use forward slash instead of arrows */
 #define BAR_POWERLINE_TAGS_SLASH_PATCH 0
 
+/* This patch turns the titlebar area into a mfact-respecting tabbar showing each client's title.
+ * https://dwm.suckless.org/patches/bartabgroups/
+ */
+#define BAR_TABGROUPS_PATCH 0
+
 /* This patch adds an option to place tags in rows like in many other window managers.
  * https://dwm.suckless.org/patches/taggrid/
  */
@@ -247,6 +252,15 @@
  * https://dwm.suckless.org/patches/vtcolors/
  */
 #define BAR_VTCOLORS_PATCH 0
+
+/* This patch allows client windows to be hidden. This code was originally part of awesomebar,
+ * but has been separated out so that other bar modules can take advantage of it.
+ * Both awesomebar and bartabgroups patches depend on this patch and it will be auto-enabled
+ * during compile time if it is needed. Note that if using flexipatch-finalizer this must be
+ * explicitly enabled.
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-barmodules-wintitleactions-6.2.diff
+ */
+#define BAR_WINTITLEACTIONS_PATCH BAR_AWESOMEBAR_PATCH || BAR_TABGROUPS_PATCH
 
 /***
  * Other patches

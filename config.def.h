@@ -58,6 +58,9 @@ static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no 
 #if BAR_EXTRASTATUS_PATCH
 static const char statussep              = ';'; /* separator between status bars */
 #endif // BAR_EXTRASTATUS_PATCH
+#if BAR_TABGROUPS_PATCH
+static void (*bartabmonfns[])(Monitor *) = { monocle /* , customlayoutfn */ };
+#endif // BAR_TABGROUPS_PATCH
 #if BAR_PANGO_PATCH
 static const char font[]                 = "monospace 10";
 #else
@@ -100,14 +103,14 @@ static char urgfloatcolor[]              = "#000000";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // URGENTBORDER_PATCH // BAR_STATUSCOLORS_PATCH
 
-#if BAR_AWESOMEBAR_PATCH
+#if BAR_WINTITLEACTIONS_PATCH
 static char hidfgcolor[]                 = "#005577";
 static char hidbgcolor[]                 = "#222222";
 static char hidbordercolor[]             = "#005577";
 #if FLOAT_BORDER_COLOR_PATCH
 static char hidfloatcolor[]              = "#f76e0c";
 #endif // FLOAT_BORDER_COLOR_PATCH
-#endif // BAR_AWESOMEBAR_PATCH
+#endif // BAR_WINTITLEACTIONS_PATCH
 #endif // BAR_VTCOLORS_PATCH
 
 #if BAR_POWERLINE_STATUS_PATCH || (BAR_TITLECOLOR_PATCH && !BAR_VTCOLORS_PATCH)
@@ -125,31 +128,48 @@ static char titleselfloatcolor[]         = "#FF0000";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // BAR_POWERLINE_STATUS_PATCH | BAR_TITLECOLOR_PATCH
 
+#if BAR_TABGROUPS_PATCH
+static char tabgrpactivefgcolor[]        = "#FFF7D4";
+static char tabgrpactivebgcolor[]        = "#444444";
+static char tabgrpactivebordercolor[]    = "#330000";
+static char tabgrpinactivefgcolor[]      = "#bbbbbb";
+static char tabgrpinactivebgcolor[]      = "#222222";
+static char tabgrpinactivebordercolor[]  = "#991100";
+#if FLOAT_BORDER_COLOR_PATCH
+static char tabgrpactivefloatcolor[]     = "#000000";
+static char tabgrpinactivefloatcolor[]   = "#000000";
+#endif // FLOAT_BORDER_COLOR_PATCH
+#endif // BAR_TABGROUPS_PATCH
+
 #if BAR_ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const unsigned int alphas[][3] = {
-	/*                    fg      bg        border     */
-	[SchemeNorm]      = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]       = { OPAQUE, baralpha, borderalpha },
+	/*                      fg      bg        border     */
+	[SchemeNorm]        = { OPAQUE, baralpha, borderalpha },
+	[SchemeSel]         = { OPAQUE, baralpha, borderalpha },
 	#if BAR_STATUSCOLORS_PATCH
-	[SchemeWarn]      = { OPAQUE, baralpha, borderalpha },
+	[SchemeWarn]        = { OPAQUE, baralpha, borderalpha },
 	#endif // BAR_STATUSCOLORS_PATCH
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	[SchemeUrg]       = { OPAQUE, baralpha, borderalpha },
+	[SchemeUrg]         = { OPAQUE, baralpha, borderalpha },
 	#endif // URGENTBORDER_PATCH / BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
-	[SchemeHid]       = { OPAQUE, baralpha, borderalpha },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
+	[SchemeHid]         = { OPAQUE, baralpha, borderalpha },
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if BAR_VTCOLORS_PATCH
-	[SchemeTagsNorm]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeTagsSel]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitleNorm] = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitleSel]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeStatus]    = { OPAQUE, baralpha, borderalpha },
+	[SchemeTagsNorm]    = { OPAQUE, baralpha, borderalpha },
+	[SchemeTagsSel]     = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitleNorm]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitleSel]    = { OPAQUE, baralpha, borderalpha },
+	[SchemeStatus]      = { OPAQUE, baralpha, borderalpha },
 	#elif BAR_TITLECOLOR_PATCH
-	[SchemeTitle]     = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitle]       = { OPAQUE, baralpha, borderalpha },
 	#endif // BAR_VTCOLORS_PATCH / BAR_TITLECOLOR_PATCH
+	#if BAR_TABGROUPS_PATCH
+	[SchemeTabActive]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeTabInactive] = { OPAQUE, baralpha, borderalpha },
+	#endif // BAR_TABGROUPS_PATCH
 };
 #endif // BAR_ALPHA_PATCH
 #if BAR_VTCOLORS_PATCH && FLOAT_BORDER_COLOR_PATCH
@@ -165,9 +185,13 @@ static const int color_ptrs[][ColCount] = {
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { 7,         9,         9,        15 },
 	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	[SchemeHid]                 = { 5,         0,         0,        -1 },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
+	#if BAR_TABGROUPS_PATCH
+	[SchemeTabActive]           = { 6,         5,         5,        -1 },
+	[SchemeTabInactive]         = { 2,         0,         0,        -1 },
+	#endif // BAR_TABGROUPS_PATCH
 	[SchemeTagsNorm]            = { 2,         0,         0,        -1 },
 	[SchemeTagsSel]             = { 6,         5,         5,        -1 },
 	[SchemeTitleNorm]           = { 6,         -1,        -1,       -1 },
@@ -184,9 +208,13 @@ static char colors[][ColCount][8] = {
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { "#000000", "#000000", "#000000", "#000000" },
 	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	[SchemeHid]                 = { "#000000", "#000000", "#000000", "#000000" },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
+	#if BAR_TABGROUPS_PATCH
+	[SchemeTabActive]           = { "#000000", "#000000", "#000000", "#000000" },
+	[SchemeTabInactive]         = { "#000000", "#000000", "#000000", "#000000" },
+	#endif // BAR_TABGROUPS_PATCH
 	[SchemeTagsNorm]            = { "#000000", "#000000", "#000000", "#000000" },
 	[SchemeTagsSel]             = { "#000000", "#000000", "#000000", "#000000" },
 	[SchemeTitleNorm]           = { "#000000", "#000000", "#000000", "#000000" },
@@ -206,9 +234,13 @@ static const int color_ptrs[][ColCount] = {
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { 7,         9,         9 },
 	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	[SchemeHid]                 = { 5,         0,         0 },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
+	#if BAR_TABGROUPS_PATCH
+	[SchemeTabActive]           = { 6,         5,         5 },
+	[SchemeTabInactive]         = { 2,         0,         0 },
+	#endif // BAR_TABGROUPS_PATCH
 	[SchemeTagsNorm]            = { 2,         0,         0 },
 	[SchemeTagsSel]             = { 6,         5,         5 },
 	[SchemeTitleNorm]           = { 6,         -1,        -1 },
@@ -225,9 +257,13 @@ static char colors[][ColCount][8] = {
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]                 = { "#000000", "#000000", "#000000" },
 	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	[SchemeHid]                 = { "#000000", "#000000", "#000000" },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
+	#if BAR_TABGROUPS_PATCH
+	[SchemeTabActive]           = { "#000000", "#000000", "#000000" },
+	[SchemeTabInactive]         = { "#000000", "#000000", "#000000" },
+	#endif // BAR_TABGROUPS_PATCH
 	[SchemeTagsNorm]            = { "#000000", "#000000", "#000000" },
 	[SchemeTagsSel]             = { "#000000", "#000000", "#000000" },
 	[SchemeTitleNorm]           = { "#000000", "#000000", "#000000" },
@@ -249,12 +285,16 @@ char *colors[][ColCount] = {
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]   = { urgfgcolor,   urgbgcolor,   urgbordercolor,   urgfloatcolor },
 	#endif // URGENTBORDER_PATCH / BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor,   hidfloatcolor },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if BAR_TITLECOLOR_PATCH
 	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor, titlefloatcolor },
 	#endif // BAR_TITLECOLOR_PATCH
+	#if BAR_TABGROUPS_PATCH
+	[SchemeTabActive]   = { tabgrpactivefgcolor, tabgrpactivebgcolor, tabgrpactivebordercolor, tabgrpactivefloatcolor },
+	[SchemeTabInactive] = { tabgrpinactivefgcolor, tabgrpinactivebgcolor, tabgrpinactivebordercolor, tabgrpinactivefloatcolor },
+	#endif // BAR_TABGROUPS_PATCH
 };
 #else // !BAR_VTCOLORS_PATCH && !FLOAT_BORDER_COLOR_PATCH
 static
@@ -271,12 +311,16 @@ char *colors[][ColCount] = {
 	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 	[SchemeUrg]   = { urgfgcolor,   urgbgcolor,   urgbordercolor },
 	#endif // URGENTBORDER_PATCH / BAR_STATUSCOLORS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	[SchemeHid]   = { hidfgcolor,   hidbgcolor,   hidbordercolor  },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if BAR_TITLECOLOR_PATCH
 	[SchemeTitle] = { titlefgcolor, titlebgcolor, titlebordercolor },
 	#endif // BAR_TITLECOLOR_PATCH
+	#if BAR_TABGROUPS_PATCH
+	[SchemeTabActive]   = { tabgrpactivefgcolor, tabgrpactivebgcolor, tabgrpactivebordercolor },
+	[SchemeTabInactive] = { tabgrpinactivefgcolor, tabgrpinactivebgcolor, tabgrpinactivebordercolor },
+	#endif // BAR_TABGROUPS_PATCH
 };
 #endif // BAR_VTCOLORS_PATCH / FLOAT_BORDER_COLOR_PATCH
 
@@ -430,7 +474,7 @@ static const BarRule barrules[] = {
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_stbutton,        draw_stbutton,        click_stbutton,     "statusbutton" },
 	#endif // BAR_STATUSBUTTON_PATCH
 	#if BAR_POWERLINE_TAGS_PATCH
-	{ 0,       0,     BAR_ALIGN_LEFT,    width_pwrl_tags,       draw_pwrl_tags,       click_pwrl_tags,    "powerline_tags" },
+	{  0,       0,     BAR_ALIGN_LEFT,   width_pwrl_tags,       draw_pwrl_tags,       click_pwrl_tags,    "powerline_tags" },
 	#endif // BAR_POWERLINE_TAGS_PATCH
 	#if BAR_TAGS_PATCH
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,            draw_tags,            click_tags,         "tags" },
@@ -449,24 +493,26 @@ static const BarRule barrules[] = {
 	#elif BAR_STATUS2D_PATCH
 	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_status2d,     "status2d" },
 	#elif BAR_POWERLINE_STATUS_PATCH
-	{ 0,       0,     BAR_ALIGN_RIGHT,   width_pwrl_status,     draw_pwrl_status,     click_pwrl_status,  "powerline_status" },
+	{  0,       0,     BAR_ALIGN_RIGHT,  width_pwrl_status,     draw_pwrl_status,     click_pwrl_status,  "powerline_status" },
 	#elif BAR_STATUS_PATCH
 	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,          draw_status,          click_status,       "status" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_TABGROUPS_PATCH
+	{ -1,       0,     BAR_ALIGN_NONE,   width_bartabgroups,    draw_bartabgroups,    click_bartabgroups, "bartabgroups" },
+	#elif BAR_AWESOMEBAR_PATCH
 	{ -1,       0,     BAR_ALIGN_NONE,   width_awesomebar,      draw_awesomebar,      click_awesomebar,   "awesomebar" },
 	#elif BAR_FANCYBAR_PATCH
 	{ -1,       0,     BAR_ALIGN_NONE,   width_fancybar,        draw_fancybar,        click_fancybar,     "fancybar" },
 	#elif BAR_WINTITLE_PATCH
 	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
-	#endif // BAR_AWESOMEBAR_PATCH | BAR_FANCYBAR_PATCH BAR_WINTITLE_PATCH
+	#endif // BAR_TABGROUPS_PATCH | BAR_AWESOMEBAR_PATCH | BAR_FANCYBAR_PATCH | BAR_WINTITLE_PATCH
 	#if BAR_EXTRASTATUS_PATCH
 	#if BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
 	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,     draw_status2d_es,     click_statuscmd_es, "status2d_es" },
 	#elif BAR_STATUS2D_PATCH
 	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,     draw_status2d_es,     click_status2d,     "status2d_es" },
 	#elif BAR_POWERLINE_STATUS_PATCH
-	{ 0,       1,     BAR_ALIGN_RIGHT,   width_pwrl_status_es,  draw_pwrl_status_es,  click_pwrl_status,  "powerline_status" },
+	{  0,       1,     BAR_ALIGN_RIGHT,  width_pwrl_status_es,  draw_pwrl_status_es,  click_pwrl_status,  "powerline_status" },
 	#elif BAR_STATUSCMD_PATCH && BAR_STATUS_PATCH
 	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,       draw_status_es,       click_statuscmd_es, "status_es" },
 	#elif BAR_STATUS_PATCH
@@ -990,9 +1036,9 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_backslash,  shiftviewclients,       { .i = +1 } },
   	#endif // SHIFTVIEW_CLIENTS_PATCH
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
 	#if KILLUNSEL_PATCH
 	{ MODKEY|ShiftMask,             XK_x,          killunsel,              {0} },
@@ -1269,10 +1315,10 @@ static Button buttons[] = {
 	#endif // BAR_STATUSBUTTON_PATCH
 	{ ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
-	#if BAR_AWESOMEBAR_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
 	{ ClkWinTitle,          0,                   Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
-	#endif // BAR_AWESOMEBAR_PATCH
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	{ ClkWinTitle,          0,                   Button2,        zoom,           {0} },
 	#if BAR_STATUSCMD_PATCH && BAR_DWMBLOCKS_PATCH
 	{ ClkStatusText,        0,                   Button1,        sigdwmblocks,   {.i = 1 } },
