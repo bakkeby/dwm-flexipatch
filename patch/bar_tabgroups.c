@@ -54,8 +54,10 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 	drw_setscheme(drw, scheme[
 		m->sel == c
 		? SchemeSel
+		#ifdef HIDDEN
 		: HIDDEN(c)
 		? SchemeHid
+		#endif
 		: groupactive
 		? SchemeTabActive
 		: SchemeTabInactive
@@ -91,6 +93,10 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 		}
 	}
 }
+
+#ifndef HIDDEN
+#define HIDDEN(C) 0
+#endif
 
 void
 bartabclick(Monitor *m, Client *c, int passx, int x, int w, int unused, Arg *arg)
