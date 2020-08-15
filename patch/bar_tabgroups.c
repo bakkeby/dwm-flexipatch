@@ -1,3 +1,29 @@
+/* Bartabgroups properties, you can override these in your config.h if you want. */
+#ifndef BARTAB_BORDERS
+#define BARTAB_BORDERS 1       // 0 = off, 1 = on
+#endif
+#ifndef BARTAB_TAGSINDICATOR
+#define BARTAB_TAGSINDICATOR 1 // 0 = off, 1 = on if >1 client/view tag, 2 = always on
+#endif
+#ifndef BARTAB_TAGSPX
+#define BARTAB_TAGSPX 5        // # pixels for tag grid boxes
+#endif
+#ifndef BARTAB_TAGSROWS
+#define BARTAB_TAGSROWS 3      // # rows in tag grid (9 tags, e.g. 3x3)
+#endif
+#ifndef BARTAB_SHOWFLOATING
+#define BARTAB_SHOWFLOATING 0  // whether to show titles for floating windows, hidden clients are always shown
+#endif
+#ifndef BARTAB_STACKWEIGHT
+#define BARTAB_STACKWEIGHT 1   // stack weight compared to hidden and floating window titles
+#endif
+#ifndef BARTAB_HIDDENWEIGHT
+#define BARTAB_HIDDENWEIGHT 1  // hidden window title weight
+#endif
+#ifndef BARTAB_FLOATWEIGHT
+#define BARTAB_FLOATWEIGHT 1   // floating window title weight, set to 0 to not show floating windows
+#endif
+
 int
 width_bartabgroups(Bar *bar, BarWidthArg *a)
 {
@@ -80,7 +106,7 @@ bartabcalculate(
 ) {
 	Client *c;
 	int
-		i, clientsnmaster = 0, clientsnstack = 0, clientsnfloating = 0,
+		i, clientsnmaster = 0, clientsnstack = 0, clientsnfloating = 0, clientsnhidden = 0,
 		masteractive = 0, fulllayout = 0,
 		x = offx, w, r, num = 0, den, tgactive;
 
@@ -93,7 +119,11 @@ bartabcalculate(
 	for (i = 0, c = m->clients; c; c = c->next) {
 		if (!ISVISIBLE(c))
 			continue;
-		if (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING) {
+		if (HIDDEN(c)) {
+			clientsnhidden++;
+			continue;
+		}
+		if (c->isfloating) {
 			clientsnfloating++;
 			continue;
 		}
@@ -106,14 +136,14 @@ bartabcalculate(
 		i++;
 	}
 
-	if (!i)
-		return;
+	if (clientsnmaster + clientsnstack + clientsnfloating + clientsnhidden == 0)
+	 	return;
 
+	tgactive = 1;
+	num = tabw;
 	/* floating mode */
-	if (clientsnmaster + clientsnstack == 0 || !m->lt[m->sellt]->arrange) {
-		tgactive = 1;
-		num = tabw;
-		den = clientsnmaster + clientsnstack + clientsnfloating;
+	if ((fulllayout && BARTAB_FLOATWEIGHT) || clientsnmaster + clientsnstack == 0 || !m->lt[m->sellt]->arrange) {
+		den = clientsnmaster + clientsnstack + clientsnfloating + clientsnhidden;
 		r = num % den;
 		w = num / den;
 		for (c = m->clients, i = 0; c; c = c->next) {
@@ -123,15 +153,13 @@ bartabcalculate(
 			x += w + (i < r ? 1 : 0);
 			i++;
 		}
-	/* monocle mode */
-	} else if (fulllayout || ((clientsnmaster == 0) ^ (clientsnstack == 0))) {
-		tgactive = 1;
-		num = tabw;
-		den = clientsnmaster + clientsnstack;
+	/* no master and stack mode, e.g. monocole, grid layouts, fibonacci */
+	} else if (fulllayout) {
+		den = clientsnmaster + clientsnstack + clientsnhidden;
 		r = num % den;
 		w = num / den;
 		for (c = m->clients, i = 0; c; c = c->next) {
-			if (!ISVISIBLE(c) || (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING))
+			if (!ISVISIBLE(c) || (c->isfloating && !HIDDEN(c)))
 				continue;
 			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
 			x += w + (i < r ? 1 : 0);
@@ -139,30 +167,61 @@ bartabcalculate(
 		}
 	/* tiled mode */
 	} else {
-		tgactive = masteractive;
-		num = clientsnstack ? tabw * m->mfact : tabw;
 		den = clientsnmaster;
-		r = num % den;
-		w = num / den;
-		for (c = m->clients, i = 0; c && i < m->nmaster; c = c->next) {
-			if (!ISVISIBLE(c) || (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING))
-				continue;
-			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
-			x += w + (i < r ? 1 : 0);
-			i++;
+		c = m->clients;
+		i = 0;
+		if (den) {
+			if (clientsnstack + clientsnfloating * BARTAB_FLOATWEIGHT + clientsnhidden) {
+				tgactive = masteractive;
+				num = tabw * m->mfact;
+			}
+			r = num % den;
+			w = num / den;
+			for (; c && i < m->nmaster; c = c->next) { // tiled master
+				if (!ISVISIBLE(c) || c->isfloating || HIDDEN(c))
+					continue;
+				tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
+				x += w + (i < r ? 1 : 0);
+				i++;
+			}
+			tgactive = !tgactive;
+			num = tabw - num;
 		}
 
-		tgactive = !tgactive;
-		num = tabw - num;
-		den = clientsnstack;
+		den = clientsnstack * BARTAB_STACKWEIGHT + clientsnfloating * BARTAB_FLOATWEIGHT + clientsnhidden * BARTAB_HIDDENWEIGHT;
+		if (!den)
+			return;
+
 		r = num % den;
 		w = num / den;
-		for (; c; c = c->next) {
-			if (!ISVISIBLE(c) || (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING))
+		#if BARTAB_STACKWEIGHT
+		for (; c; c = c->next) { // tiled stack
+			if (!ISVISIBLE(c) || HIDDEN(c) || c->isfloating)
 				continue;
-			tabfn(m, c, passx, x, w + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
-			x += w + (i - m->nmaster < r ? 1 : 0);
+			tabfn(m, c, passx, x, w * BARTAB_STACKWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
+			x += w * BARTAB_STACKWEIGHT + (i - m->nmaster < r ? 1 : 0);
 			i++;
 		}
+		#endif // BARTAB_STACKWEIGHT
+
+		#if BARTAB_HIDDENWEIGHT
+		for (c = m->clients; c; c = c->next) { // hidden windows
+			if (!ISVISIBLE(c) || !HIDDEN(c))
+				continue;
+			tabfn(m, c, passx, x, w * BARTAB_HIDDENWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
+			x += w * BARTAB_HIDDENWEIGHT + (i - m->nmaster < r ? 1 : 0);
+			i++;
+		}
+		#endif // BARTAB_HIDDENWEIGHT
+
+		#if BARTAB_FLOATWEIGHT
+		for (c = m->clients; c; c = c->next) { // floating windows
+			if (!ISVISIBLE(c) || HIDDEN(c) || !c->isfloating)
+				continue;
+			tabfn(m, c, passx, x, w * BARTAB_FLOATWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
+			x += w * BARTAB_FLOATWEIGHT + (i - m->nmaster < r ? 1 : 0);
+			i++;
+		}
+		#endif // BARTAB_FLOATWEIGHT
 	}
 }
