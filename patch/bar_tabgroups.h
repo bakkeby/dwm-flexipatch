@@ -11,6 +11,9 @@
 #ifndef BARTAB_TAGSROWS
 #define BARTAB_TAGSROWS 3      // # rows in tag grid (9 tags, e.g. 3x3)
 #endif
+#ifndef BARTAB_SHOWFLOATING
+#define BARTAB_SHOWFLOATING 0  // whether to show titles for floating windows, hidden clients are always shown
+#endif
 
 static int width_bartabgroups(Bar *bar, BarWidthArg *a);
 static int draw_bartabgroups(Bar *bar, BarDrawArg *a);

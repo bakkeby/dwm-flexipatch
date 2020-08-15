@@ -28,10 +28,8 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 	drw_setscheme(drw, scheme[
 		m->sel == c
 		? SchemeSel
-		#if BAR_WINTITLEACTIONS_PATCH
 		: HIDDEN(c)
 		? SchemeHid
-		#endif // BAR_WINTITLEACTIONS_PATCH
 		: groupactive
 		? SchemeTabActive
 		: SchemeTabInactive
@@ -95,7 +93,7 @@ bartabcalculate(
 	for (i = 0, c = m->clients; c; c = c->next) {
 		if (!ISVISIBLE(c))
 			continue;
-		if (c->isfloating) {
+		if (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING) {
 			clientsnfloating++;
 			continue;
 		}
@@ -133,7 +131,7 @@ bartabcalculate(
 		r = num % den;
 		w = num / den;
 		for (c = m->clients, i = 0; c; c = c->next) {
-			if (!ISVISIBLE(c) || c->isfloating)
+			if (!ISVISIBLE(c) || (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING))
 				continue;
 			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
 			x += w + (i < r ? 1 : 0);
@@ -147,7 +145,7 @@ bartabcalculate(
 		r = num % den;
 		w = num / den;
 		for (c = m->clients, i = 0; c && i < m->nmaster; c = c->next) {
-			if (!ISVISIBLE(c) || c->isfloating)
+			if (!ISVISIBLE(c) || (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING))
 				continue;
 			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
 			x += w + (i < r ? 1 : 0);
@@ -160,7 +158,7 @@ bartabcalculate(
 		r = num % den;
 		w = num / den;
 		for (; c; c = c->next) {
-			if (!ISVISIBLE(c) || c->isfloating)
+			if (!ISVISIBLE(c) || (!HIDDEN(c) && c->isfloating && !BARTAB_SHOWFLOATING))
 				continue;
 			tabfn(m, c, passx, x, w + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
 			x += w + (i - m->nmaster < r ? 1 : 0);
