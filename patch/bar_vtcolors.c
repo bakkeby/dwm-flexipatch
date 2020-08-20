@@ -12,8 +12,7 @@ get_vt_colors(void)
 	char *tp = NULL;
 	FILE *fp;
 	size_t r;
-	int i, c, n;
-
+	int i, c, n, len;
 	for (i = 0; i < 16; i++)
 		strcpy(vtcs[i], "#000000");
 
@@ -33,13 +32,12 @@ get_vt_colors(void)
 		}
 		fclose(fp);
 	}
-	for (i = 0; i < LENGTH(colors); i++) {
-		#if FLOAT_BORDER_COLOR_PATCH
-		for (c = 0; c < 4; c++)
-		#else
-		for (c = 0; c < 3; c++)
-		#endif // FLOAT_BORDER_COLOR_PATCH
-		{
+
+	len = LENGTH(colors);
+	if (len > LENGTH(color_ptrs))
+		len = LENGTH(color_ptrs);
+	for (i = 0; i < len; i++) {
+		for (c = 0; c < ColCount; c++) {
 			n = color_ptrs[i][c];
 			if (n > -1 && strlen(colors[i][c]) >= strlen(vtcs[n]))
 				memcpy(colors[i][c], vtcs[n], 7);

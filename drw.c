@@ -291,11 +291,7 @@ void
 drw_clr_create(
 	Drw *drw,
 	Clr *dest,
-	#if BAR_VTCOLORS_PATCH
-	const char clrname[]
-	#else
 	const char *clrname
-	#endif // BAR_VTCOLORS_PATCH
 	#if BAR_ALPHA_PATCH
 	, unsigned int alpha
 	#endif // BAR_ALPHA_PATCH
@@ -326,13 +322,7 @@ drw_clr_create(
 Clr *
 drw_scm_create(
 	Drw *drw,
-	#if BAR_VTCOLORS_PATCH
-	char clrnames[][8],
-	#elif XRDB_PATCH
 	char *clrnames[],
-	#else
-	const char *clrnames[],
-	#endif // BAR_VTCOLORS_PATCH / XRDB_PATCH
 	#if BAR_ALPHA_PATCH
 	const unsigned int alphas[],
 	#endif // BAR_ALPHA_PATCH
