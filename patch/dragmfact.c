@@ -25,8 +25,10 @@ dragmfact(const Arg *arg)
 	ah = m->wh;
 	aw = m->ww;
 
+	if (!n)
+		return;
 	#if FLEXTILE_DELUXE_LAYOUT
-	if (m->lt[m->sellt]->arrange == &flextile) {
+	else if (m->lt[m->sellt]->arrange == &flextile) {
 		int layout = m->ltaxis[LAYOUT];
 		if (layout < 0) {
 			mirror = 1;
@@ -72,7 +74,7 @@ dragmfact(const Arg *arg)
 
 	/* do not allow mfact to be modified under certain conditions */
 	if (!m->lt[m->sellt]->arrange                            // floating layout
-		|| (!n || (!fixed && m->nmaster && n <= m->nmaster)) // no master
+		|| (!fixed && m->nmaster && n <= m->nmaster) // no master
 		#if MONOCLE_LAYOUT
 		|| m->lt[m->sellt]->arrange == &monocle
 		#endif // MONOCLE_LAYOUT
