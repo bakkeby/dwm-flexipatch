@@ -142,6 +142,41 @@ enum {
 	SchemeTabActive,
 	SchemeTabInactive,
 	#endif // BAR_TABGROUPS_PATCH
+	#if BAR_FLEXWINTITLE_PATCH
+	SchemeFlexActTTB,
+	SchemeFlexActLTR,
+	SchemeFlexActMONO,
+	SchemeFlexActGRID,
+	SchemeFlexActGRD1,
+	SchemeFlexActGRD2,
+	SchemeFlexActGRDM,
+	SchemeFlexActHGRD,
+	SchemeFlexActDWDL,
+	SchemeFlexActSPRL,
+	SchemeFlexInaTTB,
+	SchemeFlexInaLTR,
+	SchemeFlexInaMONO,
+	SchemeFlexInaGRID,
+	SchemeFlexInaGRD1,
+	SchemeFlexInaGRD2,
+	SchemeFlexInaGRDM,
+	SchemeFlexInaHGRD,
+	SchemeFlexInaDWDL,
+	SchemeFlexInaSPRL,
+	SchemeFlexSelTTB,
+	SchemeFlexSelLTR,
+	SchemeFlexSelMONO,
+	SchemeFlexSelGRID,
+	SchemeFlexSelGRD1,
+	SchemeFlexSelGRD2,
+	SchemeFlexSelGRDM,
+	SchemeFlexSelHGRD,
+	SchemeFlexSelDWDL,
+	SchemeFlexSelSPRL,
+	SchemeFlexActFloat,
+	SchemeFlexInaFloat,
+	SchemeFlexSelFloat,
+	#endif // BAR_FLEXWINTITLE_PATCH
 }; /* color schemes */
 
 enum {
@@ -2978,7 +3013,7 @@ setup(void)
 	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], alphas[0], ColCount);
 	#else
 	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], ColCount);
-	#endif // BAR_ALPHA_PATCH | FLOAT_BORDER_COLOR_PATCH
+	#endif // BAR_ALPHA_PATCH
 	#else
 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
 	#endif // BAR_STATUS2D_PATCH

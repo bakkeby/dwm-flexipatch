@@ -36,6 +36,12 @@
  */
 #define BAR_FANCYBAR_PATCH 0
 
+/* Being an evolution of the bartabgroups patch the flexwintitle patch specifically
+ * taps into the many layout options that flextile-deluxe offers to produce a window
+ * title section in the bar that is representative of what is shown on screen.
+ */
+#define BAR_FLEXWINTITLE_PATCH 0
+
 /* Show layout symbol in bar */
 #define BAR_LTSYMBOL_PATCH 1
 
@@ -108,6 +114,22 @@
 
 /* Show window title in bar */
 #define BAR_WINTITLE_PATCH 1
+
+/* Shows window titles in the bar, but only for floating clients.
+ * This depends on code from the flexwintitle patch.
+ * Note that the configuration in config.def.h for this is merely an example. If combined
+ * with the corresponding hidden patch then these two will overlap unless the width of the
+ * modules are controlled.
+ */
+#define BAR_WINTITLE_FLOATING_PATCH 0
+
+/* Shows window titles in the bar, but only for floating clients.
+ * This depends on code from the flexwintitle patch.
+ * Note that the configuration in config.def.h for this is merely an example. If combined
+ * with the corresponding floating patch then these two will overlap unless the width of the
+ * modules are controlled.
+ */
+#define BAR_WINTITLE_HIDDEN_PATCH 0
 
 /* Title bar modules such as wintitle (default), fancybar and awesomebar
  * do not by default add left and/or right padding as they take up the
@@ -260,7 +282,7 @@
  * explicitly enabled.
  * https://github.com/bakkeby/patches/blob/master/dwm/dwm-barmodules-wintitleactions-6.2.diff
  */
-#define BAR_WINTITLEACTIONS_PATCH BAR_AWESOMEBAR_PATCH || BAR_TABGROUPS_PATCH
+#define BAR_WINTITLEACTIONS_PATCH BAR_AWESOMEBAR_PATCH || BAR_TABGROUPS_PATCH || BAR_FLEXWINTITLE_PATCH
 
 /***
  * Other patches

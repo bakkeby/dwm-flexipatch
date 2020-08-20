@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-08-20 - Added experimental flexwintitle patch based on bartabgroups
+
 2020-08-13 - Added bartabgroups patch
 
 2020-08-11 - Added decoration hints and focusmaster patches
@@ -267,6 +269,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [fancybar](https://dwm.suckless.org/patches/fancybar/)
       - shows the titles of all visible windows in the status bar
+
+   - flexwintitle
+      - based on the bartabgroups patch, this is a layout aware barmodules module for handling window titles intended to be used with flextile-deluxe
 
    - [floatbordercolor](https://dwm.suckless.org/patches/float_border_color/)
       - this patch allows a different border color to be chosen for floating windows

@@ -53,6 +53,15 @@
 #if BAR_FANCYBAR_PATCH
 #include "bar_fancybar.h"
 #endif
+#if BAR_FLEXWINTITLE_PATCH
+#include "bar_flexwintitle.h"
+#if BAR_WINTITLE_FLOATING_PATCH
+#include "bar_wintitle_floating.h"
+#endif
+#if BAR_WINTITLE_HIDDEN_PATCH
+#include "bar_wintitle_hidden.h"
+#endif
+#endif // BAR_FLEXWINTITLE_PATCH
 #if BAR_AWESOMEBAR_PATCH
 #include "bar_awesomebar.h"
 #endif

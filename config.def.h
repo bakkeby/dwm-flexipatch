@@ -141,6 +141,42 @@ static char tabgrpinactivefloatcolor[]   = "#000000";
 #endif // FLOAT_BORDER_COLOR_PATCH
 #endif // BAR_TABGROUPS_PATCH
 
+#if BAR_FLEXWINTITLE_PATCH
+static char normTTBbgcolor[]             = "#330000";
+static char normLTRbgcolor[]             = "#330033";
+static char normMONObgcolor[]            = "#000033";
+static char normGRIDbgcolor[]            = "#003300";
+static char normGRD1bgcolor[]            = "#003300";
+static char normGRD2bgcolor[]            = "#003300";
+static char normGRDMbgcolor[]            = "#506600";
+static char normHGRDbgcolor[]            = "#b96600";
+static char normDWDLbgcolor[]            = "#003333";
+static char normSPRLbgcolor[]            = "#333300";
+static char normfloatbgcolor[]           = "#115577";
+static char actTTBbgcolor[]              = "#440000";
+static char actLTRbgcolor[]              = "#440044";
+static char actMONObgcolor[]             = "#000044";
+static char actGRIDbgcolor[]             = "#004400";
+static char actGRD1bgcolor[]             = "#004400";
+static char actGRD2bgcolor[]             = "#004400";
+static char actGRDMbgcolor[]             = "#507711";
+static char actHGRDbgcolor[]             = "#b97711";
+static char actDWDLbgcolor[]             = "#004444";
+static char actSPRLbgcolor[]             = "#444400";
+static char actfloatbgcolor[]            = "#116688";
+static char selTTBbgcolor[]              = "#550000";
+static char selLTRbgcolor[]              = "#550055";
+static char selMONObgcolor[]             = "#212171";
+static char selGRIDbgcolor[]             = "#005500";
+static char selGRD1bgcolor[]             = "#005500";
+static char selGRD2bgcolor[]             = "#005500";
+static char selGRDMbgcolor[]             = "#508822";
+static char selHGRDbgcolor[]             = "#b98822";
+static char selDWDLbgcolor[]             = "#005555";
+static char selSPRLbgcolor[]             = "#555500";
+static char selfloatbgcolor[]            = "#117799";
+#endif // BAR_FLEXWINTITLE_PATCH
+
 #if BAR_ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
@@ -170,6 +206,41 @@ static const unsigned int alphas[][3] = {
 	[SchemeTabActive]   = { OPAQUE, baralpha, borderalpha },
 	[SchemeTabInactive] = { OPAQUE, baralpha, borderalpha },
 	#endif // BAR_TABGROUPS_PATCH
+	#if BAR_FLEXWINTITLE_PATCH
+	[SchemeFlexActTTB]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActLTR]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActMONO]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActGRID]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActGRD1]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActGRD2]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActGRDM]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActHGRD]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActDWDL]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActSPRL]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexActFloat] = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaTTB]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaLTR]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaMONO]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaGRID]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaGRD1]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaGRD2]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaGRDM]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaHGRD]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaDWDL]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaSPRL]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexInaFloat] = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelTTB]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelLTR]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelMONO]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelGRID]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelGRD1]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelGRD2]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelGRDM]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelHGRD]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelDWDL]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelSPRL]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeFlexSelFloat] = { OPAQUE, baralpha, borderalpha },
+	#endif // BAR_FLEXWINTITLE_PATCH
 };
 #endif // BAR_ALPHA_PATCH
 #if BAR_VTCOLORS_PATCH && FLOAT_BORDER_COLOR_PATCH
@@ -295,6 +366,41 @@ char *colors[][ColCount] = {
 	[SchemeTabActive]   = { tabgrpactivefgcolor, tabgrpactivebgcolor, tabgrpactivebordercolor, tabgrpactivefloatcolor },
 	[SchemeTabInactive] = { tabgrpinactivefgcolor, tabgrpinactivebgcolor, tabgrpinactivebordercolor, tabgrpinactivefloatcolor },
 	#endif // BAR_TABGROUPS_PATCH
+	#if BAR_FLEXWINTITLE_PATCH
+	[SchemeFlexActTTB]   = { selfgcolor,  actTTBbgcolor,    "#000000", "#000000" },
+	[SchemeFlexActLTR]   = { selfgcolor,  actLTRbgcolor,    "#000000", "#000000" },
+	[SchemeFlexActMONO]  = { selfgcolor,  actMONObgcolor,   "#000000", "#000000" },
+	[SchemeFlexActGRID]  = { selfgcolor,  actGRIDbgcolor,   "#000000", "#000000" },
+	[SchemeFlexActGRD1]  = { selfgcolor,  actGRD1bgcolor,   "#000000", "#000000" },
+	[SchemeFlexActGRD2]  = { selfgcolor,  actGRD2bgcolor,   "#000000", "#000000" },
+	[SchemeFlexActGRDM]  = { selfgcolor,  actGRDMbgcolor,   "#000000", "#000000" },
+	[SchemeFlexActHGRD]  = { selfgcolor,  actHGRDbgcolor,   "#000000", "#000000" },
+	[SchemeFlexActDWDL]  = { selfgcolor,  actDWDLbgcolor,   "#000000", "#000000" },
+	[SchemeFlexActSPRL]  = { selfgcolor,  actSPRLbgcolor,   "#000000", "#000000" },
+	[SchemeFlexActFloat] = { selfgcolor,  actfloatbgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaTTB]   = { normfgcolor, normTTBbgcolor,   "#000000", "#000000" },
+	[SchemeFlexInaLTR]   = { normfgcolor, normLTRbgcolor,   "#000000", "#000000" },
+	[SchemeFlexInaMONO]  = { normfgcolor, normMONObgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaGRID]  = { normfgcolor, normGRIDbgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaGRD1]  = { normfgcolor, normGRD1bgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaGRD2]  = { normfgcolor, normGRD2bgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaGRDM]  = { normfgcolor, normGRDMbgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaHGRD]  = { normfgcolor, normHGRDbgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaDWDL]  = { normfgcolor, normDWDLbgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaSPRL]  = { normfgcolor, normSPRLbgcolor,  "#000000", "#000000" },
+	[SchemeFlexInaFloat] = { normfgcolor, normfloatbgcolor, "#000000", "#000000" },
+	[SchemeFlexSelTTB]   = { selfgcolor,  selTTBbgcolor,    "#000000", "#000000" },
+	[SchemeFlexSelLTR]   = { selfgcolor,  selLTRbgcolor,    "#000000", "#000000" },
+	[SchemeFlexSelMONO]  = { selfgcolor,  selMONObgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelGRID]  = { selfgcolor,  selGRIDbgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelGRD1]  = { selfgcolor,  selGRD1bgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelGRD2]  = { selfgcolor,  selGRD2bgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelGRDM]  = { selfgcolor,  selGRDMbgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelHGRD]  = { selfgcolor,  selHGRDbgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelDWDL]  = { selfgcolor,  selDWDLbgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelSPRL]  = { selfgcolor,  selSPRLbgcolor,   "#000000", "#000000" },
+	[SchemeFlexSelFloat] = { selfgcolor,  selfloatbgcolor,  "#000000", "#000000" },
+	#endif // BAR_FLEXWINTITLE_PATCH
 };
 #else // !BAR_VTCOLORS_PATCH && !FLOAT_BORDER_COLOR_PATCH
 static
@@ -321,6 +427,41 @@ char *colors[][ColCount] = {
 	[SchemeTabActive]   = { tabgrpactivefgcolor, tabgrpactivebgcolor, tabgrpactivebordercolor },
 	[SchemeTabInactive] = { tabgrpinactivefgcolor, tabgrpinactivebgcolor, tabgrpinactivebordercolor },
 	#endif // BAR_TABGROUPS_PATCH
+	#if BAR_FLEXWINTITLE_PATCH
+	[SchemeFlexActTTB]   = { selfgcolor,  actTTBbgcolor,    "#000000" },
+	[SchemeFlexActLTR]   = { selfgcolor,  actLTRbgcolor,    "#000000" },
+	[SchemeFlexActMONO]  = { selfgcolor,  actMONObgcolor,   "#000000" },
+	[SchemeFlexActGRID]  = { selfgcolor,  actGRIDbgcolor,   "#000000" },
+	[SchemeFlexActGRD1]  = { selfgcolor,  actGRD1bgcolor,   "#000000" },
+	[SchemeFlexActGRD2]  = { selfgcolor,  actGRD2bgcolor,   "#000000" },
+	[SchemeFlexActGRDM]  = { selfgcolor,  actGRDMbgcolor,   "#000000" },
+	[SchemeFlexActHGRD]  = { selfgcolor,  actHGRDbgcolor,   "#000000" },
+	[SchemeFlexActDWDL]  = { selfgcolor,  actDWDLbgcolor,   "#000000" },
+	[SchemeFlexActSPRL]  = { selfgcolor,  actSPRLbgcolor,   "#000000" },
+	[SchemeFlexActFloat] = { selfgcolor,  actfloatbgcolor,  "#000000" },
+	[SchemeFlexInaTTB]   = { normfgcolor, normTTBbgcolor,   "#000000" },
+	[SchemeFlexInaLTR]   = { normfgcolor, normLTRbgcolor,   "#000000" },
+	[SchemeFlexInaMONO]  = { normfgcolor, normMONObgcolor,  "#000000" },
+	[SchemeFlexInaGRID]  = { normfgcolor, normGRIDbgcolor,  "#000000" },
+	[SchemeFlexInaGRD1]  = { normfgcolor, normGRD1bgcolor,  "#000000" },
+	[SchemeFlexInaGRD2]  = { normfgcolor, normGRD2bgcolor,  "#000000" },
+	[SchemeFlexInaGRDM]  = { normfgcolor, normGRDMbgcolor,  "#000000" },
+	[SchemeFlexInaHGRD]  = { normfgcolor, normHGRDbgcolor,  "#000000" },
+	[SchemeFlexInaDWDL]  = { normfgcolor, normDWDLbgcolor,  "#000000" },
+	[SchemeFlexInaSPRL]  = { normfgcolor, normSPRLbgcolor,  "#000000" },
+	[SchemeFlexInaFloat] = { normfgcolor, normfloatbgcolor, "#000000" },
+	[SchemeFlexSelTTB]   = { selfgcolor,  selTTBbgcolor,    "#000000" },
+	[SchemeFlexSelLTR]   = { selfgcolor,  selLTRbgcolor,    "#000000" },
+	[SchemeFlexSelMONO]  = { selfgcolor,  selMONObgcolor,   "#000000" },
+	[SchemeFlexSelGRID]  = { selfgcolor,  selGRIDbgcolor,   "#000000" },
+	[SchemeFlexSelGRD1]  = { selfgcolor,  selGRD1bgcolor,   "#000000" },
+	[SchemeFlexSelGRD2]  = { selfgcolor,  selGRD2bgcolor,   "#000000" },
+	[SchemeFlexSelGRDM]  = { selfgcolor,  selGRDMbgcolor,   "#000000" },
+	[SchemeFlexSelHGRD]  = { selfgcolor,  selHGRDbgcolor,   "#000000" },
+	[SchemeFlexSelDWDL]  = { selfgcolor,  selDWDLbgcolor,   "#000000" },
+	[SchemeFlexSelSPRL]  = { selfgcolor,  selSPRLbgcolor,   "#000000" },
+	[SchemeFlexSelFloat] = { selfgcolor,  selfloatbgcolor,  "#000000" },
+	#endif // BAR_FLEXWINTITLE_PATCH
 };
 #endif // BAR_VTCOLORS_PATCH / FLOAT_BORDER_COLOR_PATCH
 
@@ -469,56 +610,68 @@ static const Inset default_inset = {
  *    name - does nothing, intended for visual clue and for logging / debugging
  */
 static const BarRule barrules[] = {
-	/* monitor  bar    alignment         widthfunc              drawfunc              clickfunc           name */
+	/* monitor  bar    alignment         widthfunc                drawfunc                clickfunc                name */
 	#if BAR_STATUSBUTTON_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_stbutton,        draw_stbutton,        click_stbutton,     "statusbutton" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_stbutton,          draw_stbutton,          click_stbutton,          "statusbutton" },
 	#endif // BAR_STATUSBUTTON_PATCH
 	#if BAR_POWERLINE_TAGS_PATCH
-	{  0,       0,     BAR_ALIGN_LEFT,   width_pwrl_tags,       draw_pwrl_tags,       click_pwrl_tags,    "powerline_tags" },
+	{  0,       0,     BAR_ALIGN_LEFT,   width_pwrl_tags,         draw_pwrl_tags,         click_pwrl_tags,         "powerline_tags" },
 	#endif // BAR_POWERLINE_TAGS_PATCH
 	#if BAR_TAGS_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,            draw_tags,            click_tags,         "tags" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,              draw_tags,              click_tags,              "tags" },
 	#endif // BAR_TAGS_PATCH
 	#if BAR_TAGGRID_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_taggrid,         draw_taggrid,         click_taggrid,      "taggrid" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_taggrid,           draw_taggrid,           click_taggrid,           "taggrid" },
 	#endif // BAR_TAGGRID_PATCH
-	#if BAR_LTSYMBOL_PATCH
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
-	#endif // BAR_LTSYMBOL_PATCH
 	#if BAR_SYSTRAY_PATCH
-	{  0,       0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
+	{  0,       0,     BAR_ALIGN_RIGHT,  width_systray,           draw_systray,           click_systray,           "systray" },
 	#endif // BAR_SYSTRAY_PATCH
+	#if BAR_LTSYMBOL_PATCH
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
+	#endif // BAR_LTSYMBOL_PATCH
 	#if BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_statuscmd,    "status2d" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,          draw_status2d,          click_statuscmd,         "status2d" },
 	#elif BAR_STATUS2D_PATCH
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_status2d,     "status2d" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,          draw_status2d,          click_status2d,          "status2d" },
 	#elif BAR_POWERLINE_STATUS_PATCH
-	{  0,       0,     BAR_ALIGN_RIGHT,  width_pwrl_status,     draw_pwrl_status,     click_pwrl_status,  "powerline_status" },
+	{  0,       0,     BAR_ALIGN_RIGHT,  width_pwrl_status,       draw_pwrl_status,       click_pwrl_status,       "powerline_status" },
+	#elif BAR_STATUS_PATCH && BAR_STATUSCMD_PATCH
+	{  0,       0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
 	#elif BAR_STATUS_PATCH
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,          draw_status,          click_status,       "status" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_status,            "status" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
-	#if BAR_TABGROUPS_PATCH
-	{ -1,       0,     BAR_ALIGN_NONE,   width_bartabgroups,    draw_bartabgroups,    click_bartabgroups, "bartabgroups" },
+	#if BAR_FLEXWINTITLE_PATCH
+	{ -1,       0,     BAR_ALIGN_NONE,   width_flexwintitle,      draw_flexwintitle,      click_flexwintitle,      "flexwintitle" },
+	#elif BAR_TABGROUPS_PATCH
+	{ -1,       0,     BAR_ALIGN_NONE,   width_bartabgroups,      draw_bartabgroups,      click_bartabgroups,      "bartabgroups" },
 	#elif BAR_AWESOMEBAR_PATCH
-	{ -1,       0,     BAR_ALIGN_NONE,   width_awesomebar,      draw_awesomebar,      click_awesomebar,   "awesomebar" },
+	{ -1,       0,     BAR_ALIGN_NONE,   width_awesomebar,        draw_awesomebar,        click_awesomebar,        "awesomebar" },
 	#elif BAR_FANCYBAR_PATCH
-	{ -1,       0,     BAR_ALIGN_NONE,   width_fancybar,        draw_fancybar,        click_fancybar,     "fancybar" },
+	{ -1,       0,     BAR_ALIGN_NONE,   width_fancybar,          draw_fancybar,          click_fancybar,          "fancybar" },
 	#elif BAR_WINTITLE_PATCH
-	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
+	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,          draw_wintitle,          click_wintitle,          "wintitle" },
 	#endif // BAR_TABGROUPS_PATCH | BAR_AWESOMEBAR_PATCH | BAR_FANCYBAR_PATCH | BAR_WINTITLE_PATCH
 	#if BAR_EXTRASTATUS_PATCH
 	#if BAR_STATUS2D_PATCH && BAR_STATUSCMD_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,     draw_status2d_es,     click_statuscmd_es, "status2d_es" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,       draw_status2d_es,       click_statuscmd_es,      "status2d_es" },
 	#elif BAR_STATUS2D_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,     draw_status2d_es,     click_status2d,     "status2d_es" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status2d_es,       draw_status2d_es,       click_status2d,          "status2d_es" },
 	#elif BAR_POWERLINE_STATUS_PATCH
-	{  0,       1,     BAR_ALIGN_RIGHT,  width_pwrl_status_es,  draw_pwrl_status_es,  click_pwrl_status,  "powerline_status" },
+	{  0,       1,     BAR_ALIGN_RIGHT,  width_pwrl_status_es,    draw_pwrl_status_es,    click_pwrl_status,       "powerline_status" },
 	#elif BAR_STATUSCMD_PATCH && BAR_STATUS_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,       draw_status_es,       click_statuscmd_es, "status_es" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,         draw_status_es,         click_statuscmd_es,      "status_es" },
 	#elif BAR_STATUS_PATCH
-	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,       draw_status_es,       click_status,       "status_es" },
+	{ 'A',      1,     BAR_ALIGN_CENTER, width_status_es,         draw_status_es,         click_status,            "status_es" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 	#endif // BAR_EXTRASTATUS_PATCH
+	#if BAR_FLEXWINTITLE_PATCH
+	#if BAR_WINTITLE_HIDDEN_PATCH
+	{ -1,       1,  BAR_ALIGN_RIGHT_RIGHT, width_wintitle_hidden, draw_wintitle_hidden,   click_wintitle_hidden,   "wintitle_hidden" },
+	#endif
+	#if BAR_WINTITLE_FLOATING_PATCH
+	{ -1,       1,     BAR_ALIGN_LEFT,   width_wintitle_floating, draw_wintitle_floating, click_wintitle_floating, "wintitle_floating" },
+	#endif // BAR_WINTITLE_FLOATING_PATCH
+	#endif // BAR_FLEXWINTITLE_PATCH
 };
 
 #if DWMC_PATCH
