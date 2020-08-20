@@ -1647,6 +1647,9 @@ void
 enternotify(XEvent *e)
 {
 	Client *c;
+	#if LOSEFULLSCREEN_PATCH
+	Client *sel;
+	#endif // LOSEFULLSCREEN_PATCH
 	Monitor *m;
 	XCrossingEvent *ev = &e->xcrossing;
 
@@ -1655,8 +1658,14 @@ enternotify(XEvent *e)
 	c = wintoclient(ev->window);
 	m = c ? c->mon : wintomon(ev->window);
 	if (m != selmon) {
+		#if LOSEFULLSCREEN_PATCH
+		sel = selmon->sel;
+		selmon = m;
+		unfocus(sel, 1);
+		#else
 		unfocus(selmon->sel, 1);
 		selmon = m;
+		#endif // LOSEFULLSCREEN_PATCH
 	} else if (!c || c == selmon->sel)
 		return;
 	focus(c);
@@ -1719,13 +1728,22 @@ void
 focusmon(const Arg *arg)
 {
 	Monitor *m;
+	#if LOSEFULLSCREEN_PATCH
+	Client *sel;
+	#endif // LOSEFULLSCREEN_PATCH
 
 	if (!mons->next)
 		return;
 	if ((m = dirtomon(arg->i)) == selmon)
 		return;
+	#if LOSEFULLSCREEN_PATCH
+	sel = selmon->sel;
+	selmon = m;
+	unfocus(sel, 0);
+	#else
 	unfocus(selmon->sel, 0);
 	selmon = m;
+	#endif // LOSEFULLSCREEN_PATCH
 	focus(NULL);
 	#if WARP_PATCH
 	warp(selmon->sel);
@@ -2173,13 +2191,22 @@ motionnotify(XEvent *e)
 {
 	static Monitor *mon = NULL;
 	Monitor *m;
+	#if LOSEFULLSCREEN_PATCH
+	Client *sel;
+	#endif // LOSEFULLSCREEN_PATCH
 	XMotionEvent *ev = &e->xmotion;
 
 	if (ev->window != root)
 		return;
 	if ((m = recttomon(ev->x_root, ev->y_root, 1, 1)) != mon && mon) {
+		#if LOSEFULLSCREEN_PATCH
+		sel = selmon->sel;
+		selmon = m;
+		unfocus(sel, 1);
+		#else
 		unfocus(selmon->sel, 1);
 		selmon = m;
+		#endif // LOSEFULLSCREEN_PATCH
 		focus(NULL);
 	}
 	mon = m;
@@ -3462,10 +3489,10 @@ unfocus(Client *c, int setfocus)
 	#endif // SWAPFOCUS_PATCH
 	#if LOSEFULLSCREEN_PATCH
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-	if (c->isfullscreen && !c->fakefullscreen && ISVISIBLE(c))
+	if (c->isfullscreen && !c->fakefullscreen && ISVISIBLE(c) && c->mon == selmon)
 		setfullscreen(c, 0);
 	#else
-	if (c->isfullscreen && ISVISIBLE(c))
+	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon)
 		setfullscreen(c, 0);
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // LOSEFULLSCREEN_PATCH
