@@ -57,33 +57,18 @@ draw_tags(Bar *bar, BarDrawArg *a)
 		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
-		#if URGENTBORDER_PATCH
 		invert = 0;
-		#else
-		invert = urg & 1 << i;
-		#endif // URGENTBORDER_PATCH
 		w = TEXTW(tags[i]);
 		#if BAR_ALTERNATIVE_TAGS_PATCH
 		wdelta = selmon->alttag ? abs(TEXTW(tags[i]) - TEXTW(tagsalt[i])) / 2 : 0;
 		#endif // BAR_ALTERNATIVE_TAGS_PATCH
-		#if URGENTBORDER_PATCH
-		if (m->tagset[m->seltags] & 1 << i)
-			#if BAR_VTCOLORS_PATCH
-			drw_setscheme(drw, scheme[SchemeTagsSel]);
-			#else
-			drw_setscheme(drw, scheme[SchemeSel]);
-			#endif // BAR_VTCOLORS_PATCH
-		else
-			#if BAR_VTCOLORS_PATCH
-			drw_setscheme(drw, scheme[urg & 1 << i ? SchemeUrg : SchemeTagsNorm]);
-			#else
-			drw_setscheme(drw, scheme[urg & 1 << i ? SchemeUrg : SchemeNorm]);
-			#endif // BAR_VTCOLORS_PATCH
-		#elif BAR_VTCOLORS_PATCH
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeTagsSel : SchemeTagsNorm]);
-		#else // URGENTBORDER_PATCH
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		#endif // URGENTBORDER_PATCH
+		drw_setscheme(drw, scheme[
+			m->tagset[m->seltags] & 1 << i
+			? SchemeTagsSel
+			: urg & 1 << i
+			? SchemeUrg
+			: SchemeTagsNorm
+		]);
 		#if BAR_ALTERNATIVE_TAGS_PATCH && BAR_PANGO_PATCH
 		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert, False);
 		#elif BAR_ALTERNATIVE_TAGS_PATCH

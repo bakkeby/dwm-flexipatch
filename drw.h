@@ -21,11 +21,7 @@ typedef struct Fnt {
 	#endif // BAR_PANGO_PATCH
 } Fnt;
 
-#if FLOAT_BORDER_COLOR_PATCH
 enum { ColFg, ColBg, ColBorder, ColFloat, ColCount }; /* Clr scheme index */
-#else
-enum { ColFg, ColBg, ColBorder, ColCount }; /* Clr scheme index */
-#endif // FLOAT_BORDER_COLOR_PATCH
 typedef XftColor Clr;
 
 typedef struct {

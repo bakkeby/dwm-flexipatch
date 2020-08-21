@@ -117,31 +117,12 @@ enum {
 enum {
 	SchemeNorm,
 	SchemeSel,
-	#if BAR_STATUSCOLORS_PATCH
-	SchemeWarn,
-	#endif // BAR_STATUSCOLORS_PATCH
-	#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	SchemeUrg,
-	#endif // URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
-	#if BAR_WINTITLEACTIONS_PATCH
-	SchemeHid,
-	#endif // BAR_WINTITLEACTIONS_PATCH
-	#if BAR_VTCOLORS_PATCH
-	SchemeTagsNorm,
-	SchemeTagsSel,
-	SchemeStatus,
-	#endif
-	#if BAR_VTCOLORS_PATCH || BAR_POWERLINE_STATUS_PATCH
 	SchemeTitleNorm,
 	SchemeTitleSel,
-	#endif // BAR_POWERLINE_STATUS_PATCH
-	#if BAR_TITLECOLOR_PATCH
-	SchemeTitle,
-	#endif // BAR_VTCOLORS_PATCH
-	#if BAR_TABGROUPS_PATCH
-	SchemeTabActive,
-	SchemeTabInactive,
-	#endif // BAR_TABGROUPS_PATCH
+	SchemeTagsNorm,
+	SchemeTagsSel,
+	SchemeHid,
+	SchemeUrg,
 	#if BAR_FLEXWINTITLE_PATCH
 	SchemeFlexActTTB,
 	SchemeFlexActLTR,
@@ -1552,11 +1533,7 @@ drawbarwin(Bar *bar)
 	rw = lw = bar->bw;
 	rx = lx = 0;
 
-	#if BAR_VTCOLORS_PATCH
-	drw_setscheme(drw, scheme[SchemeTagsNorm]);
-	#else
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	#endif // BAR_VTCOLORS_PATCH
 	drw_rect(drw, lx, 0, lw, bh, 1, 1);
 	for (r = 0; r < LENGTH(barrules); r++) {
 		br = &barrules[r];
@@ -1564,11 +1541,7 @@ drawbarwin(Bar *bar)
 			continue;
 		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != mi)
 			continue;
-		#if BAR_VTCOLORS_PATCH
-		drw_setscheme(drw, scheme[SchemeTagsNorm]);
-		#else
 		drw_setscheme(drw, scheme[SchemeNorm]);
-		#endif // BAR_VTCOLORS_PATCH
 		warg.max_width = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
 		w = br->widthfunc(bar, &warg);
 		w = MIN(warg.max_width, w);
@@ -1697,14 +1670,10 @@ focus(Client *c)
 		detachstack(c);
 		attachstack(c);
 		grabbuttons(c, 1);
-		#if FLOAT_BORDER_COLOR_PATCH
 		if (c->isfloating)
 			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColFloat].pixel);
 		else
 			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
-		#else
-		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
-		#endif // FLOAT_BORDER_COLOR_PATCH
 		setfocus(c);
 	} else {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
@@ -2072,14 +2041,10 @@ manage(Window w, XWindowAttributes *wa)
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
-	#if FLOAT_BORDER_COLOR_PATCH
 	if (c->isfloating)
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
 	else
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
-	#else
-	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
-	#endif // FLOAT_BORDER_COLOR_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
 	#if !FLOATPOS_PATCH
 	updatesizehints(c);
@@ -2114,12 +2079,10 @@ manage(Window w, XWindowAttributes *wa)
 
 	if (!c->isfloating)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
-	if (c->isfloating)
+	if (c->isfloating) {
 		XRaiseWindow(dpy, c->win);
-	#if FLOAT_BORDER_COLOR_PATCH
-	if (c->isfloating)
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
-	#endif // FLOAT_BORDER_COLOR_PATCH
+	}
 	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 	attachx(c);
 	#else
@@ -3344,12 +3307,10 @@ togglefloating(const Arg *arg)
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // !FAKEFULLSCREEN_PATCH
 	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
-	#if FLOAT_BORDER_COLOR_PATCH
 	if (selmon->sel->isfloating)
 		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeSel][ColFloat].pixel);
 	else
 		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeSel][ColBorder].pixel);
-	#endif // FLOAT_BORDER_COLOR_PATCH
 	if (selmon->sel->isfloating) {
 		#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 		if (selmon->sel->sfx != -9999) {
@@ -3497,14 +3458,10 @@ unfocus(Client *c, int setfocus)
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // LOSEFULLSCREEN_PATCH
 	grabbuttons(c, 0);
-	#if FLOAT_BORDER_COLOR_PATCH
 	if (c->isfloating)
 		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColFloat].pixel);
 	else
 		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
-	#else
-	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
-	#endif // FLOAT_BORDER_COLOR_PATCH
 	if (setfocus) {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
@@ -3898,16 +3855,12 @@ updatewmhints(Client *c)
 			XSetWMHints(dpy, c->win, wmh);
 		} else
 			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
-		#if URGENTBORDER_PATCH
 		if (c->isurgent) {
-			#if FLOAT_BORDER_COLOR_PATCH
 			if (c->isfloating)
 				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColFloat].pixel);
 			else
-			#endif
-			XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
+				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
 		}
-		#endif // URGENTBORDER_PATCH
 		if (wmh->flags & InputHint)
 			c->neverfocus = !wmh->input;
 		else

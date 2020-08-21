@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-08-21 - Simplification of color configuration; settling on a set of color schemes that is shared between multiple patches (urgentborder, floatborder and titlecolor patches made non-optional)
+
 2020-08-20 - Added experimental flexwintitle patch based on bartabgroups
 
 2020-08-13 - Added bartabgroups patch
@@ -273,8 +275,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - flexwintitle
       - based on the bartabgroups patch, this is a layout aware barmodules module for handling window titles intended to be used with flextile-deluxe
 
-   - [floatbordercolor](https://dwm.suckless.org/patches/float_border_color/)
-      - this patch allows a different border color to be chosen for floating windows
+   - [~floatbordercolor~](https://dwm.suckless.org/patches/float_border_color/)
+      - ~this patch allows a different border color to be chosen for floating windows~
 
    - [floatpos](https://github.com/bakkeby/patches/wiki/floatpos/)
       - adds a float rule allowing the size and position of floating windows to be specified
@@ -515,8 +517,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [tagswapmon](https://github.com/bakkeby/patches/wiki/tagswapmon/)
       - swap all visible windows on one monitor with those of an adjacent monitor
 
-   - [titlecolor](https://dwm.suckless.org/patches/titlecolor/)
-      - adds a new color scheme used by the (selected) window title in the bar
+   - [~titlecolor~](https://dwm.suckless.org/patches/titlecolor/)
+      - ~adds a new color scheme used by the (selected) window title in the bar~
 
    - [togglefullscreen](https://github.com/bakkeby/patches/wiki/togglefullscreen/)
       - allows you to toggle fullscreen on and off using a single shortcut key
@@ -533,8 +535,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [killunsel](https://dwm.suckless.org/patches/killunsel/)
       - kills all visible clients that are not selected (only the selected client will remain)
 
-   - [urgentborder](https://dwm.suckless.org/patches/urgentborder/)
-      - this patch makes "urgent" windows have different colors
+   - [~urgentborder~](https://dwm.suckless.org/patches/urgentborder/)
+      - ~this patch makes "urgent" windows have different colors~
 
    - [vanitygaps](https://github.com/bakkeby/patches/blob/master/dwm/dwm-vanitygaps-6.2.diff)
       - adds configurable gaps between windows differentiating between outer, inner, horizontal and vertical gaps

@@ -157,13 +157,13 @@ getschemefor(Monitor *m, int group, int activegroup)
 		if (m->lt[m->sellt]->arrange == &monocle)
 			return (activegroup ? SchemeFlexActMONO : SchemeFlexInaMONO);
 		#endif // MONOCLE_LAYOUT
-		return SchemeNorm;
+		return SchemeTitleNorm;
 	case GRP_HIDDEN:
 		return SchemeHid;
 	case GRP_FLOAT:
 		return (activegroup ? SchemeFlexActFloat : SchemeFlexInaFloat);
 	}
-	return SchemeNorm;
+	return SchemeTitleNorm;
 }
 
 int
@@ -175,7 +175,7 @@ getselschemefor(int scheme)
 		return scheme + SchemeFlexInaTTB - SchemeFlexActTTB;
 	if (scheme >= SchemeFlexActTTB)
 		return scheme + SchemeFlexSelTTB - SchemeFlexActTTB;
-	return SchemeSel;
+	return SchemeTitleSel;
 }
 
 void
@@ -190,10 +190,8 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 		? getselschemefor(tabscheme)
 		: HIDDEN(c)
 		? SchemeHid
-		#if URGENTBORDER_PATCH || BAR_STATUSCOLORS_PATCH
 		: c->isurgent
 		? SchemeUrg
-		#endif
 		: tabscheme
 	)]);
 	if (w <= TEXTW("A") - lrpad + pad) // reduce text padding if wintitle is too small

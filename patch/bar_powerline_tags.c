@@ -57,11 +57,7 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
-		#if URGENTBORDER_PATCH
 		invert = 0;
-		#else
-		invert = urg & 1 << i;
-		#endif // URGENTBORDER_PATCH
 		w = TEXTW(tags[i]);
 		drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeNorm]));
 		#if BAR_POWERLINE_TAGS_SLASH_PATCH

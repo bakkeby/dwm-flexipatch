@@ -31,21 +31,11 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 			if (!ISVISIBLE(c))
 				continue;
 			if (bar->mon->sel == c)
-				#if BAR_VTCOLORS_PATCH
 				scm = SchemeTitleSel;
-				#elif BAR_TITLECOLOR_PATCH
-				scm = SchemeTitle;
-				#else
-				scm = SchemeSel;
-				#endif // BAR_VTCOLORS_PATCH / BAR_TITLECOLOR_PATCH
 			else if (HIDDEN(c))
 				scm = SchemeHid;
 			else
-				#if BAR_VTCOLORS_PATCH
 				scm = SchemeTitleNorm;
-				#else
-				scm = SchemeNorm;
-				#endif // BAR_VTCOLORS_PATCH
 
 			drw_setscheme(drw, scheme[scm]);
 			#if BAR_PANGO_PATCH

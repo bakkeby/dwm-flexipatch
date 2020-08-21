@@ -59,8 +59,8 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 		? SchemeHid
 		#endif
 		: groupactive
-		? SchemeTabActive
-		: SchemeTabInactive
+		? SchemeTitleSel
+		: SchemeTitleNorm
 	]);
 	drw_text(drw, x, 0, w, bh, lrpad / 2, c->name, 0);
 	if (c->isfloating)

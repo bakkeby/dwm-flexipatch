@@ -52,14 +52,7 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 			if (!ISVISIBLE(c))
 				continue;
 			ftw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
-
-			#if BAR_VTCOLORS_PATCH
 			drw_setscheme(drw, scheme[m->sel == c ? SchemeTitleSel : SchemeTitleNorm]);
-			#elif BAR_TITLECOLOR_PATCH
-			drw_setscheme(drw, scheme[m->sel == c ? SchemeTitle : SchemeNorm]);
-			#else
-			drw_setscheme(drw, scheme[m->sel == c ? SchemeSel : SchemeNorm]);
-			#endif // BAR_VTCOLORS_PATCH / BAR_TITLECOLOR_PATCH
 			if (ftw > 0) /* trap special handling of 0 in drw_text */
 				#if BAR_PANGO_PATCH
 				drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0, False);

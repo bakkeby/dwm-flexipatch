@@ -20,11 +20,7 @@ draw_taggrid(Bar *bar, BarDrawArg *a)
 	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
 
 	/* Firstly we will fill the borders of squares */
-	#if BAR_VTCOLORS_PATCH
 	XSetForeground(drw->dpy, drw->gc, scheme[SchemeTagsNorm][ColBg].pixel);
-	#else
-	XSetForeground(drw->dpy, drw->gc, scheme[SchemeNorm][ColBg].pixel);
-	#endif // BAR_VTCOLORS_PATCH
 	XFillRectangle(dpy, drw->drawable, drw->gc, x, y, h*columns + 1, bh);
 
 	/* We will draw LENGTH(tags) squares in tagraws raws. */
@@ -35,33 +31,19 @@ draw_taggrid(Bar *bar, BarDrawArg *a)
 				invert = bar->mon->tagset[bar->mon->seltags] & 1 << i ? 0 : 1;
 
 				/* Select active color for current square */
-				#if BAR_VTCOLORS_PATCH
 				XSetForeground(drw->dpy, drw->gc, !invert ? scheme[SchemeTagsSel][ColBg].pixel :
 									scheme[SchemeTagsNorm][ColFg].pixel);
-				#else
-				XSetForeground(drw->dpy, drw->gc, !invert ? scheme[SchemeSel][ColBg].pixel :
-									scheme[SchemeNorm][ColFg].pixel);
-				#endif // BAR_VTCOLORS_PATCH
 				XFillRectangle(dpy, drw->drawable, drw->gc, x+1, y+1, h-1, h-1);
 
 				/* Mark square if tag has client */
 				if (occ & 1 << i) {
-					#if BAR_VTCOLORS_PATCH
 					XSetForeground(drw->dpy, drw->gc, !invert ? scheme[SchemeTagsSel][ColFg].pixel :
 									scheme[SchemeTagsNorm][ColBg].pixel);
-					#else
-					XSetForeground(drw->dpy, drw->gc, !invert ? scheme[SchemeSel][ColFg].pixel :
-									scheme[SchemeNorm][ColBg].pixel);
-					#endif // BAR_VTCOLORS_PATCH
 					XFillRectangle(dpy, drw->drawable, drw->gc, x + 1, y + 1,
 								   h / 2, h / 2);
 				}
 			} else {
-				#if BAR_VTCOLORS_PATCH
 				XSetForeground(drw->dpy, drw->gc, scheme[SchemeTagsNorm][ColBg].pixel);
-				#else
-				XSetForeground(drw->dpy, drw->gc, scheme[SchemeNorm][ColBg].pixel);
-				#endif // BAR_VTCOLORS_PATCH
 				XFillRectangle(dpy, drw->drawable, drw->gc, x+1, y+1, h-1, h);
 			}
 			x += h;

@@ -24,13 +24,7 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	Monitor *m = bar->mon;
 
 	if (m->sel) {
-		#if BAR_VTCOLORS_PATCH
 		drw_setscheme(drw, scheme[m == selmon ? SchemeTitleSel : SchemeTitleNorm]);
-		#elif BAR_TITLECOLOR_PATCH
-		drw_setscheme(drw, scheme[m == selmon ? SchemeTitle : SchemeNorm]);
-		#else
-		drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-		#endif // BAR_VTCOLORS_PATCH / BAR_TITLECOLOR_PATCH
 		#if BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 		XSetErrorHandler(xerrordummy);
 		#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
@@ -61,11 +55,7 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 			drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 			#endif // BAR_ACTIVETAGINDICATORBAR_PATCH
 	} else {
-		#if BAR_VTCOLORS_PATCH
 		drw_setscheme(drw, scheme[SchemeTitleNorm]);
-		#else
-		drw_setscheme(drw, scheme[SchemeNorm]);
-		#endif // BAR_VTCOLORS_PATCH
 		drw_rect(drw, x, 0, w, bh, 1, 1);
 	}
 	return x + w;

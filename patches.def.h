@@ -263,11 +263,6 @@
  */
 #define BAR_STATUSPADDING_PATCH 0
 
-/* Adds a new color scheme used by the (selected) window title in the bar.
- * https://dwm.suckless.org/patches/titlecolor/
- */
-#define BAR_TITLECOLOR_PATCH 0
-
 /* This patch adds the ability for dwm to read colors from the linux virtual console.
  *    /sys/module/vt/parameters/default_{red,grn,blu}
  * Essentially this way the colors you use in your regular tty is "mirrored" to dwm.
@@ -441,11 +436,6 @@
  * rather than applying to all clients globally.
  */
 #define FAKEFULLSCREEN_CLIENT_PATCH 0
-
-/* This patch allows a different border color to be chosen for floating windows.
- * https://dwm.suckless.org/patches/float_border_color/
- */
-#define FLOAT_BORDER_COLOR_PATCH 0
 
 /* This patch adds a float rule allowing the size and position of floating windows to be specified
  * It also allows the size and position of floating windows to be controlled similar to the
@@ -899,11 +889,6 @@
  * https://dwm.suckless.org/patches/unfloatvisible/
  */
 #define UNFLOATVISIBLE_PATCH 0
-
-/* This patch makes "urgent" windows have different colors.
- * https://dwm.suckless.org/patches/urgentborder/
- */
-#define URGENTBORDER_PATCH 0
 
 /* This patch adds configurable gaps between windows differentiating between outer, inner,
  * horizontal and vertical gaps.
