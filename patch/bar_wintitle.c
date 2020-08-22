@@ -17,6 +17,7 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	int x = a->x, w = a->w;
 	#endif // BAR_TITLE_LEFT_PAD_PATCH | BAR_TITLE_RIGHT_PAD_PATCH
 	Monitor *m = bar->mon;
+	int pad = lrpad / 2;
 
 	if (!m->sel) {
 		drw_setscheme(drw, scheme[SchemeTitleNorm]);
@@ -29,19 +30,9 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	XSetErrorHandler(xerrordummy);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	#if BAR_CENTEREDWINDOWNAME_PATCH
-	int mid = (m->ww - TEXTW(m->sel->name)) / 2 - x;
-	#if BAR_PANGO_PATCH
-	drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0, False);
-	#else
-	drw_text(drw, x, 0, w, bh, mid, m->sel->name, 0);
-	#endif // BAR_PANGO_PATCH
-	#else
-	#if BAR_PANGO_PATCH
-	drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0, False);
-	#else
-	drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
-	#endif // BAR_PANGO_PATCH
+	pad = (m->ww - TEXTW(m->sel->name)) / 2 - x;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
+	drw_text(drw, x, 0, w, bh, pad, m->sel->name, 0, False);
 	#if BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	XSync(dpy, False);
 	XSetErrorHandler(xerror);

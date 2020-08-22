@@ -52,11 +52,7 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 			ftw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 			drw_setscheme(drw, scheme[m->sel == c ? SchemeTitleSel : SchemeTitleNorm]);
 			if (ftw > 0) /* trap special handling of 0 in drw_text */
-				#if BAR_PANGO_PATCH
 				drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0, False);
-				#else
-				drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0);
-				#endif // BAR_PANGO_PATCH
 			if (c->isfloating)
 				drawindicator(c->mon, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
 			x += ftw;

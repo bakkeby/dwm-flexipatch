@@ -63,14 +63,10 @@ draw_tags(Bar *bar, BarDrawArg *a)
 			? SchemeUrg
 			: SchemeTagsNorm
 		]);
-		#if BAR_ALTERNATIVE_TAGS_PATCH && BAR_PANGO_PATCH
+		#if BAR_ALTERNATIVE_TAGS_PATCH
 		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert, False);
-		#elif BAR_ALTERNATIVE_TAGS_PATCH
-		drw_text(drw, x, 0, w, bh, wdelta + lrpad / 2, (selmon->alttag ? tagsalt[i] : tags[i]), invert);
-		#elif BAR_PANGO_PATCH
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert, False);
 		#else
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert, False);
 		#endif // BAR_ALTERNATIVE_TAGS_PATCH
 		drawindicator(m, NULL, occ, x, w, i, -1, invert, tagindicatortype);
 		x += w;

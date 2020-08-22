@@ -44,11 +44,7 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 			#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
 			drw_setscheme(drw, scheme[scm]);
-			#if BAR_PANGO_PATCH
 			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, pad, c->name, 0, False);
-			#else
-			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, pad, c->name, 0);
-			#endif // BAR_PANGO_PATCH
 			if (c->isfloating)
 				drawindicator(c->mon, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
 			x += tabw + (i < remainder ? 1 : 0);

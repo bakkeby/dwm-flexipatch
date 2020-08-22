@@ -86,12 +86,8 @@
 #else
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #endif // SCRATCHPADS_PATCH
-#if BAR_PANGO_PATCH
-#define TEXTW(X)                (drw_font_getwidth(drw, (X), False) + lrpad)
-#define TEXTWM(X)               (drw_font_getwidth(drw, (X), True) + lrpad)
-#else
-#define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
-#endif // BAR_PANGO_PATCH
+#define TEXTWM(X)               (drw_fontset_getwidth(drw, (X), True) + lrpad)
+#define TEXTW(X)                (drw_fontset_getwidth(drw, (X), False) + lrpad)
 
 /* enums */
 enum {

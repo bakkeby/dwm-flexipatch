@@ -83,13 +83,8 @@ drawstatusbar(int x, char* stext)
 			isCode = 1;
 
 			text[i] = '\0';
-			#if BAR_PANGO_PATCH
 			w = TEXTWM(text) - lrpad;
 			drw_text(drw, x, 0, w, bh, 0, text, 0, True);
-			#else
-			w = TEXTW(text) - lrpad;
-			drw_text(drw, x, 0, w, bh, 0, text, 0);
-			#endif // BAR_PANGO_PATCH
 
 			x += w;
 
@@ -156,13 +151,8 @@ drawstatusbar(int x, char* stext)
 		}
 	}
 	if (!isCode) {
-		#if BAR_PANGO_PATCH
 		w = TEXTWM(text) - lrpad;
 		drw_text(drw, x, 0, w, bh, 0, text, 0, True);
-		#else
-		w = TEXTW(text) - lrpad;
-		drw_text(drw, x, 0, w, bh, 0, text, 0);
-		#endif // BAR_PANGO_PATCH
 		x += w;
 	}
 	free(p);
@@ -197,11 +187,7 @@ status2dtextlength(char* stext)
 			if (!isCode) {
 				isCode = 1;
 				text[i] = '\0';
-				#if BAR_PANGO_PATCH
 				w += TEXTWM(text) - lrpad;
-				#else
-				w += TEXTW(text) - lrpad;
-				#endif // BAR_PANGO_PATCH
 				text[i] = '^';
 				if (text[++i] == 'f')
 					w += atoi(text + ++i);
@@ -213,11 +199,7 @@ status2dtextlength(char* stext)
 		}
 	}
 	if (!isCode)
-		#if BAR_PANGO_PATCH
 		w += TEXTWM(text) - lrpad;
-		#else
-		w += TEXTW(text) - lrpad;
-		#endif // BAR_PANGO_PATCH
 	free(p);
 	return w;
 }

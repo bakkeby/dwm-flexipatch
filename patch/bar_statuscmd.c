@@ -35,11 +35,9 @@ click_statuscmd_text(Arg *arg, int rel_x, char *text)
 			text[i] = '\0';
 			#if BAR_STATUS2D_PATCH && !BAR_BAR_STATUSCOLORS_PATCH
 			x += status2dtextlength(text);
-			#elif BAR_PANGO_PATCH
-			x += TEXTWM(text) - lrpad;
 			#else
-			x += TEXTW(text) - lrpad;
-			#endif // STATUS2D_PATCH
+			x += TEXTWM(text) - lrpad;
+			#endif // BAR_STATUS2D_PATCH
 			text[i] = ch;
 			text += i+1;
 			i = -1;

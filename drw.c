@@ -9,7 +9,7 @@
 #include "drw.h"
 #include "util.h"
 
-#if !PANGO_PATCH
+#if !BAR_PANGO_PATCH
 #define UTF_INVALID 0xFFFD
 #define UTF_SIZ     4
 
@@ -118,11 +118,7 @@ drw_free(Drw *drw)
 {
 	XFreePixmap(drw->dpy, drw->drawable);
 	XFreeGC(drw->dpy, drw->gc);
-	#if BAR_PANGO_PATCH
-	drw_font_free(drw->font);
-	#else
 	drw_fontset_free(drw->fonts);
-	#endif // BAR_PANGO_PATCH
 	free(drw);
 }
 
@@ -247,7 +243,7 @@ drw_font_create(Drw* drw, const char font[])
 
 	fnt = xfont_create(drw, font);
 
-	return (drw->font = fnt);
+	return (drw->fonts = fnt);
 }
 #else
 Fnt*
@@ -269,23 +265,16 @@ drw_fontset_create(Drw* drw, const char *fonts[], size_t fontcount)
 }
 #endif // BAR_PANGO_PATCH
 
-#if BAR_PANGO_PATCH
-void
-drw_font_free(Fnt *font)
-{
-	if (font)
-		xfont_free(font);
-}
-#else
 void
 drw_fontset_free(Fnt *font)
 {
 	if (font) {
+		#if !BAR_PANGO_PATCH
 		drw_fontset_free(font->next);
+		#endif // BAR_PANGO_PATCH
 		xfont_free(font);
 	}
 }
-#endif // BAR_PANGO_PATCH
 
 void
 drw_clr_create(
@@ -394,7 +383,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	size_t i, len;
 	int render = x || y || w || h;
 
-	if (!drw || (render && !drw->scheme) || !text || !drw->font)
+	if (!drw || (render && !drw->scheme) || !text || !drw->fonts)
 		return 0;
 
 	if (!render) {
@@ -416,10 +405,10 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 	len = strlen(text);
 
 	if (len) {
-		drw_font_getexts(drw->font, text, len, &ew, NULL, markup);
+		drw_font_getexts(drw->fonts, text, len, &ew, NULL, markup);
 		/* shorten text if necessary */
 		for (len = MIN(len, sizeof(buf) - 1); len && ew > w; len--)
-			drw_font_getexts(drw->font, text, len, &ew, NULL, markup);
+			drw_font_getexts(drw->fonts, text, len, &ew, NULL, markup);
 
 		if (len) {
 			memcpy(buf, text, len);
@@ -450,7 +439,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 }
 #else
 int
-drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert)
+drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool ignored)
 {
 	char buf[1024];
 	int ty;
@@ -628,23 +617,13 @@ drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)
 	XSync(drw->dpy, False);
 }
 
-#if BAR_PANGO_PATCH
 unsigned int
-drw_font_getwidth(Drw *drw, const char *text, Bool markup)
-{
-	if (!drw || !drw->font || !text)
-		return 0;
-	return drw_text(drw, 0, 0, 0, 0, 0, text, 0, markup);
-}
-#else
-unsigned int
-drw_fontset_getwidth(Drw *drw, const char *text)
+drw_fontset_getwidth(Drw *drw, const char *text, Bool ignored)
 {
 	if (!drw || !drw->fonts || !text)
 		return 0;
-	return drw_text(drw, 0, 0, 0, 0, 0, text, 0);
+	return drw_text(drw, 0, 0, 0, 0, 0, text, 0, ignored);
 }
-#endif // BAR_PANGO_PATCH
 
 #if BAR_PANGO_PATCH
 void

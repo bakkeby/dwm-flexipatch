@@ -188,7 +188,7 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 		pad = (w - TEXTW(c->name) + lrpad) / 2;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
-	drw_text(drw, x, 0, w, bh, pad, c->name, 0);
+	drw_text(drw, x, 0, w, bh, pad, c->name, 0, False);
 	if (c->isfloating)
 		drawindicator(m, c, 1, x + 2, w, 0, 0, 0, floatindicatortype);
 

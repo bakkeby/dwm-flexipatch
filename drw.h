@@ -52,15 +52,13 @@ void drw_free(Drw *drw);
 /* Fnt abstraction */
 #if BAR_PANGO_PATCH
 Fnt *drw_font_create(Drw* drw, const char font[]);
-void drw_font_free(Fnt* set);
-unsigned int drw_font_getwidth(Drw *drw, const char *text, Bool markup);
 void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h, Bool markup);
 #else
 Fnt *drw_fontset_create(Drw* drw, const char *fonts[], size_t fontcount);
-void drw_fontset_free(Fnt* set);
-unsigned int drw_fontset_getwidth(Drw *drw, const char *text);
 void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h);
 #endif // BAR_PANGO_PATCH
+void drw_fontset_free(Fnt* set);
+unsigned int drw_fontset_getwidth(Drw *drw, const char *text, Bool markup);
 
 /* Colorscheme abstraction */
 void drw_clr_create(
@@ -95,11 +93,7 @@ void drw_settrans(Drw *drw, Clr *psc, Clr *nsc);
 
 /* Drawing functions */
 void drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int invert);
-#if BAR_PANGO_PATCH
 int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup);
-#else
-int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert);
-#endif // BAR_PANGO_PATCH
 #if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
 void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direction, int slash);
 #endif // BAR_POWERLINE_TAGS_PATCH | BAR_POWERLINE_STATUS_PATCH
