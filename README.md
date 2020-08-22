@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-08-22 - Added logic to auto-hide bars if nothing is drawn on them (e.g. for standalone bars that only show certain clients). Added clientindicators patch and unified indicator code.
+2020-08-22 - Added logic to auto-hide bars if nothing is drawn on them (e.g. for standalone bars that only show certain clients). Added clientindicators patch and unified indicator code. Simplified Pango integration by settling on common function signatures.
 
 2020-08-21 - Simplification of color configuration; settling on a set of color schemes that is shared between multiple patches (urgentborder, floatborder and titlecolor patches made non-optional)
 
