@@ -3310,44 +3310,45 @@ togglebar(const Arg *arg)
 void
 togglefloating(const Arg *arg)
 {
-	if (!selmon->sel)
+	Client *c = selmon->sel;
+	if (arg && arg->v)
+		c = (Client*)arg->v;
+	if (!c)
 		return;
 	#if !FAKEFULLSCREEN_PATCH
 	#if FAKEFULLSCREEN_CLIENT_PATCH
-	if (selmon->sel->isfullscreen && !selmon->sel->fakefullscreen) /* no support for fullscreen windows */
+	if (c->isfullscreen && !c->fakefullscreen) /* no support for fullscreen windows */
 		return;
 	#else
-	if (selmon->sel->isfullscreen) /* no support for fullscreen windows */
+	if (c->isfullscreen) /* no support for fullscreen windows */
 		return;
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // !FAKEFULLSCREEN_PATCH
-	selmon->sel->isfloating = !selmon->sel->isfloating || selmon->sel->isfixed;
-	if (selmon->sel->isfloating)
-		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeSel][ColFloat].pixel);
+	c->isfloating = !c->isfloating || c->isfixed;
+	if (c->isfloating)
+		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColFloat].pixel);
 	else
-		XSetWindowBorder(dpy, selmon->sel->win, scheme[SchemeSel][ColBorder].pixel);
-	if (selmon->sel->isfloating) {
+		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+	if (c->isfloating) {
 		#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
-		if (selmon->sel->sfx != -9999) {
+		if (c->sfx != -9999) {
 			/* restore last known float dimensions */
-			resize(selmon->sel, selmon->sel->sfx, selmon->sel->sfy,
-			       selmon->sel->sfw, selmon->sel->sfh, 0);
-			arrange(selmon);
+			resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 0);
+			arrange(c->mon);
 			return;
 		}
 		#endif // SAVEFLOATS_PATCH // EXRESIZE_PATCH
-		resize(selmon->sel, selmon->sel->x, selmon->sel->y,
-			selmon->sel->w, selmon->sel->h, 0);
+		resize(c, c->x, c->y, c->w, c->h, 0);
 	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 	} else {
 		/* save last known float dimensions */
-		selmon->sel->sfx = selmon->sel->x;
-		selmon->sel->sfy = selmon->sel->y;
-		selmon->sel->sfw = selmon->sel->w;
-		selmon->sel->sfh = selmon->sel->h;
+		c->sfx = c->x;
+		c->sfy = c->y;
+		c->sfw = c->w;
+		c->sfh = c->h;
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 	}
-	arrange(selmon);
+	arrange(c->mon);
 }
 
 void
@@ -3988,23 +3989,26 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 void
 zoom(const Arg *arg)
 {
-	#if BAR_WINTITLEACTIONS_PATCH
-	Client *c = (Client*)arg->v;
-	if (!c)
-		c = selmon->sel;
-	#else
 	Client *c = selmon->sel;
-	#endif // BAR_WINTITLEACTIONS_PATCH
+	if (arg && arg->v)
+		c = (Client*)arg->v;
+	if (!c)
+		return;
 	#if ZOOMSWAP_PATCH
 	Client *at = NULL, *cold, *cprevious = NULL, *p;
 	#endif // ZOOMSWAP_PATCH
 
+	#if ZOOMFLOATING_PATCH
+	if (c && c->isfloating)
+		togglefloating(&((Arg) { .v = c }));
+	#endif // ZOOMFLOATING_PATCH
+
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
-	selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(selmon->clients);
+	c->mon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(c->mon->clients);
 	#endif // SWAPFOCUS_PATCH
 
-	if (!selmon->lt[selmon->sellt]->arrange
-	|| (selmon->sel && selmon->sel->isfloating)
+	if (!c->mon->lt[c->mon->sellt]->arrange
+	|| (c && c->isfloating)
 	#if ZOOMSWAP_PATCH
 	|| !c
 	#endif // ZOOMSWAP_PATCH
@@ -4012,9 +4016,9 @@ zoom(const Arg *arg)
 		return;
 
 	#if ZOOMSWAP_PATCH
-	if (c == nexttiled(selmon->clients)) {
+	if (c == nexttiled(c->mon->clients)) {
 		#if PERTAG_PATCH
-		p = selmon->pertag->prevzooms[selmon->pertag->curtag];
+		p = c->mon->pertag->prevzooms[c->mon->pertag->curtag];
 		#else
 		p = prevzoom;
 		#endif // PERTAG_PATCH
@@ -4023,25 +4027,25 @@ zoom(const Arg *arg)
 			cprevious = nexttiled(at->next);
 		if (!cprevious || cprevious != p) {
 			#if PERTAG_PATCH
-			selmon->pertag->prevzooms[selmon->pertag->curtag] = NULL;
+			c->mon->pertag->prevzooms[c->mon->pertag->curtag] = NULL;
 			#else
 			prevzoom = NULL;
 			#endif // PERTAG_PATCH
 			#if SWAPFOCUS_PATCH && PERTAG_PATCH
-			if (!c || !(c = selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(c->next)))
+			if (!c || !(c = c->mon->pertag->prevclient[c->mon->pertag->curtag] = nexttiled(c->next)))
 			#else
 			if (!c || !(c = nexttiled(c->next)))
 			#endif // SWAPFOCUS_PATCH
 				return;
 		} else
 			#if SWAPFOCUS_PATCH && PERTAG_PATCH
-			c = selmon->pertag->prevclient[selmon->pertag->curtag] = cprevious;
+			c = c->mon->pertag->prevclient[c->mon->pertag->curtag] = cprevious;
 			#else
 			c = cprevious;
 			#endif // SWAPFOCUS_PATCH
 	}
 
-	cold = nexttiled(selmon->clients);
+	cold = nexttiled(c->mon->clients);
 	if (c != cold && !at)
 		at = findbefore(c);
 	detach(c);
@@ -4049,7 +4053,7 @@ zoom(const Arg *arg)
 	/* swap windows instead of pushing the previous one down */
 	if (c != cold && at) {
 		#if PERTAG_PATCH
-		selmon->pertag->prevzooms[selmon->pertag->curtag] = cold;
+		c->mon->pertag->prevzooms[c->mon->pertag->curtag] = cold;
 		#else
 		prevzoom = cold;
 		#endif // PERTAG_PATCH
@@ -4062,9 +4066,9 @@ zoom(const Arg *arg)
 	focus(c);
 	arrange(c->mon);
 	#else
-	if (c == nexttiled(selmon->clients))
+	if (c == nexttiled(c->mon->clients))
 		#if SWAPFOCUS_PATCH && PERTAG_PATCH
-		if (!c || !(c = selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(c->next)))
+		if (!c || !(c = c->mon->pertag->prevclient[c->mon->pertag->curtag] = nexttiled(c->next)))
 		#else
 		if (!c || !(c = nexttiled(c->next)))
 		#endif // SWAPFOCUS_PATCH

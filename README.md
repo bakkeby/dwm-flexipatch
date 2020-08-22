@@ -562,6 +562,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [xrdb](http://dwm.suckless.org/patches/xrdb/)
       - allows dwm to read colors from xrdb (.Xresources) during runtime
 
+   - [zoomfloating](https://www.reddit.com/r/suckless/comments/ie5fe3/zoomfloating_my_own_simple_original_patch/)
+      - a simple patch that allows floating windows to be zoomed into the master stack position
+
    - [zoomswap](https://dwm.suckless.org/patches/zoomswap/)
       - allows a master and a stack window to swap places rather than every window on the screen changing position
 

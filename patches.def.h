@@ -935,6 +935,11 @@
  */
 #define XRDB_PATCH 0
 
+/* Simple patch that allows floating windows to be zoomed into the master stack position.
+ * https://www.reddit.com/r/suckless/comments/ie5fe3/zoomfloating_my_own_simple_original_patch/
+ */
+#define ZOOMFLOATING_PATCH 0
+
 /* The zoomswap patch allows a master and a stack window to swap places
  * rather than every window on the screen changing position.
  * https://dwm.suckless.org/patches/zoomswap/
