@@ -4004,7 +4004,7 @@ zoom(const Arg *arg)
 	#endif // ZOOMFLOATING_PATCH
 
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
-	c->mon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(c->mon->clients);
+	c->mon->pertag->prevclient[c->mon->pertag->curtag] = nexttiled(c->mon->clients);
 	#endif // SWAPFOCUS_PATCH
 
 	if (!c->mon->lt[c->mon->sellt]->arrange
