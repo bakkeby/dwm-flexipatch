@@ -31,12 +31,6 @@ draw_tags(Bar *bar, BarDrawArg *a)
 	#if BAR_ALTERNATIVE_TAGS_PATCH
 	int wdelta;
 	#endif // BAR_ALTERNATIVE_TAGS_PATCH
-	#if !BAR_HIDEVACANTTAGS_PATCH
-	#if !BAR_ACTIVETAGINDICATORBAR_PATCH && !BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-	int boxs = drw->fonts->h / 9;
-	#endif // BAR_ACTIVETAGINDICATORBAR_PATCH | BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-	int boxw = drw->fonts->h / 6 + 2;
-	#endif // BAR_HIDEVACANTTAGS_PATCH
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
 	Monitor *m = bar->mon;
@@ -78,17 +72,7 @@ draw_tags(Bar *bar, BarDrawArg *a)
 		#else
 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert);
 		#endif // BAR_ALTERNATIVE_TAGS_PATCH
-		#if !BAR_HIDEVACANTTAGS_PATCH
-		if (occ & 1 << i)
-			#if BAR_ACTIVETAGINDICATORBAR_PATCH
-			drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw,
-			#elif BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-			drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2,
-			#else
-			drw_rect(drw, x + boxs, boxs, boxw, boxw,
-			#endif // BAR_ACTIVETAGINDICATORBAR_PATCH
-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i, invert);
-		#endif // BAR_HIDEVACANTTAGS_PATCH
+		drawindicator(m, NULL, occ, x, w, i, -1, invert, tagindicatortype);
 		x += w;
 	}
 

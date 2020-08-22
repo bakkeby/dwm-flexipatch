@@ -158,21 +158,30 @@
 
 /* This patch changes the rectangle indicating if a tag is used by a client into a bar
  * above the tag name for better visibility.
+ * Set the tagindicatortype variable in config.h to INDICATOR_TOP_BAR to enable this.
  * https://dwm.suckless.org/patches/activetagindicatorbar/
  */
-#define BAR_ACTIVETAGINDICATORBAR_PATCH 0
+#define BAR_ACTIVETAGINDICATORBAR_PATCH N/A
 
 /* Alternative patch to the activetagindicatorbar patch, adds the bar below the tag
  * icon rather than above.
+ * Set the tagindicatortype variable in config.h to INDICATOR_BOTTOM_BAR to enable this.
  */
-#define BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH 0
+#define BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH N/A
 
 /* This patch centers the WM_NAME of the currently selected window on the status bar.
- * Both fancybar and awesomebar patches take precedence over this patch.
- * This patch only applies when the BAR_WINTITLE_PATCH module is used.
+ * This is compatible with the wintitle, bartabgroups, flexwintitle and awesomebar bar
+ * modules.
  * https://dwm.suckless.org/patches/centeredwindowname/
  */
 #define BAR_CENTEREDWINDOWNAME_PATCH 0
+
+/* Draws a dot indicator overlayed on each tag icon for each client. The selected client
+ * is drawn as a larger horizontal line.
+ * Set the tagindicatortype variable in config.h to INDICATOR_CLIENT_DOTS to enable this.
+ * https://dwm.suckless.org/patches/clientindicators/
+ */
+#define BAR_CLIENTINDICATOR_PATCH N/A
 
 /* This patch enables color emoji in dwm by removing a workaround for a BadLength error
  * in the Xft library when color glyphs are used.

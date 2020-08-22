@@ -2,15 +2,6 @@
 #ifndef BARTAB_BORDERS
 #define BARTAB_BORDERS 1       // 0 = off, 1 = on
 #endif
-#ifndef BARTAB_TAGSINDICATOR
-#define BARTAB_TAGSINDICATOR 1 // 0 = off, 1 = on if >1 client/view tag, 2 = always on
-#endif
-#ifndef BARTAB_TAGSPX
-#define BARTAB_TAGSPX 5        // # pixels for tag grid boxes
-#endif
-#ifndef BARTAB_TAGSROWS
-#define BARTAB_TAGSROWS 3      // # rows in tag grid (9 tags, e.g. 3x3)
-#endif
 #ifndef BARTAB_SHOWFLOATING
 #define BARTAB_SHOWFLOATING 0  // whether to show titles for floating windows, hidden clients are always shown
 #endif
@@ -49,7 +40,7 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 {
 	if (!c)
 		return;
-	int i, nclienttags = 0, nviewtags = 0;
+	int i, nclienttags = 0, nviewtags = 0, pad = lrpad / 2;
 	drw_setscheme(drw, scheme[
 		m->sel == c
 		? SchemeSel
@@ -61,9 +52,16 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 		? SchemeTitleSel
 		: SchemeTitleNorm
 	]);
-	drw_text(drw, x, 0, w, bh, lrpad / 2, c->name, 0);
+	if (w <= TEXTW("A") - lrpad + pad) // reduce text padding if wintitle is too small
+		pad = (w - TEXTW("A") + lrpad < 0 ? 0 : (w - TEXTW("A") + lrpad) / 2);
+	#if BAR_CENTEREDWINDOWNAME_PATCH
+	else if (TEXTW(c->name) < w)
+		pad = (w - TEXTW(c->name) + lrpad) / 2;
+	#endif // BAR_CENTEREDWINDOWNAME_PATCH
+
+	drw_text(drw, x, 0, w, bh, pad, c->name, 0);
 	if (c->isfloating)
-		drw_rect(drw, x + 2, 2, 5, 5, 0, 0);
+		drawindicator(m, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
 
 	if (BARTAB_BORDERS) {
 		XSetForeground(drw->dpy, drw->gc, scheme[SchemeSel][ColBorder].pixel);
@@ -78,19 +76,8 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 			nclienttags++;
 	}
 
-	if (BARTAB_TAGSINDICATOR == 2 || nclienttags > 1 || nviewtags > 1) {
-		for (i = 0; i < LENGTH(tags); i++) {
-			drw_rect(drw,
-				( x + w - 2 - ((LENGTH(tags) / BARTAB_TAGSROWS) * BARTAB_TAGSPX)
-					- (i % (LENGTH(tags)/BARTAB_TAGSROWS)) + ((i % (LENGTH(tags) / BARTAB_TAGSROWS)) * BARTAB_TAGSPX)
-				),
-				( 2 + ((i / (LENGTH(tags)/BARTAB_TAGSROWS)) * BARTAB_TAGSPX)
-					- ((i / (LENGTH(tags)/BARTAB_TAGSROWS)))
-				),
-				BARTAB_TAGSPX, BARTAB_TAGSPX, (c->tags >> i) & 1, 0
-			);
-		}
-	}
+	if (TAGSINDICATOR == 2 || nclienttags > 1 || nviewtags > 1)
+		drawindicator(m, c, 1, x, w, 0, 0, 0, INDICATOR_RIGHT_TAGS);
 }
 
 #ifndef HIDDEN
@@ -195,7 +182,7 @@ bartabcalculate(
 
 		den = clientsnstack * BARTAB_STACKWEIGHT + clientsnfloating * BARTAB_FLOATWEIGHT + clientsnhidden * BARTAB_HIDDENWEIGHT;
 		if (!den)
-			return;
+			return 1;
 
 		r = num % den;
 		w = num / den;

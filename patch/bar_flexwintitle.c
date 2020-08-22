@@ -2,15 +2,6 @@
 #ifndef FLEXWINTITLE_BORDERS
 #define FLEXWINTITLE_BORDERS 1       // 0 = off, 1 = on
 #endif
-#ifndef FLEXWINTITLE_TAGSINDICATOR
-#define FLEXWINTITLE_TAGSINDICATOR 1 // 0 = off, 1 = on if >1 client/view tag, 2 = always on
-#endif
-#ifndef FLEXWINTITLE_TAGSPX
-#define FLEXWINTITLE_TAGSPX 5        // # pixels for tag grid boxes
-#endif
-#ifndef FLEXWINTITLE_TAGSROWS
-#define FLEXWINTITLE_TAGSROWS 3      // # rows in tag grid (9 tags, e.g. 3x3)
-#endif
 #ifndef FLEXWINTITLE_SHOWFLOATING
 #define FLEXWINTITLE_SHOWFLOATING 0  // whether to show titles for floating windows, hidden clients are always shown
 #endif
@@ -25,9 +16,6 @@
 #endif
 #ifndef FLEXWINTITLE_FLOATWEIGHT
 #define FLEXWINTITLE_FLOATWEIGHT 1   // floating window title weight, set to 0 to not show floating windows
-#endif
-#ifndef FLEXWINTITLE_CENTERTEXT
-#define FLEXWINTITLE_CENTERTEXT 1    // center windowtitle text
 #endif
 
 #define SCHEMEFOR(c) getschemefor(m, c, groupactive == c)
@@ -195,14 +183,14 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 	)]);
 	if (w <= TEXTW("A") - lrpad + pad) // reduce text padding if wintitle is too small
 		pad = (w - TEXTW("A") + lrpad < 0 ? 0 : (w - TEXTW("A") + lrpad) / 2);
-	#if FLEXWINTITLE_CENTERTEXT
+	#if BAR_CENTEREDWINDOWNAME_PATCH
 	else if (TEXTW(c->name) < w)
 		pad = (w - TEXTW(c->name) + lrpad) / 2;
-	#endif // FLEXWINTITLE_CENTERTEXT
+	#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
 	drw_text(drw, x, 0, w, bh, pad, c->name, 0);
 	if (c->isfloating)
-		drw_rect(drw, x + 2, 2, 5, 5, 0, 0);
+		drawindicator(m, c, 1, x + 2, w, 0, 0, 0, floatindicatortype);
 
 	if (FLEXWINTITLE_BORDERS) {
 		XSetForeground(drw->dpy, drw->gc, scheme[SchemeSel][ColBorder].pixel);
@@ -217,19 +205,8 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 			nclienttags++;
 	}
 
-	if (FLEXWINTITLE_TAGSINDICATOR == 2 || nclienttags > 1 || nviewtags > 1) {
-		for (i = 0; i < LENGTH(tags); i++) {
-			drw_rect(drw,
-				( x + w - 2 - ((LENGTH(tags) / FLEXWINTITLE_TAGSROWS) * FLEXWINTITLE_TAGSPX)
-					- (i % (LENGTH(tags)/FLEXWINTITLE_TAGSROWS)) + ((i % (LENGTH(tags) / FLEXWINTITLE_TAGSROWS)) * FLEXWINTITLE_TAGSPX)
-				),
-				( 2 + ((i / (LENGTH(tags)/FLEXWINTITLE_TAGSROWS)) * FLEXWINTITLE_TAGSPX)
-					- ((i / (LENGTH(tags)/FLEXWINTITLE_TAGSROWS)))
-				),
-				FLEXWINTITLE_TAGSPX, FLEXWINTITLE_TAGSPX, (c->tags >> i) & 1, 0
-			);
-		}
-	}
+	if (TAGSINDICATOR == 2 || nclienttags > 1 || nviewtags > 1)
+		drawindicator(m, c, 1, x, w, 0, 0, 0, INDICATOR_RIGHT_TAGS);
 }
 
 #ifndef HIDDEN

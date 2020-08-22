@@ -7,7 +7,7 @@ width_awesomebar(Bar *bar, BarWidthArg *a)
 int
 draw_awesomebar(Bar *bar, BarDrawArg *a)
 {
-	int n = 0, scm, remainder = 0, tabw;
+	int n = 0, scm, remainder = 0, tabw, pad;
 	unsigned int i;
 	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
@@ -37,12 +37,20 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 			else
 				scm = SchemeTitleNorm;
 
+			pad = lrpad / 2;
+			#if BAR_CENTEREDWINDOWNAME_PATCH
+			if (TEXTW(c->name) < w)
+				pad = (tabw - TEXTW(c->name) + lrpad) / 2;
+			#endif // BAR_CENTEREDWINDOWNAME_PATCH
+
 			drw_setscheme(drw, scheme[scm]);
 			#if BAR_PANGO_PATCH
-			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0, False);
+			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, pad, c->name, 0, False);
 			#else
-			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, lrpad / 2, c->name, 0);
+			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, pad, c->name, 0);
 			#endif // BAR_PANGO_PATCH
+			if (c->isfloating)
+				drawindicator(c->mon, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
 			x += tabw + (i < remainder ? 1 : 0);
 		}
 	}

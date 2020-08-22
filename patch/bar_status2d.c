@@ -1,22 +1,26 @@
 int
 width_status2d(Bar *bar, BarWidthArg *a)
 {
+	int width;
 	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
-	return status2dtextlength(rawstext) + lrpad;
+	width = status2dtextlength(rawstext);
 	#else
-	return status2dtextlength(stext) + lrpad;
+	width = status2dtextlength(stext);
 	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
+	return width ? width + lrpad : 0;
 }
 
 #if BAR_EXTRASTATUS_PATCH
 int
 width_status2d_es(Bar *bar, BarWidthArg *a)
 {
+	int width;
 	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
-	return status2dtextlength(rawestext) + lrpad;
+	width = status2dtextlength(rawestext);
 	#else
-	return status2dtextlength(estext) + lrpad;
+	width = status2dtextlength(estext);
 	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
+	return width ? width + lrpad : 0;
 }
 #endif // BAR_EXTRASTATUS_PATCH
 

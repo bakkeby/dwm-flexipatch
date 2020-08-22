@@ -7,11 +7,6 @@ width_wintitle(Bar *bar, BarWidthArg *a)
 int
 draw_wintitle(Bar *bar, BarDrawArg *a)
 {
-	#if !BAR_ACTIVETAGINDICATORBAR_PATCH && !BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-	int boxs = drw->fonts->h / 9;
-	#endif // BAR_ACTIVETAGINDICATORBAR_PATCH | BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-	int boxw = drw->fonts->h / 6 + 2;
-
 	#if BAR_TITLE_LEFT_PAD_PATCH && BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
 	#elif BAR_TITLE_LEFT_PAD_PATCH
@@ -52,13 +47,7 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	XSetErrorHandler(xerror);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	if (m->sel->isfloating)
-		#if BAR_ACTIVETAGINDICATORBAR_PATCH
-		drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw, m->sel->isfixed, 0);
-		#elif BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH
-		drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2, 0);
-		#else
-		drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
-		#endif // BAR_ACTIVETAGINDICATORBAR_PATCH
+		drawindicator(m, m->sel, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
 	return 1;
 }
 

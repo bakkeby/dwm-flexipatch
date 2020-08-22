@@ -12,8 +12,6 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 	Client *c;
 	Monitor *m = bar->mon;
 
-	int boxs = drw->fonts->h / 9;
-	int boxw = drw->fonts->h / 6 + 2;
 	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
 	#elif BAR_TITLE_LEFT_PAD
@@ -60,7 +58,7 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 				drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0);
 				#endif // BAR_PANGO_PATCH
 			if (c->isfloating)
-				drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
+				drawindicator(c->mon, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
 			x += ftw;
 			w -= ftw;
 		}
