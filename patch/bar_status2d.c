@@ -164,7 +164,7 @@ drawstatusbar(int x, char* stext)
 	free(p);
 
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	return i;
+	return len - 1;
 }
 
 int
