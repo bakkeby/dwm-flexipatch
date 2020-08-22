@@ -225,6 +225,7 @@ struct Bar {
 	Monitor *mon;
 	Bar *next;
 	int idx;
+	int showbar;
 	int topbar;
 	int bx, by, bw, bh; /* bar geometry */
 	int w[BARRULES]; // width, array length == barrules, then use r index for lookup purposes
@@ -1361,6 +1362,7 @@ createmon(void)
 		bar->topbar = istopbar;
 		m->bar = bar;
 		istopbar = !istopbar;
+		bar->showbar = 1;
 	}
 
 	#if FLEXTILE_DELUXE_LAYOUT
@@ -1523,7 +1525,7 @@ drawbarwin(Bar *bar)
 	if (!bar->win)
 		return;
 	Monitor *mon;
-	int r, w, mi;
+	int r, w, mi, total_drawn = 0;
 	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
 	const BarRule *br;
 	BarWidthArg warg = { 0 };
@@ -1610,9 +1612,22 @@ drawbarwin(Bar *bar)
 		bar->w[r] = w;
 		darg.x = bar->x[r];
 		darg.w = bar->w[r];
-		br->drawfunc(bar, &darg);
+		total_drawn += br->drawfunc(bar, &darg);
 	}
-	drw_map(drw, bar->win, 0, 0, bar->bw, bar->bh);
+	if (total_drawn == 0 && bar->showbar) {
+		bar->showbar = 0;
+		updatebarpos(bar->mon);
+		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+		arrange(bar->mon);
+	}
+	else if (total_drawn > 0 && !bar->showbar) {
+		bar->showbar = 1;
+		updatebarpos(bar->mon);
+		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+		drw_map(drw, bar->win, 0, 0, bar->bw, bar->bh);
+		arrange(bar->mon);
+	} else
+		drw_map(drw, bar->win, 0, 0, bar->bw, bar->bh);
 }
 
 #if !FOCUSONCLICK_PATCH
@@ -3611,15 +3626,19 @@ updatebarpos(Monitor *m)
 		bar->bh = bh;
 	}
 
-	if (!m->showbar) {
-		for (bar = m->bar; bar; bar = bar->next)
+	for (bar = m->bar; bar; bar = bar->next)
+		if (!m->showbar || !bar->showbar)
 			bar->by = -bh - y_pad;
+	if (!m->showbar)
 		return;
-	}
 
-	for (num_bars = 0, bar = m->bar; bar; bar = bar->next, num_bars++)
+	for (num_bars = 0, bar = m->bar; bar; bar = bar->next) {
+		if (!bar->showbar)
+			continue;
 		if (bar->topbar)
 			m->wy = m->wy + bh + y_pad;
+		num_bars++;
+	}
 	m->wh = m->wh - y_pad * num_bars - bh * num_bars;
 
 	for (bar = m->bar; bar; bar = bar->next)

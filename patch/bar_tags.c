@@ -92,7 +92,7 @@ draw_tags(Bar *bar, BarDrawArg *a)
 		x += w;
 	}
 
-	return x;
+	return 1;
 }
 
 int

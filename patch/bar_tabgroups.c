@@ -34,8 +34,7 @@ int
 draw_bartabgroups(Bar *bar, BarDrawArg *a)
 {
 	drw_rect(drw, a->x, 0, a->w, bh, 1, 1);
-	bartabcalculate(bar->mon, a->x, a->w, -1, bartabdraw, NULL);
-	return a->x + a->w;
+	return bartabcalculate(bar->mon, a->x, a->w, -1, bartabdraw, NULL);
 }
 
 int
@@ -105,7 +104,7 @@ bartabclick(Monitor *m, Client *c, int passx, int x, int w, int unused, Arg *arg
 		arg->v = c;
 }
 
-void
+int
 bartabcalculate(
 	Monitor *m, int offx, int tabw, int passx,
 	void(*tabfn)(Monitor *, Client *, int, int, int, int, Arg *arg), Arg *arg
@@ -143,7 +142,7 @@ bartabcalculate(
 	}
 
 	if (clientsnmaster + clientsnstack + clientsnfloating + clientsnhidden == 0)
-	 	return;
+	 	return 0;
 
 	tgactive = 1;
 	num = tabw;
@@ -230,4 +229,5 @@ bartabcalculate(
 		}
 		#endif // BARTAB_FLOATWEIGHT
 	}
+	return 1;
 }

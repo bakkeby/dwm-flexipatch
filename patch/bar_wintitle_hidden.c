@@ -8,8 +8,7 @@ int
 draw_wintitle_hidden(Bar *bar, BarDrawArg *a)
 {
 	drw_rect(drw, a->x, 0, a->w, bh, 1, 1);
-	calc_wintitle_hidden(bar->mon, a->x, a->w, -1, flextitledraw, NULL);
-	return a->x + a->w;
+	return calc_wintitle_hidden(bar->mon, a->x, a->w, -1, flextitledraw, NULL);;
 }
 
 int
@@ -19,7 +18,7 @@ click_wintitle_hidden(Bar *bar, Arg *arg, BarClickArg *a)
 	return ClkWinTitle;
 }
 
-void
+int
 calc_wintitle_hidden(
 	Monitor *m, int offx, int tabw, int passx,
 	void(*tabfn)(Monitor *, Client *, int, int, int, int, Arg *arg), Arg *arg
@@ -36,9 +35,10 @@ calc_wintitle_hidden(
 	}
 
 	if (!clientsnhidden)
-		return;
+		return 0;
 
 	w = tabw / clientsnhidden;
 	r = tabw % clientsnhidden;
 	c = flextitledrawarea(m, m->clients, offx, r, w, clientsnhidden, SCHEMEFOR(GRP_HIDDEN), 0, 1, 0, passx, tabfn, arg);
+	return 1;
 }

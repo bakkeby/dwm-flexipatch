@@ -17,7 +17,7 @@ int
 draw_systray(Bar *bar, BarDrawArg *a)
 {
 	if (!showsystray)
-		return a->x;
+		return 0;
 
 	XSetWindowAttributes wa;
 	Client *i;
@@ -61,7 +61,7 @@ draw_systray(Bar *bar, BarDrawArg *a)
 			fprintf(stderr, "dwm: unable to obtain system tray.\n");
 			free(systray);
 			systray = NULL;
-			return a->x;
+			return 0;
 		}
 	}
 
@@ -86,7 +86,7 @@ draw_systray(Bar *bar, BarDrawArg *a)
 	}
 
 	XMoveResizeWindow(dpy, systray->win, bar->bx + a->x + lrpad / 2, (w ? bar->by : -bar->by), MAX(w, 1), bar->bh);
-	return a->x + a->w;
+	return w;
 }
 
 int

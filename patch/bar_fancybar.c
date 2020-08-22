@@ -65,7 +65,7 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 			w -= ftw;
 		}
 	}
-	return x + w;
+	return n;
 }
 
 int

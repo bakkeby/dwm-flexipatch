@@ -8,8 +8,7 @@ int
 draw_wintitle_floating(Bar *bar, BarDrawArg *a)
 {
 	drw_rect(drw, a->x, 0, a->w, bh, 1, 1);
-	calc_wintitle_floating(bar->mon, a->x, a->w, -1, flextitledraw, NULL);
-	return a->x + a->w;
+	return calc_wintitle_floating(bar->mon, a->x, a->w, -1, flextitledraw, NULL);;
 }
 
 int
@@ -19,7 +18,7 @@ click_wintitle_floating(Bar *bar, Arg *arg, BarClickArg *a)
 	return ClkWinTitle;
 }
 
-void
+int
 calc_wintitle_floating(
 	Monitor *m, int offx, int tabw, int passx,
 	void(*tabfn)(Monitor *, Client *, int, int, int, int, Arg *arg), Arg *arg
@@ -36,9 +35,10 @@ calc_wintitle_floating(
 	}
 
 	if (!clientsnfloating)
-		return;
+		return 0;
 
 	w = tabw / clientsnfloating;
 	r = tabw % clientsnfloating;
 	c = flextitledrawarea(m, m->clients, offx, r, w, clientsnfloating, SCHEMEFOR(GRP_FLOAT), 0, 0, 1, passx, tabfn, arg);
+	return 1;
 }

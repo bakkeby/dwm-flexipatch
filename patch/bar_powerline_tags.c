@@ -90,7 +90,7 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 	#else
 	drw_arrow(drw, x, 0, plw, bh, 1, 0);
 	#endif // BAR_POWERLINE_TAGS_SLASH_PATCH
-	return a->x + a->w;
+	return 1;
 }
 
 int

@@ -46,7 +46,7 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 			x += tabw + (i < remainder ? 1 : 0);
 		}
 	}
-	return a->x + a->w;
+	return n;
 }
 
 int

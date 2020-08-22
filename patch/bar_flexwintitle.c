@@ -44,8 +44,7 @@ int
 draw_flexwintitle(Bar *bar, BarDrawArg *a)
 {
 	drw_rect(drw, a->x, 0, a->w, bh, 1, 1);
-	flextitlecalculate(bar->mon, a->x, a->w, -1, flextitledraw, NULL);
-	return a->x + a->w;
+	return flextitlecalculate(bar->mon, a->x, a->w, -1, flextitledraw, NULL);
 }
 
 int
@@ -244,7 +243,7 @@ flextitleclick(Monitor *m, Client *c, int passx, int x, int w, int unused, Arg *
 		arg->v = c;
 }
 
-void
+int
 flextitlecalculate(
 	Monitor *m, int offx, int tabw, int passx,
 	void(*tabfn)(Monitor *, Client *, int, int, int, int, Arg *arg), Arg *arg
@@ -310,7 +309,7 @@ flextitlecalculate(
 
 	n = clientsnmaster + clientsnstack + clientsnstack2 + clientsnfloating + clientsnhidden;
 	if (n == 0)
-	 	return;
+	 	return 0;
 	#if FLEXTILE_DELUXE_LAYOUT
 	else if (m->lt[m->sellt]->arrange == &flextile) {
 		int layout = m->ltaxis[LAYOUT];
@@ -448,4 +447,5 @@ flextitlecalculate(
 		rr -= clientsnhidden;
 		c = flextitledrawarea(m, m->clients, flt_x, rr, w * FLEXWINTITLE_FLOATWEIGHT + rw, clientsnfloating, SCHEMEFOR(GRP_FLOAT), 0, 0, 1, passx, tabfn, arg); // floating
 	}
+	return 1;
 }

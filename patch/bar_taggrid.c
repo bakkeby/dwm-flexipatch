@@ -53,7 +53,7 @@ draw_taggrid(Bar *bar, BarDrawArg *a)
 		}
 		y += h;
 	}
-	return max_x;
+	return 1;
 }
 
 int
