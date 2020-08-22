@@ -205,7 +205,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - the cfacts patch provides the ability to assign different weights to clients in their respective stack in tiled layout
 
    - [clientindicators](https://dwm.suckless.org/patches/clientindicators/)
-      - raws a dot indicator overlayed on each tag icon for each client
+      - draws a dot indicator overlayed on each tag icon for each client
       - the selected client is drawn as a larger horizontal line
 
    - [cmdcustomize](https://dwm.suckless.org/patches/cmdcustomize/)
