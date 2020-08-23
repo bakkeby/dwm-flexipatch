@@ -30,7 +30,8 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	XSetErrorHandler(xerrordummy);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	#if BAR_CENTEREDWINDOWNAME_PATCH
-	pad = (m->ww - TEXTW(m->sel->name)) / 2 - x;
+	if (TEXTW(m->sel->name) < w)
+		pad = (w - TEXTW(m->sel->name) + lrpad) / 2;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
 	drw_text(drw, x, 0, w, bh, pad, m->sel->name, 0, False);
 	#if BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
@@ -38,7 +39,7 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	XSetErrorHandler(xerror);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	if (m->sel->isfloating)
-		drawindicator(m, m->sel, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
+		drawindicator(m, m->sel, 1, x, w, 0, 0, m->sel->isfixed, floatindicatortype);
 	return 1;
 }
 

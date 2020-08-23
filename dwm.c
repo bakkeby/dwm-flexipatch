@@ -88,6 +88,7 @@
 #endif // SCRATCHPADS_PATCH
 #define TEXTWM(X)               (drw_fontset_getwidth(drw, (X), True) + lrpad)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X), False) + lrpad)
+#define HIDDEN(C)               ((getstate(C->win) == IconicState))
 
 /* enums */
 enum {
@@ -1280,7 +1281,10 @@ Monitor *
 createmon(void)
 {
 	Monitor *m, *mon;
-	int i, n, mi, max_bars = 2, istopbar = topbar, layout;
+	int i, n, mi, max_bars = 2, istopbar = topbar;
+	#if MONITOR_RULES_PATCH
+	int layout;
+	#endif // MONITOR_RULES_PATCH
 
 	const BarRule *br;
 	Bar *bar;
