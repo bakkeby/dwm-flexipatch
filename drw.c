@@ -618,11 +618,11 @@ drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h)
 }
 
 unsigned int
-drw_fontset_getwidth(Drw *drw, const char *text, Bool ignored)
+drw_fontset_getwidth(Drw *drw, const char *text, Bool markup)
 {
 	if (!drw || !drw->fonts || !text)
 		return 0;
-	return drw_text(drw, 0, 0, 0, 0, 0, text, 0, ignored);
+	return drw_text(drw, 0, 0, 0, 0, 0, text, 0, markup);
 }
 
 #if BAR_PANGO_PATCH

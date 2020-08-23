@@ -59,7 +59,7 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 		pad = (w - TEXTW(c->name) + lrpad) / 2;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
-	drw_text(drw, x, 0, w, bh, pad, c->name, 0);
+	drw_text(drw, x, 0, w, bh, pad, c->name, 0, False);
 	if (c->isfloating)
 		drawindicator(m, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
 

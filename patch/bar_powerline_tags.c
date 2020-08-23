@@ -61,8 +61,8 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 		#endif // BAR_POWERLINE_TAGS_SLASH_PATCH
 		x += plw;
 		drw_setscheme(drw, nxtscheme);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert);
-		drawindicator(m, NULL, occ, x, w, i, -1, invert, tagindicatortype);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert, False);
+		drawindicator(bar->mon, NULL, occ, x, w, i, -1, invert, tagindicatortype);
 		x += w;
 		prevscheme = nxtscheme;
 	}
