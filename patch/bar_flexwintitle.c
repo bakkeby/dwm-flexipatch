@@ -258,12 +258,14 @@ flextitlecalculate(
 
 		if (i < m->nmaster)
 			clientsnmaster++;
+		#if FLEXTILE_DELUXE_LAYOUT
 		else if (m->nstack) {
 			if (clientsnstack < m->nstack)
 				clientsnstack++;
 			else
 				clientsnstack2++;
 		}
+		#endif // FLEXTILE_DELUXE_LAYOUT
 		else if (i % 2)
 			clientsnstack++;
 		else
@@ -366,7 +368,12 @@ flextitlecalculate(
 		r = num % den; // weight rest width
 		rw = r / n; // rest incr per client
 		rr = r % n; // rest rest
-		if ((!center && !dualstack) || (center && n <= m->nmaster + (m->nstack ? m->nstack : 1))) {
+		#if FLEXTILE_DELUXE_LAYOUT
+		if ((!center && !dualstack) || (center && n <= m->nmaster + (m->nstack ? m->nstack : 1)))
+		#else
+		if ((!center && !dualstack) || (center && n <= m->nmaster + 1))
+		#endif // FLEXTILE_DELUXE_LAYOUT
+		{
 			clientsnstack += clientsnstack2;
 			clientsnstack2 = 0;
 			if (groupactive == GRP_STACK2)

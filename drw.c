@@ -17,10 +17,13 @@ static const unsigned char utfbyte[UTF_SIZ + 1] = {0x80,    0, 0xC0, 0xE0, 0xF0}
 static const unsigned char utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
 static const long utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
+#endif // BAR_PANGO_PATCH
+
 #if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
 Clr transcheme[3];
 #endif // BAR_POWERLINE_TAGS_PATCH | BAR_POWERLINE_STATUS_PATCH
 
+#if !BAR_PANGO_PATCH
 static long
 utf8decodebyte(const char c, size_t *i)
 {
@@ -333,7 +336,7 @@ drw_scm_create(
 	return ret;
 }
 
-#if !PANGO_PATCH
+#if !BAR_PANGO_PATCH
 void
 drw_setfontset(Drw *drw, Fnt *set)
 {

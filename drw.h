@@ -83,7 +83,7 @@ Cur *drw_cur_create(Drw *drw, int shape);
 void drw_cur_free(Drw *drw, Cur *cursor);
 
 /* Drawing context manipulation */
-#if !PANGO_PATCH
+#if !BAR_PANGO_PATCH
 void drw_setfontset(Drw *drw, Fnt *set);
 #endif // BAR_PANGO_PATCH
 void drw_setscheme(Drw *drw, Clr *scm);
