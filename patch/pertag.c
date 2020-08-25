@@ -1,26 +1,26 @@
 struct Pertag {
 	unsigned int curtag, prevtag; /* current and previous tag */
-	int nmasters[LENGTH(tags) + 1]; /* number of windows in master area */
+	int nmasters[NUMTAGS + 1]; /* number of windows in master area */
 	#if FLEXTILE_DELUXE_LAYOUT
-	int nstacks[LENGTH(tags) + 1]; /* number of windows in primary stack area */
-	int ltaxis[LENGTH(tags) + 1][LTAXIS_LAST];
-	const Layout *ltidxs[LENGTH(tags) + 1][3]; /* matrix of tags and layouts indexes  */
+	int nstacks[NUMTAGS + 1]; /* number of windows in primary stack area */
+	int ltaxis[NUMTAGS + 1][LTAXIS_LAST];
+	const Layout *ltidxs[NUMTAGS + 1][3]; /* matrix of tags and layouts indexes  */
 	#else
-	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
+	const Layout *ltidxs[NUMTAGS + 1][2]; /* matrix of tags and layouts indexes  */
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
-	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
+	float mfacts[NUMTAGS + 1]; /* mfacts per tag */
+	unsigned int sellts[NUMTAGS + 1]; /* selected layouts */
 	#if PERTAGBAR_PATCH
-	int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
+	int showbars[NUMTAGS + 1]; /* display bar for the current tag */
 	#endif // PERTAGBAR_PATCH
 	#if SWAPFOCUS_PATCH
-	Client *prevclient[LENGTH(tags) + 1];
+	Client *prevclient[NUMTAGS + 1];
 	#endif // SWAPFOCUS_PATCH
 	#if ZOOMSWAP_PATCH
-	Client *prevzooms[LENGTH(tags) + 1]; /* store zoom information */
+	Client *prevzooms[NUMTAGS + 1]; /* store zoom information */
 	#endif // ZOOMSWAP_PATCH
 	#if VANITYGAPS_PATCH
-	int enablegaps[LENGTH(tags) + 1];
+	int enablegaps[NUMTAGS + 1];
 	#endif // VANITYGAPS_PATCH
 };
 
@@ -29,7 +29,6 @@ pertagview(const Arg *arg)
 {
 	int i;
 	unsigned int tmptag;
-
 	if (arg->ui & TAGMASK) {
 		selmon->pertag->prevtag = selmon->pertag->curtag;
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
@@ -52,6 +51,7 @@ pertagview(const Arg *arg)
 	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
 	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
 	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
+
 	#if FLEXTILE_DELUXE_LAYOUT
 	selmon->ltaxis[LAYOUT] = selmon->pertag->ltaxis[selmon->pertag->curtag][LAYOUT];
 	selmon->ltaxis[MASTER] = selmon->pertag->ltaxis[selmon->pertag->curtag][MASTER];

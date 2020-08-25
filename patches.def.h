@@ -67,6 +67,7 @@
  * https://gitlab.com/udiboy1209-suckless/dwm/-/commit/071f5063e8ac4280666828179f92788d893eea40#4b1a539194be7467cefbda22f675a3b7c19ceca7
  */
 #define BAR_POWERLINE_TAGS_PATCH 0
+
 /* Alters the tags powerline to use forward slash instead of arrows */
 #define BAR_POWERLINE_TAGS_SLASH_PATCH 0
 
@@ -155,6 +156,12 @@
  * https://dwm.suckless.org/patches/alternativetags/
  */
 #define BAR_ALTERNATIVE_TAGS_PATCH 0
+
+/* This patches provides the ability to use alternative text for tags which contain at
+ * least one window.
+ * https://dwm.suckless.org/patches/alttagsdecoration/
+ */
+#define BAR_ALTTAGSDECORATION_PATCH 0
 
 /* This patch changes the rectangle indicating if a tag is used by a client into a bar
  * above the tag name for better visibility.

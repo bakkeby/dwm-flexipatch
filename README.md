@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-08-25 - Unified tag icon handling while adding support for different icons per monitor. Added alttagsdecoration patch.
+
 2020-08-22 - Added logic to auto-hide bars if nothing is drawn on them (e.g. for standalone bars that only show certain clients). Added clientindicators patch and unified indicator code. Simplified Pango integration by settling on common function signatures.
 
 2020-08-21 - Simplification of color configuration; settling on a set of color schemes that is shared between multiple patches (urgentborder, floatborder and titlecolor patches made non-optional)
@@ -161,6 +163,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [alternativetags](https://dwm.suckless.org/patches/alternativetags/)
       - adds alternative tags which can be toggled on the fly for the sole purpose of providing visual aid
+
+   - [alttagsdecoration](https://dwm.suckless.org/patches/alttagsdecoration/)
+      - provides the ability to use alternative text for tags which contain at least one window
 
    - [alwaysfullscreen](https://dwm.suckless.org/patches/alwaysfullscreen/)
       - prevents the focus to drift from the active fullscreen client when using focusstack\(\)
@@ -412,7 +417,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
       - let's you rotate through the stack using keyboard shortcuts
 
-   - [roundedcorners](https://github.com/mitchweaver/suckless/blob/master/dwm/patches_mitch/mitch-06-rounded_corners-db6093f6ec1bb884f7540f2512935b5254750b30.patch)
+   - [roundedcorners](https://github.com/mitchweaver/suckless/blob/master/dwm/patches/mitch-06-rounded_corners-f04cac6d6e39cd9e3fc4fae526e3d1e8df5e34b2.patch)
       - adds rounded corners to client windows
 
    - [savefloats](https://dwm.suckless.org/patches/save_floats/)

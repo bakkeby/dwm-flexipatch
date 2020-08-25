@@ -1,5 +1,7 @@
 /* Bar functionality */
 #include "bar_indicators.c"
+#include "bar_tagicons.c"
+
 #if BAR_ALPHA_PATCH
 #include "bar_alpha.c"
 #endif

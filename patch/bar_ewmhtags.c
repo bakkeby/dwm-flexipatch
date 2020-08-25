@@ -8,15 +8,19 @@ setcurrentdesktop(void)
 void
 setdesktopnames(void)
 {
+	int i;
 	XTextProperty text;
-	Xutf8TextListToTextProperty(dpy, tags, TAGSLENGTH, XUTF8StringStyle, &text);
+	char *tags[NUMTAGS];
+	for (i = 0; i < NUMTAGS; i++)
+		tags[i] = tagicon(selmon, i);
+	Xutf8TextListToTextProperty(dpy, tags, NUMTAGS, XUTF8StringStyle, &text);
 	XSetTextProperty(dpy, root, &text, netatom[NetDesktopNames]);
 }
 
 void
 setnumdesktops(void)
 {
-	long data[] = { TAGSLENGTH };
+	long data[] = { NUMTAGS };
 	XChangeProperty(dpy, root, netatom[NetNumberOfDesktops], XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data, 1);
 }
 

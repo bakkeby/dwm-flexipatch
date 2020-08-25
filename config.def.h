@@ -153,15 +153,15 @@ static char selfloatbgcolor[]            = "#117799";
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const unsigned int alphas[][3] = {
-	/*                      fg      bg        border     */
-	[SchemeNorm]        = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]         = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitleNorm]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitleSel]    = { OPAQUE, baralpha, borderalpha },
-	[SchemeTagsNorm]    = { OPAQUE, baralpha, borderalpha },
-	[SchemeTagsSel]     = { OPAQUE, baralpha, borderalpha },
-	[SchemeHid]         = { OPAQUE, baralpha, borderalpha },
-	[SchemeUrg]         = { OPAQUE, baralpha, borderalpha },
+	/*                       fg      bg        border     */
+	[SchemeNorm]         = { OPAQUE, baralpha, borderalpha },
+	[SchemeSel]          = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitleNorm]    = { OPAQUE, baralpha, borderalpha },
+	[SchemeTitleSel]     = { OPAQUE, baralpha, borderalpha },
+	[SchemeTagsNorm]     = { OPAQUE, baralpha, borderalpha },
+	[SchemeTagsSel]      = { OPAQUE, baralpha, borderalpha },
+	[SchemeHid]          = { OPAQUE, baralpha, borderalpha },
+	[SchemeUrg]          = { OPAQUE, baralpha, borderalpha },
 	#if BAR_FLEXWINTITLE_PATCH
 	[SchemeFlexActTTB]   = { OPAQUE, baralpha, borderalpha },
 	[SchemeFlexActLTR]   = { OPAQUE, baralpha, borderalpha },
@@ -203,15 +203,15 @@ static const unsigned int alphas[][3] = {
 static const char title_bg_dark[]   = "#303030";
 static const char title_bg_light[]  = "#fdfdfd";
 static const int color_ptrs[][ColCount] = {
-	/*                              fg         bg         border    float */
-	[SchemeNorm]                = { -1,        -1,        5,        12 },
-	[SchemeSel]                 = { -1,        -1,        11,       13 },
-	[SchemeTitleNorm]           = { 6,         -1,        -1,       -1 },
-	[SchemeTitleSel]            = { 6,         -1,        -1,       -1 },
-	[SchemeTagsNorm]            = { 2,         0,         0,        -1 },
-	[SchemeTagsSel]             = { 6,         5,         5,        -1 },
-	[SchemeHid]                 = { 5,         0,         0,        -1 },
-	[SchemeUrg]                 = { 7,         9,         9,        15 },
+	/*                       fg      bg      border  float */
+	[SchemeNorm]         = { -1,     -1,     5,      12 },
+	[SchemeSel]          = { -1,     -1,     11,     13 },
+	[SchemeTitleNorm]    = { 6,      -1,     -1,     -1 },
+	[SchemeTitleSel]     = { 6,      -1,     -1,     -1 },
+	[SchemeTagsNorm]     = { 2,      0,      0,      -1 },
+	[SchemeTagsSel]      = { 6,      5,      5,      -1 },
+	[SchemeHid]          = { 5,      0,      0,      -1 },
+	[SchemeUrg]          = { 7,      9,      9,      15 },
 };
 #endif // BAR_VTCOLORS_PATCH
 
@@ -264,15 +264,15 @@ static char *colors[][ColCount] = {
 
 #if BAR_POWERLINE_STATUS_PATCH
 static char *statuscolors[][ColCount] = {
-	/*                    fg                bg                border                float */
-	[SchemeNorm]      = { normfgcolor,      normbgcolor,      normbordercolor,      normfloatcolor },
-	[SchemeSel]       = { selfgcolor,       selbgcolor,       selbordercolor,       selfloatcolor },
-	[SchemeTitleNorm] = { titlenormfgcolor, titlenormbgcolor, titlenormbordercolor, titlenormfloatcolor },
-	[SchemeTitleSel]  = { titleselfgcolor,  titleselbgcolor,  titleselbordercolor,  titleselfloatcolor },
-	[SchemeTagsNorm]  = { tagsnormfgcolor,  tagsnormbgcolor,  tagsnormbordercolor,  tagsnormfloatcolor },
-	[SchemeTagsSel]   = { tagsselfgcolor,   tagsselbgcolor,   tagsselbordercolor,   tagsselfloatcolor },
-	[SchemeHid]       = { hidfgcolor,       hidbgcolor,       hidbordercolor,       hidfloatcolor },
-	[SchemeUrg]       = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
+	/*                       fg                bg                border                float */
+	[SchemeNorm]         = { normfgcolor,      normbgcolor,      normbordercolor,      normfloatcolor },
+	[SchemeSel]          = { selfgcolor,       selbgcolor,       selbordercolor,       selfloatcolor },
+	[SchemeTitleNorm]    = { titlenormfgcolor, titlenormbgcolor, titlenormbordercolor, titlenormfloatcolor },
+	[SchemeTitleSel]     = { titleselfgcolor,  titleselbgcolor,  titleselbordercolor,  titleselfloatcolor },
+	[SchemeTagsNorm]     = { tagsnormfgcolor,  tagsnormbgcolor,  tagsnormbordercolor,  tagsnormfloatcolor },
+	[SchemeTagsSel]      = { tagsselfgcolor,   tagsselbgcolor,   tagsselbordercolor,   tagsselfloatcolor },
+	[SchemeHid]          = { hidfgcolor,       hidbgcolor,       hidbordercolor,       hidfloatcolor },
+	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
 };
 #endif // BAR_POWERLINE_STATUS_PATCH
 
@@ -295,15 +295,38 @@ static Sp scratchpads[] = {
 };
 #endif // SCRATCHPADS_PATCH
 
-/* tagging */
-#if BAR_EWMHTAGS_PATCH
-static char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-#else
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-#endif // BAR_EWMHTAGS_PATCH
-#if BAR_ALTERNATIVE_TAGS_PATCH
-static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-#endif // BAR_ALTERNATIVE_TAGS_PATCH
+/* Tags
+ * In a traditional dwm the number of tags in use can be changed simply by changing the number
+ * of strings in the tags array. This build does things a bit different which has some added
+ * benefits. If you need to change the number of tags here then change the NUMTAGS macro in dwm.c.
+ *
+ * Examples:
+ *
+ *  1) static char *tagicons[][NUMTAGS*2] = {
+ *         [DEFAULT_TAGS] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I" },
+ *     }
+ *
+ *  2) static char *tagicons[][1] = {
+ *         [DEFAULT_TAGS] = { "•" },
+ *     }
+ *
+ * The first example would result in the tags on the first monitor to be 1 through 9, while the
+ * tags for the second monitor would be named A through I. A third monitor would start again at
+ * 1 through 9 while the tags on a fourth monitor would also be named A through I. Note the tags
+ * count of NUMTAGS*2 in the array initialiser which defines how many tag text / icon exists in
+ * the array. This can be changed to *3 to add separate icons for a third monitor.
+ *
+ * For the second example each tag would be represented as a bullet point. Both cases work the
+ * same from a technical standpoint - the icon index is derived from the tag index and the monitor
+ * index. If the icon index is is greater than the number of tag icons then it will wrap around
+ * until it an icon matches. Similarly if there are two tag icons then it would alternate between
+ * them. This works seamlessly with alternative tags and alttagsdecoration patches.
+ */
+static char *tagicons[][NUMTAGS] = {
+	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
+	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
+};
 
 #if BAR_TAGGRID_PATCH
 /* grid of tags */
@@ -461,6 +484,7 @@ static const BarRule barrules[] = {
 	{ -1,       1,     BAR_ALIGN_LEFT,   width_wintitle_floating, draw_wintitle_floating, click_wintitle_floating, "wintitle_floating" },
 	#endif // BAR_WINTITLE_FLOATING_PATCH
 	#endif // BAR_FLEXWINTITLE_PATCH
+	{ NULL }
 };
 
 #if DWMC_PATCH

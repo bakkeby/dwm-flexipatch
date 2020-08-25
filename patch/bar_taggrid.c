@@ -1,7 +1,7 @@
 int
 width_taggrid(Bar *bar, BarWidthArg *a)
 {
-	return (bh / 2) * (LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0)) + lrpad;
+	return (bh / 2) * (NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0)) + lrpad;
 }
 
 int
@@ -17,17 +17,17 @@ draw_taggrid(Bar *bar, BarDrawArg *a)
 	max_x = x = a->x + lrpad / 2;
 	h = bh / tagrows;
 	y = 0;
-	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
+	columns = NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0);
 
 	/* Firstly we will fill the borders of squares */
 	XSetForeground(drw->dpy, drw->gc, scheme[SchemeTagsNorm][ColBg].pixel);
 	XFillRectangle(dpy, drw->drawable, drw->gc, x, y, h*columns + 1, bh);
 
-	/* We will draw LENGTH(tags) squares in tagraws raws. */
+	/* We will draw NUMTAGS squares in tagraws raws. */
 	for (j = 0, i = 0; j < tagrows; j++) {
 		x = a->x + lrpad / 2;
 		for (k = 0; k < columns; k++, i++) {
-			if (i < LENGTH(tags)) {
+			if (i < NUMTAGS) {
 				invert = bar->mon->tagset[bar->mon->seltags] & 1 << i ? 0 : 1;
 
 				/* Select active color for current square */
@@ -61,10 +61,10 @@ click_taggrid(Bar *bar, Arg *arg, BarClickArg *a)
 {
 	unsigned int i, columns;
 
-	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
+	columns = NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0);
 	i = (a->rel_x - lrpad / 2) / (bh / tagrows) + columns * (a->rel_y / (bh / tagrows));
-	if (i >= LENGTH(tags)) {
-		i = LENGTH(tags) - 1;
+	if (i >= NUMTAGS) {
+		i = NUMTAGS - 1;
 	}
 	arg->ui = 1 << i;
 	return ClkTagBar;
@@ -79,9 +79,9 @@ switchtag(const Arg *arg)
 	int col, row;
 	Arg new_arg;
 
-	columns = LENGTH(tags) / tagrows + ((LENGTH(tags) % tagrows > 0) ? 1 : 0);
+	columns = NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0);
 
-	for (i = 0; i < LENGTH(tags); ++i) {
+	for (i = 0; i < NUMTAGS; ++i) {
 		if (!(selmon->tagset[selmon->seltags] & 1 << i)) {
 			continue;
 		}
@@ -96,7 +96,7 @@ switchtag(const Arg *arg)
 			do {
 				pos = row * columns + col;
 				row --;
-			} while (pos >= LENGTH(tags));
+			} while (pos >= NUMTAGS);
 		}
 		if (arg->ui & SWITCHTAG_DOWN) {     /* DOWN */
 			row ++;
@@ -104,7 +104,7 @@ switchtag(const Arg *arg)
 				row = 0;
 			}
 			pos = row * columns + col;
-			if (pos >= LENGTH(tags)) {
+			if (pos >= NUMTAGS) {
 				row = 0;
 			}
 			pos = row * columns + col;
@@ -117,7 +117,7 @@ switchtag(const Arg *arg)
 			do {
 				pos = row * columns + col;
 				col --;
-			} while (pos >= LENGTH(tags));
+			} while (pos >= NUMTAGS);
 		}
 		if (arg->ui & SWITCHTAG_RIGHT) {     /* RIGHT */
 			col ++;
@@ -125,7 +125,7 @@ switchtag(const Arg *arg)
 				col = 0;
 			}
 			pos = row * columns + col;
-			if (pos >= LENGTH(tags)) {
+			if (pos >= NUMTAGS) {
 				col = 0;
 				pos = row * columns + col;
 			}

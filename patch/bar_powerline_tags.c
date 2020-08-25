@@ -10,16 +10,12 @@ width_pwrl_tags(Bar *bar, BarWidthArg *a)
 		occ |= c->tags == 255 ? 0 : c->tags;
 	#endif // BAR_HIDEVACANTTAGS_PATCH
 
-	for (w = 0, i = 0; i < LENGTH(tags); i++) {
+	for (w = 0, i = 0; i < NUMTAGS; i++) {
 		#if BAR_HIDEVACANTTAGS_PATCH
 		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
-		#if BAR_ALTERNATIVE_TAGS_PATCH
-		w += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]) + plw;
-		#else
-		w += TEXTW(tags[i]) + plw;
-		#endif // BAR_ALTERNATIVE_TAGS_PATCH
+		w += TEXTW(tagicon(bar->mon, i)) + plw;
 	}
 	return w + lrpad;
 }
@@ -31,6 +27,7 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 	int invert;
 	int plw = drw->fonts->h / 2 + 1;
 	unsigned int i, occ = 0, urg = 0;
+	char *icon;
 	Client *c;
 	Clr *prevscheme, *nxtscheme;
 
@@ -45,14 +42,16 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 	}
 	x = a->x;
 	prevscheme = scheme[SchemeNorm];
-	for (i = 0; i < LENGTH(tags); i++) {
+	for (i = 0; i < NUMTAGS; i++) {
 		#if BAR_HIDEVACANTTAGS_PATCH
 		/* do not draw vacant tags */
 		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
+
+		icon = tagicon(bar->mon, i);
 		invert = 0;
-		w = TEXTW(tags[i]);
+		w = TEXTW(icon);
 		drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeNorm]));
 		#if BAR_POWERLINE_TAGS_SLASH_PATCH
 		drw_arrow(drw, x, 0, plw, bh, 1, 1);
@@ -61,7 +60,7 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 		#endif // BAR_POWERLINE_TAGS_SLASH_PATCH
 		x += plw;
 		drw_setscheme(drw, nxtscheme);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert, False);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, icon, invert, False);
 		drawindicator(bar->mon, NULL, occ, x, w, i, -1, invert, tagindicatortype);
 		x += w;
 		prevscheme = nxtscheme;
@@ -94,13 +93,9 @@ click_pwrl_tags(Bar *bar, Arg *arg, BarClickArg *a)
 		if (!(occ & 1 << i || bar->mon->tagset[bar->mon->seltags] & 1 << i))
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
-		#if BAR_ALTERNATIVE_TAGS_PATCH
-		x += selmon->alttag ? TEXTW(tagsalt[i]) : TEXTW(tags[i]) + plw;
-		#else
-		x += TEXTW(tags[i]) + plw;
-		#endif
-	} while (a->rel_x >= x && ++i < LENGTH(tags));
-	if (i < LENGTH(tags)) {
+		x += TEXTW(tagicon(bar->mon, i)) + plw;
+	} while (a->rel_x >= x && ++i < NUMTAGS);
+	if (i < NUMTAGS) {
 		arg->ui = 1 << i;
 	}
 	return ClkTagBar;

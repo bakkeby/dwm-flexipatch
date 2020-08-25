@@ -3,13 +3,13 @@ reorganizetags(const Arg *arg)
 {
    Client *c;
    unsigned int occ, unocc, i;
-   unsigned int tagdest[LENGTH(tags)];
+   unsigned int tagdest[NUMTAGS];
 
    occ = 0;
    for (c = selmon->clients; c; c = c->next)
        occ |= (1 << (ffs(c->tags)-1));
    unocc = 0;
-   for (i = 0; i < LENGTH(tags); ++i) {
+   for (i = 0; i < NUMTAGS; ++i) {
        while (unocc < i && (occ & (1 << unocc)))
            unocc++;
        if (occ & (1 << i)) {

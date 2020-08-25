@@ -45,6 +45,12 @@
 #include "drw.h"
 #include "util.h"
 
+#if BAR_FLEXWINTITLE_PATCH
+#ifndef FLEXTILE_DELUXE_LAYOUT
+#define FLEXTILE_DELUXE_LAYOUT 1
+#endif
+#endif
+
 #if BAR_PANGO_PATCH
 #include <pango/pango.h>
 #endif // BAR_PANGO_PATCH
@@ -57,6 +63,7 @@
 #endif // SPAWNCMD_PATCH
 
 /* macros */
+#define NUMTAGS                 9
 #define BARRULES                20
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
@@ -79,12 +86,12 @@
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define WTYPE                   "_NET_WM_WINDOW_TYPE_"
 #if SCRATCHPADS_PATCH
-#define NUMTAGS                 (LENGTH(tags) + LENGTH(scratchpads))
-#define TAGMASK                 ((1 << NUMTAGS) - 1)
-#define SPTAG(i)                ((1 << LENGTH(tags)) << (i))
-#define SPTAGMASK               (((1 << LENGTH(scratchpads))-1) << LENGTH(tags))
+#define TOTALTAGS               (NUMTAGS + LENGTH(scratchpads))
+#define TAGMASK                 ((1 << TOTALTAGS) - 1)
+#define SPTAG(i)                ((1 << NUMTAGS) << (i))
+#define SPTAGMASK               (((1 << LENGTH(scratchpads))-1) << NUMTAGS)
 #else
-#define TAGMASK                 ((1 << LENGTH(tags)) - 1)
+#define TAGMASK                 ((1 << NUMTAGS) - 1)
 #endif // SCRATCHPADS_PATCH
 #define TEXTWM(X)               (drw_fontset_getwidth(drw, (X), True) + lrpad)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X), False) + lrpad)
@@ -364,6 +371,7 @@ typedef struct {
 typedef struct Pertag Pertag;
 #endif // PERTAG_PATCH
 struct Monitor {
+	int index;
 	char ltsymbol[16];
 	float mfact;
 	#if FLEXTILE_DELUXE_LAYOUT
@@ -670,9 +678,9 @@ static Window root, wmcheckwin;
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
 #if SCRATCHPAD_ALT_1_PATCH
-struct NumTags { char limitexceeded[LENGTH(tags) > 30 ? -1 : 1]; };
+struct NumTags { char limitexceeded[NUMTAGS > 30 ? -1 : 1]; };
 #else
-struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
+struct NumTags { char limitexceeded[NUMTAGS > 31 ? -1 : 1]; };
 #endif // SCRATCHPAD_ALT_1_PATCH
 
 /* function implementations */
@@ -911,7 +919,7 @@ attachstack(Client *c)
 void
 buttonpress(XEvent *e)
 {
-	int click, i, r, mi;
+	int click, i, r;
 	Arg arg = {0};
 	Client *c;
 	Monitor *m;
@@ -931,14 +939,13 @@ buttonpress(XEvent *e)
 		focus(NULL);
 	}
 
-	for (mi = 0, m = mons; m && m != selmon; m = m->next, mi++); // get the monitor index
 	for (bar = selmon->bar; bar; bar = bar->next) {
 		if (ev->window == bar->win) {
 			for (r = 0; r < LENGTH(barrules); r++) {
 				br = &barrules[r];
 				if (br->bar != bar->idx || (br->monitor == 'A' && m != selmon) || br->clickfunc == NULL)
 					continue;
-				if (br->monitor != 'A' && br->monitor != -1 && br->monitor != mi)
+				if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
 					continue;
 				if (bar->x[r] <= ev->x && ev->x <= bar->x[r] + bar->w[r]) {
 					carg.rel_x = ev->x - bar->x[r];
@@ -1133,8 +1140,8 @@ clientmessage(XEvent *e)
 			selmon = c->mon;
 			focus(c);
 		} else {
-			for (i = 0; i < LENGTH(tags) && !((1 << i) & c->tags); i++);
-			if (i < LENGTH(tags)) {
+			for (i = 0; i < NUMTAGS && !((1 << i) & c->tags); i++);
+			if (i < NUMTAGS) {
 				const Arg a = {.ui = 1 << i};
 				selmon = c->mon;
 				view(&a);
@@ -1312,8 +1319,8 @@ createmon(void)
 	m->gappoh = gappoh;
 	m->gappov = gappov;
 	#endif // VANITYGAPS_PATCH
-
 	for (mi = 0, mon = mons; mon; mon = mon->next, mi++); // monitor index
+	m->index = mi;
 	#if MONITOR_RULES_PATCH
 	for (j = 0; j < LENGTH(monrules); j++) {
 		mr = &monrules[j];
@@ -1374,7 +1381,7 @@ createmon(void)
 	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
 		die("fatal: could not malloc() %u bytes\n", sizeof(Pertag));
 	m->pertag->curtag = m->pertag->prevtag = 1;
-	for (i = 0; i <= LENGTH(tags); i++) {
+	for (i = 0; i <= NUMTAGS; i++) {
 		#if FLEXTILE_DELUXE_LAYOUT
 		m->pertag->nstacks[i] = m->nstack;
 		#endif // FLEXTILE_DELUXE_LAYOUT
@@ -1522,14 +1529,12 @@ drawbarwin(Bar *bar)
 {
 	if (!bar->win)
 		return;
-	Monitor *mon;
-	int r, w, mi, total_drawn = 0;
+	int r, w, total_drawn = 0;
 	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
 	const BarRule *br;
 	BarWidthArg warg = { 0 };
 	BarDrawArg darg  = { 0, 0 };
 
-	for (mi = 0, mon = mons; mon && mon != bar->mon; mon = mon->next, mi++); // get the monitor index
 	rw = lw = bar->bw;
 	rx = lx = 0;
 
@@ -1539,7 +1544,7 @@ drawbarwin(Bar *bar)
 		br = &barrules[r];
 		if (br->bar != bar->idx || br->drawfunc == NULL || (br->monitor == 'A' && bar->mon != selmon))
 			continue;
-		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != mi)
+		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
 			continue;
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		warg.max_width = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
@@ -3630,7 +3635,6 @@ updatebarpos(Monitor *m)
 			bar->by = -bh - y_pad;
 	if (!m->showbar)
 		return;
-
 	for (num_bars = 0, bar = m->bar; bar; bar = bar->next) {
 		if (!bar->showbar)
 			continue;
@@ -3639,7 +3643,6 @@ updatebarpos(Monitor *m)
 		num_bars++;
 	}
 	m->wh = m->wh - y_pad * num_bars - bh * num_bars;
-
 	for (bar = m->bar; bar; bar = bar->next)
 		bar->by = (bar->topbar ? m->wy - bh : m->wy + m->wh);
 }
@@ -3720,6 +3723,8 @@ updategeom(void)
 				cleanupmon(m);
 			}
 		}
+		for (i = 0, m = mons; m; m = m->next, i++)
+			m->index = i;
 		free(unique);
 	} else
 #endif /* XINERAMA */

@@ -8,11 +8,11 @@ tagall(const Arg *arg)
 	int tag = (char *)arg->v ? atoi(((char *)arg->v) + floating_only) : 0;
 	int j;
 	Client* c;
-	if (tag >= 0 && tag < LENGTH(tags))
+	if (tag >= 0 && tag < NUMTAGS)
 		for (c = selmon->clients; c; c = c->next)
 		{
 			if (!floating_only || c->isfloating)
-				for (j = 0; j < LENGTH(tags); j++)
+				for (j = 0; j < NUMTAGS; j++)
 				{
 					if (c->tags & 1 << j && selmon->tagset[selmon->seltags] & 1 << j)
 					{

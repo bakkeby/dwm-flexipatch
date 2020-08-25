@@ -69,7 +69,7 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x + w, 0, 1, bh);
 	}
 	/* Optional tags icons */
-	for (i = 0; i < LENGTH(tags); i++) {
+	for (i = 0; i < NUMTAGS; i++) {
 		if ((m->tagset[m->seltags] >> i) & 1)
 			nviewtags++;
 		if ((c->tags >> i) & 1)
