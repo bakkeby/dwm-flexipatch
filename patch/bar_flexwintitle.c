@@ -171,8 +171,7 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 	if (!c)
 		return;
 	int i, nclienttags = 0, nviewtags = 0, pad = lrpad / 2;
-
-	drw_setscheme(drw, scheme[(
+	int clientscheme = (
 		c == m->sel
 		? getselschemefor(tabscheme)
 		: HIDDEN(c)
@@ -180,7 +179,9 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 		: c->isurgent
 		? SchemeUrg
 		: tabscheme
-	)]);
+	);
+	drw_setscheme(drw, scheme[clientscheme]);
+	XSetWindowBorder(dpy, c->win, scheme[clientscheme][ColBorder].pixel);
 	if (w <= TEXTW("A") - lrpad + pad) // reduce text padding if wintitle is too small
 		pad = (w - TEXTW("A") + lrpad < 0 ? 0 : (w - TEXTW("A") + lrpad) / 2);
 	#if BAR_CENTEREDWINDOWNAME_PATCH
