@@ -117,6 +117,11 @@ expand(unsigned char mask)
 {
 	XEvent ev;
 	int nx1, ny1, nx2, ny2;
+	#if SETBORDERPX_PATCH
+	int bp = selmon->borderpx;
+	#else
+	int bp = borderpx;
+	#endif // SETBORDERPX_PATCH
 	unsigned char curmask;
 	unsigned char newmask;
 
@@ -142,7 +147,7 @@ expand(unsigned char mask)
 	nx2 = calculate_expand(mask, curmask, &newmask,
 			EXPAND_RIGHT, &selmon->sel->expandx2,
 			selmon->sel->x + selmon->sel->w,
-			selmon->wx + selmon->ww - 2*borderpx,
+			selmon->wx + selmon->ww - 2*bp,
 			selmon->sel->oldw + selmon->sel->x);
 	ny1 = calculate_expand(mask, curmask, &newmask,
 			EXPAND_UP, &selmon->sel->expandy1,
@@ -152,7 +157,7 @@ expand(unsigned char mask)
 	ny2 = calculate_expand(mask, curmask, &newmask,
 			EXPAND_DOWN, &selmon->sel->expandy2,
 			selmon->sel->y + selmon->sel->h,
-			selmon->wy + selmon->wh - 2*borderpx,
+			selmon->wy + selmon->wh - 2*bp,
 			selmon->sel->oldh + selmon->sel->y);
 
 

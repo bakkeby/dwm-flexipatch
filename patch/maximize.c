@@ -30,6 +30,25 @@ maximize(int x, int y, int w, int h)
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 }
 
+#if SETBORDERPX_PATCH
+void
+togglemax(const Arg *arg)
+{
+	maximize(selmon->wx, selmon->wy, selmon->ww - 2 * selmon->borderpx, selmon->wh - 2 * selmon->borderpx);
+}
+
+void
+toggleverticalmax(const Arg *arg)
+{
+	maximize(selmon->sel->x, selmon->wy, selmon->sel->w, selmon->wh - 2 * selmon->borderpx);
+}
+
+void
+togglehorizontalmax(const Arg *arg)
+{
+	maximize(selmon->wx, selmon->sel->y, selmon->ww - 2 * selmon->borderpx, selmon->sel->h);
+}
+#else
 void
 togglemax(const Arg *arg)
 {
@@ -47,3 +66,4 @@ togglehorizontalmax(const Arg *arg)
 {
 	maximize(selmon->wx, selmon->sel->y, selmon->ww - 2 * borderpx, selmon->sel->h);
 }
+#endif // SETBORDERPX_PATCH
