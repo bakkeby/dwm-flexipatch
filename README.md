@@ -221,6 +221,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [cmdcustomize](https://dwm.suckless.org/patches/cmdcustomize/)
       - allows color attributes to be set through the command line
 
+   - [colorbar](https://dwm.suckless.org/patches/colorbar/)
+      - lets you change the foreground and background color of every statusbar element
+
    - color_emoji
       - enables color emoji in dmenu by removing a workaround for a BadLength error in the Xft library when color glyphs are used
       - enabling this will crash dwm on encountering such glyphs unless you also have an updated Xft library that can handle them
