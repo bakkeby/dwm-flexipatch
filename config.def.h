@@ -945,6 +945,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
 	{ MODKEY|ShiftMask,             XK_o,          setcfact,               {0} },
 	#endif // CFACTS_PATCH
+	#if ASPECTRESIZE_PATCH
+	{ MODKEY|ControlMask|ShiftMask, XK_e,          aspectresize,           {.i = +24} },
+	{ MODKEY|ControlMask|ShiftMask, XK_r,          aspectresize,           {.i = -24} },
+	#endif // ASPECTRESIZE_PATCH
 	#if MOVERESIZE_PATCH
 	{ MODKEY|Mod4Mask,              XK_Down,       moveresize,             {.v = "0x 25y 0w 0h" } },
 	{ MODKEY|Mod4Mask,              XK_Up,         moveresize,             {.v = "0x -25y 0w 0h" } },

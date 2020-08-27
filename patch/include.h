@@ -79,6 +79,9 @@
 #endif
 
 /* Other patches */
+#if ASPECTRESIZE_PATCH
+#include "aspectresize.h"
+#endif
 #if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 #include "attachx.h"
 #endif

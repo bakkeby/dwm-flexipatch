@@ -63,6 +63,10 @@
 #endif // SPAWNCMD_PATCH
 
 /* macros */
+#define Button6                 6
+#define Button7                 7
+#define Button8                 8
+#define Button9                 9
 #define NUMTAGS                 9
 #define BARRULES                20
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)

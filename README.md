@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-08-27 - Added aspectresize patch
+
 2020-08-25 - Unified tag icon handling while adding support for different icons per monitor. Added alttagsdecoration patch.
 
 2020-08-22 - Added logic to auto-hide bars if nothing is drawn on them (e.g. for standalone bars that only show certain clients). Added clientindicators patch and unified indicator code. Simplified Pango integration by settling on common function signatures.
@@ -169,6 +171,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [alwaysfullscreen](https://dwm.suckless.org/patches/alwaysfullscreen/)
       - prevents the focus to drift from the active fullscreen client when using focusstack\(\)
+
+   - [aspectresize](https://dwm.suckless.org/patches/aspectresize/)
+      - allows windows to be resized with its aspect ratio remaining constant
 
    - [attachabove](https://dwm.suckless.org/patches/attachabove/)
       - new windows are placed above selected client
