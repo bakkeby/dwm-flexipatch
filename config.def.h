@@ -674,9 +674,6 @@ static const int decorhints  = 1;    /* 1 means respect decoration hints */
 #define FORCE_VSPLIT 1
 #endif
 
-/* Position of the monocle layout in the layouts variable, used by warp and fullscreen patches */
-#define MONOCLE_LAYOUT_POS 2
-
 #if FLEXTILE_DELUXE_LAYOUT
 static const Layout layouts[] = {
 	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis } */

@@ -503,7 +503,6 @@
 
 /* Applies the monocle layout with the focused client on top and hides the bar. When pressed
  * again it shows the bar and restores the layout that was active before going fullscreen.
- * NB: This patch assumes that the third layout is monocle and that the bar is shown.
  * https://dwm.suckless.org/patches/fullscreen/
  */
 #define FULLSCREEN_PATCH 0

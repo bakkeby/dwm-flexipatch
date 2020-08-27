@@ -2591,6 +2591,9 @@ restack(Monitor *m)
 	Client *c;
 	XEvent ev;
 	XWindowChanges wc;
+	#if WARP_PATCH && FLEXTILE_DELUXE_LAYOUT
+	int n;
+	#endif // WARP_PATCH
 
 	drawbar(m);
 	if (!m->sel)
@@ -2608,8 +2611,21 @@ restack(Monitor *m)
 	}
 	XSync(dpy, False);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
-	#if WARP_PATCH
-	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && selmon->lt[selmon->sellt] != &layouts[MONOCLE_LAYOUT_POS])
+	#if WARP_PATCH && (FLEXTILE_DELUXE_LAYOUT || MONOCLE_LAYOUT)
+	#if FLEXTILE_DELUXE_LAYOUT
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	#endif // FLEXTILE_DELUXE_LAYOUT
+	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && (
+		#if MONOCLE_LAYOUT && FLEXTILE_DELUXE_LAYOUT
+		(m->lt[m->sellt]->arrange != &monocle
+		&& !(m->ltaxis[MASTER] == MONOCLE && (abs(m->ltaxis[LAYOUT] == NO_SPLIT || !m->nmaster || n <= m->nmaster))))
+		#elif MONOCLE_LAYOUT
+		m->lt[m->sellt]->arrange == &monocle
+		#else
+		!(m->ltaxis[MASTER] == MONOCLE && (abs(m->ltaxis[LAYOUT] == NO_SPLIT || !m->nmaster || n <= m->nmaster)))
+		#endif // FLEXTILE_DELUXE_LAYOUT
+		|| m->sel->isfloating)
+	)
 		warp(m->sel);
 	#endif // WARP_PATCH
 }
