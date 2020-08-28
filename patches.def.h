@@ -105,6 +105,14 @@
 /* Supplementary patch should you want to disable alpha for the status2d section */
 #define BAR_STATUS2D_NO_ALPHA_PATCH 0
 
+/* Addition to the status2d patch that allows the use of terminal colors (color0 through color15)
+ * from xrdb in the status, allowing programs like pywal to change statusbar colors.
+ * This adds the C and B codes to use terminal foreground and background colors respectively.
+ * E.g. ^B5^ would use color5 as the background color.
+ * https://dwm.suckless.org/patches/status2d/
+ */
+#define BAR_STATUS2D_XRDB_TERMCOLORS_PATCH 0
+
 /* The systray patch adds systray for the status bar.
  * https://dwm.suckless.org/patches/systray/
  */
