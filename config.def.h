@@ -330,9 +330,6 @@ static char *tagicons[][NUMTAGS] = {
 
 #if BAR_TAGGRID_PATCH
 /* grid of tags */
-#define DRAWCLASSICTAGS             1 << 0
-#define DRAWTAGGRID                 1 << 1
-
 #define SWITCHTAG_UP                1 << 0
 #define SWITCHTAG_DOWN              1 << 1
 #define SWITCHTAG_LEFT              1 << 2
@@ -342,7 +339,6 @@ static char *tagicons[][NUMTAGS] = {
 #define SWITCHTAG_VIEW              1 << 6
 #define SWITCHTAG_TOGGLEVIEW        1 << 7
 
-static const unsigned int drawtagmask = DRAWTAGGRID; /* | DRAWCLASSICTAGS to show classic row of tags */
 static const int tagrows = 2;
 #endif // BAR_TAGGRID_PATCH
 
