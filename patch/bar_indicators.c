@@ -47,6 +47,9 @@ drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int w, unsigned in
 	case INDICATOR_BOX_WIDER:
 		drw_rect(drw, x + boxw/2, 0, w - boxw, bh, 0, invert);
 		break;
+	case INDICATOR_BOX_FULL:
+		drw_rect(drw, x, 0, w - 2, bh, 0, invert);
+		break;
 	case INDICATOR_CLIENT_DOTS:
 		for (c = m->clients; c; c = c->next) {
 			if (c->tags & (1 << tag)) {
