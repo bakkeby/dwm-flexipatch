@@ -2619,7 +2619,7 @@ restack(Monitor *m)
 	}
 	XSync(dpy, False);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
-	#if WARP_PATCH && (FLEXTILE_DELUXE_LAYOUT || MONOCLE_LAYOUT)
+	#if WARP_PATCH && FLEXTILE_DELUXE_LAYOUT || WARP_PATCH && MONOCLE_LAYOUT
 	#if FLEXTILE_DELUXE_LAYOUT
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
 	#endif // FLEXTILE_DELUXE_LAYOUT
