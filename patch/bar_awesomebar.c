@@ -39,7 +39,7 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 
 			pad = lrpad / 2;
 			#if BAR_CENTEREDWINDOWNAME_PATCH
-			if (TEXTW(c->name) < w)
+			if (TEXTW(c->name) < tabw)
 				pad = (tabw - TEXTW(c->name) + lrpad) / 2;
 			#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
