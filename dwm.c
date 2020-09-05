@@ -1146,9 +1146,9 @@ clientmessage(XEvent *e)
 		} else {
 			for (i = 0; i < NUMTAGS && !((1 << i) & c->tags); i++);
 			if (i < NUMTAGS) {
-				const Arg a = {.ui = 1 << i};
 				selmon = c->mon;
-				view(&a);
+				if (((1 << i) & TAGMASK) != selmon->tagset[selmon->seltags])
+					view(&((Arg) { .ui = 1 << i }));
 				focus(c);
 				restack(selmon);
 			}
@@ -3281,7 +3281,8 @@ tag(const Arg *arg)
 		#endif // SWAPFOCUS_PATCH
 		arrange(selmon);
 		#if VIEWONTAG_PATCH
-		view(arg);
+		if ((arg->ui & TAGMASK) != selmon->tagset[selmon->seltags])
+			view(arg);
 		#endif // VIEWONTAG_PATCH
 	}
 }
@@ -3562,7 +3563,7 @@ unmanage(Client *c, int destroyed)
 	updateclientlist();
 	arrange(m);
 	#if SWITCHTAG_PATCH
-	if (switchtag)
+	if (switchtag && ((switchtag & TAGMASK) != selmon->tagset[selmon->seltags]))
 		view(&((Arg) { .ui = switchtag }));
 	#endif // SWITCHTAG_PATCH
 }
@@ -3928,7 +3929,12 @@ view(const Arg *arg)
 	#else
 	if ((arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
 	#endif // EMPTYVIEW_PATCH
+	{
+		#if VIEW_SAME_TAG_GIVES_PREVIOUS_TAG_PATCH
+		view(&((Arg) { .ui = 0 }));
+		#endif // VIEW_SAME_TAG_GIVES_PREVIOUS_TAG_PATCH
 		return;
+    }
 	selmon->seltags ^= 1; /* toggle sel tagset */
 	#if PERTAG_PATCH
 	pertagview(arg);

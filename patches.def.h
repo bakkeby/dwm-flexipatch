@@ -936,6 +936,14 @@
  */
 #define VIEWONTAG_PATCH 0
 
+/* By default tags can be changed using MOD+<num> while MOD+Tab toggles between the current and
+ * the previous tag. This patch changes this so that if you hit MOD+<num> for the tag you are
+ * currently on, then it works the same as MOD+Tab and switches back to the previous tag.
+ * Idea ref.
+ * https://www.reddit.com/r/suckless/comments/ik27vd/key_toggle_between_next_and_previous_tag_dwm/
+ */
+#define VIEW_SAME_TAG_GIVES_PREVIOUS_TAG_PATCH 0
+
 /* This patch warps the mouse cursor to the center of the currently focused window or screen
  * when the mouse cursor is (a) on a different screen or (b) on top of a different window.
  * https://dwm.suckless.org/patches/warp/
