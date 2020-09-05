@@ -51,7 +51,7 @@ tagswapmon(const Arg *arg)
 	}
 
 	for (c = mc; c; c = next) {
-		next = ;
+		next = c->next;
 		c->mon = selmon;
 		c->tags = selmon->tagset[selmon->seltags]; /* assign tags of target monitor */
 		attach(c);
