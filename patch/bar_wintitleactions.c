@@ -57,7 +57,7 @@ togglewin(const Arg *arg)
 		if (HIDDEN(c))
 			show(c);
 		focus(c);
-		restack(selmon);
+		restack(c->mon);
 	}
 }
 
@@ -82,7 +82,8 @@ showhideclient(const Arg *arg)
 
 	if (HIDDEN(c)) {
 		show(c);
-		restack(selmon);
+		focus(c);
+		restack(c->mon);
 	} else {
 		hide(c);
 	}
