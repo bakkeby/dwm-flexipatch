@@ -13,7 +13,7 @@ tagswapmon(const Arg *arg)
 		next = c->next;
 		if (!ISVISIBLE(c))
 			continue;
-		unfocus(c, 1);
+		unfocus(c, 1, NULL);
 		detach(c);
 		detachstack(c);
 		c->next = sc;
@@ -24,7 +24,7 @@ tagswapmon(const Arg *arg)
 		next = c->next;
 		if (!ISVISIBLE(c))
 			continue;
-		unfocus(c, 1);
+		unfocus(c, 1, NULL);
 		detach(c);
 		detachstack(c);
 		c->next = mc;
@@ -38,20 +38,34 @@ tagswapmon(const Arg *arg)
 		attach(c);
 		attachstack(c);
 		if (c->isfullscreen) {
-			setfullscreen(c, 0);
-			setfullscreen(c, 1);
+			#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+			if (c->fakefullscreen != 1) {
+				resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+				XRaiseWindow(dpy, c->win);
+			}
+			#elif !FAKEFULLSCREEN_PATCH
+			resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+			XRaiseWindow(dpy, c->win);
+			#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		}
 	}
 
 	for (c = mc; c; c = next) {
-		next = c->next;
+		next = ;
 		c->mon = selmon;
 		c->tags = selmon->tagset[selmon->seltags]; /* assign tags of target monitor */
 		attach(c);
 		attachstack(c);
 		if (c->isfullscreen) {
-			setfullscreen(c, 0);
-			setfullscreen(c, 1);
+			#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+			if (c->fakefullscreen != 1) {
+				resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+				XRaiseWindow(dpy, c->win);
+			}
+			#elif !FAKEFULLSCREEN_PATCH
+			resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+			XRaiseWindow(dpy, c->win);
+			#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		}
 	}
 

@@ -578,7 +578,7 @@ static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
-static void unfocus(Client *c, int setfocus);
+static void unfocus(Client *c, int setfocus, Client *nextfocus);
 static void unmanage(Client *c, int destroyed);
 static void unmapnotify(XEvent *e);
 static void updatebarpos(Monitor *m);
@@ -938,7 +938,7 @@ buttonpress(XEvent *e)
 		&& (focusonwheel || (ev->button != Button4 && ev->button != Button5))
 		#endif // FOCUSONCLICK_PATCH
 	) {
-		unfocus(selmon->sel, 1);
+		unfocus(selmon->sel, 1, NULL);
 		selmon = m;
 		focus(NULL);
 	}
@@ -1656,9 +1656,9 @@ enternotify(XEvent *e)
 		#if LOSEFULLSCREEN_PATCH
 		sel = selmon->sel;
 		selmon = m;
-		unfocus(sel, 1);
+		unfocus(sel, 1, c);
 		#else
-		unfocus(selmon->sel, 1);
+		unfocus(selmon->sel, 1, c);
 		selmon = m;
 		#endif // LOSEFULLSCREEN_PATCH
 	} else if (!c || c == selmon->sel)
@@ -1683,7 +1683,7 @@ focus(Client *c)
 	if (!c || !ISVISIBLE(c))
 		for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
 	if (selmon->sel && selmon->sel != c)
-		unfocus(selmon->sel, 0);
+		unfocus(selmon->sel, 0, c);
 	if (c) {
 		if (c->mon != selmon)
 			selmon = c->mon;
@@ -1732,9 +1732,9 @@ focusmon(const Arg *arg)
 	#if LOSEFULLSCREEN_PATCH
 	sel = selmon->sel;
 	selmon = m;
-	unfocus(sel, 0);
+	unfocus(sel, 0, NULL);
 	#else
-	unfocus(selmon->sel, 0);
+	unfocus(selmon->sel, 0, NULL);
 	selmon = m;
 	#endif // LOSEFULLSCREEN_PATCH
 	focus(NULL);
@@ -2126,7 +2126,7 @@ manage(Window w, XWindowAttributes *wa)
 	setclientstate(c, NormalState);
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	if (c->mon == selmon)
-		unfocus(selmon->sel, 0);
+		unfocus(selmon->sel, 0, c);
 	c->mon->sel = c;
 	arrange(c->mon);
 	#if BAR_WINTITLEACTIONS_PATCH
@@ -2191,9 +2191,9 @@ motionnotify(XEvent *e)
 		#if LOSEFULLSCREEN_PATCH
 		sel = selmon->sel;
 		selmon = m;
-		unfocus(sel, 1);
+		unfocus(sel, 1, NULL);
 		#else
-		unfocus(selmon->sel, 1);
+		unfocus(selmon->sel, 1, NULL);
 		selmon = m;
 		#endif // LOSEFULLSCREEN_PATCH
 		focus(NULL);
@@ -2686,7 +2686,7 @@ sendmon(Client *c, Monitor *m)
 	#if SENDMON_KEEPFOCUS_PATCH && !EXRESIZE_PATCH
 	int hadfocus = (c == selmon->sel);
 	#endif // SENDMON_KEEPFOCUS_PATCH
-	unfocus(c, 1);
+	unfocus(c, 1, NULL);
 	detach(c);
 	detachstack(c);
 	#if SENDMON_KEEPFOCUS_PATCH && !EXRESIZE_PATCH
@@ -2821,7 +2821,8 @@ setfullscreen(Client *c, int fullscreen)
 		c->isfullscreen = 1;
 		#if !FAKEFULLSCREEN_PATCH
 		#if FAKEFULLSCREEN_CLIENT_PATCH
-		if (!c->fakefullscreen) {
+		if (c->fakefullscreen == 1)
+			return;
 		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->oldstate = c->isfloating;
 		c->oldbw = c->bw;
@@ -2829,9 +2830,6 @@ setfullscreen(Client *c, int fullscreen)
 		c->isfloating = 1;
 		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
 		XRaiseWindow(dpy, c->win);
-		#if FAKEFULLSCREEN_CLIENT_PATCH
-		}
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		#endif // !FAKEFULLSCREEN_PATCH
 	} else if (!fullscreen && c->isfullscreen){
 		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
@@ -2839,7 +2837,10 @@ setfullscreen(Client *c, int fullscreen)
 		c->isfullscreen = 0;
 		#if !FAKEFULLSCREEN_PATCH
 		#if FAKEFULLSCREEN_CLIENT_PATCH
-		if (!c->fakefullscreen) {
+		if (c->fakefullscreen == 1)
+			return;
+		if (c->fakefullscreen == 2)
+			c->fakefullscreen = 1;
 		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->isfloating = c->oldstate;
 		c->bw = c->oldbw;
@@ -2849,9 +2850,6 @@ setfullscreen(Client *c, int fullscreen)
 		c->h = c->oldh;
 		resizeclient(c, c->x, c->y, c->w, c->h);
 		arrange(c->mon);
-		#if FAKEFULLSCREEN_CLIENT_PATCH
-		}
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		#endif // !FAKEFULLSCREEN_PATCH
 	}
 }
@@ -3299,7 +3297,7 @@ tagmon(const Arg *arg)
 		sendmon(c, dirtomon(arg->i));
 		c->isfullscreen = 1;
 		#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-		if (!c->fakefullscreen) {
+		if (c->fakefullscreen != 1) {
 			resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
 			XRaiseWindow(dpy, c->win);
 		}
@@ -3487,7 +3485,7 @@ toggleview(const Arg *arg)
 }
 
 void
-unfocus(Client *c, int setfocus)
+unfocus(Client *c, int setfocus, Client *nextfocus)
 {
 	if (!c)
 		return;
@@ -3495,13 +3493,18 @@ unfocus(Client *c, int setfocus)
 	selmon->pertag->prevclient[selmon->pertag->curtag] = c;
 	#endif // SWAPFOCUS_PATCH
 	#if LOSEFULLSCREEN_PATCH
-	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-	if (c->isfullscreen && !c->fakefullscreen && ISVISIBLE(c) && c->mon == selmon)
+	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon && nextfocus && !nextfocus->isfloating) {
+		#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+		if (!c->fakefullscreen)
+			setfullscreen(c, 0);
+		else if (c->fakefullscreen == 2) {
+			c->fakefullscreen = 0;
+			togglefakefullscreen(NULL);
+		}
+		#else
 		setfullscreen(c, 0);
-	#else
-	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon)
-		setfullscreen(c, 0);
-	#endif // FAKEFULLSCREEN_CLIENT_PATCH
+		#endif // FAKEFULLSCREEN_CLIENT_PATCH
+	}
 	#endif // LOSEFULLSCREEN_PATCH
 	grabbuttons(c, 0);
 	#if !BAR_FLEXWINTITLE_PATCH
