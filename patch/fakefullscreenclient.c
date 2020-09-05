@@ -1,26 +1,27 @@
 void
 togglefakefullscreen(const Arg *arg)
 {
-    if (!selmon->sel)
+    Client *c = selmon->sel;
+    if (!c)
         return;
 
-    if (selmon->sel->fakefullscreen) {
-        if (selmon->sel->isfullscreen)
-            selmon->sel->fakefullscreen = 0;
+    if (c->fakefullscreen) {
+        if (c->isfullscreen)
+            c->fakefullscreen = 0;
         else
-            selmon->sel->isfullscreen = 0;
+            c->isfullscreen = 0;
     } else {
-        if (selmon->sel->isfullscreen) {
-            selmon->sel->isfloating = selmon->sel->oldstate;
-            selmon->sel->bw = selmon->sel->oldbw;
-            selmon->sel->x = selmon->sel->oldx;
-            selmon->sel->y = selmon->sel->oldy;
-            selmon->sel->w = selmon->sel->oldw;
-            selmon->sel->h = selmon->sel->oldh;
-            resizeclient(selmon->sel, selmon->sel->x, selmon->sel->y, selmon->sel->w, selmon->sel->h);
+        if (c->isfullscreen) {
+            c->isfloating = c->oldstate;
+            c->bw = c->oldbw;
+            c->x = c->oldx;
+            c->y = c->oldy;
+            c->w = c->oldw;
+            c->h = c->oldh;
+            resizeclient(c, c->x, c->y, c->w, c->h);
         }
-        selmon->sel->fakefullscreen = 1;
-        selmon->sel->isfullscreen = 0;
+        c->fakefullscreen = 1;
+        c->isfullscreen = 0;
     }
-    setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+    setfullscreen(c, !c->isfullscreen);
 }

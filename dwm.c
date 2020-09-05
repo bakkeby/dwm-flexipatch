@@ -1122,7 +1122,7 @@ clientmessage(XEvent *e)
 		if (cme->data.l[1] == netatom[NetWMFullscreen]
 		|| cme->data.l[2] == netatom[NetWMFullscreen]) {
 			#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-			if (c->fakefullscreen)
+			if (c->fakefullscreen == 1)
 				resizeclient(c, c->x, c->y, c->w, c->h);
 			else
 				setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
@@ -1202,7 +1202,7 @@ configurenotify(XEvent *e)
 				#if !FAKEFULLSCREEN_PATCH
 				for (c = m->clients; c; c = c->next)
 					#if FAKEFULLSCREEN_CLIENT_PATCH
-					if (c->isfullscreen && !c->fakefullscreen)
+					if (c->isfullscreen && c->fakefullscreen != 1)
 					#else
 					if (c->isfullscreen)
 					#endif // FAKEFULLSCREEN_CLIENT_PATCH
@@ -2215,7 +2215,7 @@ movemouse(const Arg *arg)
 		return;
 	#if !FAKEFULLSCREEN_PATCH
 	#if FAKEFULLSCREEN_CLIENT_PATCH
-	if (c->isfullscreen && !c->fakefullscreen) /* no support moving fullscreen windows by mouse */
+	if (c->isfullscreen && c->fakefullscreen != 1) /* no support moving fullscreen windows by mouse */
 		return;
 	#else
 	if (c->isfullscreen) /* no support moving fullscreen windows by mouse */
@@ -2479,7 +2479,7 @@ resizemouse(const Arg *arg)
 		return;
 	#if !FAKEFULLSCREEN_PATCH
 	#if FAKEFULLSCREEN_CLIENT_PATCH
-	if (c->isfullscreen && !c->fakefullscreen) /* no support resizing fullscreen windows by mouse */
+	if (c->isfullscreen && c->fakefullscreen != 1) /* no support resizing fullscreen windows by mouse */
 		return;
 	#else
 	if (c->isfullscreen) /* no support resizing fullscreen windows by mouse */
@@ -3343,7 +3343,7 @@ togglefloating(const Arg *arg)
 		return;
 	#if !FAKEFULLSCREEN_PATCH
 	#if FAKEFULLSCREEN_CLIENT_PATCH
-	if (c->isfullscreen && !c->fakefullscreen) /* no support for fullscreen windows */
+	if (c->isfullscreen && c->fakefullscreen != 1) /* no support for fullscreen windows */
 		return;
 	#else
 	if (c->isfullscreen) /* no support for fullscreen windows */
