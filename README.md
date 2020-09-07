@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-09-07 - Scratchpads improvement (multi-monitor support)
+
 2020-09-05 - Assortment of fullscreen improvements
 
 2020-08-27 - Added aspectresize patch

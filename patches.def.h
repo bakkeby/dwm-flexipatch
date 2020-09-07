@@ -714,6 +714,9 @@
  */
 #define SCRATCHPADS_PATCH 0
 
+/* Minor alteration of the above allowing clients to keep their size and position when shown */
+#define SCRATCHPADS_KEEP_POSITION_AND_SIZE_PATCH 0
+
 /* This alternative patch enables a scratchpad feature in dwm similar to the scratchpad
  * feature in i3wm.
  * https://github.com/GasparVardanyan/dwm-scratchpad
