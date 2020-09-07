@@ -2160,7 +2160,7 @@ maprequest(XEvent *e)
 
 	#if BAR_SYSTRAY_PATCH
 	Client *i;
-	if (showsystray && (i = wintosystrayicon(ev->window))) {
+	if (showsystray && systray && (i = wintosystrayicon(ev->window))) {
 		sendevent(i->win, netatom[Xembed], StructureNotifyMask, CurrentTime, XEMBED_WINDOW_ACTIVATE, 0, systray->win, XEMBED_EMBEDDED_VERSION);
 		drawbarwin(systray->bar);
 	}
