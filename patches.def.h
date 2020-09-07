@@ -532,6 +532,20 @@
  */
 #define INSETS_PATCH 0
 
+/* This patch (v1.5.5) implements inter-process communication through a UNIX socket for dwm. This
+ * allows for the window manager to be queried for information, e.g. listen for events such as tag
+ * or layout changes, as well as send commands to control the window manager via other programs.
+ *
+ * You need to uncomment the corresponding lines in config.mk to use the -lyajl library
+ * when including this patch.
+ * This patch depends on the following additional library:
+ *    - yajl
+ *
+ * https://github.com/mihirlad55/dwm-ipc
+ * https://dwm.suckless.org/patches/ipc/
+ */
+#define IPC_PATCH 0
+
 /* Adds rule option for clients to avoid accidental termination by killclient for sticky windows.
  * https://dwm.suckless.org/patches/ispermanent/
  */

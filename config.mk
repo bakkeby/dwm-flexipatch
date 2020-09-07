@@ -30,6 +30,10 @@ FREETYPEINC = /usr/include/freetype2
 #PANGOINC = `pkg-config --cflags xft pango pangoxft`
 #PANGOLIB = `pkg-config --libs xft pango pangoxft`
 
+# Uncomment for the ipc patch / IPC_PATCH
+#YAJLLIBS = -I-lyajl
+#YAJLINC = /usr/include/yajl
+
 # Uncomment this for the rounded corners patch / ROUNDED_CORNERS_PATCH
 #XEXTLIB = -lXext
 
@@ -37,8 +41,8 @@ FREETYPEINC = /usr/include/freetype2
 #XCBLIBS = -lX11-xcb -lxcb -lxcb-res
 
 # includes and libs
-INCS = -I${X11INC} -I${FREETYPEINC} ${PANGOINC}
-LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}  ${XRENDER} ${MPDCLIENT} ${XEXTLIB} ${XCBLIBS} ${PANGOLIB}
+INCS = -I${X11INC} -I${FREETYPEINC} ${PANGOINC} ${YAJLLIBS}
+LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}  ${XRENDER} ${MPDCLIENT} ${XEXTLIB} ${XCBLIBS} ${PANGOLIB} ${YAJLLIBS}
 
 # flags
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}

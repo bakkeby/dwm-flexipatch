@@ -138,6 +138,15 @@
 #if INPLACEROTATE_PATCH
 #include "inplacerotate.c"
 #endif
+#if IPC_PATCH
+#include "ipc.c"
+#ifdef VERSION
+#include "ipc/IPCClient.c"
+#include "ipc/yajl_dumps.c"
+#include "ipc/ipc.c"
+#include "ipc/util.c"
+#endif
+#endif // IPC_PATCH
 #if INSETS_PATCH
 #include "insets.c"
 #endif

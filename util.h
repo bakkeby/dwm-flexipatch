@@ -8,5 +8,11 @@
 #endif
 #define BETWEEN(X, A, B)        ((A) <= (X) && (X) <= (B))
 
+#ifdef _DEBUG
+#define DEBUG(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define DEBUG(...)
+#endif
+
 void die(const char *fmt, ...);
 void *ecalloc(size_t nmemb, size_t size);

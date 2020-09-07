@@ -6,7 +6,11 @@ include config.mk
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
 
+ifdef YAJLLIBS
+all: options dwm dwm-msg
+else
 all: options dwm
+endif
 
 options:
 	@echo dwm build options:
@@ -28,8 +32,14 @@ patches.h:
 dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
+ifdef YAJLLIBS
+dwm-msg:
+	${CC} -o $@ patch/ipc/dwm-msg.c ${LDFLAGS}
+endif
+
 clean:
 	rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz
+	rm -f dwm-msg
 
 dist: clean
 	mkdir -p dwm-${VERSION}
@@ -42,8 +52,14 @@ dist: clean
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm ${DESTDIR}${PREFIX}/bin
+ifdef YAJLLIBS
+	cp -f dwm-msg ${DESTDIR}${PREFIX}/bin
+endif
 	#cp -f patch/dwmc ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
+ifdef YAJLLIBS
+	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm-msg
+endif
 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1

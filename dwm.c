@@ -219,9 +219,28 @@ enum {
 	BAR_ALIGN_LAST
 }; /* bar alignment */
 
+#if IPC_PATCH
+typedef struct TagState TagState;
+struct TagState {
+       int selected;
+       int occupied;
+       int urgent;
+};
+
+typedef struct ClientState ClientState;
+struct ClientState {
+       int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+};
+#endif // IPC_PATCH
+
 typedef union {
+	#if IPC_PATCH
+	long i;
+	unsigned long ui;
+	#else
 	int i;
 	unsigned int ui;
+	#endif // IPC_PATCH
 	float f;
 	const void *v;
 } Arg;
@@ -333,6 +352,9 @@ struct Client {
 	#endif // SWALLOW_PATCH
 	Monitor *mon;
 	Window win;
+	#if IPC_PATCH
+	ClientState prevstate;
+	#endif // IPC_PATCH
 };
 
 typedef struct {
@@ -414,6 +436,12 @@ struct Monitor {
 	#if INSETS_PATCH
 	Inset inset;
 	#endif // INSETS_PATCH
+	#if IPC_PATCH
+	char lastltsymbol[16];
+	TagState tagstate;
+	Client *lastsel;
+	const Layout *lastlt;
+	#endif // IPC_PATCH
 };
 
 typedef struct {
@@ -1039,6 +1067,13 @@ cleanup(void)
 	XSync(dpy, False);
 	XSetInputFocus(dpy, PointerRoot, RevertToPointerRoot, CurrentTime);
 	XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
+
+	#if IPC_PATCH
+	ipc_cleanup();
+
+	if (close(epoll_fd) < 0)
+		fprintf(stderr, "Failed to close epoll file descriptor\n");
+	#endif // IPC_PATCH
 }
 
 void
@@ -2638,6 +2673,46 @@ restack(Monitor *m)
 	#endif // WARP_PATCH
 }
 
+#if IPC_PATCH
+void
+run(void)
+{
+	int event_count = 0;
+	const int MAX_EVENTS = 10;
+	struct epoll_event events[MAX_EVENTS];
+
+	XSync(dpy, False);
+
+	/* main event loop */
+	while (running) {
+		event_count = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+
+		for (int i = 0; i < event_count; i++) {
+			int event_fd = events[i].data.fd;
+			DEBUG("Got event from fd %d\n", event_fd);
+
+			if (event_fd == dpy_fd) {
+				// -1 means EPOLLHUP
+				if (handlexevent(events + i) == -1)
+					return;
+			} else if (event_fd == ipc_get_sock_fd()) {
+				ipc_handle_socket_epoll_event(events + i);
+			} else if (ipc_is_client_registered(event_fd)) {
+				if (ipc_handle_client_epoll_event(events + i, mons, &lastselmon, selmon,
+						NUMTAGS, layouts, LENGTH(layouts)) < 0) {
+					fprintf(stderr, "Error handling IPC event on fd %d\n", event_fd);
+				}
+			} else {
+				fprintf(stderr, "Got event from unknown fd %d, ptr %p, u32 %d, u64 %lu",
+				event_fd, events[i].data.ptr, events[i].data.u32,
+				events[i].data.u64);
+				fprintf(stderr, " with events %d\n", events[i].events);
+				return;
+			}
+		}
+	}
+}
+#else
 void
 run(void)
 {
@@ -2648,6 +2723,7 @@ run(void)
 		if (handler[ev.type])
 			handler[ev.type](&ev); /* call handler */
 }
+#endif // IPC_PATCH
 
 void
 scan(void)
@@ -3096,6 +3172,9 @@ setup(void)
 	XSelectInput(dpy, root, wa.event_mask);
 	grabkeys();
 	focus(NULL);
+	#if IPC_PATCH
+	setupepoll();
+	#endif // IPC_PATCH
 }
 
 
@@ -3910,10 +3989,22 @@ updatestatus(void)
 void
 updatetitle(Client *c)
 {
+	#if IPC_PATCH
+	char oldname[sizeof(c->name)];
+	strcpy(oldname, c->name);
+	#endif // IPC_PATCH
+
 	if (!gettextprop(c->win, netatom[NetWMName], c->name, sizeof c->name))
 		gettextprop(c->win, XA_WM_NAME, c->name, sizeof c->name);
 	if (c->name[0] == '\0') /* hack to mark broken clients */
 		strcpy(c->name, broken);
+
+	#if IPC_PATCH
+	for (Monitor *m = mons; m; m = m->next) {
+		if (m->sel == c && strcmp(oldname, c->name) != 0)
+			ipc_focused_title_change_event(m->num, c->win, oldname, c->name);
+	}
+	#endif // IPC_PATCH
 }
 
 void

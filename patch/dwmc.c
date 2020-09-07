@@ -62,9 +62,17 @@ fake_signal(void)
 			if (paramn == 1) arg = (Arg) {0};
 			else if (paramn > 2) return 1;
 			else if (strncmp(param, "i", n - len_str_sig) == 0)
+				#if IPC_PATCH
+				sscanf(fsignal + len_indicator + n, "%li", &(arg.i));
+				#else
 				sscanf(fsignal + len_indicator + n, "%i", &(arg.i));
+				#endif // IPC_PATCH
 			else if (strncmp(param, "ui", n - len_str_sig) == 0)
+				#if IPC_PATCH
+				sscanf(fsignal + len_indicator + n, "%lu", &(arg.ui));
+				#else
 				sscanf(fsignal + len_indicator + n, "%u", &(arg.ui));
+				#endif // IPC_PATCH
 			else if (strncmp(param, "f", n - len_str_sig) == 0)
 				sscanf(fsignal + len_indicator + n, "%f", &(arg.f));
 			else return 1;

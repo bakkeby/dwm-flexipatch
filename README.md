@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-09-07 - Scratchpads improvement (multi-monitor support)
+2020-09-07 - Scratchpads improvement (multi-monitor support). Added ipc v1.5.5 patch.
 
 2020-09-05 - Assortment of fullscreen improvements
 
@@ -349,6 +349,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [insets](https://dwm.suckless.org/patches/insets/)
       - lets custom insets from each edge of the screen to be defined
       - an example use case would be to make space for an external bar
+
+   - [ipc](https://github.com/mihirlad55/dwm-ipc)
+      - implements inter-process communication through a UNIX socket for dwm
+      - allows for the window manager to be queried for information, e.g. listen for events such as tag or layout changes, as well as send commands to control the window manager via other programs
 
    - [ispermanent](https://dwm.suckless.org/patches/ispermanent/)
       - adds rule option for clients to avoid accidental termination by killclient for sticky windows

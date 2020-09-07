@@ -138,6 +138,11 @@
 #if INPLACEROTATE_PATCH
 #include "inplacerotate.h"
 #endif
+#if IPC_PATCH
+#include "ipc.h"
+#include "ipc/ipc.h"
+#include "ipc/util.h"
+#endif
 #if INSETS_PATCH
 #include "insets.h"
 #endif
