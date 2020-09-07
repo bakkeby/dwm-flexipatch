@@ -1076,7 +1076,7 @@ clientmessage(XEvent *e)
 	#endif // FOCUSONNETACTIVE_PATCH
 
 	#if BAR_SYSTRAY_PATCH
-	if (showsystray && cme->window == systray->win && cme->message_type == netatom[NetSystemTrayOP]) {
+	if (showsystray && systray && cme->window == systray->win && cme->message_type == netatom[NetSystemTrayOP]) {
 		/* add systray icons */
 		if (cme->data.l[1] == SYSTEM_TRAY_REQUEST_DOCK) {
 			if (!(c = (Client *)calloc(1, sizeof(Client))))
