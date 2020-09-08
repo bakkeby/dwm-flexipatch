@@ -58,3 +58,44 @@ setupepoll(void)
 	if (ipc_init(ipcsockpath, epoll_fd, ipccommands, LENGTH(ipccommands)) < 0)
 		fputs("Failed to initialize IPC\n", stderr);
 }
+
+void
+setstatus(const Arg *arg)
+{
+	Monitor *m;
+	#if BAR_EXTRASTATUS_PATCH
+	if (arg->v == NULL) {
+		strcpy(stext, "dwm-"VERSION);
+		estext[0] = '\0';
+	} else {
+		strcpy(rawstext, arg->v);
+		char *e = strchr(rawstext, statussep);
+		if (e) {
+			*e = '\0'; e++;
+			#if BAR_STATUSCMD_PATCH
+			strncpy(rawestext, e, sizeof(estext) - 1);
+			copyvalidchars(estext, rawestext);
+			#else
+			strncpy(estext, e, sizeof(estext) - 1);
+			#endif // BAR_STATUSCMD_PATCH
+		} else {
+			estext[0] = '\0';
+		}
+		#if BAR_STATUSCMD_PATCH
+		copyvalidchars(stext, rawstext);
+		#else
+		strncpy(stext, rawstext, sizeof(stext) - 1);
+		#endif // BAR_STATUSCMD_PATCH
+	}
+	#elif BAR_STATUSCMD_PATCH
+	if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext)))
+		strcpy(stext, "dwm-"VERSION);
+	else
+		copyvalidchars(stext, rawstext);
+	#else
+	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
+		strcpy(stext, "dwm-"VERSION);
+	#endif // BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
+	for (m = mons; m; m = m->next)
+		drawbar(m);
+}

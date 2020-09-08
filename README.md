@@ -15,7 +15,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-09-07 - Scratchpads improvement (multi-monitor support). Added ipc v1.5.5 patch.
+2020-09-08 - Added ipc v1.5.5 patch
+
+2020-09-07 - Scratchpads improvement (multi-monitor support)
 
 2020-09-05 - Assortment of fullscreen improvements
 
