@@ -1,11 +1,11 @@
 int
-width_taggrid(Bar *bar, BarWidthArg *a)
+width_taggrid(Bar *bar, BarArg *a)
 {
-	return (bh / 2) * (NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0)) + lrpad;
+	return (a->h / 2) * (NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0)) + lrpad;
 }
 
 int
-draw_taggrid(Bar *bar, BarDrawArg *a)
+draw_taggrid(Bar *bar, BarArg *a)
 {
 	unsigned int x, y, h, max_x = 0, columns, occ = 0;
 	int invert, i,j, k;
@@ -15,13 +15,13 @@ draw_taggrid(Bar *bar, BarDrawArg *a)
 		occ |= c->tags;
 
 	max_x = x = a->x + lrpad / 2;
-	h = bh / tagrows;
-	y = 0;
+	h = a->h / tagrows - 1;
+	y = a->y;
 	columns = NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0);
 
 	/* Firstly we will fill the borders of squares */
 	XSetForeground(drw->dpy, drw->gc, scheme[SchemeTagsNorm][ColBg].pixel);
-	XFillRectangle(dpy, drw->drawable, drw->gc, x, y, h*columns + 1, bh);
+	XFillRectangle(dpy, drw->drawable, drw->gc, x, y, h*columns + 1, a->h);
 
 	/* We will draw NUMTAGS squares in tagraws raws. */
 	for (j = 0, i = 0; j < tagrows; j++) {
@@ -57,12 +57,13 @@ draw_taggrid(Bar *bar, BarDrawArg *a)
 }
 
 int
-click_taggrid(Bar *bar, Arg *arg, BarClickArg *a)
+click_taggrid(Bar *bar, Arg *arg, BarArg *a)
 {
-	unsigned int i, columns;
+	unsigned int i, h, columns;
 
+	h = a->h / tagrows - 1;
 	columns = NUMTAGS / tagrows + ((NUMTAGS % tagrows > 0) ? 1 : 0);
-	i = (a->rel_x - lrpad / 2) / (bh / tagrows) + columns * (a->rel_y / (bh / tagrows));
+	i = (a->x - lrpad / 2) / h + columns * (a->y / h);
 	if (i >= NUMTAGS) {
 		i = NUMTAGS - 1;
 	}

@@ -16,27 +16,27 @@
 #endif
 
 int
-width_bartabgroups(Bar *bar, BarWidthArg *a)
+width_bartabgroups(Bar *bar, BarArg *a)
 {
-	return a->max_width;
+	return a->w;
 }
 
 int
-draw_bartabgroups(Bar *bar, BarDrawArg *a)
+draw_bartabgroups(Bar *bar, BarArg *a)
 {
-	drw_rect(drw, a->x, 0, a->w, bh, 1, 1);
-	return bartabcalculate(bar->mon, a->x, a->w, -1, bartabdraw, NULL);
+	drw_rect(drw, a->x, a->y, a->w, a->h, 1, 1);
+	return bartabcalculate(bar->mon, a->x, a->w, -1, bartabdraw, NULL, a);
 }
 
 int
-click_bartabgroups(Bar *bar, Arg *arg, BarClickArg *a)
+click_bartabgroups(Bar *bar, Arg *arg, BarArg *a)
 {
-	bartabcalculate(bar->mon, 0, a->rel_w, a->rel_x, bartabclick, arg);
+	bartabcalculate(bar->mon, 0, a->w, a->x, bartabclick, arg, a);
 	return ClkWinTitle;
 }
 
 void
-bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg *arg)
+bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg *arg, BarArg *barg)
 {
 	if (!c)
 		return;
@@ -59,14 +59,14 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 		pad = (w - TEXTW(c->name) + lrpad) / 2;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
-	drw_text(drw, x, 0, w, bh, pad, c->name, 0, False);
+	drw_text(drw, x, barg->y, w, barg->h, pad, c->name, 0, False);
 	if (c->isfloating)
-		drawindicator(m, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
+		drawindicator(m, c, 1, x, barg->y, w, barg->h, 0, 0, c->isfixed, floatindicatortype);
 
 	if (BARTAB_BORDERS) {
 		XSetForeground(drw->dpy, drw->gc, scheme[SchemeSel][ColBorder].pixel);
-		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, 0, 1, bh);
-		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x + w, 0, 1, bh);
+		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, barg->y, 1, barg->h);
+		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x + w - (x + w >= barg->w ? 1 : 0), barg->y, 1, barg->h);
 	}
 	/* Optional tags icons */
 	for (i = 0; i < NUMTAGS; i++) {
@@ -77,7 +77,7 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 	}
 
 	if (TAGSINDICATOR == 2 || nclienttags > 1 || nviewtags > 1)
-		drawindicator(m, c, 1, x, w, 0, 0, 0, INDICATOR_RIGHT_TAGS);
+		drawindicator(m, c, 1, x, barg->y, w, barg->h, 0, 0, 0, INDICATOR_RIGHT_TAGS);
 }
 
 #ifndef HIDDEN
@@ -85,7 +85,7 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 #endif
 
 void
-bartabclick(Monitor *m, Client *c, int passx, int x, int w, int unused, Arg *arg)
+bartabclick(Monitor *m, Client *c, int passx, int x, int w, int unused, Arg *arg, BarArg *barg)
 {
 	if (passx >= x && passx <= x + w)
 		arg->v = c;
@@ -94,7 +94,8 @@ bartabclick(Monitor *m, Client *c, int passx, int x, int w, int unused, Arg *arg
 int
 bartabcalculate(
 	Monitor *m, int offx, int tabw, int passx,
-	void(*tabfn)(Monitor *, Client *, int, int, int, int, Arg *arg), Arg *arg
+	void(*tabfn)(Monitor *, Client *, int, int, int, int, Arg *arg, BarArg *barg),
+	Arg *arg, BarArg *barg
 ) {
 	Client *c;
 	int
@@ -141,7 +142,7 @@ bartabcalculate(
 		for (c = m->clients, i = 0; c; c = c->next) {
 			if (!ISVISIBLE(c))
 				continue;
-			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
+			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg, barg);
 			x += w + (i < r ? 1 : 0);
 			i++;
 		}
@@ -153,7 +154,7 @@ bartabcalculate(
 		for (c = m->clients, i = 0; c; c = c->next) {
 			if (!ISVISIBLE(c) || (c->isfloating && !HIDDEN(c)))
 				continue;
-			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
+			tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg, barg);
 			x += w + (i < r ? 1 : 0);
 			i++;
 		}
@@ -172,7 +173,7 @@ bartabcalculate(
 			for (; c && i < m->nmaster; c = c->next) { // tiled master
 				if (!ISVISIBLE(c) || c->isfloating || HIDDEN(c))
 					continue;
-				tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg);
+				tabfn(m, c, passx, x, w + (i < r ? 1 : 0), tgactive, arg, barg);
 				x += w + (i < r ? 1 : 0);
 				i++;
 			}
@@ -190,7 +191,7 @@ bartabcalculate(
 		for (; c; c = c->next) { // tiled stack
 			if (!ISVISIBLE(c) || HIDDEN(c) || c->isfloating)
 				continue;
-			tabfn(m, c, passx, x, w * BARTAB_STACKWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
+			tabfn(m, c, passx, x, w * BARTAB_STACKWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg, barg);
 			x += w * BARTAB_STACKWEIGHT + (i - m->nmaster < r ? 1 : 0);
 			i++;
 		}
@@ -200,7 +201,7 @@ bartabcalculate(
 		for (c = m->clients; c; c = c->next) { // hidden windows
 			if (!ISVISIBLE(c) || !HIDDEN(c))
 				continue;
-			tabfn(m, c, passx, x, w * BARTAB_HIDDENWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
+			tabfn(m, c, passx, x, w * BARTAB_HIDDENWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg, barg);
 			x += w * BARTAB_HIDDENWEIGHT + (i - m->nmaster < r ? 1 : 0);
 			i++;
 		}
@@ -210,7 +211,7 @@ bartabcalculate(
 		for (c = m->clients; c; c = c->next) { // floating windows
 			if (!ISVISIBLE(c) || HIDDEN(c) || !c->isfloating)
 				continue;
-			tabfn(m, c, passx, x, w * BARTAB_FLOATWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg);
+			tabfn(m, c, passx, x, w * BARTAB_FLOATWEIGHT + (i - m->nmaster < r ? 1 : 0), tgactive, arg, barg);
 			x += w * BARTAB_FLOATWEIGHT + (i - m->nmaster < r ? 1 : 0);
 			i++;
 		}

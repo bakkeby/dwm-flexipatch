@@ -1,5 +1,5 @@
 int
-width_pwrl_tags(Bar *bar, BarWidthArg *a)
+width_pwrl_tags(Bar *bar, BarArg *a)
 {
 	int w, i;
 	int plw = drw->fonts->h / 2 + 1;
@@ -21,7 +21,7 @@ width_pwrl_tags(Bar *bar, BarWidthArg *a)
 }
 
 int
-draw_pwrl_tags(Bar *bar, BarDrawArg *a)
+draw_pwrl_tags(Bar *bar, BarArg *a)
 {
 	int x, w;
 	int invert;
@@ -54,14 +54,14 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 		w = TEXTW(icon);
 		drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeNorm]));
 		#if BAR_POWERLINE_TAGS_SLASH_PATCH
-		drw_arrow(drw, x, 0, plw, bh, 1, 1);
+		drw_arrow(drw, x, a->y, plw, a->h, 1, 1);
 		#else
-		drw_arrow(drw, x, 0, plw, bh, 1, 0);
+		drw_arrow(drw, x, a->y, plw, a->h, 1, 0);
 		#endif // BAR_POWERLINE_TAGS_SLASH_PATCH
 		x += plw;
 		drw_setscheme(drw, nxtscheme);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, icon, invert, False);
-		drawindicator(bar->mon, NULL, occ, x, w, i, -1, invert, tagindicatortype);
+		drw_text(drw, x, a->y, w, a->h, lrpad / 2, icon, invert, False);
+		drawindicator(bar->mon, NULL, occ, x, a->y, w, a->h, i, -1, invert, tagindicatortype);
 		x += w;
 		prevscheme = nxtscheme;
 	}
@@ -69,15 +69,15 @@ draw_pwrl_tags(Bar *bar, BarDrawArg *a)
 
 	drw_settrans(drw, prevscheme, nxtscheme);
 	#if BAR_POWERLINE_TAGS_SLASH_PATCH
-	drw_arrow(drw, x, 0, plw, bh, 1, 1);
+	drw_arrow(drw, x, a->y, plw, a->h, 1, 1);
 	#else
-	drw_arrow(drw, x, 0, plw, bh, 1, 0);
+	drw_arrow(drw, x, a->y, plw, a->h, 1, 0);
 	#endif // BAR_POWERLINE_TAGS_SLASH_PATCH
 	return 1;
 }
 
 int
-click_pwrl_tags(Bar *bar, Arg *arg, BarClickArg *a)
+click_pwrl_tags(Bar *bar, Arg *arg, BarArg *a)
 {
 	int i = 0, x = lrpad / 2;
 	int plw = drw->fonts->h / 2 + 1;
@@ -94,7 +94,7 @@ click_pwrl_tags(Bar *bar, Arg *arg, BarClickArg *a)
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
 		x += TEXTW(tagicon(bar->mon, i)) + plw;
-	} while (a->rel_x >= x && ++i < NUMTAGS);
+	} while (a->x >= x && ++i < NUMTAGS);
 	if (i < NUMTAGS) {
 		arg->ui = 1 << i;
 	}

@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-09-09 - Added the bar border patch
+
 2020-09-08 - Added ipc v1.5.5 patch
 
 2020-09-07 - Scratchpads improvement (multi-monitor support)
@@ -201,6 +203,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [awesomebar](https://dwm.suckless.org/patches/awesomebar/)
       - enhanced taskbar that allows focus / hiding / unhiding of windows by clicking on the status bar
+
+   - [bar_border](https://codemadness.org/paste/dwm-border-bar.patch)
+      - adds a border around the bar similarly to how client windows have borders
 
    - [bar_height](https://dwm.suckless.org/patches/bar_height/)
       - allows the bar height to be explicitly set rather than being derived from font

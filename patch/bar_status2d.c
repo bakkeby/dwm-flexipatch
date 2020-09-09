@@ -22,7 +22,7 @@ static char *termcolor[] = {
 #endif // BAR_STATUS2D_XRDB_TERMCOLORS_PATCH
 
 int
-width_status2d(Bar *bar, BarWidthArg *a)
+width_status2d(Bar *bar, BarArg *a)
 {
 	int width;
 	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
@@ -35,7 +35,7 @@ width_status2d(Bar *bar, BarWidthArg *a)
 
 #if BAR_EXTRASTATUS_PATCH
 int
-width_status2d_es(Bar *bar, BarWidthArg *a)
+width_status2d_es(Bar *bar, BarArg *a)
 {
 	int width;
 	#if BAR_STATUSCMD_PATCH
@@ -48,39 +48,41 @@ width_status2d_es(Bar *bar, BarWidthArg *a)
 #endif // BAR_EXTRASTATUS_PATCH
 
 int
-draw_status2d(Bar *bar, BarDrawArg *a)
+draw_status2d(Bar *bar, BarArg *a)
 {
 	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
-	return drawstatusbar(a->x, rawstext);
+	return drawstatusbar(a, rawstext);
 	#else
-	return drawstatusbar(a->x, stext);
+	return drawstatusbar(a, stext);
 	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
 }
 
 #if BAR_EXTRASTATUS_PATCH
 int
-draw_status2d_es(Bar *bar, BarDrawArg *a)
+draw_status2d_es(Bar *bar, BarArg *a)
 {
 	#if BAR_STATUSCMD_PATCH
-	return drawstatusbar(a->x, rawestext);
+	return drawstatusbar(a, rawestext);
 	#else
-	return drawstatusbar(a->x, estext);
+	return drawstatusbar(a, estext);
 	#endif // BAR_STATUSCMD_PATCH
 }
 #endif // BAR_EXTRASTATUS_PATCH
 
 #if !BAR_STATUSCMD_PATCH
 int
-click_status2d(Bar *bar, Arg *arg, BarClickArg *a)
+click_status2d(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkStatusText;
 }
 #endif // BAR_STATUSCMD_PATCH
 
 int
-drawstatusbar(int x, char* stext)
+drawstatusbar(BarArg *a, char* stext)
 {
 	int i, w, len;
+	int x = a->x;
+	int y = a->y;
 	short isCode = 0;
 	char *text;
 	char *p;
@@ -108,7 +110,7 @@ drawstatusbar(int x, char* stext)
 
 			text[i] = '\0';
 			w = TEXTWM(text) - lrpad;
-			drw_text(drw, x, 0, w, bh, 0, text, 0, True);
+			drw_text(drw, x, y, w, bh, 0, text, 0, True);
 
 			x += w;
 
@@ -194,7 +196,7 @@ drawstatusbar(int x, char* stext)
 					if (rx < 0)
 						rx = 0;
 
-					drw_rect(drw, rx + x, ry, rw, rh, 1, 0);
+					drw_rect(drw, rx + x, y + ry, rw, rh, 1, 0);
 				} else if (text[i] == 'f') {
 					x += atoi(text + ++i);
 				}
@@ -207,7 +209,7 @@ drawstatusbar(int x, char* stext)
 	}
 	if (!isCode) {
 		w = TEXTWM(text) - lrpad;
-		drw_text(drw, x, 0, w, bh, 0, text, 0, True);
+		drw_text(drw, x, y, w, bh, 0, text, 0, True);
 		x += w;
 	}
 	free(p);

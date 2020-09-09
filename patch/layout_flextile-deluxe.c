@@ -66,7 +66,7 @@ getfactsforrange(Monitor *m, int an, int ai, int size, int *rest, float *fact)
 	*fact = facts;
 }
 
-#if DWMC_PATCH
+#if IPC_PATCH || DWMC_PATCH
 static void
 setlayoutaxisex(const Arg *arg)
 {
@@ -85,7 +85,7 @@ setlayoutaxisex(const Arg *arg)
 	#endif // PERTAG_PATCH
 	arrange(selmon);
 }
-#endif // DWMC_PATCH
+#endif // IPC_PATCH | DWMC_PATCH
 
 static void
 layout_no_split(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n)

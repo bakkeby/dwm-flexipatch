@@ -18,7 +18,7 @@ setgaps(int oh, int ov, int ih, int iv)
 	arrange(selmon);
 }
 
-#if DWMC_PATCH || IPC_PATCH
+#if IPC_PATCH || DWMC_PATCH
 /* External function that takes one integer and splits it
  * into four gap values:
  *    - outer horizontal (oh)
@@ -70,7 +70,7 @@ setgapsex(const Arg *arg)
 
 	setgaps(oh, ov, ih, iv);
 }
-#endif // DWMC_PATCH | IPC_PATCH
+#endif // IPC_PATCH | DWMC_PATCH
 
 static void
 togglegaps(const Arg *arg)

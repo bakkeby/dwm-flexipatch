@@ -1,5 +1,5 @@
 int
-width_tags(Bar *bar, BarWidthArg *a)
+width_tags(Bar *bar, BarArg *a)
 {
 	int w, i;
 	#if BAR_HIDEVACANTTAGS_PATCH
@@ -20,7 +20,7 @@ width_tags(Bar *bar, BarWidthArg *a)
 }
 
 int
-draw_tags(Bar *bar, BarDrawArg *a)
+draw_tags(Bar *bar, BarArg *a)
 {
 	int invert;
 	int w, x = a->x;
@@ -55,8 +55,8 @@ draw_tags(Bar *bar, BarDrawArg *a)
 			? SchemeUrg
 			: SchemeTagsNorm
 		]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, icon, invert, False);
-		drawindicator(m, NULL, occ, x, w, i, -1, invert, tagindicatortype);
+		drw_text(drw, x, a->y, w, a->h, lrpad / 2, icon, invert, False);
+		drawindicator(m, NULL, occ, x, a->y, w, a->h, i, -1, invert, tagindicatortype);
 		x += w;
 	}
 
@@ -64,7 +64,7 @@ draw_tags(Bar *bar, BarDrawArg *a)
 }
 
 int
-click_tags(Bar *bar, Arg *arg, BarClickArg *a)
+click_tags(Bar *bar, Arg *arg, BarArg *a)
 {
 	int i = 0, x = lrpad / 2;
 	#if BAR_HIDEVACANTTAGS_PATCH
@@ -80,7 +80,7 @@ click_tags(Bar *bar, Arg *arg, BarClickArg *a)
 			continue;
 		#endif // BAR_HIDEVACANTTAGS_PATCH
 		x += TEXTW(tagicon(bar->mon, i));
-	} while (a->rel_x >= x && ++i < NUMTAGS);
+	} while (a->x >= x && ++i < NUMTAGS);
 	if (i < NUMTAGS) {
 		arg->ui = 1 << i;
 	}

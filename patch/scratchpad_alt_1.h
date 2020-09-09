@@ -1,4 +1,4 @@
-# define SCRATCHPAD_MASK (1u << sizeof tags / sizeof * tags)
+#define SCRATCHPAD_MASK (1u << NUMTAGS)
 
 static void scratchpad_hide ();
 static _Bool scratchpad_last_showed_is_killed (void);

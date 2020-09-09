@@ -2,7 +2,7 @@ static Systray *systray = NULL;
 static unsigned long systrayorientation = _NET_SYSTEM_TRAY_ORIENTATION_HORZ;
 
 int
-width_systray(Bar *bar, BarWidthArg *a)
+width_systray(Bar *bar, BarArg *a)
 {
 	unsigned int w = 0;
 	Client *i;
@@ -14,7 +14,7 @@ width_systray(Bar *bar, BarWidthArg *a)
 }
 
 int
-draw_systray(Bar *bar, BarDrawArg *a)
+draw_systray(Bar *bar, BarArg *a)
 {
 	if (!showsystray)
 		return 0;
@@ -34,12 +34,12 @@ draw_systray(Bar *bar, BarDrawArg *a)
 		#if BAR_ALPHA_PATCH
 		wa.background_pixel = 0;
 		wa.colormap = cmap;
-		systray->win = XCreateWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by, MAX(a->w + 40, 1), bar->bh, 0, depth,
+		systray->win = XCreateWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by + a->y, MAX(a->w + 40, 1), a->h, 0, depth,
 						InputOutput, visual,
 						CWOverrideRedirect|CWBorderPixel|CWBackPixel|CWColormap|CWEventMask, &wa); // CWBackPixmap
 		#else
 		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
-		systray->win = XCreateSimpleWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by, MIN(a->w, 1), bar->bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
+		systray->win = XCreateSimpleWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by + a->y, MIN(a->w, 1), a->h, 0, 0, scheme[SchemeNorm][ColBg].pixel);
 		XChangeWindowAttributes(dpy, systray->win, CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWEventMask, &wa);
 		#endif // BAR_ALPHA_PATCH
 
@@ -85,12 +85,12 @@ draw_systray(Bar *bar, BarDrawArg *a)
 			i->mon = bar->mon;
 	}
 
-	XMoveResizeWindow(dpy, systray->win, bar->bx + a->x + lrpad / 2, (w ? bar->by : -bar->by), MAX(w, 1), bar->bh);
+	XMoveResizeWindow(dpy, systray->win, bar->bx + a->x + lrpad / 2, (w ? bar->by + a->y : -bar->by - a->y), MAX(w, 1), a->h);
 	return w;
 }
 
 int
-click_systray(Bar *bar, Arg *arg, BarClickArg *a)
+click_systray(Bar *bar, Arg *arg, BarArg *a)
 {
 	return -1;
 }
@@ -124,25 +124,29 @@ resizerequest(XEvent *e)
 void
 updatesystrayicongeom(Client *i, int w, int h)
 {
+	if (!systray)
+		return;
+
+	int bar_height = systray->bar->bh - 2 * systray->bar->borderpx;
 	if (i) {
-		i->h = bh;
+		i->h = bar_height;
 		if (w == h)
-			i->w = bh;
-		else if (h == bh)
+			i->w = bar_height;
+		else if (h == bar_height)
 			i->w = w;
 		else
-			i->w = (int) ((float)bh * ((float)w / (float)h));
+			i->w = (int) ((float)bar_height * ((float)w / (float)h));
 		applysizehints(i, &(i->x), &(i->y), &(i->w), &(i->h), False);
 		/* force icons into the systray dimensions if they don't want to */
-		if (i->h > bh) {
+		if (i->h > bar_height) {
 			if (i->w == i->h)
-				i->w = bh;
+				i->w = bar_height;
 			else
-				i->w = (int) ((float)bh * ((float)i->w / (float)i->h));
-			i->h = bh;
+				i->w = (int) ((float)bar_height * ((float)i->w / (float)i->h));
+			i->h = bar_height;
 		}
-		if (i->w > 2*bh)
-			i->w = bh;
+		if (i->w > 2 * bar_height)
+			i->w = bar_height;
 	}
 }
 

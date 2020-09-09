@@ -1,11 +1,11 @@
 int
-width_fancybar(Bar *bar, BarWidthArg *a)
+width_fancybar(Bar *bar, BarArg *a)
 {
-	return a->max_width;
+	return a->w;
 }
 
 int
-draw_fancybar(Bar *bar, BarDrawArg *a)
+draw_fancybar(Bar *bar, BarArg *a)
 {
 	int ftw, mw, ew = 0, n = 0;
 	unsigned int i;
@@ -52,9 +52,9 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 			ftw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 			drw_setscheme(drw, scheme[m->sel == c ? SchemeTitleSel : SchemeTitleNorm]);
 			if (ftw > 0) /* trap special handling of 0 in drw_text */
-				drw_text(drw, x, 0, ftw, bh, lrpad / 2, c->name, 0, False);
+				drw_text(drw, x, a->y, ftw, a->h, lrpad / 2, c->name, 0, False);
 			if (c->isfloating)
-				drawindicator(c->mon, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
+				drawindicator(c->mon, c, 1, x, a->y, w, a->h, 0, 0, c->isfixed, floatindicatortype);
 			x += ftw;
 			w -= ftw;
 		}
@@ -63,7 +63,7 @@ draw_fancybar(Bar *bar, BarDrawArg *a)
 }
 
 int
-click_fancybar(Bar *bar, Arg *arg, BarClickArg *a)
+click_fancybar(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkWinTitle;
 }

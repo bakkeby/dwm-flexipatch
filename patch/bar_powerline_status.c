@@ -1,7 +1,7 @@
 static Clr **statusscheme;
 
 int
-width_pwrl_status(Bar *bar, BarWidthArg *a)
+width_pwrl_status(Bar *bar, BarArg *a)
 {
 	#if BAR_STATUSCMD_PATCH
 	return widthpowerlinestatus(rawstext);
@@ -12,7 +12,7 @@ width_pwrl_status(Bar *bar, BarWidthArg *a)
 
 #if BAR_EXTRASTATUS_PATCH
 int
-width_pwrl_status_es(Bar *bar, BarWidthArg *a)
+width_pwrl_status_es(Bar *bar, BarArg *a)
 {
 	#if BAR_STATUSCMD_PATCH
 	return widthpowerlinestatus(rawestext);
@@ -23,29 +23,29 @@ width_pwrl_status_es(Bar *bar, BarWidthArg *a)
 #endif // BAR_EXTRASTATUS_PATCH
 
 int
-draw_pwrl_status(Bar *bar, BarDrawArg *a)
+draw_pwrl_status(Bar *bar, BarArg *a)
 {
 	#if BAR_STATUSCMD_PATCH
-	return drawpowerlinestatus(a->x + a->w, rawstext);
+	return drawpowerlinestatus(a->x + a->w, rawstext, a);
 	#else
-	return drawpowerlinestatus(a->x + a->w, stext);
+	return drawpowerlinestatus(a->x + a->w, stext, a);
 	#endif // BAR_STATUSCMD_PATCH
 }
 
 #if BAR_EXTRASTATUS_PATCH
 int
-draw_pwrl_status_es(Bar *bar, BarDrawArg *a)
+draw_pwrl_status_es(Bar *bar, BarArg *a)
 {
 	#if BAR_STATUSCMD_PATCH
-	return drawpowerlinestatus(a->x + a->w, rawestext);
+	return drawpowerlinestatus(a->x + a->w, rawestext, a);
 	#else
-	return drawpowerlinestatus(a->x + a->w, estext);
+	return drawpowerlinestatus(a->x + a->w, estext, a);
 	#endif // BAR_STATUSCMD_PATCH
 }
 #endif // BAR_EXTRASTATUS_PATCH
 
 int
-click_pwrl_status(Bar *bar, Arg *arg, BarClickArg *a)
+click_pwrl_status(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkStatusText;
 }
@@ -75,7 +75,7 @@ widthpowerlinestatus(char *stext)
 }
 
 int
-drawpowerlinestatus(int xpos, char *stext)
+drawpowerlinestatus(int xpos, char *stext, BarArg *barg)
 {
 	char status[512];
 	int i, n = strlen(stext), cn = 0;
@@ -96,13 +96,13 @@ drawpowerlinestatus(int xpos, char *stext)
 			}
 
 			if (bp != '|') {
-				drw_arrow(drw, x - plw, 0, plw, bh, bp == '\\' || bp == '>' ? 1 : 0, bp == '<' ? 0 : 1);
+				drw_arrow(drw, x - plw, barg->y, plw, barg->h, bp == '\\' || bp == '>' ? 1 : 0, bp == '<' ? 0 : 1);
 				x -= plw;
 			}
 
 			drw_setscheme(drw, nxtscheme);
 			w = TEXTW(bs+2);
-			drw_text(drw, x - w, 0, w, bh, lrpad / 2, bs+2, 0, False);
+			drw_text(drw, x - w, barg->y, w, barg->h, lrpad / 2, bs+2, 0, False);
 			x -= w;
 
 			bp = *bs;
@@ -112,8 +112,8 @@ drawpowerlinestatus(int xpos, char *stext)
 	}
 	if (bp != '|') {
 		drw_settrans(drw, prevscheme, scheme[SchemeNorm]);
-		drw_arrow(drw, x - plw, 0, plw, bh, bp == '\\' || bp == '>' ? 1 : 0, bp == '<' ? 0 : 1);
-		drw_rect(drw, x - 2 * plw, 0, plw, bh, 1, 1);
+		drw_arrow(drw, x - plw, barg->y, plw, barg->h, bp == '\\' || bp == '>' ? 1 : 0, bp == '<' ? 0 : 1);
+		drw_rect(drw, x - 2 * plw, barg->y, plw, barg->h, 1, 1);
 		x -= plw * 2;
 	}
 

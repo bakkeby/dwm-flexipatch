@@ -13,4 +13,4 @@ enum {
 	INDICATOR_RIGHT_TAGS
 };
 
-static void drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int w, unsigned int tag, int filled, int invert, int type);
+static void drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int y, int w, int h, unsigned int tag, int filled, int invert, int type);

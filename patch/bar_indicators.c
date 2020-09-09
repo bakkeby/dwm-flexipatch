@@ -10,7 +10,7 @@
 #endif
 
 void
-drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int w, unsigned int tag, int filled, int invert, int type)
+drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int y, int w, int h, unsigned int tag, int filled, int invert, int type)
 {
 	int i, boxw, boxs, indn = 0;
 	if (!(occ & 1 << tag) || type == INDICATOR_NONE)
@@ -24,31 +24,31 @@ drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int w, unsigned in
 	switch (type) {
 	default:
 	case INDICATOR_TOP_LEFT_SQUARE:
-		drw_rect(drw, x + boxs, boxs, boxw, boxw, filled, invert);
+		drw_rect(drw, x + boxs, y + boxs, boxw, boxw, filled, invert);
 		break;
 	case INDICATOR_TOP_LEFT_LARGER_SQUARE:
-		drw_rect(drw, x + boxs + 2, boxs+1, boxw+1, boxw+1, filled, invert);
+		drw_rect(drw, x + boxs + 2, y + boxs+1, boxw+1, boxw+1, filled, invert);
 		break;
 	case INDICATOR_TOP_BAR:
-		drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), boxw/2, filled, invert);
+		drw_rect(drw, x + boxw, y, w - ( 2 * boxw + 1), boxw/2, filled, invert);
 		break;
 	case INDICATOR_TOP_BAR_SLIM:
-		drw_rect(drw, x + boxw, 0, w - ( 2 * boxw + 1), 1, 0, invert);
+		drw_rect(drw, x + boxw, y, w - ( 2 * boxw + 1), 1, 0, invert);
 		break;
 	case INDICATOR_BOTTOM_BAR:
-		drw_rect(drw, x + boxw, bh - boxw/2, w - ( 2 * boxw + 1), boxw/2, filled, invert);
+		drw_rect(drw, x + boxw, y + h - boxw/2, w - ( 2 * boxw + 1), boxw/2, filled, invert);
 		break;
 	case INDICATOR_BOTTOM_BAR_SLIM:
-		drw_rect(drw, x + boxw, bh - 1, w - ( 2 * boxw + 1), 1, 0, invert);
+		drw_rect(drw, x + boxw, y + h - 1, w - ( 2 * boxw + 1), 1, 0, invert);
 		break;
 	case INDICATOR_BOX:
-		drw_rect(drw, x + boxw, 0, w - 2 * boxw, bh, 0, invert);
+		drw_rect(drw, x + boxw, y, w - 2 * boxw, h, 0, invert);
 		break;
 	case INDICATOR_BOX_WIDER:
-		drw_rect(drw, x + boxw/2, 0, w - boxw, bh, 0, invert);
+		drw_rect(drw, x + boxw/2, y, w - boxw, h, 0, invert);
 		break;
 	case INDICATOR_BOX_FULL:
-		drw_rect(drw, x, 0, w - 2, bh, 0, invert);
+		drw_rect(drw, x, y, w - 2, h, 0, invert);
 		break;
 	case INDICATOR_CLIENT_DOTS:
 		for (c = m->clients; c; c = c->next) {
@@ -56,7 +56,7 @@ drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int w, unsigned in
 				drw_rect(drw, x, 1 + (indn * 2), m->sel == c ? 6 : 1, 1, 1, invert);
 				indn++;
 			}
-			if (bh <= 1 + (indn * 2)) {
+			if (h <= 1 + (indn * 2)) {
 				indn = 0;
 				x += 2;
 			}

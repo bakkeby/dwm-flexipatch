@@ -60,8 +60,10 @@ static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no 
 #if BAR_EXTRASTATUS_PATCH
 static const char statussep              = ';'; /* separator between status bars */
 #endif // BAR_EXTRASTATUS_PATCH
-#if BAR_TABGROUPS_PATCH
+#if BAR_TABGROUPS_PATCH && MONOCLE_LAYOUT
 static void (*bartabmonfns[])(Monitor *) = { monocle /* , customlayoutfn */ };
+#else
+static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #endif // BAR_TABGROUPS_PATCH
 #if BAR_PANGO_PATCH
 static const char font[]                 = "monospace 10";

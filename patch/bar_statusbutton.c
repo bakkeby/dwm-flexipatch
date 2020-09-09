@@ -1,17 +1,17 @@
 int
-width_stbutton(Bar *bar, BarWidthArg *a)
+width_stbutton(Bar *bar, BarArg *a)
 {
 	return TEXTW(buttonbar);
 }
 
 int
-draw_stbutton(Bar *bar, BarDrawArg *a)
+draw_stbutton(Bar *bar, BarArg *a)
 {
-	return drw_text(drw, a->x, 0, a->w, bh, lrpad / 2, buttonbar, 0, False);
+	return drw_text(drw, a->x, a->y, a->w, a->h, lrpad / 2, buttonbar, 0, False);
 }
 
 int
-click_stbutton(Bar *bar, Arg *arg, BarClickArg *a)
+click_stbutton(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkButton;
 }

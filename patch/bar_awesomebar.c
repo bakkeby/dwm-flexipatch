@@ -1,11 +1,11 @@
 int
-width_awesomebar(Bar *bar, BarWidthArg *a)
+width_awesomebar(Bar *bar, BarArg *a)
 {
-	return a->max_width;
+	return a->w;
 }
 
 int
-draw_awesomebar(Bar *bar, BarDrawArg *a)
+draw_awesomebar(Bar *bar, BarArg *a)
 {
 	int n = 0, scm, remainder = 0, tabw, pad;
 	unsigned int i;
@@ -44,9 +44,9 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 			#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
 			drw_setscheme(drw, scheme[scm]);
-			drw_text(drw, x, 0, tabw + (i < remainder ? 1 : 0), bh, pad, c->name, 0, False);
+			drw_text(drw, x, a->y, tabw + (i < remainder ? 1 : 0), a->h, pad, c->name, 0, False);
 			if (c->isfloating)
-				drawindicator(c->mon, c, 1, x, w, 0, 0, c->isfixed, floatindicatortype);
+				drawindicator(c->mon, c, 1, x, a->y, w, a->h, 0, 0, c->isfixed, floatindicatortype);
 			x += tabw + (i < remainder ? 1 : 0);
 		}
 	}
@@ -54,7 +54,7 @@ draw_awesomebar(Bar *bar, BarDrawArg *a)
 }
 
 int
-click_awesomebar(Bar *bar, Arg *arg, BarClickArg *a)
+click_awesomebar(Bar *bar, Arg *arg, BarArg *a)
 {
 	int x = 0, n = 0;
 	Client *c;
@@ -69,8 +69,8 @@ click_awesomebar(Bar *bar, Arg *arg, BarClickArg *a)
 		if (!c || !ISVISIBLE(c))
 			continue;
 		else
-			x += (1.0 / (double)n) * a->rel_w;
-	} while (c && a->rel_x > x && (c = c->next));
+			x += (1.0 / (double)n) * a->w;
+	} while (c && a->x > x && (c = c->next));
 
 	if (c) {
 		arg->v = c;

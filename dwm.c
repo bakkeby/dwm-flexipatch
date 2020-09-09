@@ -254,34 +254,27 @@ struct Bar {
 	int idx;
 	int showbar;
 	int topbar;
+	int borderpx;
+	int borderscheme;
 	int bx, by, bw, bh; /* bar geometry */
 	int w[BARRULES]; // width, array length == barrules, then use r index for lookup purposes
 	int x[BARRULES]; // x position, array length == ^
 };
 
 typedef struct {
-	int max_width;
-} BarWidthArg;
-
-typedef struct {
 	int x;
+	int y;
+	int h;
 	int w;
-} BarDrawArg;
-
-typedef struct {
-	int rel_x;
-	int rel_y;
-	int rel_w;
-	int rel_h;
-} BarClickArg;
+} BarArg;
 
 typedef struct {
 	int monitor;
 	int bar;
 	int alignment; // see bar alignment enum
-	int (*widthfunc)(Bar *bar, BarWidthArg *a);
-	int (*drawfunc)(Bar *bar, BarDrawArg *a);
-	int (*clickfunc)(Bar *bar, Arg *arg, BarClickArg *a);
+	int (*widthfunc)(Bar *bar, BarArg *a);
+	int (*drawfunc)(Bar *bar, BarArg *a);
+	int (*clickfunc)(Bar *bar, Arg *arg, BarArg *a);
 	char *name; // for debugging
 	int x, w; // position, width for internal use
 } BarRule;
@@ -958,7 +951,7 @@ buttonpress(XEvent *e)
 	Bar *bar;
 	XButtonPressedEvent *ev = &e->xbutton;
 	const BarRule *br;
-	BarClickArg carg = { 0, 0, 0, 0 };
+	BarArg carg = { 0, 0, 0, 0 };
 	click = ClkRootWin;
 	/* focus monitor if necessary */
 	if ((m = wintomon(ev->window)) && m != selmon
@@ -980,10 +973,10 @@ buttonpress(XEvent *e)
 				if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
 					continue;
 				if (bar->x[r] <= ev->x && ev->x <= bar->x[r] + bar->w[r]) {
-					carg.rel_x = ev->x - bar->x[r];
-					carg.rel_y = ev->y;
-					carg.rel_w = bar->w[r];
-					carg.rel_h = bar->bh;
+					carg.x = ev->x - bar->x[r];
+					carg.y = ev->y - bar->borderpx;
+					carg.w = bar->w[r];
+					carg.h = bar->bh - 2 * bar->borderpx;
 					click = br->clickfunc(bar, &arg, &carg);
 					if (click < 0)
 						return;
@@ -1407,6 +1400,12 @@ createmon(void)
 		m->bar = bar;
 		istopbar = !istopbar;
 		bar->showbar = 1;
+		#if BAR_BORDER_PATCH
+		bar->borderpx = borderpx;
+		#else
+		bar->borderpx = 0;
+		#endif // BAR_BORDER_PATCH
+		bar->borderscheme = SchemeNorm;
 	}
 
 	#if FLEXTILE_DELUXE_LAYOUT
@@ -1571,24 +1570,32 @@ drawbarwin(Bar *bar)
 	int r, w, total_drawn = 0;
 	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
 	const BarRule *br;
-	BarWidthArg warg = { 0 };
-	BarDrawArg darg  = { 0, 0 };
 
-	rw = lw = bar->bw;
-	rx = lx = 0;
+	if (bar->borderpx) {
+		XSetForeground(drw->dpy, drw->gc, scheme[bar->borderscheme][ColBorder].pixel);
+		XFillRectangle(drw->dpy, drw->drawable, drw->gc, 0, 0, bar->bw, bar->bh);
+	}
+
+	BarArg warg = { 0 };
+	BarArg darg  = { 0 };
+	warg.h = bar->bh - 2 * bar->borderpx;
+
+	rw = lw = bar->bw - 2 * bar->borderpx;
+	rx = lx = bar->borderpx;
 
 	drw_setscheme(drw, scheme[SchemeNorm]);
-	drw_rect(drw, lx, 0, lw, bh, 1, 1);
+	drw_rect(drw, lx, bar->borderpx, lw, bar->bh - 2 * bar->borderpx, 1, 1);
 	for (r = 0; r < LENGTH(barrules); r++) {
 		br = &barrules[r];
-		if (br->bar != bar->idx || br->drawfunc == NULL || (br->monitor == 'A' && bar->mon != selmon))
+		if (br->bar != bar->idx || (br->monitor == 'A' && bar->mon != selmon))
 			continue;
 		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
 			continue;
 		drw_setscheme(drw, scheme[SchemeNorm]);
-		warg.max_width = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
+		warg.w = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
+
 		w = br->widthfunc(bar, &warg);
-		w = MIN(warg.max_width, w);
+		w = MIN(warg.w, w);
 
 		if (lw <= 0) { // if left is exhausted then switch to right side, and vice versa
 			lw = rw;
@@ -1653,9 +1660,13 @@ drawbarwin(Bar *bar)
 		}
 		bar->w[r] = w;
 		darg.x = bar->x[r];
+		darg.y = bar->borderpx;
+		darg.h = bar->bh - 2 * bar->borderpx;
 		darg.w = bar->w[r];
-		total_drawn += br->drawfunc(bar, &darg);
+		if (br->drawfunc)
+			total_drawn += br->drawfunc(bar, &darg);
 	}
+
 	if (total_drawn == 0 && bar->showbar) {
 		bar->showbar = 0;
 		updatebarpos(bar->mon);
@@ -2899,12 +2910,12 @@ setfullscreen(Client *c, int fullscreen)
 			PropModeReplace, (unsigned char*)&netatom[NetWMFullscreen], 1);
 		c->isfullscreen = 1;
 		#if !FAKEFULLSCREEN_PATCH
+		c->oldbw = c->bw;
 		#if FAKEFULLSCREEN_CLIENT_PATCH
 		if (c->fakefullscreen == 1)
 			return;
 		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->oldstate = c->isfloating;
-		c->oldbw = c->bw;
 		c->bw = 0;
 		c->isfloating = 1;
 		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
@@ -2915,6 +2926,7 @@ setfullscreen(Client *c, int fullscreen)
 			PropModeReplace, (unsigned char*)0, 0);
 		c->isfullscreen = 0;
 		#if !FAKEFULLSCREEN_PATCH
+		c->bw = c->oldbw;
 		#if FAKEFULLSCREEN_CLIENT_PATCH
 		if (c->fakefullscreen == 1)
 			return;
@@ -2922,7 +2934,6 @@ setfullscreen(Client *c, int fullscreen)
 			c->fakefullscreen = 1;
 		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->isfloating = c->oldstate;
-		c->bw = c->oldbw;
 		c->x = c->oldx;
 		c->y = c->oldy;
 		c->w = c->oldw;
@@ -3197,7 +3208,7 @@ showhide(Client *c)
 	if (!c)
 		return;
 	if (ISVISIBLE(c)) {
-		#if SCRATCHPADS_KEEP_POSITION_AND_SIZE_PATCH
+		#if SCRATCHPADS_PATCH && SCRATCHPADS_KEEP_POSITION_AND_SIZE_PATCH
 		if (
 			(c->tags & SPTAGMASK) &&
 			c->isfloating &&
@@ -3733,7 +3744,6 @@ updatebarpos(Monitor *m)
 	m->wy = m->my;
 	m->ww = m->mw;
 	m->wh = m->mh;
-	int num_bars;
 	Bar *bar;
 	#if BAR_PADDING_PATCH
 	int y_pad = vertpad;
@@ -3755,24 +3765,23 @@ updatebarpos(Monitor *m)
 	for (bar = m->bar; bar; bar = bar->next) {
 		bar->bx = m->wx + x_pad;
 		bar->bw = m->ww - 2 * x_pad;
-		bar->bh = bh;
+		bar->bh = bh + bar->borderpx * 2;
 	}
 
 	for (bar = m->bar; bar; bar = bar->next)
 		if (!m->showbar || !bar->showbar)
-			bar->by = -bh - y_pad;
+			bar->by = -bh - bar->borderpx * 2 - y_pad;
 	if (!m->showbar)
 		return;
-	for (num_bars = 0, bar = m->bar; bar; bar = bar->next) {
+	for (bar = m->bar; bar; bar = bar->next) {
 		if (!bar->showbar)
 			continue;
 		if (bar->topbar)
-			m->wy = m->wy + bh + y_pad;
-		num_bars++;
+			m->wy = m->wy + bh + bar->borderpx * 2 + y_pad;
+		m->wh -= y_pad + bh + bar->borderpx * 2;
 	}
-	m->wh = m->wh - y_pad * num_bars - bh * num_bars;
 	for (bar = m->bar; bar; bar = bar->next)
-		bar->by = (bar->topbar ? m->wy - bh : m->wy + m->wh);
+		bar->by = (bar->topbar ? m->wy - bh - bar->borderpx * 2 : m->wy + m->wh);
 }
 
 void

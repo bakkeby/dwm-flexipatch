@@ -1,11 +1,11 @@
 int
-width_wintitle(Bar *bar, BarWidthArg *a)
+width_wintitle(Bar *bar, BarArg *a)
 {
-	return a->max_width;
+	return a->w;
 }
 
 int
-draw_wintitle(Bar *bar, BarDrawArg *a)
+draw_wintitle(Bar *bar, BarArg *a)
 {
 	#if BAR_TITLE_LEFT_PAD_PATCH && BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
@@ -21,7 +21,7 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 
 	if (!m->sel) {
 		drw_setscheme(drw, scheme[SchemeTitleNorm]);
-		drw_rect(drw, x, 0, w, bh, 1, 1);
+		drw_rect(drw, x, a->y, w, a->h, 1, 1);
 		return 0;
 	}
 
@@ -33,18 +33,18 @@ draw_wintitle(Bar *bar, BarDrawArg *a)
 	if (TEXTW(m->sel->name) < w)
 		pad = (w - TEXTW(m->sel->name) + lrpad) / 2;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
-	drw_text(drw, x, 0, w, bh, pad, m->sel->name, 0, False);
+	drw_text(drw, x, a->y, w, a->h, pad, m->sel->name, 0, False);
 	#if BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	XSync(dpy, False);
 	XSetErrorHandler(xerror);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	if (m->sel->isfloating)
-		drawindicator(m, m->sel, 1, x, w, 0, 0, m->sel->isfixed, floatindicatortype);
+		drawindicator(m, m->sel, 1, x, a->y, w, a->h, 0, 0, m->sel->isfixed, floatindicatortype);
 	return 1;
 }
 
 int
-click_wintitle(Bar *bar, Arg *arg, BarClickArg *a)
+click_wintitle(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkWinTitle;
 }
