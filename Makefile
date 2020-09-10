@@ -6,6 +6,8 @@ include config.mk
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
 
+# FreeBSD users, prefix all ifdef, else and endif statements with a . for this to work (e.g. .ifdef)
+
 ifdef YAJLLIBS
 all: options dwm dwm-msg
 else
