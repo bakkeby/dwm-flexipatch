@@ -1587,7 +1587,7 @@ drawbarwin(Bar *bar)
 	drw_rect(drw, lx, bar->borderpx, lw, bar->bh - 2 * bar->borderpx, 1, 1);
 	for (r = 0; r < LENGTH(barrules); r++) {
 		br = &barrules[r];
-		if (br->bar != bar->idx || !bar->widthfunc || (br->monitor == 'A' && bar->mon != selmon))
+		if (br->bar != bar->idx || !br->widthfunc || (br->monitor == 'A' && bar->mon != selmon))
 			continue;
 		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
 			continue;
