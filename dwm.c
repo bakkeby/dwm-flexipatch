@@ -2536,7 +2536,7 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	    #endif // MONOCLE_LAYOUT
 	    )
 	    #if FAKEFULLSCREEN_CLIENT_PATCH
-	    && (c->fakefullscreen == 1 || !c->isfullscreen) && c->fakefullscreen
+	    && (c->fakefullscreen == 1 || !c->isfullscreen)
 	    #else
 	    && !c->isfullscreen
 	    #endif // FAKEFULLSCREEN_CLIENT_PATCH
