@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2020-09-10 - Added the anybar patch (basic integration, no support for dwm bar(s) + anybar)
+2020-09-10 - Added the anybar patch (with experimental support for dwm bar(s) + anybar)
 
 2020-09-09 - Added the bar border patch
 

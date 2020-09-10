@@ -188,8 +188,8 @@
  * dwm treats the external bar as it would its own, so all regular dwm commands such as
  * togglebar affect the external bar in the same way.
  *
- * There is currently no support for anybar + regular dwm bar(s), so if this is to be
- * enabled the recommendation is to disable all bar modules and have { 0 } in the barrules.
+ * NB: Unless you want both anybar + dwm bar(s) then the recommendation is to disable all
+ * bar modules and have { 0 } in the barrules.
  *
  * https://dwm.suckless.org/patches/anybar/
  */

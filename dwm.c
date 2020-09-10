@@ -259,6 +259,7 @@ struct Bar {
 	int idx;
 	int showbar;
 	int topbar;
+	int external;
 	int borderpx;
 	int borderscheme;
 	int bx, by, bw, bh; /* bar geometry */
@@ -1087,15 +1088,10 @@ cleanupmon(Monitor *mon)
 		m->next = mon->next;
 	}
 	for (bar = mon->bar; bar; bar = mon->bar) {
-		#if BAR_ANYBAR_PATCH
-		if (!usealtbar) {
+		if (!bar->external) {
 			XUnmapWindow(dpy, bar->win);
 			XDestroyWindow(dpy, bar->win);
 		}
-		#else
-		XUnmapWindow(dpy, bar->win);
-		XDestroyWindow(dpy, bar->win);
-		#endif // BAR_ANYBAR_PATCH
 		mon->bar = bar->next;
 		free(bar);
 	}
@@ -1229,7 +1225,6 @@ configurenotify(XEvent *e)
 	#endif // !FAKEFULLSCREEN_PATCH
 	XConfigureEvent *ev = &e->xconfigure;
 	int dirty;
-
 	/* TODO: updategeom handling sucks, needs to be simplified */
 	if (ev->window == root) {
 		dirty = (sw != ev->width || sh != ev->height);
@@ -1262,9 +1257,11 @@ configurerequest(XEvent *e)
 {
 	Client *c;
 	Monitor *m;
+	#if BAR_ANYBAR_PATCH
+	Bar *bar;
+	#endif // BAR_ANYBAR_PATCH
 	XConfigureRequestEvent *ev = &e->xconfigurerequest;
 	XWindowChanges wc;
-
 	if ((c = wintoclient(ev->window))) {
 		if (ev->value_mask & CWBorderWidth)
 			c->bw = ev->border_width;
@@ -1316,6 +1313,15 @@ configurerequest(XEvent *e)
 	} else {
 		wc.x = ev->x;
 		wc.y = ev->y;
+		#if BAR_ANYBAR_PATCH
+		m = wintomon(ev->window);
+		for (bar = m->bar; bar; bar = bar->next) {
+			if (bar->win == ev->window) {
+				wc.y = bar->by;
+				wc.x = bar->bx;
+			}
+		}
+		#endif // BAR_ANYBAR_PATCH
 		wc.width = ev->width;
 		wc.height = ev->height;
 		wc.border_width = ev->border_width;
@@ -1412,11 +1418,13 @@ createmon(void)
 		m->bar = bar;
 		istopbar = !istopbar;
 		bar->showbar = 1;
+		bar->external = 0;
 		#if BAR_BORDER_PATCH
 		bar->borderpx = borderpx;
 		#else
 		bar->borderpx = 0;
 		#endif // BAR_BORDER_PATCH
+		bar->bh = bh + bar->borderpx * 2;
 		bar->borderscheme = SchemeNorm;
 	}
 
@@ -1576,11 +1584,6 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	#if BAR_ANYBAR_PATCH
-	if (usealtbar)
-		return;
-	#endif // BAR_ANYBAR_PATCH
-
 	Bar *bar;
 	for (bar = m->bar; bar; bar = bar->next)
 		drawbarwin(bar);
@@ -1597,7 +1600,7 @@ drawbars(void)
 void
 drawbarwin(Bar *bar)
 {
-	if (!bar->win)
+	if (!bar->win || bar->external)
 		return;
 	int r, w, total_drawn = 0;
 	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
@@ -3116,10 +3119,6 @@ setup(void)
 	bh = drw->fonts->h + 2;
 	#endif // BAR_HEIGHT_PATCH
 	#endif // BAR_STATUSPADDING_PATCH
-	#if BAR_ANYBAR_PATCH
-	if (usealtbar)
-		bh = 0;
-	#endif // BAR_ANYBAR_PATCH
 	updategeom();
 	/* init atoms */
 	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
@@ -3781,10 +3780,6 @@ unmapnotify(XEvent *e)
 void
 updatebars(void)
 {
-	#if BAR_ANYBAR_PATCH
-	if (usealtbar)
-		return;
-	#endif // BAR_ANYBAR_PATCH
 	Bar *bar;
 	Monitor *m;
 	XSetWindowAttributes wa = {
@@ -3801,6 +3796,8 @@ updatebars(void)
 	XClassHint ch = {"dwm", "dwm"};
 	for (m = mons; m; m = m->next) {
 		for (bar = m->bar; bar; bar = bar->next) {
+			if (bar->external)
+				continue;
 			if (!bar->win) {
 				#if BAR_ALPHA_PATCH
 				bar->win = XCreateWindow(dpy, root, bar->bx, bar->by, bar->bw, bar->bh, 0, depth,
@@ -3847,23 +3844,22 @@ updatebarpos(Monitor *m)
 	for (bar = m->bar; bar; bar = bar->next) {
 		bar->bx = m->wx + x_pad;
 		bar->bw = m->ww - 2 * x_pad;
-		bar->bh = bh + bar->borderpx * 2;
 	}
 
 	for (bar = m->bar; bar; bar = bar->next)
 		if (!m->showbar || !bar->showbar)
-			bar->by = -bh - bar->borderpx * 2 - y_pad;
+			bar->by = -bar->bh - y_pad;
 	if (!m->showbar)
 		return;
 	for (bar = m->bar; bar; bar = bar->next) {
 		if (!bar->showbar)
 			continue;
 		if (bar->topbar)
-			m->wy = m->wy + bh + bar->borderpx * 2 + y_pad;
-		m->wh -= y_pad + bh + bar->borderpx * 2;
+			m->wy = m->wy + bar->bh + y_pad;
+		m->wh -= y_pad + bar->bh;
 	}
 	for (bar = m->bar; bar; bar = bar->next)
-		bar->by = (bar->topbar ? m->wy - bh - bar->borderpx * 2 : m->wy + m->wh);
+		bar->by = (bar->topbar ? m->wy - bar->bh : m->wy + m->wh);
 }
 
 void
