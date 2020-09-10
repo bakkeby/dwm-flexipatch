@@ -2494,7 +2494,13 @@ resizeclient(Client *c, int x, int y, int w, int h)
 		#if MONOCLE_LAYOUT
 	    || &monocle == c->mon->lt[c->mon->sellt]->arrange
 	    #endif // MONOCLE_LAYOUT
-	    ) && !c->isfullscreen && !c->isfloating
+	    )
+	    #if FAKEFULLSCREEN_CLIENT_PATCH
+	    && (c->fakefullscreen == 1 || !c->isfullscreen) && c->fakefullscreen
+	    #else
+	    && !c->isfullscreen
+	    #endif // FAKEFULLSCREEN_CLIENT_PATCH
+	    && !c->isfloating
 	    && c->mon->lt[c->mon->sellt]->arrange) {
 		c->w = wc.width += c->bw * 2;
 		c->h = wc.height += c->bw * 2;
@@ -2503,7 +2509,14 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	#endif // NOBORDER_PATCH
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
+	#if FAKEFULLSCREEN_CLIENT_PATCH
+	if (c->fakefullscreen == 1)
+		XSync(dpy, True);
+	else
+		XSync(dpy, False);
+	#else
 	XSync(dpy, False);
+	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 }
 
 void
