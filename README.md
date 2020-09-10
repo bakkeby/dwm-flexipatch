@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-09-10 - Added the anybar patch (basic integration, no support for dwm bar(s) + anybar)
+
 2020-09-09 - Added the bar border patch
 
 2020-09-08 - Added ipc v1.5.5 patch
@@ -179,6 +181,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [alwaysfullscreen](https://dwm.suckless.org/patches/alwaysfullscreen/)
       - prevents the focus to drift from the active fullscreen client when using focusstack\(\)
+
+   - [anybar](https://dwm.suckless.org/patches/anybar/)
+      - enables dwm to manage external status bars such as lemonbar and polybar
+      - dwm treats the external bar as it would its own, so all regular dwm commands such as togglebar affect the external bar in the same way
 
    - [aspectresize](https://dwm.suckless.org/patches/aspectresize/)
       - allows windows to be resized with its aspect ratio remaining constant

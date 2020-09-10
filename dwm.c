@@ -71,8 +71,13 @@
 #define BARRULES                20
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
+#if BAR_ANYBAR_PATCH
+#define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->mx+(m)->mw) - MAX((x),(m)->mx)) \
+                               * MAX(0, MIN((y)+(h),(m)->my+(m)->mh) - MAX((y),(m)->my)))
+#else
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
+#endif // BAR_ANYBAR_PATCH
 #if ATTACHASIDE_PATCH && STICKY_PATCH
 #define ISVISIBLEONTAG(C, T)    ((C->tags & T) || C->issticky)
 #define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])
@@ -1082,8 +1087,15 @@ cleanupmon(Monitor *mon)
 		m->next = mon->next;
 	}
 	for (bar = mon->bar; bar; bar = mon->bar) {
+		#if BAR_ANYBAR_PATCH
+		if (!usealtbar) {
+			XUnmapWindow(dpy, bar->win);
+			XDestroyWindow(dpy, bar->win);
+		}
+		#else
 		XUnmapWindow(dpy, bar->win);
 		XDestroyWindow(dpy, bar->win);
+		#endif // BAR_ANYBAR_PATCH
 		mon->bar = bar->next;
 		free(bar);
 	}
@@ -1492,6 +1504,10 @@ void
 destroynotify(XEvent *e)
 {
 	Client *c;
+	#if BAR_ANYBAR_PATCH
+	Monitor *m;
+	Bar *bar;
+	#endif // BAR_ANYBAR_PATCH
 	XDestroyWindowEvent *ev = &e->xdestroywindow;
 
 	if ((c = wintoclient(ev->window)))
@@ -1506,6 +1522,17 @@ destroynotify(XEvent *e)
 		drawbarwin(systray->bar);
 	}
 	#endif // BAR_SYSTRAY_PATCH
+	#if BAR_ANYBAR_PATCH
+	else {
+		 m = wintomon(ev->window);
+		 for (bar = m->bar; bar; bar = bar->next) {
+		 	if (bar->win == ev->window) {
+				unmanagealtbar(ev->window);
+				break;
+			}
+		}
+	}
+	#endif // BAR_ANYBAR_PATCH
 }
 
 void
@@ -1549,6 +1576,11 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
+	#if BAR_ANYBAR_PATCH
+	if (usealtbar)
+		return;
+	#endif // BAR_ANYBAR_PATCH
+
 	Bar *bar;
 	for (bar = m->bar; bar; bar = bar->next)
 		drawbarwin(bar);
@@ -2216,6 +2248,11 @@ maprequest(XEvent *e)
 		return;
 	if (wa.override_redirect)
 		return;
+	#if BAR_ANYBAR_PATCH
+	if (wmclasscontains(ev->window, altbarclass, ""))
+		managealtbar(ev->window, &wa);
+	else
+	#endif // BAR_ANYBAR_PATCH
 	if (!wintoclient(ev->window))
 		manage(ev->window, &wa);
 }
@@ -2761,6 +2798,11 @@ scan(void)
 			if (!XGetWindowAttributes(dpy, wins[i], &wa)
 			|| wa.override_redirect || XGetTransientForHint(dpy, wins[i], &d1))
 				continue;
+			#if BAR_ANYBAR_PATCH
+			if (wmclasscontains(wins[i], altbarclass, ""))
+				managealtbar(wins[i], &wa);
+			else
+			#endif // BAR_ANYBAR_PATCH
 			if (wa.map_state == IsViewable || getstate(wins[i]) == IconicState)
 				manage(wins[i], &wa);
 		}
@@ -3074,6 +3116,10 @@ setup(void)
 	bh = drw->fonts->h + 2;
 	#endif // BAR_HEIGHT_PATCH
 	#endif // BAR_STATUSPADDING_PATCH
+	#if BAR_ANYBAR_PATCH
+	if (usealtbar)
+		bh = 0;
+	#endif // BAR_ANYBAR_PATCH
 	updategeom();
 	/* init atoms */
 	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
@@ -3199,6 +3245,10 @@ setup(void)
 	#if IPC_PATCH
 	setupepoll();
 	#endif // IPC_PATCH
+	#if BAR_ANYBAR_PATCH
+	if (usealtbar)
+		spawnbar();
+	#endif // BAR_ANYBAR_PATCH
 }
 
 
@@ -3695,6 +3745,10 @@ void
 unmapnotify(XEvent *e)
 {
 	Client *c;
+	#if BAR_ANYBAR_PATCH
+	Monitor *m;
+	Bar *bar;
+	#endif // BAR_ANYBAR_PATCH
 	XUnmapEvent *ev = &e->xunmap;
 
 	if ((c = wintoclient(ev->window))) {
@@ -3711,11 +3765,26 @@ unmapnotify(XEvent *e)
 		drawbarwin(systray->bar);
 	#endif // BAR_SYSTRAY_PATCH
 	}
+	#if BAR_ANYBAR_PATCH
+	else {
+		 m = wintomon(ev->window);
+		 for (bar = m->bar; bar; bar = bar->next) {
+		 	if (bar->win == ev->window) {
+				unmanagealtbar(ev->window);
+				break;
+			}
+		}
+	}
+	#endif // BAR_ANYBAR_PATCH
 }
 
 void
 updatebars(void)
 {
+	#if BAR_ANYBAR_PATCH
+	if (usealtbar)
+		return;
+	#endif // BAR_ANYBAR_PATCH
 	Bar *bar;
 	Monitor *m;
 	XSetWindowAttributes wa = {

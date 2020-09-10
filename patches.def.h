@@ -152,6 +152,19 @@
  * Bar options
  */
 
+/* This patch changes the rectangle indicating if a tag is used by a client into a bar
+ * above the tag name for better visibility.
+ * Set the tagindicatortype variable in config.h to INDICATOR_TOP_BAR to enable this.
+ * https://dwm.suckless.org/patches/activetagindicatorbar/
+ */
+#define BAR_ACTIVETAGINDICATORBAR_PATCH N/A
+
+/* Alternative patch to the activetagindicatorbar patch, adds the bar below the tag
+ * icon rather than above.
+ * Set the tagindicatortype variable in config.h to INDICATOR_BOTTOM_BAR to enable this.
+ */
+#define BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH N/A
+
 /* The alpha patch adds transparency for the status bar.
  * You need to uncomment the corresponding line in config.mk to use the -lXrender library
  * when including this patch.
@@ -171,18 +184,16 @@
  */
 #define BAR_ALTTAGSDECORATION_PATCH 0
 
-/* This patch changes the rectangle indicating if a tag is used by a client into a bar
- * above the tag name for better visibility.
- * Set the tagindicatortype variable in config.h to INDICATOR_TOP_BAR to enable this.
- * https://dwm.suckless.org/patches/activetagindicatorbar/
+/* This patch enables dwm to manage external status bars such as lemonbar and polybar.
+ * dwm treats the external bar as it would its own, so all regular dwm commands such as
+ * togglebar affect the external bar in the same way.
+ *
+ * There is currently no support for anybar + regular dwm bar(s), so if this is to be
+ * enabled the recommendation is to disable all bar modules and have { 0 } in the barrules.
+ *
+ * https://dwm.suckless.org/patches/anybar/
  */
-#define BAR_ACTIVETAGINDICATORBAR_PATCH N/A
-
-/* Alternative patch to the activetagindicatorbar patch, adds the bar below the tag
- * icon rather than above.
- * Set the tagindicatortype variable in config.h to INDICATOR_BOTTOM_BAR to enable this.
- */
-#define BAR_ACTIVETAGINDICATORBAR_ALT1_PATCH N/A
+#define BAR_ANYBAR_PATCH 0
 
 /* This patch adds a border around the status bar(s) just like the border of client windows.
  * https://codemadness.org/paste/dwm-border-bar.patch

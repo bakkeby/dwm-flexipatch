@@ -8,6 +8,9 @@
 #if BAR_ALTERNATIVE_TAGS_PATCH
 #include "bar_alternativetags.c"
 #endif
+#if BAR_ANYBAR_PATCH
+#include "bar_anybar.c"
+#endif
 #if BAR_DWMBLOCKS_PATCH && BAR_STATUSCMD_PATCH
 #include "bar_dwmblocks.c"
 #endif
