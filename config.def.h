@@ -482,7 +482,6 @@ static const BarRule barrules[] = {
 	{ -1,       1,     BAR_ALIGN_LEFT,   width_wintitle_floating, draw_wintitle_floating, click_wintitle_floating, "wintitle_floating" },
 	#endif // BAR_WINTITLE_FLOATING_PATCH
 	#endif // BAR_FLEXWINTITLE_PATCH
-	{ NULL }
 };
 
 /* layout(s) */
