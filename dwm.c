@@ -2216,8 +2216,11 @@ manage(Window w, XWindowAttributes *wa)
 	#if SWALLOW_PATCH
 	if (term)
 		swallow(term, c);
-	#endif // SWALLOW_PATCH
+	else
+		arrange(c->mon);
+	#else
 	arrange(c->mon);
+	#endif // SWALLOW_PATCH
 	focus(NULL);
 }
 
