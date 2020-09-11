@@ -4394,7 +4394,11 @@ main(int argc, char *argv[])
 	#endif // COOL_AUTOSTART_PATCH
 	setup();
 #ifdef __OpenBSD__
+	#if SWALLOW_PATCH
+	if (pledge("stdio rpath proc exec ps", NULL) == -1)
+	#else
 	if (pledge("stdio rpath proc exec", NULL) == -1)
+	#endif // SWALLOW_PATCH
 		die("pledge");
 #endif /* __OpenBSD__ */
 	scan();
