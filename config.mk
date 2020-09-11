@@ -19,6 +19,8 @@ FREETYPELIBS = -lfontconfig -lXft
 FREETYPEINC = /usr/include/freetype2
 # OpenBSD (uncomment)
 #FREETYPEINC = ${X11INC}/freetype2
+# OpenBSD - Uncomment this for the swallow patch / SWALLOW_PATCH
+#KVMLIB = -lkvm
 
 # Uncomment this for the alpha patch / BAR_ALPHA_PATCH
 #XRENDER = -lXrender
@@ -31,8 +33,8 @@ FREETYPEINC = /usr/include/freetype2
 #PANGOLIB = `pkg-config --libs xft pango pangoxft`
 
 # Uncomment for the ipc patch / IPC_PATCH
-#YAJLLIBS = -I-lyajl
-#YAJLINC = /usr/include/yajl
+#YAJLLIBS = -lyajl
+#YAJLINC = -I/usr/include/yajl
 
 # Uncomment this for the rounded corners patch / ROUNDED_CORNERS_PATCH
 #XEXTLIB = -lXext
@@ -41,8 +43,8 @@ FREETYPEINC = /usr/include/freetype2
 #XCBLIBS = -lX11-xcb -lxcb -lxcb-res
 
 # includes and libs
-INCS = -I${X11INC} -I${FREETYPEINC} ${PANGOINC} ${YAJLLIBS}
-LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}  ${XRENDER} ${MPDCLIENT} ${XEXTLIB} ${XCBLIBS} ${PANGOLIB} ${YAJLLIBS}
+INCS = -I${X11INC} -I${FREETYPEINC} ${YAJLINC} ${PANGOINC}
+LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}  ${XRENDER} ${MPDCLIENT} ${XEXTLIB} ${XCBLIBS} ${KVMLIB} ${PANGOLIB} ${YAJLLIBS}
 
 # flags
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
