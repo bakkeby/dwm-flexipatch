@@ -1,12 +1,17 @@
 #include <X11/Xlib-xcb.h>
 #include <xcb/res.h>
 
+static int scanner;
 static xcb_connection_t *xcon;
 
 void
 swallow(Client *p, Client *c)
 {
-	if (c->noswallow || c->isterminal)
+	Client *s;
+
+	if (c->noswallow > 0 || c->isterminal)
+		return;
+	if (c->noswallow < 0 && !swallowfloating && c->isfloating)
 		return;
 
 	detach(c);
@@ -21,9 +26,14 @@ swallow(Client *p, Client *c)
 	Window w = p->win;
 	p->win = c->win;
 	c->win = w;
+
+	XChangeProperty(dpy, c->win, netatom[NetClientList], XA_WINDOW, 32, PropModeReplace,
+		(unsigned char *) &(p->win), 1);
+
 	updatetitle(p);
+	s = scanner ? c : p;
+	XMoveResizeWindow(dpy, p->win, s->x, s->y, s->w, s->h);
 	arrange(p->mon);
-	XMoveResizeWindow(dpy, p->win, p->x, p->y, p->w, p->h);
 	configure(p);
 	updateclientlist();
 }
@@ -36,12 +46,17 @@ unswallow(Client *c)
 	free(c->swallowing);
 	c->swallowing = NULL;
 
+	XDeleteProperty(dpy, c->win, netatom[NetClientList]);
+
+	/* unfullscreen the client */
+	setfullscreen(c, 0);
 	updatetitle(c);
 	arrange(c->mon);
 	XMapWindow(dpy, c->win);
 	XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
-	configure(c);
 	setclientstate(c, NormalState);
+	focus(NULL);
+	arrange(c->mon);
 }
 
 pid_t
@@ -82,21 +97,25 @@ getparentprocess(pid_t p)
 {
 	unsigned int v = 0;
 
-#ifdef __linux__
+#if defined(__linux__)
 	FILE *f;
 	char buf[256];
 	snprintf(buf, sizeof(buf) - 1, "/proc/%u/stat", (unsigned)p);
 
 	if (!(f = fopen(buf, "r")))
-		return 0;
+		return (pid_t)0;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-	fscanf(f, "%*u %*s %*c %u", &v);
-#pragma GCC diagnostic pop
+	if (fscanf(f, "%*u %*s %*c %u", (unsigned *)&v) != 1)
+		v = (pid_t)0;
 	fclose(f);
-#endif /* __linux__ */
+#elif defined(__FreeBSD__)
+	struct kinfo_proc *proc = kinfo_getproc(p);
+	if (!proc)
+		return (pid_t)0;
 
+	v = proc->ki_ppid;
+	free(proc);
+#endif
 	return (pid_t)v;
 }
 

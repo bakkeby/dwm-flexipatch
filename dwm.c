@@ -732,6 +732,9 @@ applyrules(Client *c)
 	XClassHint ch = { NULL, NULL };
 
 	/* rule matching */
+	#if SWALLOW_PATCH
+	c->noswallow = -1;
+	#endif // SWALLOW_PATCH
 	c->isfloating = 0;
 	c->tags = 0;
 	XGetClassHint(dpy, c->win, &ch);
@@ -785,7 +788,10 @@ applyrules(Client *c)
 
 			#if SWITCHTAG_PATCH
 			#if SWALLOW_PATCH
-			if (r->switchtag && (c->noswallow || !termforwin(c)))
+			if (r->switchtag && (
+				c->noswallow > 0 ||
+				!termforwin(c) ||
+				!(c->isfloating && swallowfloating && c->noswallow < 0)))
 			#else
 			if (r->switchtag)
 			#endif // SWALLOW_PATCH
@@ -1173,7 +1179,6 @@ clientmessage(XEvent *e)
 				#endif // !FAKEFULLSCREEN_PATCH
 			)));
 			#endif // FAKEFULLSCREEN_CLIENT_PATCH
-		}
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
 		#if FOCUSONNETACTIVE_PATCH
 		if (c->tags & c->mon->tagset[c->mon->seltags]) {
@@ -2125,6 +2130,8 @@ manage(Window w, XWindowAttributes *wa)
 		applyrules(c);
 		#if SWALLOW_PATCH
 		term = termforwin(c);
+		if (term)
+			c->mon = term->mon;
 		#endif // SWALLOW_PATCH
 	}
 
@@ -2209,7 +2216,6 @@ manage(Window w, XWindowAttributes *wa)
 	if (c->mon == selmon)
 		unfocus(selmon->sel, 0, c);
 	c->mon->sel = c;
-	arrange(c->mon);
 	#if BAR_WINTITLEACTIONS_PATCH
 	if (!HIDDEN(c))
 		XMapWindow(dpy, c->win);
@@ -2220,6 +2226,7 @@ manage(Window w, XWindowAttributes *wa)
 	if (term)
 		swallow(term, c);
 	#endif // SWALLOW_PATCH
+	arrange(c->mon);
 	focus(NULL);
 }
 
@@ -2792,6 +2799,10 @@ run(void)
 void
 scan(void)
 {
+	#if SWALLOW_PATCH
+	scanner = 1;
+	char swin[256];
+	#endif // SWALLOW_PATCH
 	unsigned int i, num;
 	Window d1, d2, *wins = NULL;
 	XWindowAttributes wa;
@@ -2808,6 +2819,10 @@ scan(void)
 			#endif // BAR_ANYBAR_PATCH
 			if (wa.map_state == IsViewable || getstate(wins[i]) == IconicState)
 				manage(wins[i], &wa);
+			#if SWALLOW_PATCH
+			else if (gettextprop(wins[i], netatom[NetClientList], swin, sizeof swin))
+				manage(wins[i], &wa);
+			#endif // SWALLOW_PATCH
 		}
 		for (i = 0; i < num; i++) { /* now the transients */
 			if (!XGetWindowAttributes(dpy, wins[i], &wa))
@@ -2818,6 +2833,9 @@ scan(void)
 		}
 		XFree(wins);
 	}
+	#if SWALLOW_PATCH
+	scanner = 0;
+	#endif // SWALLOW_PATCH
 }
 
 void

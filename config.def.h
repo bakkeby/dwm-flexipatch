@@ -8,6 +8,9 @@ static const int corner_radius           = 10;
 static const unsigned int borderpx       = 1;   /* border pixel of windows */
 #endif // ROUNDED_CORNERS_PATCH
 static const unsigned int snap           = 32;  /* snap pixel */
+#if SWALLOW_PATCH
+static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
+#endif // SWALLOW_PATCH
 #if VANITYGAPS_PATCH
 static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 10;  /* vert inner gap between windows */
