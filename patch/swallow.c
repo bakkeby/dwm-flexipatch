@@ -8,15 +8,15 @@
 static int scanner;
 static xcb_connection_t *xcon;
 
-void
+int
 swallow(Client *p, Client *c)
 {
 	Client *s;
 
 	if (c->noswallow > 0 || c->isterminal)
-		return;
+		return 0;
 	if (c->noswallow < 0 && !swallowfloating && c->isfloating)
-		return;
+		return 0;
 
 	detach(c);
 	detachstack(c);
@@ -40,6 +40,8 @@ swallow(Client *p, Client *c)
 	arrange(p->mon);
 	configure(p);
 	updateclientlist();
+
+	return 1;
 }
 
 void

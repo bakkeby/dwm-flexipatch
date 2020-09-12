@@ -2214,9 +2214,7 @@ manage(Window w, XWindowAttributes *wa)
 	XMapWindow(dpy, c->win);
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if SWALLOW_PATCH
-	if (term)
-		swallow(term, c);
-	else
+	if (!(term && swallow(term, c)))
 		arrange(c->mon);
 	#else
 	arrange(c->mon);
