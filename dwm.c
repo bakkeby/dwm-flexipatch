@@ -2981,11 +2981,13 @@ setfullscreen(Client *c, int fullscreen)
 		c->isfullscreen = 1;
 		#if !FAKEFULLSCREEN_PATCH
 		c->oldbw = c->bw;
-		#if FAKEFULLSCREEN_CLIENT_PATCH
-		if (c->fakefullscreen == 1)
-			return;
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->oldstate = c->isfloating;
+		#if FAKEFULLSCREEN_CLIENT_PATCH
+		if (c->fakefullscreen == 1) {
+			restack(c->mon);
+			return;
+		}
+		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->bw = 0;
 		c->isfloating = 1;
 		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
@@ -2997,19 +2999,19 @@ setfullscreen(Client *c, int fullscreen)
 		c->isfullscreen = 0;
 		#if !FAKEFULLSCREEN_PATCH
 		c->bw = c->oldbw;
+		c->isfloating = c->oldstate;
+		restack(c->mon);
 		#if FAKEFULLSCREEN_CLIENT_PATCH
 		if (c->fakefullscreen == 1)
 			return;
 		if (c->fakefullscreen == 2)
 			c->fakefullscreen = 1;
 		#endif // FAKEFULLSCREEN_CLIENT_PATCH
-		c->isfloating = c->oldstate;
 		c->x = c->oldx;
 		c->y = c->oldy;
 		c->w = c->oldw;
 		c->h = c->oldh;
 		resizeclient(c, c->x, c->y, c->w, c->h);
-		arrange(c->mon);
 		#endif // !FAKEFULLSCREEN_PATCH
 	}
 }

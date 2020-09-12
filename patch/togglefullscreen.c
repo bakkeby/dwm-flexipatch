@@ -13,12 +13,9 @@ togglefullscreen(const Arg *arg)
 	} else if (c->fakefullscreen == 2) {
 		c->fakefullscreen = 0;
 		togglefakefullscreen(NULL);
-		arrange(selmon);
 		return;
 	}
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 
 	setfullscreen(c, !c->isfullscreen);
-	if (!c->isfullscreen)
-		arrange(c->mon);
 }
