@@ -1163,6 +1163,10 @@ clientmessage(XEvent *e)
 	if (cme->message_type == netatom[NetWMState]) {
 		if (cme->data.l[1] == netatom[NetWMFullscreen]
 		|| cme->data.l[2] == netatom[NetWMFullscreen]) {
+			#if FAKEFULLSCREEN_CLIENT_PATCH
+			if (c->fakefullscreen == 2 && c->isfullscreen)
+				c->fakefullscreen = 3;
+			#endif // FAKEFULLSCREEN_CLIENT_PATCH
 			setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
 				|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */
 				#if !FAKEFULLSCREEN_PATCH
@@ -2970,6 +2974,68 @@ setfocus(Client *c)
 	#endif // BAR_SYSTRAY_PATCH
 }
 
+#if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
+void
+setfullscreen(Client *c, int fullscreen)
+{
+	int savestate = 0, restorestate = 0;
+
+	if ((c->fakefullscreen == 0 && fullscreen && !c->isfullscreen) // normal fullscreen
+			|| (c->fakefullscreen == 2 && fullscreen)) // fake fullscreen --> actual fullscreen
+		savestate = 1; // go actual fullscreen
+	else if ((c->fakefullscreen == 0 && !fullscreen && c->isfullscreen) // normal fullscreen exit
+			|| (c->fakefullscreen >= 2 && !fullscreen)) // fullscreen exit --> fake fullscreen
+		restorestate = 1; // go back into tiled
+
+	/* If leaving fullscreen and the window was previously fake fullscreen (2), then restore
+	 * that while staying in fullscreen. The exception to this is if we are in said state, but
+	 * the client itself disables fullscreen (3) then we let the client go out of fullscreen
+	 * while keeping fake fullscreen enabled (as otherwise there will be a mismatch between the
+	 * client and the window manager's perception of the client's fullscreen state). */
+	if (c->fakefullscreen == 2 && !fullscreen && c->isfullscreen) {
+		c->fakefullscreen = 1;
+		c->isfullscreen = 1;
+		fullscreen = 1;
+	} else if (c->fakefullscreen == 3) // client exiting actual fullscreen
+		c->fakefullscreen = 1;
+
+	if (fullscreen != c->isfullscreen) { // only send property change if necessary
+		if (fullscreen)
+			XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+				PropModeReplace, (unsigned char*)&netatom[NetWMFullscreen], 1);
+		else
+			XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+				PropModeReplace, (unsigned char*)0, 0);
+	}
+
+	c->isfullscreen = fullscreen;
+
+	/* Some clients, e.g. firefox, will send a client message informing the window manager
+	 * that it is going into fullscreen after receiving the above signal. This has the side
+	 * effect of this function (setfullscreen) sometimes being called twice when toggling
+	 * fullscreen on and off via the window manager as opposed to the application itself.
+	 * To protect against obscure issues where the client settings are stored or restored
+	 * when they are not supposed to we add an additional bit-lock on the old state so that
+	 * settings can only be stored and restored in that precise order. */
+	if (savestate && !(c->oldstate & (1 << 1))) {
+		c->oldbw = c->bw;
+		c->oldstate = c->isfloating | (1 << 1);
+		c->bw = 0;
+		c->isfloating = 1;
+		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
+		XRaiseWindow(dpy, c->win);
+	} else if (restorestate && (c->oldstate & (1 << 1))) {
+		c->bw = c->oldbw;
+		c->isfloating = c->oldstate = c->oldstate & 1;
+		c->x = c->oldx;
+		c->y = c->oldy;
+		c->w = c->oldw;
+		c->h = c->oldh;
+		resizeclient(c, c->x, c->y, c->w, c->h);
+		restack(c->mon);
+	}
+}
+#else
 void
 setfullscreen(Client *c, int fullscreen)
 {
@@ -2980,12 +3046,6 @@ setfullscreen(Client *c, int fullscreen)
 		#if !FAKEFULLSCREEN_PATCH
 		c->oldbw = c->bw;
 		c->oldstate = c->isfloating;
-		#if FAKEFULLSCREEN_CLIENT_PATCH
-		if (c->fakefullscreen == 1) {
-			restack(c->mon);
-			return;
-		}
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->bw = 0;
 		c->isfloating = 1;
 		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
@@ -2998,21 +3058,16 @@ setfullscreen(Client *c, int fullscreen)
 		#if !FAKEFULLSCREEN_PATCH
 		c->bw = c->oldbw;
 		c->isfloating = c->oldstate;
-		restack(c->mon);
-		#if FAKEFULLSCREEN_CLIENT_PATCH
-		if (c->fakefullscreen == 1)
-			return;
-		if (c->fakefullscreen == 2)
-			c->fakefullscreen = 1;
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		c->x = c->oldx;
 		c->y = c->oldy;
 		c->w = c->oldw;
 		c->h = c->oldh;
 		resizeclient(c, c->x, c->y, c->w, c->h);
+		arrange(c->mon);
 		#endif // !FAKEFULLSCREEN_PATCH
 	}
 }
+#endif // FAKEFULLSCREEN_CLIENT_PATCH
 
 void
 setlayout(const Arg *arg)
@@ -3674,18 +3729,13 @@ unfocus(Client *c, int setfocus, Client *nextfocus)
 	selmon->pertag->prevclient[selmon->pertag->curtag] = c;
 	#endif // SWAPFOCUS_PATCH
 	#if LOSEFULLSCREEN_PATCH
-	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon && nextfocus && !nextfocus->isfloating) {
-		#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-		if (!c->fakefullscreen)
+	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon && nextfocus && !nextfocus->isfloating)
+		#if FAKEFULLSCREEN_CLIENT_PATCH
+		if (c->fakefullscreen != 1)
 			setfullscreen(c, 0);
-		else if (c->fakefullscreen == 2) {
-			c->fakefullscreen = 0;
-			togglefakefullscreen(NULL);
-		}
 		#else
 		setfullscreen(c, 0);
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
-	}
+		#endif // #if FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // LOSEFULLSCREEN_PATCH
 	grabbuttons(c, 0);
 	#if !BAR_FLEXWINTITLE_PATCH
