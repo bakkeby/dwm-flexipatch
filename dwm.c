@@ -658,6 +658,12 @@ static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar geometry */
 static int lrpad;            /* sum of left and right padding for text */
+/* Some clients (e.g. alacritty) helpfully send configure notify requests with a new size or
+ * position when they detect that they have been moved to another monitor. This can cause visual
+ * glitches when moving (or resizing) client windows from one monitor to another. This variable
+ * is used internally to ignore such configure notify requests while movemouse or resizemouse are
+ * being used. */
+static int ignoreconfigurenotifyrequests = 0;
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
 static void (*handler[LASTEvent]) (XEvent *) = {
@@ -1262,6 +1268,10 @@ configurerequest(XEvent *e)
 	#endif // BAR_ANYBAR_PATCH
 	XConfigureRequestEvent *ev = &e->xconfigurerequest;
 	XWindowChanges wc;
+
+	if (ignoreconfigurenotifyrequests)
+		return;
+
 	if ((c = wintoclient(ev->window))) {
 		if (ev->value_mask & CWBorderWidth)
 			c->bw = ev->border_width;
@@ -2319,6 +2329,7 @@ movemouse(const Arg *arg)
 		return;
 	if (!getrootptr(&x, &y))
 		return;
+	ignoreconfigurenotifyrequests = 1;
 	do {
 		XMaskEvent(dpy, MOUSEMASK|ExposureMask|SubstructureRedirectMask, &ev);
 		switch(ev.type) {
@@ -2376,6 +2387,7 @@ movemouse(const Arg *arg)
 	#if ROUNDED_CORNERS_PATCH
 	drawroundedcorners(c);
 	#endif // ROUNDED_CORNERS_PATCH
+	ignoreconfigurenotifyrequests = 0;
 }
 
 Client *
@@ -2628,6 +2640,7 @@ resizemouse(const Arg *arg)
 		return;
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w + c->bw - 1, c->h + c->bw - 1);
 	#endif // RESIZEPOINT_PATCH | RESIZECORNERS_PATCH
+	ignoreconfigurenotifyrequests = 1;
 	do {
 		XMaskEvent(dpy, MOUSEMASK|ExposureMask|SubstructureRedirectMask, &ev);
 		switch(ev.type) {
@@ -2710,6 +2723,7 @@ resizemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
+	ignoreconfigurenotifyrequests = 0;
 }
 
 void
