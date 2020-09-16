@@ -60,8 +60,7 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
 	drw_text(drw, x, barg->y, w, barg->h, pad, c->name, 0, False);
-	if (c->isfloating)
-		drawindicator(m, c, 1, x, barg->y, w, barg->h, 0, 0, c->isfixed, floatindicatortype);
+	drawstateindicator(m, c, 1, x, barg->y, w, barg->h, 0, 0, c->isfixed);
 
 	if (BARTAB_BORDERS) {
 		XSetForeground(drw->dpy, drw->gc, scheme[SchemeSel][ColBorder].pixel);

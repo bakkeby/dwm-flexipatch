@@ -38,8 +38,7 @@ draw_wintitle(Bar *bar, BarArg *a)
 	XSync(dpy, False);
 	XSetErrorHandler(xerror);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
-	if (m->sel->isfloating)
-		drawindicator(m, m->sel, 1, x, a->y, w, a->h, 0, 0, m->sel->isfixed, floatindicatortype);
+	drawstateindicator(m, m->sel, 1, x, a->y, w, a->h, 0, 0, m->sel->isfixed);
 	return 1;
 }
 
