@@ -479,6 +479,8 @@
  * the space currently given to them.
  * The "twist" with this patch is that fake fullscreen can be toggled on a per client basis
  * rather than applying to all clients globally.
+ * Also see the selectivefakefullscreen option that adds a rule option to enabled this on client
+ * startup.
  */
 #define FAKEFULLSCREEN_CLIENT_PATCH 0
 
@@ -652,6 +654,9 @@
  */
 #define NO_TRANSPARENT_BORDERS_PATCH 0
 
+/* Minor patch that prevents more than one rule being matched for a given client. */
+#define ONLY_ONE_RULE_MATCH_PATCH 0
+
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/
@@ -752,6 +757,13 @@
  * https://github.com/GasparVardanyan/dwm-scratchpad
  */
 #define SCRATCHPAD_ALT_1_PATCH 0
+
+/* As opposed to the original patch this only adds a rule option allowing fake fullscreen
+ * to be enabled for applications when they start. This is intended to be used in combination
+ * with the fakefullscreenclient patch and offers no practical functionality without it.
+ * https://dwm.suckless.org/patches/selectivefakefullscreen/
+ */
+#define SELECTIVEFAKEFULLSCREEN_PATCH 0
 
 /* Allows restarting dwm without the dependency of an external script.
  * https://dwm.suckless.org/patches/selfrestart/

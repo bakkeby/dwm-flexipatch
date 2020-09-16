@@ -459,6 +459,9 @@ typedef struct {
 	int iscentered;
 	#endif // CENTER_PATCH
 	int isfloating;
+	#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+	int isfakefullscreen;
+	#endif // SELECTIVEFAKEFULLSCREEN_PATCH
 	#if ISPERMANENT_PATCH
 	int ispermanent;
 	#endif // ISPERMANENT_PATCH
@@ -486,6 +489,11 @@ typedef struct {
 #else
 #define PERMANENT
 #endif // ISPERMANENT_PATCH
+#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+#define FAKEFULLSCREEN , .isfakefullscreen = 1
+#else
+#define FAKEFULLSCREEN
+#endif // SELECTIVEFAKEFULLSCREEN_PATCH
 #if SWALLOW_PATCH
 #define NOSWALLOW , .noswallow = 1
 #define TERMINAL , .isterminal = 1
@@ -771,6 +779,9 @@ applyrules(Client *c)
 			#if ISPERMANENT_PATCH
 			c->ispermanent = r->ispermanent;
 			#endif // ISPERMANENT_PATCH
+			#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+			c->fakefullscreen = r->isfakefullscreen;
+			#endif // SELECTIVEFAKEFULLSCREEN_PATCH
 			#if SWALLOW_PATCH
 			c->isterminal = r->isterminal;
 			c->noswallow = r->noswallow;
@@ -825,6 +836,9 @@ applyrules(Client *c)
 				}
 			}
 			#endif // SWITCHTAG_PATCH
+			#if ONLY_ONE_RULE_MATCH_PATCH
+			break;
+			#endif // ONLY_ONE_RULE_MATCH_PATCH
 		}
 	}
 	if (ch.res_class)
@@ -2552,16 +2566,16 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	#if NOBORDER_PATCH
 	if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
 		#if MONOCLE_LAYOUT
-	    || &monocle == c->mon->lt[c->mon->sellt]->arrange
-	    #endif // MONOCLE_LAYOUT
-	    )
-	    #if FAKEFULLSCREEN_CLIENT_PATCH
-	    && (c->fakefullscreen == 1 || !c->isfullscreen)
-	    #else
-	    && !c->isfullscreen
-	    #endif // FAKEFULLSCREEN_CLIENT_PATCH
-	    && !c->isfloating
-	    && c->mon->lt[c->mon->sellt]->arrange) {
+		|| &monocle == c->mon->lt[c->mon->sellt]->arrange
+		#endif // MONOCLE_LAYOUT
+		)
+		#if FAKEFULLSCREEN_CLIENT_PATCH
+		&& (c->fakefullscreen == 1 || !c->isfullscreen)
+		#else
+		&& !c->isfullscreen
+		#endif // FAKEFULLSCREEN_CLIENT_PATCH
+		&& !c->isfloating
+		&& c->mon->lt[c->mon->sellt]->arrange) {
 		c->w = wc.width += c->bw * 2;
 		c->h = wc.height += c->bw * 2;
 		wc.border_width = 0;
