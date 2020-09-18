@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-09-18 - Added the nomodbuttons patch allowing for toggleable mouse button bindings that have no modifiers
+
 2020-09-10 - Added the anybar patch (with experimental support for dwm bar(s) + anybar)
 
 2020-09-09 - Added the bar border patch
@@ -407,6 +409,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [nodmenu](https://dwm.suckless.org/patches/nodmenu/)
       - enable modifying dmenu in config.def.h which resulted previously in a compilation error because two lines of code hardcode dmenu into dwm
       - allows complete removal of dmenu, should you want to do that
+
+   - nomodbuttons
+      - allows for toggleable client button bindings that have no modifiers
+      - this can, for example, allow you to move or resize using the mouse alone without holding down a modifier key, which can be practical if you have extra buttons on your mouse
 
    - [no_transparent_borders](https://github.com/szatanjl/dwm/commit/1529909466206016f2101457bbf37c67195714c8)
       - when terminals have transparency then their borders also become transparent

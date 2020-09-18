@@ -646,6 +646,20 @@
  */
 #define NODMENU_PATCH 0
 
+/* This patch allows for toggleable client button bindings that have no modifiers.
+ * This can, for example, allow you to move or resize using the mouse alone without holding
+ * down a modifier key. This can be practical if you have extra buttons on your mouse.
+ * While you can use button bindings with no modifiers without this patch in a bare dwm,
+ * those buttons are then unavailable for use within the application itself so being able to
+ * toggle these on and off can be necessary in certain situations (e.g. being able to use
+ * back and forward buttons in a browser).
+
+ * Example bindings:
+ *     { ClkClientWin,              0,              Button8,        movemouse,      {0} },
+ *     { ClkClientWin,              0,              Button9,        resizemouse,    {0} },
+ */
+#define NO_MOD_BUTTONS_PATCH 0
+
 /* When terminals have transparency then their borders also become transparent.
  * This patch ensures that borders have no transparency. Note that this patch is
  * only relevant if you are not using the alpha patch.

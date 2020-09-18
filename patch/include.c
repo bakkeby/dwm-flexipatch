@@ -174,6 +174,9 @@
 #if MOVESTACK_PATCH
 #include "movestack.c"
 #endif
+#if NO_MOD_BUTTONS_PATCH
+#include "nomodbuttons.c"
+#endif
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif
