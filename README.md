@@ -471,7 +471,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [sendmon_keepfocus](https://github.com/bakkeby/patches/wiki/sendmon_keepfocus/)
       - minor patch that allow clients to keep focus when being sent to another monitor
 
-   - [setborderpx](https://dwm.suckless.org/patches/statuspadding/)
+   - [setborderpx](https://dwm.suckless.org/patches/setborderpx/)
       - this patch allows border pixels to be changed during runtime
 
    - [shiftview](https://github.com/chau-bao-long/dotfiles/blob/master/suckless/dwm/shiftview.diff)
