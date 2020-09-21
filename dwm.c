@@ -2030,10 +2030,23 @@ grabkeys(void)
 void
 incnmaster(const Arg *arg)
 {
-	#if PERTAG_PATCH
+	#if PERTAG_PATCH && PERTAG_PERSELTAG_PATCH
+    unsigned int i;
+    #endif
+	#if PERTAG_PATCH && !PERTAG_PERSELTAG_PATCH
 	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag] = MAX(selmon->nmaster + arg->i, 0);
 	#else
 	selmon->nmaster = MAX(selmon->nmaster + arg->i, 0);
+	#endif // PERTAG_PATCH
+	#if PERTAG_PATCH && PERTAG_PERSELTAG_PATCH
+    for(i=0; i<NUMTAGS; ++i)
+		if(selmon->tagset[selmon->seltags] & 1<<i)
+			selmon->pertag->nmasters[i+1] = selmon->nmaster;
+
+	if(selmon->pertag->curtag == 0)
+	{
+		selmon->pertag->nmasters[0] = selmon->nmaster;
+	}
 	#endif // PERTAG_PATCH
 	arrange(selmon);
 }
@@ -3122,8 +3135,11 @@ setfullscreen(Client *c, int fullscreen)
 void
 setlayout(const Arg *arg)
 {
+	#if PERTAG_PATCH && PERTAG_PERSELTAG_PATCH
+    unsigned int i;
+    #endif
 	if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt]) {
-		#if PERTAG_PATCH
+		#if PERTAG_PATCH && !PERTAG_PERSELTAG_PATCH
 		selmon->pertag->sellts[selmon->pertag->curtag] ^= 1;
 		selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
 		#else
@@ -3142,7 +3158,7 @@ setlayout(const Arg *arg)
 		#endif // EXRESIZE_PATCH
 	}
 	if (arg && arg->v)
-	#if PERTAG_PATCH
+	#if PERTAG_PATCH && !PERTAG_PERSELTAG_PATCH
 		selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt] = (Layout *)arg->v;
 	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
 	#else
@@ -3160,7 +3176,7 @@ setlayout(const Arg *arg)
 	selmon->ltaxis[STACK]  = selmon->lt[selmon->sellt]->preset.stack1axis;
 	selmon->ltaxis[STACK2] = selmon->lt[selmon->sellt]->preset.stack2axis;
 
-	#if PERTAG_PATCH
+	#if PERTAG_PATCH && !PERTAG_PERSELTAG_PATCH
 	selmon->pertag->ltaxis[selmon->pertag->curtag][LAYOUT] = selmon->ltaxis[LAYOUT];
 	selmon->pertag->ltaxis[selmon->pertag->curtag][MASTER] = selmon->ltaxis[MASTER];
 	selmon->pertag->ltaxis[selmon->pertag->curtag][STACK]  = selmon->ltaxis[STACK];
@@ -3168,7 +3184,22 @@ setlayout(const Arg *arg)
 	#endif // PERTAG_PATCH
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof selmon->ltsymbol);
-	if (selmon->sel)
+
+    #if PERTAG_PERSELTAG_PATCH && PERTAG_PATCH
+	for(i=0; i<NUMTAGS+1; ++i)
+		if(selmon->tagset[selmon->seltags] & 1<<i)
+		{
+			selmon->pertag->ltidxs[i+1][selmon->sellt] = selmon->lt[selmon->sellt];
+			selmon->pertag->sellts[i+1] = selmon->sellt;
+		}
+
+	if(selmon->pertag->curtag == 0)
+	{
+		selmon->pertag->ltidxs[0][selmon->sellt] = selmon->lt[selmon->sellt];
+		selmon->pertag->sellts[0] = selmon->sellt;
+	}
+    #endif
+    if (selmon->sel)
 		arrange(selmon);
 	else
 		drawbar(selmon);
@@ -3179,17 +3210,30 @@ void
 setmfact(const Arg *arg)
 {
 	float f;
+	#if PERTAG_PATCH && PERTAG_PERSELTAG_PATCH
+    unsigned int i;
+    #endif
 
 	if (!arg || !selmon->lt[selmon->sellt]->arrange)
 		return;
 	f = arg->f < 1.0 ? arg->f + selmon->mfact : arg->f - 1.0;
 	if (f < 0.05 || f > 0.95)
 		return;
-	#if PERTAG_PATCH
+	#if PERTAG_PATCH && !PERTAG_PERSELTAG_PATCH
 	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = f;
 	#else
 	selmon->mfact = f;
 	#endif // PERTAG_PATCH
+    #if PERTAG_PATCH && PERTAG_PERSELTAG_PATCH
+    for(i=0; i<NUMTAGS+1; ++i)
+		if(selmon->tagset[selmon->seltags] & 1<<i)
+			selmon->pertag->mfacts[i+1] = f;
+
+	if(selmon->pertag->curtag == 0)
+	{
+		selmon->pertag->mfacts[0] = f;
+	}
+    #endif
 	arrange(selmon);
 }
 
@@ -3604,15 +3648,28 @@ void
 togglebar(const Arg *arg)
 {
 	Bar *bar;
-	#if BAR_HOLDBAR_PATCH && PERTAG_PATCH && PERTAGBAR_PATCH
+    #if PERTAG_PERSELTAG_PATCH && PERTAGBAR_PATCH
+	unsigned int i;
+	#elif BAR_HOLDBAR_PATCH && PERTAG_PATCH && PERTAGBAR_PATCH && !PERTAG_PERSELTAG_PATCH
 	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = (selmon->showbar == 2 ? 1 : !selmon->showbar);
 	#elif BAR_HOLDBAR_PATCH
 	selmon->showbar = (selmon->showbar == 2 ? 1 : !selmon->showbar);
-	#elif PERTAG_PATCH && PERTAGBAR_PATCH
+	#elif PERTAG_PATCH && PERTAGBAR_PATCH && !PERTAG_PERSELTAG_PATCH
 	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = !selmon->showbar;
 	#else
 	selmon->showbar = !selmon->showbar;
 	#endif // BAR_HOLDBAR_PATCH | PERTAG_PATCH
+    #if PERTAG_PERSELTAG_PATCH && PERTAGBAR_PATCH
+	selmon->showbar = !selmon->showbar;
+	for(i=0; i<NUMTAGS+1; ++i)
+		if(selmon->tagset[selmon->seltags] & 1<<i)
+			selmon->pertag->showbars[i+1] = selmon->showbar;
+
+	if(selmon->pertag->curtag == 0)
+	{
+		selmon->pertag->showbars[0] = selmon->showbar;
+	}
+    #endif
 	updatebarpos(selmon);
 	for (bar = selmon->bar; bar; bar = bar->next)
 		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);

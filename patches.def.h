@@ -683,6 +683,11 @@
  */
 #define PERTAG_PATCH 0
 
+/* This patch allows you to modify nmaster, mfact and layouts
+ * simultaniously on selected tags.
+ */
+#define PERTAG_PERSELTAG_PATCH 0
+
 /* This controls whether or not to also store bar position on a per
  * tag basis, or leave it as one bar per monitor.
  */
