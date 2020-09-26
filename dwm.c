@@ -2780,7 +2780,7 @@ restack(Monitor *m)
 		(m->lt[m->sellt]->arrange != &monocle
 		&& !(m->ltaxis[MASTER] == MONOCLE && (abs(m->ltaxis[LAYOUT] == NO_SPLIT || !m->nmaster || n <= m->nmaster))))
 		#elif MONOCLE_LAYOUT
-		m->lt[m->sellt]->arrange == &monocle
+		m->lt[m->sellt]->arrange != &monocle
 		#else
 		!(m->ltaxis[MASTER] == MONOCLE && (abs(m->ltaxis[LAYOUT] == NO_SPLIT || !m->nmaster || n <= m->nmaster)))
 		#endif // FLEXTILE_DELUXE_LAYOUT
