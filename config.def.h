@@ -305,13 +305,9 @@ static const char *const autostart[] = {
 
 #if SCRATCHPADS_PATCH
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
-const char *spcmd2[] = {"st", "-n", "spfm", "-g", "144x41", "-e", "ranger", NULL };
-const char *spcmd3[] = {"keepassxc", NULL };
 static Sp scratchpads[] = {
    /* name          cmd  */
    {"spterm",      spcmd1},
-   {"spranger",    spcmd2},
-   {"keepassxc",   spcmd3},
 };
 #endif // SCRATCHPADS_PATCH
 
@@ -395,8 +391,6 @@ static const Rule rules[] = {
 	RULE(.class = "Firefox", .tags = 1 << 7)
 	#if SCRATCHPADS_PATCH
 	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
-	RULE(.instance = "spfm", .tags = SPTAG(1), .isfloating = 1)
-	RULE(.instance = "keepassxc", .tags = SPTAG(2))
 	#endif // SCRATCHPADS_PATCH
 };
 
@@ -903,8 +897,8 @@ static Key keys[] = {
 	#endif // NO_MOD_BUTTONS_PATCH
 	#if SCRATCHPADS_PATCH
 	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
-	{ MODKEY|ControlMask,           XK_grave,      togglescratch,          {.ui = 1 } },
-	{ MODKEY|ShiftMask,             XK_grave,      togglescratch,          {.ui = 2 } },
+	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
+	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
 	#endif // SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
