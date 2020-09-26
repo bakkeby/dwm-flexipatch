@@ -13,10 +13,10 @@ warp(const Client *c)
 		 y > c->y - c->bw &&
 		 x < c->x + c->w + c->bw*2 &&
 		 y < c->y + c->h + c->bw*2) ||
-		x < c->mon->wx ||
-		x > c->mon->wx + c->mon->ww ||
-		y < c->mon->wy ||
-		y > c->mon->wy + c->mon->wh
+		(x < c->mon->wx &&
+		x > c->mon->wx + c->mon->ww) ||
+		(y < c->mon->wy ||
+		y > c->mon->wy + c->mon->wh)
 	)
 		return;
 
