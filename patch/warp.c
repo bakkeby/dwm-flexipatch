@@ -1,6 +1,8 @@
 void
 warp(const Client *c)
 {
+	Monitor *m;
+	Bar *bar;
 	int x, y;
 
 	if (!c) {
@@ -12,13 +14,17 @@ warp(const Client *c)
 		(x > c->x - c->bw &&
 		 y > c->y - c->bw &&
 		 x < c->x + c->w + c->bw*2 &&
-		 y < c->y + c->h + c->bw*2) ||
-		x < c->mon->wx ||
-		x > c->mon->wx + c->mon->ww ||
-		y < c->mon->wy ||
-		y > c->mon->wy + c->mon->wh
+		 y < c->y + c->h + c->bw*2)
 	)
 		return;
+
+	for (m = mons; m; m = m->next)
+		for (bar = m->bar; bar; bar = bar->next)
+			if (x > bar->bx &&
+				x < bar->bx + bar->bw &&
+				y > bar->by &&
+				y < bar->by + bar->bh)
+				return;
 
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 }
