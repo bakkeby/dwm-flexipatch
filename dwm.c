@@ -3746,14 +3746,19 @@ toggleview(const Arg *arg)
 		selmon->tagset[selmon->seltags] = newtagset;
 
 		#if PERTAG_PATCH
-		if (newtagset == ~0) {
+		#if SCRATCHPADS_PATCH
+		if (newtagset == ~SPTAGMASK)
+		#else
+		if (newtagset == ~0)
+		#endif // SCRATCHPADS_PATCH
+		{
 			selmon->pertag->prevtag = selmon->pertag->curtag;
 			selmon->pertag->curtag = 0;
 		}
 		/* test if the user did not select the same tag */
 		if (!(newtagset & 1 << (selmon->pertag->curtag - 1))) {
 			selmon->pertag->prevtag = selmon->pertag->curtag;
-			for (i=0; !(newtagset & 1 << i); i++) ;
+			for (i = 0; !(newtagset & 1 << i); i++) ;
 			selmon->pertag->curtag = i + 1;
 		}
 

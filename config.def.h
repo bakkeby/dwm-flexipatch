@@ -920,6 +920,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_minus,      scratchpad_show,        {0} },
 	{ MODKEY|ShiftMask,             XK_minus,      scratchpad_hide,        {0} },
 	{ MODKEY,                       XK_equal,      scratchpad_remove,      {0} },
+	#elif SCRATCHPADS_PATCH
+	{ MODKEY,                       XK_0,          view,                   {.ui = ~SPTAGMASK } },
+	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~SPTAGMASK } },
 	#else
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
