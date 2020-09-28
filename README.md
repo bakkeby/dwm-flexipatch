@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-09-28 - Added the \_IS\_FLOATING patch (embedded in the EWMHTAGS patch)
+
 2020-09-18 - Added the nomodbuttons patch allowing for toggleable mouse button bindings that have no modifiers
 
 2020-09-10 - Added the anybar patch (with experimental support for dwm bar(s) + anybar)
@@ -368,6 +370,11 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [ipc](https://github.com/mihirlad55/dwm-ipc)
       - implements inter-process communication through a UNIX socket for dwm
       - allows for the window manager to be queried for information, e.g. listen for events such as tag or layout changes, as well as send commands to control the window manager via other programs
+
+   - [\_IS\_FLOATING](https://github.com/bakkeby/dwm-flexipatch/issues/50)
+      - adds the \_IS\_FLOATING xproperty for floating windows
+      - this can allow for a compositor to handle floating windows differently to tiled windows, e.g. only show shadows on floating windows
+      - this patch is enabled via the ewmhtags patch
 
    - [ispermanent](https://dwm.suckless.org/patches/ispermanent/)
       - adds rule option for clients to avoid accidental termination by killclient for sticky windows

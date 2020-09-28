@@ -238,6 +238,15 @@
 /* Adds EWMH support for _NET_NUMBER_OF_DESKTOPS, _NET_CURRENT_DESKTOP, _NET_DESKTOP_NAMES
  * and _NET_DESKTOP_VIEWPORT, which allows for compatibility with other bars and programs
  * that request workspace information. For example polybar's xworkspaces module.
+ *
+ * This patch also includes support for adding the _IS_FLOATING property for floating windows
+ * allowing for compositors to treat floating windows differently to tiled windows.
+ *
+ * E.g. this setting makes picom only render shadows for floating windows:
+ *
+ *     shadow-exclude = [ "! _IS_FLOATING@:32c = 1" ];
+ *
+ * https://github.com/bakkeby/dwm-flexipatch/issues/50 (_IS_FLOATING patch)
  * https://dwm.suckless.org/patches/ewmhtags/
  */
 #define BAR_EWMHTAGS_PATCH 0

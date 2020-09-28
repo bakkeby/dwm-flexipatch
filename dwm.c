@@ -2253,6 +2253,10 @@ manage(Window w, XWindowAttributes *wa)
 	arrange(c->mon);
 	#endif // SWALLOW_PATCH
 	focus(NULL);
+
+	#if BAR_EWMHTAGS_PATCH
+	setfloatinghint(c);
+	#endif // BAR_EWMHTAGS_PATCH
 }
 
 void
@@ -3663,6 +3667,10 @@ togglefloating(const Arg *arg)
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 	}
 	arrange(c->mon);
+
+	#if BAR_EWMHTAGS_PATCH
+	setfloatinghint(c);
+	#endif // BAR_EWMHTAGS_PATCH
 }
 
 void
