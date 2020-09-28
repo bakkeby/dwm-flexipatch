@@ -766,6 +766,11 @@
 
 /* The scratchpad patch allows you to spawn or restore floating terminal windows.
  * It is typically useful when one need to do some short typing.
+ *
+ * Note that this patch changes TAGMASK to make room for special scratchpad tags,
+ * so ~0 does more than select all tags with this patch. Code that relies on ~0 to
+ * represent all tags should use ~SPTAGMASK instead.
+ *
  * Upgraded to Christian Tenllado's multiple scratchpad version.
  * https://lists.suckless.org/hackers/2004/17205.html
  * https://dwm.suckless.org/patches/scratchpads/
