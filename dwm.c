@@ -2157,10 +2157,6 @@ manage(Window w, XWindowAttributes *wa)
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;
-		#if CENTER_PATCH
-		if (c->x == c->mon->wx && c->y == c->mon->wy)
-			c->iscentered = 1;
-		#endif // CENTER_PATCH
 		#if SETBORDERPX_PATCH
 		c->bw = c->mon->borderpx;
 		#else
@@ -2174,7 +2170,10 @@ manage(Window w, XWindowAttributes *wa)
 		#elif CENTER_TRANSIENT_WINDOWS_PATCH
 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 		c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
-		#endif // CENTER_TRANSIENT_WINDOWS_PATCH | CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH
+		#elif CENTER_PATCH
+		if (c->x == c->mon->wx && c->y == c->mon->wy)
+			c->iscentered = 1;
+		#endif // CENTER_TRANSIENT_WINDOWS_PATCH | CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH | CENTER_PATCH
 	} else {
 		c->mon = selmon;
 		#if CENTER_PATCH
