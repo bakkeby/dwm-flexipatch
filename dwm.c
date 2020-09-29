@@ -798,8 +798,12 @@ applyrules(Client *c)
 			if (m)
 				c->mon = m;
 			#if FLOATPOS_PATCH
-			if (c->isfloating && r->floatpos)
+			if (c->isfloating && r->floatpos) {
+				#if CENTER_PATCH
+				c->iscentered = 0;
+				#endif // CENTER_PATCH
 				setfloatpos(c, r->floatpos);
+			}
 			#endif // FLOATPOS_PATCH
 
 			#if SWITCHTAG_PATCH
@@ -2123,34 +2127,35 @@ manage(Window w, XWindowAttributes *wa)
 	#if CFACTS_PATCH
 	c->cfact = 1.0;
 	#endif // CFACTS_PATCH
-
 	updatetitle(c);
+	#if CENTER_PATCH
+	if (c->x == c->mon->wx && c->y == c->mon->wy)
+		c->iscentered = 1;
+	#endif // CENTER_PATCH
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;
-		#if FLOATPOS_PATCH
 		#if SETBORDERPX_PATCH
 		c->bw = c->mon->borderpx;
 		#else
 		c->bw = borderpx;
 		#endif // SETBORDERPX_PATCH
-		#endif // FLOATPOS_PATCH
 		#if CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH
 		c->x = t->x + WIDTH(t) / 2 - WIDTH(c) / 2;
 		c->y = t->y + HEIGHT(t) / 2 - HEIGHT(c) / 2;
+		#elif CENTER_PATCH && CENTER_TRANSIENT_WINDOWS_PATCH
+		c->iscentered = 1;
 		#elif CENTER_TRANSIENT_WINDOWS_PATCH
 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 		c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
 		#endif // CENTER_TRANSIENT_WINDOWS_PATCH | CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH
 	} else {
 		c->mon = selmon;
-		#if FLOATPOS_PATCH
 		#if SETBORDERPX_PATCH
 		c->bw = c->mon->borderpx;
 		#else
 		c->bw = borderpx;
 		#endif // SETBORDERPX_PATCH
-		#endif // FLOATPOS_PATCH
 		applyrules(c);
 		#if SWALLOW_PATCH
 		term = termforwin(c);
@@ -2167,13 +2172,6 @@ manage(Window w, XWindowAttributes *wa)
 	/* only fix client y-offset, if the client center might cover the bar */
 	c->y = MAX(c->y, ((c->mon->bar->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
 		&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
-	#if !FLOATPOS_PATCH
-	#if SETBORDERPX_PATCH
-	c->bw = c->mon->borderpx;
-	#else
-	c->bw = borderpx;
-	#endif // SETBORDERPX_PATCH
-	#endif // FLOATPOS_PATCH
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
