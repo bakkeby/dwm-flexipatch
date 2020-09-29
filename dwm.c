@@ -420,6 +420,9 @@ struct Monitor {
 	unsigned int sellt;
 	unsigned int tagset[2];
 	int showbar;
+	#if ON_EMPTY_KEYS_PATCH
+	int isempty;
+	#endif // ON_EMPTY_KEYS_PATCH
 	Client *clients;
 	Client *sel;
 	Client *stack;
@@ -1813,6 +1816,13 @@ focus(Client *c)
 	}
 	selmon->sel = c;
 	drawbars();
+
+	#if ON_EMPTY_KEYS_PATCH
+	if ((selmon->isempty && selmon->sel) || (!selmon->isempty && !selmon->sel)) {
+		selmon->isempty = !selmon->isempty;
+		grabkeys();
+	}
+	#endif // ON_EMPTY_KEYS_PATCH
 }
 
 /* there are some broken focus acquiring clients needing extra handling */
@@ -2028,6 +2038,14 @@ grabkeys(void)
 				for (j = 0; j < LENGTH(modifiers); j++)
 					XGrabKey(dpy, code, keys[i].mod | modifiers[j], root,
 						True, GrabModeAsync, GrabModeAsync);
+		#if ON_EMPTY_KEYS_PATCH
+		if (!selmon->sel)
+			for (i = 0; i < LENGTH(on_empty_keys); i++)
+				if ((code = XKeysymToKeycode(dpy, on_empty_keys[i].keysym)))
+					for (j = 0; j < LENGTH(modifiers); j++)
+						XGrabKey(dpy, code, on_empty_keys[i].mod | modifiers[j], root,
+								True, GrabModeAsync, GrabModeAsync);
+		#endif // ON_EMPTY_KEYS_PATCH
 	}
 }
 
@@ -2073,6 +2091,14 @@ keypress(XEvent *e)
 				&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
 				&& keys[i].func)
 			keys[i].func(&(keys[i].arg));
+	#if ON_EMPTY_KEYS_PATCH
+	if (!selmon->sel)
+		for (i = 0; i < LENGTH(on_empty_keys); i++)
+			if (*keysym == on_empty_keys[i].keysym
+					&& CLEANMASK(on_empty_keys[i].mod) == CLEANMASK(ev->state)
+					&& on_empty_keys[i].func)
+				on_empty_keys[i].func(&(on_empty_keys[i].arg));
+	#endif // ON_EMPTY_KEYS_PATCH
 	XFree(keysym);
 }
 
@@ -2128,13 +2154,13 @@ manage(Window w, XWindowAttributes *wa)
 	c->cfact = 1.0;
 	#endif // CFACTS_PATCH
 	updatetitle(c);
-	#if CENTER_PATCH
-	if (c->x == c->mon->wx && c->y == c->mon->wy)
-		c->iscentered = 1;
-	#endif // CENTER_PATCH
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;
+		#if CENTER_PATCH
+		if (c->x == c->mon->wx && c->y == c->mon->wy)
+			c->iscentered = 1;
+		#endif // CENTER_PATCH
 		#if SETBORDERPX_PATCH
 		c->bw = c->mon->borderpx;
 		#else
@@ -2151,6 +2177,10 @@ manage(Window w, XWindowAttributes *wa)
 		#endif // CENTER_TRANSIENT_WINDOWS_PATCH | CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH
 	} else {
 		c->mon = selmon;
+		#if CENTER_PATCH
+		if (c->x == c->mon->wx && c->y == c->mon->wy)
+			c->iscentered = 1;
+		#endif // CENTER_PATCH
 		#if SETBORDERPX_PATCH
 		c->bw = c->mon->borderpx;
 		#else

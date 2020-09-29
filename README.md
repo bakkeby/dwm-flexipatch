@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-09-29 - Added the on\_empty\_keys patch (ported from InstantOS)
+
 2020-09-28 - Added the \_IS\_FLOATING patch (embedded in the EWMHTAGS patch)
 
 2020-09-18 - Added the nomodbuttons patch allowing for toggleable mouse button bindings that have no modifiers
@@ -425,6 +427,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - when terminals have transparency then their borders also become transparent
       - this patch ensures that borders have no transparency
       - note that this patch is only relevant if you are not using the alpha patch
+
+   - [on\_empty\_keys](https://github.com/bakkeby/dwm-flexipatch/issues/51)
+      - port of InstantVM's on_empty_keys functionality allowing keybindings that apply only when a tag/view is empty
+      - an example use case is being able to launch applications with first hand keys like "f" to launch firefox
 
    - [onlyquitonempty](https://dwm.suckless.org/patches/onlyquitonempty/)
       - makes it so dwm will only exit via quit() if no windows are open (in order to prevent accidental loss of work)

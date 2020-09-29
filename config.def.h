@@ -733,6 +733,14 @@ static const char *statuscmds[] = { "notify-send Mouse$BUTTON" };
 static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
 #endif // BAR_STATUSCMD_PATCH | DWMBLOCKS_PATCH
 
+#if ON_EMPTY_KEYS_PATCH
+static const char* firefoxcmd[] = {"firefox", NULL};
+static Key on_empty_keys[] = {
+	/* modifier key            function                argument */
+	{ 0,        XK_f,          spawn,                  {.v = firefoxcmd } },
+};
+#endif // ON_EMPTY_KEYS_PATCH
+
 static Key keys[] = {
 	/* modifier                     key            function                argument */
 	#if KEYMODES_PATCH

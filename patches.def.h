@@ -677,6 +677,15 @@
  */
 #define NO_TRANSPARENT_BORDERS_PATCH 0
 
+/* Port of InstantVM's on_empty_keys functionality allowing keybindings that apply only when
+ * a tag is empty. An example use case is being able to launch applications with first hand
+ * keys like "f" to launch firefox.
+ *
+ * https://github.com/instantOS/instantWM/
+ * https://github.com/bakkeby/dwm-flexipatch/issues/51
+ */
+#define ON_EMPTY_KEYS_PATCH 0
+
 /* Minor patch that prevents more than one rule being matched for a given client. */
 #define ONLY_ONE_RULE_MATCH_PATCH 0
 
