@@ -420,9 +420,6 @@ struct Monitor {
 	unsigned int sellt;
 	unsigned int tagset[2];
 	int showbar;
-	#if ON_EMPTY_KEYS_PATCH
-	int isempty;
-	#endif // ON_EMPTY_KEYS_PATCH
 	Client *clients;
 	Client *sel;
 	Client *stack;
@@ -710,6 +707,9 @@ static Atom wmatom[WMLast], netatom[NetLast], xatom[XLast];
 #else
 static Atom wmatom[WMLast], netatom[NetLast];
 #endif // BAR_SYSTRAY_PATCH
+#if ON_EMPTY_KEYS_PATCH
+static int isempty = 0;
+#endif // ON_EMPTY_KEYS_PATCH
 static int running = 1;
 static Cur *cursor[CurLast];
 static Clr **scheme;
@@ -1818,8 +1818,8 @@ focus(Client *c)
 	drawbars();
 
 	#if ON_EMPTY_KEYS_PATCH
-	if ((selmon->isempty && selmon->sel) || (!selmon->isempty && !selmon->sel)) {
-		selmon->isempty = !selmon->isempty;
+	if ((isempty && selmon->sel) || (!isempty && !selmon->sel)) {
+		isempty = !isempty;
 		grabkeys();
 	}
 	#endif // ON_EMPTY_KEYS_PATCH
