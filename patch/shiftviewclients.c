@@ -16,7 +16,11 @@ shiftviewclients(const Arg *arg)
 		tagmask = tagmask | c->tags;
 		#endif // SCRATCHPADS_PATCH
 
+	#if SCRATCHPADS_PATCH
+	shifted.ui = selmon->tagset[selmon->seltags] & ~SPTAGMASK;
+	#else
 	shifted.ui = selmon->tagset[selmon->seltags];
+	#endif // SCRATCHPADS_PATCH
 	if (arg->i > 0) // left circular shift
 		do {
 			shifted.ui = (shifted.ui << arg->i)
