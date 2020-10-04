@@ -11,12 +11,23 @@ setborderpx(const Arg *arg)
 	else
 		selmon->borderpx += arg->i;
 
+	#if BAR_BORDER_PATCH
+	for (bar = selmon->bar; bar; bar = bar->next) {
+		bar->bh = bar->bh - 2 * bar->borderpx + 2 * selmon->borderpx;
+		bar->borderpx = selmon->borderpx;
+	}
+	updatebarpos(selmon);
+	for (bar = selmon->bar; bar; bar = bar->next)
+		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+	#endif // BAR_BORDER_PATCH
+
 	for (c = selmon->clients; c; c = c->next)
 	{
 		if (c->bw + arg->i < 0)
-			c->bw = selmon->borderpx = 0;
+			c->bw = 0;
 		else
 			c->bw = selmon->borderpx;
+
 		if (c->isfloating || !selmon->lt[selmon->sellt]->arrange)
 		{
 			if (arg->i != 0 && prev_borderpx + arg->i >= 0)
