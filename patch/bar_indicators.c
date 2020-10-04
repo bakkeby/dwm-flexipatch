@@ -70,7 +70,7 @@ drawindicator(Monitor *m, Client *c, unsigned int occ, int x, int y, int w, int 
 				( x + w - 2 - ((NUMTAGS / TAGSROWS) * TAGSPX)
 					- (i % (NUMTAGS/TAGSROWS)) + ((i % (NUMTAGS / TAGSROWS)) * TAGSPX)
 				),
-				( 2 + ((i / (NUMTAGS/TAGSROWS)) * TAGSPX)
+				( y + 2 + ((i / (NUMTAGS/TAGSROWS)) * TAGSPX)
 					- ((i / (NUMTAGS/TAGSROWS)))
 				),
 				TAGSPX, TAGSPX, (c->tags >> i) & 1, 0
