@@ -731,11 +731,6 @@
  */
 #define REORGANIZETAGS_PATCH 0
 
-/* Resets the layout and mfact if there is only one visible client.
- * https://dwm.suckless.org/patches/resetlayout/
- */
-#define RESETLAYOUT_PATCH 0
-
 /* By default, windows only resize from the bottom right corner. With this
  * patch the mouse is warped to the nearest corner and you resize from there.
  * https://dwm.suckless.org/patches/resizecorners/
