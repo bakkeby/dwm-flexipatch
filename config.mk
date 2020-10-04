@@ -25,7 +25,7 @@ FREETYPEINC = /usr/include/freetype2
 # Uncomment this for the alpha patch / BAR_ALPHA_PATCH
 #XRENDER = -lXrender
 
-# Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
+# Uncomment this for the mpdcontrol patch / MPDCONTROL_PATCH
 #MPDCLIENT = -lmpdclient
 
 # Uncomment for the pango patch / BAR_PANGO_PATCH

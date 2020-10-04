@@ -1078,11 +1078,11 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
 	#endif // CYCLELAYOUTS_PATCH
-	#if MDPCONTROL_PATCH
+	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
 	{ MODKEY,                       XK_F2,         mpdchange,              {.i = +1} },
 	{ MODKEY,                       XK_Escape,     mpdcontrol,             {0} },
-	#endif // MDPCONTROL_PATCH
+	#endif // MPDCONTROL_PATCH
 	TAGKEYS(                        XK_1,                                  0)
 	TAGKEYS(                        XK_2,                                  1)
 	TAGKEYS(                        XK_3,                                  2)
@@ -1272,10 +1272,10 @@ static Signal signals[] = {
 	#if CYCLELAYOUTS_PATCH
 	{ "cyclelayout",             cyclelayout },
 	#endif // CYCLELAYOUTS_PATCH
-	#if MDPCONTROL_PATCH
+	#if MPDCONTROL_PATCH
 	{ "mpdchange",               mpdchange },
 	{ "mpdcontrol",              mpdcontrol },
-	#endif // MDPCONTROL_PATCH
+	#endif // MPDCONTROL_PATCH
 	{ "toggleviewex",            toggleviewex },
 	{ "tag",                     tag },
 	{ "tagall",                  tagallex },
@@ -1410,10 +1410,10 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( toggleverticalmax, 1, {ARG_TYPE_NONE} ),
 	IPCCOMMAND( togglemax, 1, {ARG_TYPE_NONE} ),
 	#endif // MAXIMIZE_PATCH
-	#if MDPCONTROL_PATCH
+	#if MPDCONTROL_PATCH
 	IPCCOMMAND( mpdchange, 1, {ARG_TYPE_SINT} ),
 	IPCCOMMAND( mpdcontrol, 1, {ARG_TYPE_NONE} ),
-	#endif // MDPCONTROL_PATCH
+	#endif // MPDCONTROL_PATCH
 	#if MOVEPLACE_PATCH
 	IPCCOMMAND( moveplace, 1, {ARG_TYPE_UINT} ),
 	#endif // MOVEPLACE_PATCH

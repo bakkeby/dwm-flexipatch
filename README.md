@@ -129,7 +129,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 2019-10-11 - Added the patch to ignore Xft errors when drawing text in the status bar
 
-2019-10-10 - Added mdpcontrol, scratchpad and spawn_cwd cpatches
+2019-10-10 - Added mpdcontrol, scratchpad and spawn_cwd cpatches
 
 2019-10-08 - Added columns layout and fakefullscreen patch
 
@@ -395,7 +395,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [maximize](https://dwm.suckless.org/patches/maximize/)
       - adds helper functions for maximizing, horizontally and vertically, floating windows using keybindings
 
-   - [mdpcontrol](https://dwm.suckless.org/patches/mpdcontrol/)
+   - [mpdcontrol](https://dwm.suckless.org/patches/mpdcontrol/)
       - adds keyboard bindings to control MDP (Music Player Daemon)
 
    - [monitorrules](https://github.com/bakkeby/patches/wiki/monitorrules/)

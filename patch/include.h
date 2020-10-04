@@ -158,8 +158,8 @@
 #if MAXIMIZE_PATCH
 #include "maximize.h"
 #endif
-#if MDPCONTROL_PATCH
-#include "mdpcontrol.h"
+#if MPDCONTROL_PATCH
+#include "mpdcontrol.h"
 #endif
 #if MOVEPLACE_PATCH
 #include "moveplace.h"
