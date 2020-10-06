@@ -13,24 +13,25 @@ warp(const Client *c)
 		return;
 	}
 
-	if (!force_warp) {
-		if (!getrootptr(&x, &y) ||
-			(x > c->x - c->bw &&
-			 y > c->y - c->bw &&
-			 x < c->x + c->w + c->bw*2 &&
-			 y < c->y + c->h + c->bw*2)
-		)
-			return;
+	if (!getrootptr(&x, &y))
+		return;
 
-		for (m = mons; m; m = m->next)
-			for (bar = m->bar; bar; bar = bar->next)
-				if (x > bar->bx &&
-					x < bar->bx + bar->bw &&
-					y > bar->by &&
-					y < bar->by + bar->bh)
-					return;
-	} else
-		force_warp = 0;
+	if (!force_warp &&
+		(x > c->x - c->bw &&
+		 y > c->y - c->bw &&
+		 x < c->x + c->w + c->bw*2 &&
+		 y < c->y + c->h + c->bw*2))
+		return;
+
+	force_warp = 0;
+
+	for (m = mons; m; m = m->next)
+		for (bar = m->bar; bar; bar = bar->next)
+			if (x > bar->bx &&
+				x < bar->bx + bar->bw &&
+				y > bar->by &&
+				y < bar->by + bar->bh)
+				return;
 
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 }
