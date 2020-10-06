@@ -152,6 +152,11 @@ dragmfact(const Arg *arg)
 	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
 		None, cursor[horizontal ? CurResizeVertArrow : CurResizeHorzArrow]->cursor, CurrentTime) != GrabSuccess)
 		return;
+
+	#if WARP_PATCH
+	ignore_warp = 1;
+	#endif // WARP_PATCH
+
 	XWarpPointer(dpy, None, root, 0, 0, 0, 0, px, py);
 
 	do {
@@ -216,6 +221,10 @@ dragmfact(const Arg *arg)
 			break;
 		}
 	} while (ev.type != ButtonRelease);
+
+	#if WARP_PATCH
+	ignore_warp = 0;
+	#endif // WARP_PATCH
 
 	XUngrabPointer(dpy, CurrentTime);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));

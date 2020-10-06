@@ -27,6 +27,11 @@ dragcfact(const Arg *arg)
 	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
 		None, cursor[CurIronCross]->cursor, CurrentTime) != GrabSuccess)
 		return;
+
+	#if WARP_PATCH
+	ignore_warp = 1;
+	#endif // WARP_PATCH
+
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
 
 	prev_x = prev_y = -999999;
@@ -66,6 +71,9 @@ dragcfact(const Arg *arg)
 		}
 	} while (ev.type != ButtonRelease);
 
+	#if WARP_PATCH
+	ignore_warp = 0;
+	#endif // WARP_PATCH
 
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
 
