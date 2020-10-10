@@ -18,6 +18,8 @@ swallow(Client *p, Client *c)
 	if (c->noswallow < 0 && !swallowfloating && c->isfloating)
 		return 0;
 
+	XMapWindow(dpy, c->win);
+
 	detach(c);
 	detachstack(c);
 

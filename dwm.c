@@ -2276,17 +2276,24 @@ manage(Window w, XWindowAttributes *wa)
 		unfocus(selmon->sel, 0, c);
 	c->mon->sel = c;
 	#if SWALLOW_PATCH
-	if (!(term && swallow(term, c)))
+	if (!(term && swallow(term, c))) {
 		arrange(c->mon);
+		#if BAR_WINTITLEACTIONS_PATCH
+		if (!HIDDEN(c))
+			XMapWindow(dpy, c->win);
+		#else
+		XMapWindow(dpy, c->win);
+		#endif // BAR_WINTITLEACTIONS_PATCH
+	}
 	#else
 	arrange(c->mon);
-	#endif // SWALLOW_PATCH
 	#if BAR_WINTITLEACTIONS_PATCH
 	if (!HIDDEN(c))
 		XMapWindow(dpy, c->win);
 	#else
 	XMapWindow(dpy, c->win);
 	#endif // BAR_WINTITLEACTIONS_PATCH
+	#endif // SWALLOW_PATCH
 	focus(NULL);
 
 	#if BAR_EWMHTAGS_PATCH
