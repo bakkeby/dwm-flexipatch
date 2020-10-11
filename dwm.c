@@ -3694,9 +3694,7 @@ togglefloating(const Arg *arg)
 		if (c->sfx != -9999) {
 			/* restore last known float dimensions */
 			resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 0);
-			arrange(c->mon);
-			return;
-		}
+		} else
 		#endif // SAVEFLOATS_PATCH // EXRESIZE_PATCH
 		resize(c, c->x, c->y, c->w, c->h, 0);
 	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
