@@ -11,7 +11,7 @@ transfer(const Arg *arg)
 		stail = c;
 		i++;
 	}
-	if (selmon->sel->isfloating || i == 0) {
+	if (!selmon->sel || selmon->sel->isfloating || i == 0) {
 		return;
 	} else if (transfertostack) {
 		selmon->nmaster = MIN(i, selmon->nmaster) - 1;
