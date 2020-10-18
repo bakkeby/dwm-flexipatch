@@ -9,15 +9,15 @@ draw_awesomebar(Bar *bar, BarArg *a)
 {
 	int n = 0, scm, remainder = 0, tabw, pad;
 	unsigned int i;
-	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
+	#if BAR_TITLE_LEFT_PAD_PATCH && BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
-	#elif BAR_TITLE_LEFT_PAD
+	#elif BAR_TITLE_LEFT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad / 2;
-	#elif BAR_TITLE_RIGHT_PAD
+	#elif BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x, w = a->w - lrpad / 2;
 	#else
 	int x = a->x, w = a->w;
-	#endif // BAR_TITLE_LEFT_PAD | BAR_TITLE_RIGHT_PAD
+	#endif // BAR_TITLE_LEFT_PAD_PATCH | BAR_TITLE_RIGHT_PAD_PATCH
 
 	Client *c;
 	for (c = bar->mon->clients; c; c = c->next)

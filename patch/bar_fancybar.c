@@ -12,15 +12,15 @@ draw_fancybar(Bar *bar, BarArg *a)
 	Client *c;
 	Monitor *m = bar->mon;
 
-	#if BAR_TITLE_LEFT_PAD && BAR_TITLE_RIGHT_PAD
+	#if BAR_TITLE_LEFT_PAD_PATCH && BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad;
-	#elif BAR_TITLE_LEFT_PAD
+	#elif BAR_TITLE_LEFT_PAD_PATCH
 	int x = a->x + lrpad / 2, w = a->w - lrpad / 2;
-	#elif BAR_TITLE_RIGHT_PAD
+	#elif BAR_TITLE_RIGHT_PAD_PATCH
 	int x = a->x, w = a->w - lrpad / 2;
 	#else
 	int x = a->x, w = a->w;
-	#endif // BAR_TITLE_LEFT_PAD | BAR_TITLE_RIGHT_PAD
+	#endif // BAR_TITLE_LEFT_PAD_PATCH | BAR_TITLE_RIGHT_PAD_PATCH
 
 	for (c = m->clients; c; c = c->next) {
 		if (ISVISIBLE(c))
