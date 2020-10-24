@@ -23,6 +23,7 @@ struct Systray {
 	Window win;
 	Client *icons;
 	Bar *bar;
+	int h;
 };
 
 /* bar integration */
