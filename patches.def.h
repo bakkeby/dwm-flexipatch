@@ -644,6 +644,12 @@
  */
 #define MOVESTACK_PATCH 0
 
+/* Adds support for the _NET_CLIENT_LIST_STACKING atom, needed by certain applications like the
+ * Zoom video conferencing application.
+ * https://github.com/bakkeby/patches/wiki/netclientliststacking/
+ */
+#define NET_CLIENT_LIST_STACKING_PATCH 0
+
 /* Removes the border when there is only one window visible.
  * https://dwm.suckless.org/patches/noborder/
  */

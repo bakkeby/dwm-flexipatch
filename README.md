@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2020-10-26 - Added the \_NET\_CLIENT\_LIST\_STACKING patch
+
 2020-09-29 - Added the on\_empty\_keys patch (ported from InstantOS)
 
 2020-09-28 - Added the \_IS\_FLOATING patch (embedded in the EWMHTAGS patch)
@@ -411,6 +413,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [movestack](https://dwm.suckless.org/patches/movestack/)
       - allows you to move clients around in the stack and swap them with the master
+
+   - [netclientliststacking](https://github.com/bakkeby/patches/wiki/netclientliststacking)
+      - adds support for the \_NET\_CLIENT\_LIST\_STACKING atom, needed by certain applications like the Zoom video conferencing application
 
    - [noborder](https://dwm.suckless.org/patches/noborder/)
       - removes the border when there is only one window visible

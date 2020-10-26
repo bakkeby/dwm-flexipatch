@@ -183,7 +183,11 @@ enum {
 	#if BAR_EWMHTAGS_PATCH
 	NetDesktopNames, NetDesktopViewport, NetNumberOfDesktops, NetCurrentDesktop,
 	#endif // BAR_EWMHTAGS_PATCH
-	NetClientList, NetLast
+	NetClientList,
+	#if NET_CLIENT_LIST_STACKING_PATCH
+	NetClientListStacking,
+	#endif // NET_CLIENT_LIST_STACKING_PATCH
+	NetLast
 }; /* EWMH atoms */
 
 enum {
@@ -2264,6 +2268,10 @@ manage(Window w, XWindowAttributes *wa)
 	attachstack(c);
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 		(unsigned char *) &(c->win), 1);
+	#if NET_CLIENT_LIST_STACKING_PATCH
+	XChangeProperty(dpy, root, netatom[NetClientListStacking], XA_WINDOW, 32, PropModePrepend,
+		(unsigned char *) &(c->win), 1);
+	#endif // NET_CLIENT_LIST_STACKING_PATCH
 	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw, c->y, c->w, c->h); /* some windows require this */
 
 	#if BAR_WINTITLEACTIONS_PATCH
@@ -3325,6 +3333,9 @@ setup(void)
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
+	#if NET_CLIENT_LIST_STACKING_PATCH
+	netatom[NetClientListStacking] = XInternAtom(dpy, "_NET_CLIENT_LIST_STACKING", False);
+	#endif // NET_CLIENT_LIST_STACKING_PATCH
 	#if DECORATION_HINTS_PATCH
 	motifatom = XInternAtom(dpy, "_MOTIF_WM_HINTS", False);
 	#endif // DECORATION_HINTS_PATCH
@@ -3403,6 +3414,9 @@ setup(void)
 	setviewport();
 	#endif // BAR_EWMHTAGS_PATCH
 	XDeleteProperty(dpy, root, netatom[NetClientList]);
+	#if NET_CLIENT_LIST_STACKING_PATCH
+	XDeleteProperty(dpy, root, netatom[NetClientListStacking]);
+	#endif // NET_CLIENT_LIST_STACKING_PATCH
 	/* select events */
 	wa.cursor = cursor[CurNormal]->cursor;
 	wa.event_mask = SubstructureRedirectMask|SubstructureNotifyMask
@@ -4047,6 +4061,15 @@ updateclientlist()
 			XChangeProperty(dpy, root, netatom[NetClientList],
 				XA_WINDOW, 32, PropModeAppend,
 				(unsigned char *) &(c->win), 1);
+
+	#if NET_CLIENT_LIST_STACKING_PATCH
+	XDeleteProperty(dpy, root, netatom[NetClientListStacking]);
+	for (m = mons; m; m = m->next)
+		for (c = m->stack; c; c = c->snext)
+			XChangeProperty(dpy, root, netatom[NetClientListStacking],
+				XA_WINDOW, 32, PropModeAppend,
+				(unsigned char *) &(c->win), 1);
+	#endif // NET_CLIENT_LIST_STACKING_PATCH
 }
 
 int
