@@ -53,7 +53,7 @@ draw_fancybar(Bar *bar, BarArg *a)
 			drw_setscheme(drw, scheme[m->sel == c ? SchemeTitleSel : SchemeTitleNorm]);
 			if (ftw > 0) /* trap special handling of 0 in drw_text */
 				drw_text(drw, x, a->y, ftw, a->h, lrpad / 2, c->name, 0, False);
-			drawstateindicator(c->mon, c, 1, x, a->y, w, a->h, 0, 0, c->isfixed);
+			drawstateindicator(c->mon, c, 1, x, a->y, ftw, a->h, 0, 0, c->isfixed);
 			x += ftw;
 			w -= ftw;
 		}
