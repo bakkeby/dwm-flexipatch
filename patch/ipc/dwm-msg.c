@@ -499,12 +499,12 @@ main(int argc, char *argv[])
   }
 
   int i = 1;
-  if (strcmp(argv[i], "--ignore-reply") == 0) {
+  if (i < argc && strcmp(argv[i], "--ignore-reply") == 0) {
     ignore_reply = 1;
     i++;
   }
 
-  // if (i >= argc) usage_error(prog_name, "Expected an argument, got none");
+  if (i >= argc) usage_error(prog_name, "Expected an argument, got none");
 
   if (!argc || strcmp(argv[i], "help") == 0)
     print_usage(prog_name);
