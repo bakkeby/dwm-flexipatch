@@ -267,10 +267,10 @@ flextitlecalculate(
 				clientsnstack2++;
 		}
 		#endif // FLEXTILE_DELUXE_LAYOUT
-		else if (i % 2)
-			clientsnstack++;
-		else
+		else if ((i - m->nmaster) % 2)
 			clientsnstack2++;
+		else
+			clientsnstack++;
 		i++;
 	}
 
