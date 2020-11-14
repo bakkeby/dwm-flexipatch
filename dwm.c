@@ -1647,9 +1647,6 @@ drawbarwin(Bar *bar)
 	int r, w, total_drawn = 0;
 	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
 	const BarRule *br;
-	#if BAR_SYSTRAY_PATCH
-	Monitor *lastmon;
-	#endif // BAR_SYSTRAY_PATCH
 
 	if (bar->borderpx) {
 		XSetForeground(drw->dpy, drw->gc, scheme[bar->borderscheme][ColBorder].pixel);
@@ -1663,21 +1660,13 @@ drawbarwin(Bar *bar)
 	rw = lw = bar->bw - 2 * bar->borderpx;
 	rx = lx = bar->borderpx;
 
-	#if BAR_SYSTRAY_PATCH
-	for (lastmon = mons; lastmon && lastmon->next; lastmon = lastmon->next);
-	#endif // BAR_SYSTRAY_PATCH
-
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	drw_rect(drw, lx, bar->borderpx, lw, bar->bh - 2 * bar->borderpx, 1, 1);
 	for (r = 0; r < LENGTH(barrules); r++) {
 		br = &barrules[r];
 		if (br->bar != bar->idx || !br->widthfunc || (br->monitor == 'A' && bar->mon != selmon))
 			continue;
-		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index
-				#if BAR_SYSTRAY_PATCH
-				&& (br->drawfunc != draw_systray || (lastmon->index >= br->monitor && bar->mon->index == 0)) // hack: draw systray on first monitor if the designated one is not available
-				#endif // BAR_SYSTRAY_PATCH
-		)
+		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
 			continue;
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		warg.w = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
