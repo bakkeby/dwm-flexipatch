@@ -888,6 +888,15 @@
  * Clients marked with isterminal in config.h swallow a window opened by any child process,
  * e.g. running xclock in a terminal. Closing the xclock window restores the terminal window
  * in the current position.
+ *
+ * This patch depends on the following additional libraries:
+ *    - libxcb
+ *    - Xlib-libxcb
+ *    - xcb-res
+ *
+ * You need to uncomment the corresponding line in config.mk to use the above libraries when
+ * including this patch.
+ *
  * https://dwm.suckless.org/patches/swallow/
  */
 #define SWALLOW_PATCH 0
@@ -895,10 +904,6 @@
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (MOD+s) instead of having to think if you should use mod-j or mod-k for reaching
  * the previously used window.
- * This patch depends on the following additional libraries:
- *    - libxcb
- *    - Xlib-libxcb
- *    - xcb-res
  * https://dwm.suckless.org/patches/swapfocus/
  */
 #define SWAPFOCUS_PATCH 0
