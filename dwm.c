@@ -2636,7 +2636,13 @@ resizeclient(Client *c, int x, int y, int w, int h)
 		#if MONOCLE_LAYOUT
 		|| &monocle == c->mon->lt[c->mon->sellt]->arrange
 		#endif // MONOCLE_LAYOUT
-		)
+               #if FLEXTILE_DELUXE_LAYOUT
+               || (c->mon->ltaxis[LAYOUT] == NO_SPLIT &&
+               c->mon->ltaxis[MASTER] == MONOCLE &&
+               c->mon->ltaxis[STACK] == 0 &&
+               c->mon->ltaxis[STACK2] == 0)
+               #endif //FLEXTILE_DELUXE_LAYOUT
+               )
 		#if FAKEFULLSCREEN_CLIENT_PATCH
 		&& (c->fakefullscreen == 1 || !c->isfullscreen)
 		#else
