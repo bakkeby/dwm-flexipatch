@@ -90,7 +90,7 @@ setlayoutaxisex(const Arg *arg)
 static void
 layout_no_split(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n)
 {
-	(&flextiles[m->ltaxis[MASTER]])->arrange(m, x, y, h, w, ih, iv, n, n, 0);
+	(&flextiles[m->ltaxis[m->nmaster >= n ? MASTER : STACK]])->arrange(m, x, y, h, w, ih, iv, n, n, 0);
 }
 
 static void
