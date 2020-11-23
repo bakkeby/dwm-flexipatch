@@ -559,7 +559,7 @@
  */
 #define INSETS_PATCH 0
 
-/* This patch (v1.5.5) implements inter-process communication through a UNIX socket for dwm. This
+/* This patch (v1.5.7) implements inter-process communication through a UNIX socket for dwm. This
  * allows for the window manager to be queried for information, e.g. listen for events such as tag
  * or layout changes, as well as send commands to control the window manager via other programs.
  *
