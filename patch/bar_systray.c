@@ -20,6 +20,7 @@ draw_systray(Bar *bar, BarArg *a)
 		return 0;
 
 	XSetWindowAttributes wa;
+	XWindowChanges wc;
 	Client *i;
 	unsigned int w;
 
@@ -67,6 +68,10 @@ draw_systray(Bar *bar, BarArg *a)
 	}
 
 	systray->bar = bar;
+
+	wc.stack_mode = Above;
+	wc.sibling = bar->win;
+	XConfigureWindow(dpy, systray->win, CWSibling|CWStackMode, &wc);
 
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	for (w = 0, i = systray->icons; i; i = i->next) {
