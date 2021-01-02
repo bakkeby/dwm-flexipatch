@@ -297,6 +297,10 @@ static char *statuscolors[][ColCount] = {
 };
 #endif // BAR_POWERLINE_STATUS_PATCH
 
+#if BAR_LAYOUTMENU_PATCH
+static const char *layoutmenu_cmd = "layoutmenu.sh";
+#endif
+
 #if COOL_AUTOSTART_PATCH
 static const char *const autostart[] = {
 	"st", NULL,
@@ -1134,8 +1138,12 @@ static Button buttons[] = {
 	{ ClkButton,            0,                   Button1,        spawn,          {.v = dmenucmd } },
 	#endif // BAR_STATUSBUTTON_PATCH
 	{ ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
+    #if BAR_LAYOUTMENU_PATCH
+	{ ClkLtSymbol,          0,                   Button3,        layoutmenu,     {0} },
+    #else
 	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
-	#if BAR_WINTITLEACTIONS_PATCH
+    #endif // BAR_LAYOUTMENU_PATCH
+    #if BAR_WINTITLEACTIONS_PATCH
 	{ ClkWinTitle,          0,                   Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
 	#endif // BAR_WINTITLEACTIONS_PATCH

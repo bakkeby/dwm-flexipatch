@@ -80,6 +80,9 @@
 #if BAR_WINTITLEACTIONS_PATCH
 #include "bar_wintitleactions.h"
 #endif
+#if BAR_LAYOUTMENU_PATCH
+#include "bar_layoutmenu.h"
+#endif
 
 /* Other patches */
 #if ASPECTRESIZE_PATCH

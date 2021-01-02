@@ -42,6 +42,15 @@
  */
 #define BAR_FLEXWINTITLE_PATCH 0
 
+/* This patch adds a context menu for layout switching.
+ *   - xmenu needs to be installed.
+ *   - Edit layoutmenu.sh with the installed layouts and with correct indexes.
+ *   - Place layoutmenu.sh in PATH.
+ *   - The text of the menu items is for display only. Name them however you want.
+ * https://dwm.suckless.org/patches/layoutmenu/
+ */
+#define BAR_LAYOUTMENU_PATCH 0
+
 /* Show layout symbol in bar */
 #define BAR_LTSYMBOL_PATCH 1
 
