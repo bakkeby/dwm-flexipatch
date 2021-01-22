@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-01-02 - Added the Layoutmenu patch
+
 2020-10-26 - Added the \_NET\_CLIENT\_LIST\_STACKING patch
 
 2020-09-29 - Added the on\_empty\_keys patch (ported from InstantOS)
