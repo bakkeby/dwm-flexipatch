@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-01-22 - Added the placemouse patch
+
 2021-01-02 - Added the Layoutmenu patch
 
 2020-10-26 - Added the \_NET\_CLIENT\_LIST\_STACKING patch
@@ -447,6 +449,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor
+
+   - [placemouse](https://github.com/bakkeby/patches/wiki/placemouse)
+      - lets the user change the position of a client in the stack using the mouse.
 
    - [powerline](https://gitlab.com/udiboy1209-suckless/dwm/-/commit/071f5063e8ac4280666828179f92788d893eea40#4b1a539194be7467cefbda22f675a3b7c19ceca7)
       - adds drawing of powerline arrows (and diagonal lines) for both the status bar and the tags

@@ -338,6 +338,9 @@ struct Client {
 	#if ISPERMANENT_PATCH
 	int ispermanent;
 	#endif // ISPERMANENT_PATCH
+	#if PLACEMOUSE_PATCH
+	int beingmoved;
+	#endif // PLACEMOUSE_PATCH
 	#if SWALLOW_PATCH
 	int isterminal, noswallow;
 	pid_t pid;

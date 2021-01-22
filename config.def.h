@@ -1160,6 +1160,9 @@ static Button buttons[] = {
 	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = termcmd } },
 	#endif // BAR_STATUSCMD_PATCH
 	{ ClkClientWin,         MODKEY,              Button1,        movemouse,      {0} },
+	#if PLACEMOUSE_PATCH
+	{ ClkClientWin,         MODKEY|ControlMask,  Button1,        placemouse,     {0} },
+	#endif // PLACEMOUSE_PATCH
 	{ ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
 	#if DRAGCFACT_PATCH && CFACTS_PATCH

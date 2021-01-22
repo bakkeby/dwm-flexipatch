@@ -179,6 +179,9 @@
 #if PERTAG_PATCH
 #include "pertag.h"
 #endif
+#if PLACEMOUSE_PATCH
+#include "placemouse.h"
+#endif
 #if PUSH_NO_MASTER_PATCH
 #include "push_no_master.h"
 #elif PUSH_PATCH
