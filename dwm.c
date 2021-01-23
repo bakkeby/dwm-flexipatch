@@ -3700,7 +3700,11 @@ togglebar(const Arg *arg)
 		else if (selmon->showbar) {
 			wc.y = 0;
 			if (!selmon->topbar)
+				#if BARPADDING_PATCH
+				wc.y = selmon->mh - bh + vp;
+				#else
 				wc.y = selmon->mh - bh;
+				#endif // BARPADDING_PATCH
 		}
 		XConfigureWindow(dpy, systray->win, CWY, &wc);
 	}
