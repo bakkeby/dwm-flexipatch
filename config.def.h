@@ -52,6 +52,9 @@ static const int focusonwheel            = 0;
 static int floatposgrid_x                = 5;  /* float grid columns */
 static int floatposgrid_y                = 5;  /* float grid rows */
 #endif // FLOATPOS_PATCH
+#if RIODRAW_PATCH
+static const char slopstyle[]            = "-t 0 -c 0.92,0.85,0.69,0.3"; /* do NOT define -f (format) here */
+#endif // RIODRAW_PATCH
 #if BAR_STATUSPADDING_PATCH
 static const int horizpadbar             = 2;   /* horizontal padding for statusbar */
 static const int vertpadbar              = 0;   /* vertical padding for statusbar */
@@ -768,6 +771,9 @@ static Key keys[] = {
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
 	{ MODKEY,                       XK_s,          swapfocus,              {.i = -1 } },
 	#endif // SWAPFOCUS_PATCH
+	#if RIODRAW_PATCH
+	{ MODKEY|ControlMask,           XK_s,          riodraw,                {0} },
+	#endif // RIODRAW_PATCH
 	#if SWITCHCOL_PATCH
 	{ MODKEY,                       XK_v,          switchcol,              {0} },
 	#endif // SWITCHCOL_PATCH
@@ -1438,6 +1444,9 @@ static IPCCommand ipccommands[] = {
 	#if MOVERESIZE_PATCH
 	IPCCOMMAND( moveresize, 1, {ARG_TYPE_STR} ),
 	#endif // MOVERESIZE_PATCH
+	#if RIODRAW_PATCH
+	IPCCOMMAND( riodraw, 1, {ARG_TYPE_NONE} ),
+	#endif // RIODRAW_PATCH
 	#if PUSH_PATCH || PUSH_NO_MASTER_PATCH
 	IPCCOMMAND( pushdown, 1, {ARG_TYPE_NONE} ),
 	IPCCOMMAND( pushup, 1, {ARG_TYPE_NONE} ),

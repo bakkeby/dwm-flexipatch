@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-02-11 - Added the riodraw patch
+
 2021-01-22 - Added the placemouse patch
 
 2021-01-02 - Added the Layoutmenu patch
@@ -473,6 +475,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [restartsig](https://dwm.suckless.org/patches/restartsig/)
       - adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid
       - additionally dwm can quit cleanly by using kill -TERM dwmpid
+
+   - [riodraw](https://github.com/bakkeby/patches/blob/master/dwm/dwm-riodraw-6.2.diff)
+      - adds rio-like drawing to resize the selected client (backported from instantWM)
+      - depends on an external tool slop being installed
 
    - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
       - let's you rotate through the stack using keyboard shortcuts

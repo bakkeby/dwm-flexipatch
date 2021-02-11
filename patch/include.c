@@ -197,6 +197,9 @@
 #if RESTARTSIG_PATCH
 #include "restartsig.c"
 #endif
+#if RIODRAW_PATCH
+#include "riodraw.c"
+#endif
 #if ROTATESTACK_PATCH
 #include "rotatestack.c"
 #endif

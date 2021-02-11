@@ -1,0 +1,1 @@
+static void riodraw(const Arg *arg);
