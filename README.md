@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2021-02-11 - Added the riodraw patch
+2021-02-11 - Added the riodraw and focusdir patches
 
 2021-01-22 - Added the placemouse patch
 
@@ -337,6 +337,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [focusadjacenttag](https://dwm.suckless.org/patches/focusadjacenttag/)
       - provides the ability to focus the tag on the immediate left or right of the currently focused tag
       - it also allows to send the focused window either on the left or the right tag
+
+   - [focusdir](https://github.com/bakkeby/patches/wiki/focusdir)
+      - allows focusing on clients based on direction (up, down, left, right) instead of client order
 
    - [focusmaster](https://dwm.suckless.org/patches/focusmaster/)
       - a simple patch that just puts focus back to the master client

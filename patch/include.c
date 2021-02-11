@@ -132,6 +132,9 @@
 #if FOCUSADJACENTTAG_PATCH
 #include "focusadjacenttag.c"
 #endif
+#if FOCUSDIR_PATCH
+#include "focusdir.c"
+#endif
 #if FOCUSMASTER_PATCH
 #include "focusmaster.c"
 #endif

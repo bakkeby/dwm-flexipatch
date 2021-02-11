@@ -129,6 +129,9 @@
 #if FLOATPOS_PATCH
 #include "floatpos.h"
 #endif
+#if FOCUSDIR_PATCH
+#include "focusdir.h"
+#endif
 #if FOCUSADJACENTTAG_PATCH
 #include "focusadjacenttag.h"
 #endif

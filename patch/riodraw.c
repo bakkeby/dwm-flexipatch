@@ -54,7 +54,7 @@ riodraw(const Arg *arg)
 	c = selmon->sel;
 
 	if (width > 50 && height > 50 && x > -40 && y > -40 && width < selmon->mw + 40 && height < selmon->mh + 40 &&
-	(abs(c->w - width) > 20 || abs(c->h - height) > 20 || abs(c->x - x) > 20 || abs(c->y - y) > 20)) {
+			(abs(c->w - width) > 20 || abs(c->h - height) > 20 || abs(c->x - x) > 20 || abs(c->y - y) > 20)) {
 		if ((m = recttomon(x, y, width, height)) != selmon) {
 			sendmon(c, m);
 			unfocus(selmon->sel, 0, NULL);
