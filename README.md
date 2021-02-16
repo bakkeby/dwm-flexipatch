@@ -479,8 +479,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid
       - additionally dwm can quit cleanly by using kill -TERM dwmpid
 
-   - [riodraw](https://github.com/bakkeby/patches/blob/master/dwm/dwm-riodraw-6.2.diff)
-      - adds rio-like drawing to resize the selected client (backported from instantWM)
+   - [riodraw](https://github.com/bakkeby/patches/wiki/riodraw/)
+      - adds rio-like drawing to spawn new windows or to resize the selected client (backported from instantWM)
       - depends on an external tool slop being installed
 
    - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
