@@ -1,4 +1,12 @@
 void
+moveorplace(const Arg *arg) {
+	if ((!selmon->lt[selmon->sellt]->arrange || selmon->sel->isfloating))
+		movemouse(arg);
+	else
+		placemouse(arg);
+}
+
+void
 placemouse(const Arg *arg)
 {
 	int x, y, px, py, ocx, ocy, nx = -9999, ny = -9999, freemove = 0;
@@ -117,9 +125,9 @@ placemouse(const Arg *arg)
 		attach(c);
 		attachstack(c);
 		selmon = m;
-		focus(c);
 	}
 
+	focus(c);
 	c->beingmoved = 0;
 
 	if (nx != -9999)
