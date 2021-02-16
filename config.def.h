@@ -1464,7 +1464,7 @@ static IPCCommand ipccommands[] = {
 	IPCCOMMAND( moveresize, 1, {ARG_TYPE_STR} ),
 	#endif // MOVERESIZE_PATCH
 	#if RIODRAW_PATCH
-	IPCCOMMAND( riodraw, 1, {ARG_TYPE_NONE} ),
+	IPCCOMMAND( rioresize, 1, {ARG_TYPE_NONE} ),
 	#endif // RIODRAW_PATCH
 	#if PUSH_PATCH || PUSH_NO_MASTER_PATCH
 	IPCCOMMAND( pushdown, 1, {ARG_TYPE_NONE} ),
