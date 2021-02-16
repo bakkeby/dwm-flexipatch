@@ -614,6 +614,9 @@ static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
+#if RIODRAW_PATCH
+static pid_t spawncmd(const Arg *arg);
+#endif // RIODRAW_PATCH
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
@@ -684,6 +687,10 @@ static int ignore_warp = 0; // force skip warp in some situations, e.g. dragmfac
 #endif // WARP_PATCH
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
+#if RIODRAW_PATCH
+static int riodimensions[4] = { -1, -1, -1, -1 };
+static pid_t riopid = 0;
+#endif // RIODRAW_PATCH
 static void (*handler[LASTEvent]) (XEvent *) = {
 	[ButtonPress] = buttonpress,
 	#if COMBO_PATCH || BAR_HOLDBAR_PATCH
@@ -2293,6 +2300,16 @@ manage(Window w, XWindowAttributes *wa)
 	c->mon->sel = c;
 	#if SWALLOW_PATCH
 	if (!(term && swallow(term, c))) {
+		#if RIODRAW_PATCH
+		if (riopid && (!riodraw_matchpid || isdescprocess(riopid, c->pid))) {
+			if (riodimensions[3] != -1)
+				rioposition(c, riodimensions[0], riodimensions[1], riodimensions[2], riodimensions[3]);
+			else {
+				killclient(&((Arg) { .v = c }));
+				return;
+			}
+		}
+		#endif // RIODRAW_PATCH
 		arrange(c->mon);
 		#if BAR_WINTITLEACTIONS_PATCH
 		if (!HIDDEN(c))
@@ -2302,6 +2319,16 @@ manage(Window w, XWindowAttributes *wa)
 		#endif // BAR_WINTITLEACTIONS_PATCH
 	}
 	#else
+	#if RIODRAW_PATCH
+	if (riopid) {
+		if (riodimensions[3] != -1)
+			rioposition(c, riodimensions[0], riodimensions[1], riodimensions[2], riodimensions[3]);
+		else {
+			killclient(&((Arg) { .v = c }));
+			return;
+		}
+	}
+	#endif // RIODRAW_PATCH
 	arrange(c->mon);
 	#if BAR_WINTITLEACTIONS_PATCH
 	if (!HIDDEN(c))
@@ -3556,9 +3583,23 @@ sigchld(int unused)
 	#endif // COOL_AUTOSTART_PATCH
 }
 
+#if RIODRAW_PATCH
 void
 spawn(const Arg *arg)
 {
+	spawncmd(arg);
+}
+
+pid_t
+spawncmd(const Arg *arg)
+#else
+void
+spawn(const Arg *arg)
+#endif // RIODRAW_PATCH
+{
+	#if RIODRAW_PATCH
+	pid_t pid;
+	#endif // RIODRAW_PATCH
 	#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
 	char *cmd = NULL;
 	#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
@@ -3583,7 +3624,12 @@ spawn(const Arg *arg)
 	}
 	#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
 
-	if (fork() == 0) {
+	#if RIODRAW_PATCH
+	if ((pid = fork()) == 0)
+	#else
+	if (fork() == 0)
+	#endif // RIODRAW_PATCH
+	{
 		if (dpy)
 			close(ConnectionNumber(dpy));
 		#if SPAWNCMD_PATCH
@@ -3629,6 +3675,9 @@ spawn(const Arg *arg)
 	#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
 	free(cmd);
 	#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
+	#if RIODRAW_PATCH
+	return pid;
+	#endif // RIODRAW_PATCH
 }
 
 void
