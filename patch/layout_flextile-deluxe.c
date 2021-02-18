@@ -35,6 +35,7 @@ static const TileArranger flextiles[] = {
 	{ arrange_horizgrid },
 	{ arrange_dwindle },
 	{ arrange_spiral },
+	{ arrange_tatami },
 };
 
 static void
@@ -561,23 +562,19 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 					if (s) {
 						ny += nh + ih;
 						nh += hrest;
-					}
-					else {
+					} else {
 						nh -= hrest;
 						ny -= nh + ih;
 					}
-				}
-				else if ((i % 4) == 1) {
+				} else if ((i % 4) == 1) {
 					nx += nw + iv;
 					nw += wrest;
-				}
-				else if ((i % 4) == 2) {
+				} else if ((i % 4) == 2) {
 					ny += nh + ih;
 					nh += hrest;
 					if (i < n - 1)
 						nw += wrest;
-				}
-				else if ((i % 4) == 3) {
+				} else if ((i % 4) == 3) {
 					if (s) {
 						nx += nw + iv;
 						nw -= wrest;
@@ -593,8 +590,7 @@ arrange_fibonacci(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n,
 						wrest = 0;
 					}
 					ny = y;
-				}
-				else if (i == 1)
+				} else if (i == 1)
 					nw = w - nw - iv;
 				i++;
 			}
@@ -614,6 +610,130 @@ static void
 arrange_spiral(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
 {
 	arrange_fibonacci(m, x, y, h, w, ih, iv, n, an, ai, 0);
+}
+
+static void
+arrange_tatami(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, int an, int ai)
+{
+	unsigned int i, j, nx, ny, nw, nh, tnx, tny, tnw, tnh, nhrest, hrest, wrest, areas, mats, cats;
+	Client *c;
+
+	nx = x;
+	ny = y;
+	nw = w;
+	nh = h;
+
+	mats = an / 5;
+	cats = an % 5;
+	hrest = 0;
+	wrest = 0;
+
+	areas = mats + (cats > 0);
+	nh = (h - ih * (areas - 1)) / areas;
+	nhrest = (h - ih * (areas - 1)) % areas;
+
+	for (i = 0, j = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), j++) {
+		if (j >= ai && j < (ai + an)) {
+
+			tnw = nw;
+			tnx = nx;
+			tnh = nh;
+			tny = ny;
+
+			if (j < ai + cats) {
+				/* Arrange cats (all excess clients that can't be tiled as mats). Cats sleep on mats. */
+
+	 			switch (cats) {
+				case 1: // fill
+					break;
+				case 2: // up and down
+					if ((i % 5) == 0) //up
+						tnh = (nh - ih) / 2 + (nh - ih) % 2;
+					else if ((i % 5) == 1) { //down
+						tny += (nh - ih) / 2 + (nh - ih) % 2 + ih;
+						tnh = (nh - ih) / 2;
+					}
+					break;
+				case 3: //bottom, up-left and up-right
+					if ((i % 5) == 0) { // up-left
+						tnw = (nw - iv) / 2 + (nw - iv) % 2;
+						tnh = (nh - ih) * 2 / 3 + (nh - ih) * 2 % 3;
+					} else if ((i % 5) == 1) { // up-right
+						tnx += (nw - iv) / 2 + (nw - iv) % 2 + iv;
+						tnw = (nw - iv) / 2;
+						tnh = (nh - ih) * 2 / 3 + (nh - ih) * 2 % 3;
+					} else if ((i % 5) == 2) { //bottom
+						tnh = (nh - ih) / 3;
+						tny += (nh - ih) * 2 / 3 + (nh - ih) * 2 % 3 + ih;
+					}
+					break;
+				case 4: // bottom, left, right and top
+					if ((i % 5) == 0) { //top
+						hrest = (nh - 2 * ih) % 4;
+						tnh = (nh - 2 * ih) / 4 + (hrest ? 1 : 0);
+					} else if ((i % 5) == 1) { // left
+						tnw = (nw - iv) / 2 + (nw - iv) % 2;
+						tny += (nh - 2 * ih) / 4 + (hrest ? 1 : 0) + ih;
+						tnh = (nh - 2 * ih) * 2 / 4 + (hrest > 1 ? 1 : 0);
+					} else if ((i % 5) == 2) { // right
+						tnx += (nw - iv) / 2 + (nw - iv) % 2 + iv;
+						tnw = (nw - iv) / 2;
+						tny += (nh - 2 * ih) / 4 + (hrest ? 1 : 0) + ih;
+						tnh = (nh - 2 * ih) * 2 / 4 + (hrest > 1 ? 1 : 0);
+					} else if ((i % 5) == 3) { // bottom
+						tny += (nh - 2 * ih) / 4 + (hrest ? 1 : 0) + (nh - 2 * ih) * 2 / 4 + (hrest > 1 ? 1 : 0) + 2 * ih;
+						tnh = (nh - 2 * ih) / 4 + (hrest > 2 ? 1 : 0);
+					}
+					break;
+				}
+
+			} else {
+				/* Arrange mats. One mat is a collection of five clients arranged tatami style */
+
+				if (((i - cats) % 5) == 0) {
+					if ((cats > 0) || ((i - cats) >= 5)) {
+						tny = ny = ny + nh + (nhrest > 0 ? 1 : 0) + ih;
+						--nhrest;
+					}
+				}
+
+				switch ((i - cats) % 5) {
+				case 0: // top-left-vert
+					wrest = (nw - 2 * iv) % 3;
+					hrest = (nh - 2 * ih) % 3;
+					tnw = (nw - 2 * iv) / 3 + (wrest ? 1 : 0);
+					tnh = (nh - 2 * ih) * 2 / 3 + hrest + iv;
+					break;
+				case 1: // top-right-hor
+					tnx += (nw - 2 * iv) / 3 + (wrest ? 1 : 0) + iv;
+					tnw = (nw - 2 * iv) * 2 / 3 + (wrest > 1 ? 1 : 0) + iv;
+					tnh = (nh - 2 * ih) / 3 + (hrest ? 1 : 0);
+					break;
+				case 2: // center
+					tnx += (nw - 2 * iv) / 3 + (wrest ? 1 : 0) + iv;
+					tnw = (nw - 2 * iv) / 3 + (wrest > 1 ? 1 : 0);
+					tny += (nh - 2 * ih) / 3 + (hrest ? 1 : 0) + ih;
+					tnh = (nh - 2 * ih) / 3 + (hrest > 1 ? 1 : 0);
+					break;
+				case 3: // bottom-right-vert
+					tnx += (nw - 2 * iv) * 2 / 3 + wrest + 2 * iv;
+					tnw = (nw - 2 * iv) / 3;
+					tny += (nh - 2 * ih) / 3 + (hrest ? 1 : 0) + ih;
+					tnh = (nh - 2 * ih) * 2 / 3 + hrest + iv;
+					break;
+				case 4: // (oldest) bottom-left-hor
+					tnw = (nw - 2 * iv) * 2 / 3 + wrest + iv;
+					tny += (nh - 2 * ih) * 2 / 3 + hrest + 2 * iv;
+					tnh = (nh - 2 * ih) / 3;
+					break;
+				}
+
+			}
+
+			resize(c, tnx, tny, tnw - 2 * c->bw, tnh - 2 * c->bw, False);
+			++i;
+		}
+	}
 }
 
 static void
