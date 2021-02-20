@@ -52,7 +52,11 @@ draw_pwrl_tags(Bar *bar, BarArg *a)
 		icon = tagicon(bar->mon, i);
 		invert = 0;
 		w = TEXTW(icon);
-		drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeNorm]));
+		if (urg & 1 << i ) {
+			drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeUrg]));
+		} else {
+			drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeNorm]));
+		}
 		#if BAR_POWERLINE_TAGS_SLASH_PATCH
 		drw_arrow(drw, x, a->y, plw, a->h, 1, 1);
 		#else
