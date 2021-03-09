@@ -15,7 +15,7 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
-2021-03-09 - Added the tab patch
+2021-03-09 - Added the tab patch and the LG3D patch
 
 2021-02-11 - Added the riodraw and focusdir patches
 
@@ -399,6 +399,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [~leftlayout~](http://dwm.suckless.org/patches/leftlayout/)
       - ~moves the layout symbol in the status bar to the left hand side~
+
+   - LG3D
+      - changes the window manager name to "LG3d" instead of "dwm" as a workaround for Java applications that assume that the window manager is using window reparenting
+      - refer to the ISSUES secton of the dwm man page for more details
 
    - [losefullscreen](https://github.com/bakkeby/patches/wiki/losefullscreen/)
       - by default in dwm it is possible to make an application fullscreen, then use the focusstack keybindings to focus on other windows beneath the current window

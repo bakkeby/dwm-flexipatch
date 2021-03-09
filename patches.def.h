@@ -603,6 +603,12 @@
  */
 #define KILLUNSEL_PATCH 0
 
+/* This changes the window manager name to LG3d instead of dwm as a workaround for Java
+ * applications that assume that the window manager is using window reparenting.
+ * Refer to the ISSUES secton of the dwm man page for more details.
+ */
+#define LG3D_PATCH 0
+
 /* By default in dwm it is possible to make an application fullscreen, then use
  * the focusstack keybindings to focus on other windows beneath the current window.
  * It is also possible to spawn new windows (e.g. a terminal) that end up getting

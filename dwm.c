@@ -1020,7 +1020,10 @@ attachstack(Client *c)
 void
 buttonpress(XEvent *e)
 {
-	int click, i, x, r;
+	int click, i, r;
+	#if TAB_PATCH
+	int x;
+	#endif // TAB_PATCH
 	Arg arg = {0};
 	Client *c;
 	Monitor *m;
@@ -3518,8 +3521,13 @@ setup(void)
 	wmcheckwin = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
 	XChangeProperty(dpy, wmcheckwin, netatom[NetWMCheck], XA_WINDOW, 32,
 		PropModeReplace, (unsigned char *) &wmcheckwin, 1);
+	#if LG3D_PATCH
+	XChangeProperty(dpy, wmcheckwin, netatom[NetWMName], utf8string, 8,
+		PropModeReplace, (unsigned char *) "LG3D", 4);
+	#else
 	XChangeProperty(dpy, wmcheckwin, netatom[NetWMName], utf8string, 8,
 		PropModeReplace, (unsigned char *) "dwm", 3);
+	#endif // LG3D_PATCH
 	XChangeProperty(dpy, root, netatom[NetWMCheck], XA_WINDOW, 32,
 		PropModeReplace, (unsigned char *) &wmcheckwin, 1);
 	/* EWMH support per view */
