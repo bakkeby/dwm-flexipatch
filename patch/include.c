@@ -253,6 +253,9 @@
 #if SWITCHCOL_PATCH
 #include "switchcol.c"
 #endif
+#if TAB_PATCH
+#include "tab.c"
+#endif
 #if TAGALL_PATCH
 #include "tagall.c"
 #endif

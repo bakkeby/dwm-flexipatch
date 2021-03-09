@@ -52,7 +52,7 @@ draw_pwrl_tags(Bar *bar, BarArg *a)
 		icon = tagicon(bar->mon, i);
 		invert = 0;
 		w = TEXTW(icon);
-		if (urg & 1 << i ) {
+		if (urg & 1 << i) {
 			drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeUrg]));
 		} else {
 			drw_settrans(drw, prevscheme, (nxtscheme = scheme[bar->mon->tagset[bar->mon->seltags] & 1 << i ? SchemeSel : SchemeNorm]));

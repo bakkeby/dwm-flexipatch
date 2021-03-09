@@ -249,6 +249,9 @@
 #if SWITCHCOL_PATCH
 #include "switchcol.h"
 #endif
+#if TAB_PATCH
+#include "tab.h"
+#endif
 #if TAGALL_PATCH
 #include "tagall.h"
 #endif

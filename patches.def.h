@@ -963,6 +963,14 @@
  */
 #define SWITCHTAG_PATCH 0
 
+/* This patch transforms the monocle layout into a "tabbed" layout if more than one window is
+ * present on the monocle view. This patch has been added for demonstration purposes only and has
+ * limited compatibility with other patches. It will conflict space-wise with a second bar.
+ * Note that fancybar, awesomebar, bartabgroups and similar patches make the tab patch redundant.
+ * https://dwm.suckless.org/patches/tab/
+ */
+#define TAB_PATCH 0
+
 /* Adds keyboard shortcuts to move all (or only floating) windows from one tag to another.
  * https://dwm.suckless.org/patches/tagall/
  */

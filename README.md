@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-03-09 - Added the tab patch
+
 2021-02-11 - Added the riodraw and focusdir patches
 
 2021-01-22 - Added the placemouse patch
@@ -574,6 +576,13 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [systray](https://dwm.suckless.org/patches/systray/)
       - adds system tray in the status bar
+
+   - [tab](https://dwm.suckless.org/patches/tab/)
+      - transforms the monocle layout into a "tabbed" layout if more than one window is present on the monocle view
+      - this is essentially just a specific bar
+      - the patch has been added for demonstration purposes only and has limited compatibility with other patches
+      - it will conflict space-wise with a second bar
+      - note that fancybar, awesomebar, bartabgroups and similar patches make the tab patch redundant
 
    - [tagall](https://dwm.suckless.org/patches/tagall/)
       - adds keyboard shortcuts to move all (or only floating) windows from one tag to another

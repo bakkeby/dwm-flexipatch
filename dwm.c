@@ -69,6 +69,9 @@
 #define Button9                 9
 #define NUMTAGS                 9
 #define BARRULES                20
+#if TAB_PATCH
+#define MAXTABS                 50
+#endif // TAB_PATCH
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
 #if BAR_ANYBAR_PATCH
@@ -205,6 +208,9 @@ enum {
 	#if BAR_STATUSBUTTON_PATCH
 	ClkButton,
 	#endif // BAR_STATUSBUTTON_PATCH
+	#if TAB_PATCH
+	ClkTabBar,
+	#endif // TAB_PATCH
 	ClkTagBar,
 	ClkLtSymbol,
 	ClkStatusText,
@@ -414,6 +420,9 @@ struct Monitor {
 	int num;
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
+	#if TAB_PATCH
+	int ty;               /* tab bar geometry */
+	#endif // TAB_PATCH
 	#if VANITYGAPS_PATCH
 	int gappih;           /* horizontal gap between windows */
 	int gappiv;           /* vertical gap between windows */
@@ -427,6 +436,13 @@ struct Monitor {
 	unsigned int sellt;
 	unsigned int tagset[2];
 	int showbar;
+	#if TAB_PATCH
+	int showtab;
+	int toptab;
+	Window tabwin;
+	int ntabs;
+	int tab_widths[MAXTABS];
+	#endif // TAB_PATCH
 	Client *clients;
 	Client *sel;
 	Client *stack;
@@ -973,6 +989,10 @@ arrange(Monitor *m)
 void
 arrangemon(Monitor *m)
 {
+	#if TAB_PATCH
+	updatebarpos(m);
+	XMoveResizeWindow(dpy, m->tabwin, m->wx, m->ty, m->ww, th);
+	#endif // TAB_PATCH
 	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
@@ -1000,7 +1020,7 @@ attachstack(Client *c)
 void
 buttonpress(XEvent *e)
 {
-	int click, i, r;
+	int click, i, x, r;
 	Arg arg = {0};
 	Client *c;
 	Monitor *m;
@@ -1043,6 +1063,26 @@ buttonpress(XEvent *e)
 		}
 	}
 
+	#if TAB_PATCH
+	if (ev->window == selmon->tabwin) {
+		for (i = 0, x = 0, c = selmon->clients; c; c = c->next) {
+			if (!ISVISIBLE(c) || HIDDEN(c))
+				continue;
+			x += selmon->tab_widths[i];
+			if (ev->x > x)
+				++i;
+			else
+				break;
+			if (i >= m->ntabs)
+				break;
+		}
+		if (c) {
+			click = ClkTabBar;
+			arg.ui = i;
+		}
+	}
+	#endif // TAB_PATCH
+
 	if (click == ClkRootWin && (c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
 		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
@@ -1058,11 +1098,17 @@ buttonpress(XEvent *e)
 	for (i = 0; i < LENGTH(buttons); i++) {
 		if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
 				&& CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state)) {
-			#if BAR_WINTITLEACTIONS_PATCH
-			buttons[i].func((click == ClkTagBar || click == ClkWinTitle) && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
-			#else
-			buttons[i].func(click == ClkTagBar && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
-			#endif // BAR_WINTITLEACTIONS_PATCH
+			buttons[i].func(
+				(
+					click == ClkTagBar
+					#if TAB_PATCH
+					|| click == ClkTabBar
+					#endif // TAB_PATCH
+					#if BAR_WINTITLEACTIONS_PATCH
+					|| click == ClkWinTitle
+					#endif // BAR_WINTITLEACTIONS_PATCH
+				) && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg
+			);
 		}
 	}
 }
@@ -1149,6 +1195,10 @@ cleanupmon(Monitor *mon)
 		#endif // BAR_SYSTRAY_PATCH
 		free(bar);
 	}
+	#if TAB_PATCH
+	XUnmapWindow(dpy, mon->tabwin);
+	XDestroyWindow(dpy, mon->tabwin);
+	#endif // TAB_PATCH
 	free(mon);
 }
 
@@ -1413,6 +1463,11 @@ createmon(void)
 	m->nstack = nstack;
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	m->showbar = showbar;
+	#if TAB_PATCH
+	m->showtab = showtab;
+	m->toptab = toptab;
+	m->ntabs = 0;
+	#endif // TAB_PATCH
 	#if SETBORDERPX_PATCH
 	m->borderpx = borderpx;
 	#endif // SETBORDERPX_PATCH
@@ -1807,8 +1862,12 @@ expose(XEvent *e)
 	Monitor *m;
 	XExposeEvent *ev = &e->xexpose;
 
-	if (ev->count == 0 && (m = wintomon(ev->window)))
+	if (ev->count == 0 && (m = wintomon(ev->window))) {
 		drawbar(m);
+		#if TAB_PATCH
+		drawtabs();
+		#endif // TAB_PATCH
+	}
 }
 
 void
@@ -2567,12 +2626,18 @@ propertynotify(XEvent *e)
 			updatewmhints(c);
 			if (c->isurgent)
 				drawbars();
+			#if TAB_PATCH
+			drawtabs();
+			#endif // TAB_PATCH
 			break;
 		}
 		if (ev->atom == XA_WM_NAME || ev->atom == netatom[NetWMName]) {
 			updatetitle(c);
 			if (c == c->mon->sel)
 				drawbar(c->mon);
+			#if TAB_PATCH
+			drawtab(c->mon);
+			#endif // TAB_PATCH
 		}
 		#if DECORATION_HINTS_PATCH
 		if (ev->atom == motifatom)
@@ -2864,6 +2929,9 @@ restack(Monitor *m)
 	#endif // WARP_PATCH
 
 	drawbar(m);
+	#if TAB_PATCH
+	drawtab(m);
+	#endif // TAB_PATCH
 	if (!m->sel)
 		return;
 	if (m->sel->isfloating || !m->lt[m->sellt]->arrange)
@@ -3345,6 +3413,9 @@ setup(void)
 	bh = drw->fonts->h + 2;
 	#endif // BAR_HEIGHT_PATCH
 	#endif // BAR_STATUSPADDING_PATCH
+	#if TAB_PATCH
+	th = bh;
+	#endif // TAB_PATCH
 	updategeom();
 	/* init atoms */
 	utf8string = XInternAtom(dpy, "UTF8_STRING", False);
@@ -4069,12 +4140,32 @@ updatebars(void)
 				XSetClassHint(dpy, bar->win, &ch);
 			}
 		}
+		#if TAB_PATCH
+		if (!m->tabwin) {
+			#if BAR_ALPHA_PATCH
+			m->tabwin = XCreateWindow(dpy, root, m->wx, m->ty, m->ww, th, 0, depth,
+							InputOutput, visual,
+							CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
+			#else
+			m->tabwin = XCreateWindow(dpy, root, m->wx, m->ty, m->ww, th, 0, DefaultDepth(dpy, screen),
+							CopyFromParent, DefaultVisual(dpy, screen),
+							CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+			#endif // BAR_ALPHA_PATCH
+			XDefineCursor(dpy, m->tabwin, cursor[CurNormal]->cursor);
+			XMapRaised(dpy, m->tabwin);
+		}
+		#endif // TAB_PATCH
 	}
 }
 
 void
 updatebarpos(Monitor *m)
 {
+	#if TAB_PATCH
+	Client *c;
+	int nvis = 0;
+	#endif // TAB_PATCH
+
 	m->wx = m->mx;
 	m->wy = m->my;
 	m->ww = m->mw;
@@ -4105,6 +4196,24 @@ updatebarpos(Monitor *m)
 	for (bar = m->bar; bar; bar = bar->next)
 		if (!m->showbar || !bar->showbar)
 			bar->by = -bar->bh - y_pad;
+
+	#if TAB_PATCH
+	for (c = m->clients; c; c = c->next) {
+		if (ISVISIBLE(c) && !HIDDEN(c))
+			++nvis;
+	}
+
+	if (m->showtab == showtab_always
+	   || ((m->showtab == showtab_auto) && (nvis > 1) && (m->lt[m->sellt]->arrange == monocle))) {
+		m->wh -= th;
+		m->ty = m->toptab ? m->wy : m->wy + m->wh;
+		if (m->toptab)
+			m->wy += th;
+	} else {
+		m->ty = -th;
+	}
+	#endif // TAB_PATCH
+
 	if (!m->showbar)
 		return;
 	for (bar = m->bar; bar; bar = bar->next) {

@@ -38,6 +38,14 @@ static const int showbar                 = 0;   /* 0 means no bar */
 static const int showbar                 = 1;   /* 0 means no bar */
 #endif // BAR_HOLDBAR_PATCH
 static const int topbar                  = 1;   /* 0 means bottom bar */
+#if TAB_PATCH
+/*  Display modes of the tab bar: never shown, always shown, shown only in  */
+/*  monocle mode in the presence of several windows.                        */
+/*  Modes after showtab_nmodes are disabled.                                */
+enum showtab_modes { showtab_never, showtab_auto, showtab_nmodes, showtab_always};
+static const int showtab                 = showtab_auto;        /* Default tab bar show mode */
+static const int toptab                  = False;               /* False means bottom tab bar */
+#endif // TAB_PATCH
 #if BAR_HEIGHT_PATCH
 static const int bar_height              = 0;   /* 0 means derive from font, >= 1 explicit height */
 #endif // BAR_HEIGHT_PATCH
@@ -769,6 +777,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_s,          rioresize,              {0} },
 	#endif // RIODRAW_PATCH
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
+	#if TAB_PATCH
+	{ MODKEY|ControlMask,           XK_b,          tabmode,                {-1} },
+	#endif // TAB_PATCH
 	#if FOCUSMASTER_PATCH
 	{ MODKEY|ControlMask,           XK_space,      focusmaster,            {0} },
 	#endif // FOCUSMASTER_PATCH
@@ -1206,6 +1217,9 @@ static Button buttons[] = {
 	{ ClkTagBar,            0,                   Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,              Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,              Button3,        toggletag,      {0} },
+	#if TAB_PATCH
+	{ ClkTabBar,            0,                   Button1,        focuswin,       {0} },
+	#endif // TAB_PATCH
 };
 
 #if DWMC_PATCH
