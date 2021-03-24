@@ -772,7 +772,7 @@
  * This takes precedence over the resizecorners patch.
  * https://github.com/bakkeby/patches/blob/master/dwm/dwm-resizepoint-6.2.diff
  */
-#define RESIZEPOINT_PATCH 0
+#define RESIZEPOINT_PATCH 1
 
 /* Adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid.
  * Additionally dwm can quit cleanly by using kill -TERM dwmpid.
