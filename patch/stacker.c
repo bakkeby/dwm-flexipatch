@@ -7,10 +7,10 @@ focusstack(const Arg *arg)
 	if (i < 0)
  		return;
 
-	#if ALWAYSFULLSCREEN_PATCH
+ 	#if !LOSEFULLSCREEN_PATCH
 	if (!selmon->sel || selmon->sel->isfullscreen)
 		return;
-	#endif // ALWAYSFULLSCREEN_PATCH
+	#endif // LOSEFULLSCREEN_PATCH
 
 	#if BAR_WINTITLEACTIONS_PATCH
 	for (p = NULL, c = selmon->clients; c && (i || !ISVISIBLE(c) || HIDDEN(c));

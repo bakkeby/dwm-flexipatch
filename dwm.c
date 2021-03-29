@@ -1952,12 +1952,13 @@ focusstack(const Arg *arg)
 {
 	Client *c = NULL, *i;
 
+	#if LOSEFULLSCREEN_PATCH
 	if (!selmon->sel)
 		return;
-	#if ALWAYSFULLSCREEN_PATCH
-	if (selmon->sel->isfullscreen)
+	#else
+	if (!selmon->sel || selmon->sel->isfullscreen)
 		return;
-	#endif // ALWAYSFULLSCREEN_PATCH
+	#endif // LOSEFULLSCREEN_PATCH
 	#if BAR_WINTITLEACTIONS_PATCH
 	if (arg->i > 0) {
 		for (c = selmon->sel->next; c && (!ISVISIBLE(c) || (arg->i == 1 && HIDDEN(c))); c = c->next);

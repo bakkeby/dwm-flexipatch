@@ -1,4 +1,4 @@
-This dwm 6.2 (bb2e72, 2020-07-08) side project has a different take on dwm patching. It uses preprocessor directives to decide whether or not to include a patch during build time. Essentially this means that this build, for better or worse, contains both the patched _and_ the original code. The aim being that you can select which patches to include and the build will contain that code and nothing more. Due to the complexity of some of the patches dwm-flexipatch has diverged from mainstream dwm by making some core patches non-optional for maintenance reasons. For the classic dwm-flexipatch build refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0).
+This dwm 6.2 (67d76b, 2021-03-29) side project has a different take on dwm patching. It uses preprocessor directives to decide whether or not to include a patch during build time. Essentially this means that this build, for better or worse, contains both the patched _and_ the original code. The aim being that you can select which patches to include and the build will contain that code and nothing more. Due to the complexity of some of the patches dwm-flexipatch has diverged from mainstream dwm by making some core patches non-optional for maintenance reasons. For the classic dwm-flexipatch build refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0).
 
 For example to include the `alpha` patch then you would only need to flip this setting from 0 to 1 in [patches.h](https://github.com/bakkeby/dwm-flexipatch/blob/master/patches.def.h):
 ```c
@@ -14,6 +14,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 ---
 
 ### Changelog:
+
+2021-03-29 - Removed alwaysfullscreen patch (merged into dwm 6.2)
 
 2021-03-09 - Added the tab patch and the LG3D patch
 
@@ -195,8 +197,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [alttagsdecoration](https://dwm.suckless.org/patches/alttagsdecoration/)
       - provides the ability to use alternative text for tags which contain at least one window
 
-   - [alwaysfullscreen](https://dwm.suckless.org/patches/alwaysfullscreen/)
-      - prevents the focus to drift from the active fullscreen client when using focusstack\(\)
+   - [~alwaysfullscreen~](https://dwm.suckless.org/patches/alwaysfullscreen/)
+      - ~prevents the focus to drift from the active fullscreen client when using focusstack\(\)~
 
    - [anybar](https://dwm.suckless.org/patches/anybar/)
       - enables dwm to manage external status bars such as lemonbar and polybar

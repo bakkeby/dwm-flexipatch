@@ -346,12 +346,6 @@
  */
 #define ASPECTRESIZE_PATCH 0
 
-/* This patch prevents the focus to drift from the active fullscreen client when
- * using focusstack().
- * https://dwm.suckless.org/patches/alwaysfullscreen/
- */
-#define ALWAYSFULLSCREEN_PATCH 0
-
 /* This patch adds new clients above the selected client, instead of always
  * becoming the new master. This behaviour is known from Xmonad.
  * This patch takes precedence over ATTACHASIDE_PATCH.
