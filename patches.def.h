@@ -1017,6 +1017,13 @@
  */
 #define TAGSWAPMON_PATCH 0
 
+/* This patch can be useful to the touchpad users because it allows to
+ * resize windows using Mod + two-finger scroll. It is useful when
+ * two-finger scrolling is configured in libinput.
+ * https://dwm.suckless.org/patches/tapresize/
+ */
+#define TAPRESIZE_PATCH 0
+
 /* This patch allows you to toggle fullscreen on and off using a single shortcut key.
  * https://github.com/bakkeby/patches/blob/master/dwm/dwm-togglefullscreen-6.2.diff
  */
