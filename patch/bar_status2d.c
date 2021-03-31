@@ -87,8 +87,8 @@ drawstatusbar(BarArg *a, char* stext)
 	char *text;
 	char *p;
 	Clr oldbg, oldfg;
-	len = strlen(stext) + 1;
-	if (!(text = (char*) malloc(sizeof(char)*len)))
+	len = strlen(stext);
+	if (!(text = (char*) malloc(sizeof(char)*(len + 1))))
 		die("malloc");
 	p = text;
 	#if BAR_STATUSCMD_PATCH
@@ -203,6 +203,7 @@ drawstatusbar(BarArg *a, char* stext)
 			}
 
 			text = text + i + 1;
+			len -= i + 1;
 			i=-1;
 			isCode = 0;
 		}
