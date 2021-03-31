@@ -264,6 +264,9 @@
 #if TAGSWAPMON_PATCH
 #include "tagswapmon.h"
 #endif
+#if TAPRESIZE_PATCH
+#include "tapresize.h"
+#endif
 #if TOGGLEFULLSCREEN_PATCH
 #include "togglefullscreen.h"
 #endif

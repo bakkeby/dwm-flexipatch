@@ -532,6 +532,19 @@ static const int decorhints  = 1;    /* 1 means respect decoration hints */
 #define FORCE_VSPLIT 1
 #endif
 
+#if TAPRESIZE_PATCH
+/* mouse scroll resize */
+static const int scrollsensetivity = 30; /* 1 means resize window by 1 pixel for each scroll event */
+/* resizemousescroll direction argument list */
+static const int scrollargs[][2] = {
+	/* width change         height change */
+	{ +scrollsensetivity,	0 },
+	{ -scrollsensetivity,	0 },
+	{ 0, 				  	+scrollsensetivity },
+	{ 0, 					-scrollsensetivity },
+};
+#endif
+
 #if FLEXTILE_DELUXE_LAYOUT
 static const Layout layouts[] = {
 	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis, symbol func } */
@@ -1207,6 +1220,12 @@ static Button buttons[] = {
 	#endif // PLACEMOUSE_PATCH
 	{ ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
+	#if TAPRESIZE_PATCH
+	{ ClkClientWin,         MODKEY,              Button4,        resizemousescroll, {.v = &scrollargs[0]} },
+	{ ClkClientWin,         MODKEY,              Button5,        resizemousescroll, {.v = &scrollargs[1]} },
+	{ ClkClientWin,         MODKEY,              Button6,        resizemousescroll, {.v = &scrollargs[2]} },
+	{ ClkClientWin,         MODKEY,              Button7,        resizemousescroll, {.v = &scrollargs[3]} },
+    #endif // TAPRESIZE_PATCH
 	#if DRAGCFACT_PATCH && CFACTS_PATCH
 	{ ClkClientWin,         MODKEY|ShiftMask,    Button3,        dragcfact,      {0} },
 	#endif // DRAGCFACT_PATCH

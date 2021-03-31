@@ -268,6 +268,9 @@
 #if TAGSWAPMON_PATCH
 #include "tagswapmon.c"
 #endif
+#if TAPRESIZE_PATCH
+#include "tapresize.c"
+#endif
 #if TOGGLEFULLSCREEN_PATCH
 #include "togglefullscreen.c"
 #endif
