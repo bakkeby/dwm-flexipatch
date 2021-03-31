@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-03-31 - Added tapresize patch (contributed by [verschmelzen](https://github.com/verschmelzen))
+
 2021-03-29 - Removed alwaysfullscreen patch (merged into dwm 6.2)
 
 2021-03-09 - Added the tab patch and the LG3D patch
@@ -611,6 +613,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [tagswapmon](https://github.com/bakkeby/patches/wiki/tagswapmon/)
       - swap all visible windows on one monitor with those of an adjacent monitor
+
+   - [tapresize](https://dwm.suckless.org/patches/tapresize/)
+      - allows resizing of windows using a touchpad
+      - uses vertical and horizontal scroll events allowing you to use one-finger tap for moving windows and two-finger tap for resizing
 
    - [~titlecolor~](https://dwm.suckless.org/patches/titlecolor/)
       - ~adds a new color scheme used by the (selected) window title in the bar~

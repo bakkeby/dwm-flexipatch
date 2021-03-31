@@ -543,7 +543,7 @@ static const int scrollargs[][2] = {
 	{ 0, 				  	+scrollsensetivity },
 	{ 0, 					-scrollsensetivity },
 };
-#endif
+#endif // TAPRESIZE_PATCH
 
 #if FLEXTILE_DELUXE_LAYOUT
 static const Layout layouts[] = {
@@ -1225,7 +1225,7 @@ static Button buttons[] = {
 	{ ClkClientWin,         MODKEY,              Button5,        resizemousescroll, {.v = &scrollargs[1]} },
 	{ ClkClientWin,         MODKEY,              Button6,        resizemousescroll, {.v = &scrollargs[2]} },
 	{ ClkClientWin,         MODKEY,              Button7,        resizemousescroll, {.v = &scrollargs[3]} },
-    #endif // TAPRESIZE_PATCH
+	#endif // TAPRESIZE_PATCH
 	#if DRAGCFACT_PATCH && CFACTS_PATCH
 	{ ClkClientWin,         MODKEY|ShiftMask,    Button3,        dragcfact,      {0} },
 	#endif // DRAGCFACT_PATCH
