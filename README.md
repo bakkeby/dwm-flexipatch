@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-04-04 - Added option for having different gaps on a per tag basis
+
 2021-03-31 - Added tapresize patch (contributed by [verschmelzen](https://github.com/verschmelzen))
 
 2021-03-29 - Removed alwaysfullscreen patch (merged into dwm 6.2)

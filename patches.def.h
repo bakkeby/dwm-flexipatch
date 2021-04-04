@@ -721,6 +721,11 @@
  */
 #define PERTAG_PATCH 0
 
+/* Option to store gaps on a per tag basis rather than on a per monitor basis.
+ * Depends on both pertag and vanitygaps patches being enabled.
+ */
+#define PERTAG_VANITYGAPS_PATCH 0
+
 /* This controls whether or not to also store bar position on a per
  * tag basis, or leave it as one bar per monitor.
  */
