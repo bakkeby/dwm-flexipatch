@@ -20,10 +20,10 @@ setfloatpos(Client *c, const char *floatpos)
 {
 	char xCh, yCh, wCh, hCh;
 	int x, y, w, h, wx, ww, wy, wh;
-	#if FLOATPOS_RESPECT_GAPS_PATCH
+	#if FLOATPOS_RESPECT_GAPS_PATCH && VANITYGAPS_PATCH
 	int oh, ov, ih, iv;
 	unsigned int n;
-	#endif // FLOATPOS_RESPECT_GAPS_PATCH
+	#endif // FLOATPOS_RESPECT_GAPS_PATCH | VANITYGAPS_PATCH
 
 	if (!c || !floatpos)
 		return;
@@ -57,7 +57,7 @@ setfloatpos(Client *c, const char *floatpos)
 			return;
 	}
 
-	#if FLOATPOS_RESPECT_GAPS_PATCH
+	#if FLOATPOS_RESPECT_GAPS_PATCH && VANITYGAPS_PATCH
 	getgaps(c->mon, &oh, &ov, &ih, &iv, &n);
 	wx = c->mon->wx + ov;
 	wy = c->mon->wy + oh;
@@ -68,7 +68,7 @@ setfloatpos(Client *c, const char *floatpos)
 	wy = c->mon->wy;
 	ww = c->mon->ww;
 	wh = c->mon->wh;
-	#endif // FLOATPOS_RESPECT_GAPS_PATCH
+	#endif // FLOATPOS_RESPECT_GAPS_PATCH | VANITYGAPS_PATCH
 
 	getfloatpos(x, xCh, w, wCh, wx, ww, c->x, c->w, c->bw, floatposgrid_x, &c->x, &c->w);
 	getfloatpos(y, yCh, h, hCh, wy, wh, c->y, c->h, c->bw, floatposgrid_y, &c->y, &c->h);
