@@ -112,6 +112,9 @@
 #if DECORATION_HINTS_PATCH
 #include "decorationhints.c"
 #endif
+#if DISTRIBUTETAGS_PATCH
+#include "distributetags.c"
+#endif
 #if DRAGCFACT_PATCH && CFACTS_PATCH
 #include "dragcfact.c"
 #endif

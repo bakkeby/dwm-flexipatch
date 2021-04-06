@@ -109,6 +109,9 @@
 #if DECORATION_HINTS_PATCH
 #include "decorationhints.h"
 #endif
+#if DISTRIBUTETAGS_PATCH
+#include "distributetags.h"
+#endif
 #if DRAGCFACT_PATCH && CFACTS_PATCH
 #include "dragcfact.h"
 #endif

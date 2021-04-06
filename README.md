@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-04-06 - Added the distributetags patch
+
 2021-04-04 - Added option for having different gaps on a per tag basis
 
 2021-03-31 - Added tapresize patch (contributed by [verschmelzen](https://github.com/verschmelzen))
@@ -281,6 +283,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
       - make dwm respect \_MOTIF\_WM\_HINTS property, and not draw borders around windows requesting for it
       - some applications use this property to notify window managers to not draw window decorations
       - not respecting this property leads to issues with applications that draw their own borders, like chromium (with "Use system title bar and borders" turned off) or vlc in fullscreen mode
+
+   - [distributetags](https://dwm.suckless.org/patches/reorganizetags/)
+      - this reorganisetags variant re-distributes all clients on the current monitor evenly across all tags
 
    - [dmenumatchtop](https://dwm.suckless.org/patches/dmenumatchtop)
       - updates the position of dmenu to match that of the bar

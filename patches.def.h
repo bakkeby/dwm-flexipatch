@@ -445,6 +445,12 @@
  */
 #define DECORATION_HINTS_PATCH 0
 
+/* This feature distributes all clients on the current monitor evenly across all tags.
+ * It is a variant of the reorganizetags patch.
+ * https://dwm.suckless.org/patches/reorganizetags/
+ */
+#define DISTRIBUTETAGS_PATCH 0
+
 /* Similarly to the dragmfact patch this allows you to click and drag clients to change the
  * cfact to adjust the client's size in the stack. This patch depends on the cfacts patch.
  */

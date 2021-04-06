@@ -869,6 +869,9 @@ static Key keys[] = {
 	#if REORGANIZETAGS_PATCH
 	{ MODKEY|ControlMask,           XK_r,          reorganizetags,         {0} },
 	#endif // REORGANIZETAGS_PATCH
+	#if DISTRIBUTETAGS_PATCH
+	{ MODKEY|ControlMask,           XK_d,          distributetags,         {0} },
+	#endif // DISTRIBUTETAGS_PATCH
 	#if INSETS_PATCH
 	{ MODKEY|ShiftMask|ControlMask, XK_a,          updateinset,            {.v = &default_inset } },
 	#endif // INSETS_PATCH
