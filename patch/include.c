@@ -298,6 +298,9 @@
 #if ZOOMSWAP_PATCH
 #include "zoomswap.c"
 #endif
+#if XKB_PATCH
+#include "xkb.c"
+#endif
 #if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 #include "xrdb.c"
 #endif

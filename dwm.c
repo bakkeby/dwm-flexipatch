@@ -55,6 +55,10 @@
 #include <pango/pango.h>
 #endif // BAR_PANGO_PATCH
 
+#if XKB_PATCH
+#include <X11/XKBlib.h>
+#endif // XKB_PATCH
+
 #if SPAWNCMD_PATCH
 #include <assert.h>
 #include <libgen.h>
@@ -217,6 +221,9 @@ enum {
 	ClkWinTitle,
 	ClkClientWin,
 	ClkRootWin,
+	#if XKB_PATCH
+	ClkXKB,
+	#endif // XKB_PATCH
 	ClkLast
 }; /* clicks */
 
@@ -303,6 +310,16 @@ typedef struct {
 	const Arg arg;
 } Button;
 
+#if XKB_PATCH
+typedef struct XkbInfo XkbInfo;
+struct XkbInfo {
+	XkbInfo *next;
+	XkbInfo *prev;
+	int group;
+	Window w;
+};
+#endif // XKB_PATCH
+
 typedef struct Client Client;
 struct Client {
 	char name[256];
@@ -367,6 +384,9 @@ struct Client {
 	#if IPC_PATCH
 	ClientState prevstate;
 	#endif // IPC_PATCH
+	#if XKB_PATCH
+	XkbInfo *xkb;
+	#endif // XKB_PATCH
 };
 
 typedef struct {
@@ -496,9 +516,16 @@ typedef struct {
 	const char *floatpos;
 	#endif // FLOATPOS_PATCH
 	int monitor;
+	#if XKB_PATCH
+	int xkb_layout;
+	#endif // XKB_PATCH
 } Rule;
 
+#if XKB_PATCH
+#define RULE(...) { .monitor = -1, .xkb_layout = -1, ##__VA_ARGS__ },
+#else
 #define RULE(...) { .monitor = -1, ##__VA_ARGS__ },
+#endif // XKB_PATCH
 
 /* Cross patch compatibility rule macro helper macros */
 #define FLOATING , .isfloating = 1
@@ -688,6 +715,9 @@ static char rawestext[1024];
 #endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 #endif // BAR_EXTRASTATUS_PATCH
 
+#if XKB_PATCH
+static int xkbEventType = 0;
+#endif // XKB_PATCH
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar geometry */
@@ -877,6 +907,10 @@ applyrules(Client *c)
 				}
 			}
 			#endif // SWITCHTAG_PATCH
+			#if XKB_PATCH
+			if (r->xkb_layout > -1)
+				c->xkb->group = r->xkb_layout;
+			#endif // XKB_PATCH
 			#if ONLY_ONE_RULE_MATCH_PATCH
 			break;
 			#endif // ONLY_ONE_RULE_MATCH_PATCH
@@ -2246,6 +2280,13 @@ manage(Window w, XWindowAttributes *wa)
 	c->cfact = 1.0;
 	#endif // CFACTS_PATCH
 	updatetitle(c);
+
+	#if XKB_PATCH
+	/* Setting current xkb state must be before applyrules */
+	if (!(c->xkb = findxkb(c->win)))
+		c->xkb = createxkb(c->win);
+	#endif // XKB_PATCH
+
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;
@@ -3018,9 +3059,20 @@ run(void)
 	XEvent ev;
 	/* main event loop */
 	XSync(dpy, False);
-	while (running && !XNextEvent(dpy, &ev))
+	while (running && !XNextEvent(dpy, &ev)) {
+
+		#if XKB_PATCH
+		/* Unfortunately the xkbEventType is not constant hence it can't be part of the
+		 * normal event handler below */
+		if (ev.type == xkbEventType) {
+			xkbeventnotify(&ev);
+			continue;
+		}
+		#endif // XKB_PATCH
+
 		if (handler[ev.type])
 			handler[ev.type](&ev); /* call handler */
+	}
 }
 #endif // IPC_PATCH
 
@@ -3198,6 +3250,9 @@ setfocus(Client *c)
 		XChangeProperty(dpy, root, netatom[NetActiveWindow],
 			XA_WINDOW, 32, PropModeReplace,
 			(unsigned char *) &(c->win), 1);
+		#if XKB_PATCH
+		XkbLockGroup(dpy, XkbUseCoreKbd, c->xkb->group);
+		#endif // XKB_PATCH
 	}
 	#if BAR_SYSTRAY_PATCH
 	sendevent(c->win, wmatom[WMTakeFocus], NoEventMask, wmatom[WMTakeFocus], CurrentTime, 0, 0, 0);
@@ -3381,6 +3436,9 @@ setup(void)
 {
 	int i;
 	XSetWindowAttributes wa;
+	#if XKB_PATCH
+	XkbStateRec xkbstate;
+	#endif // XKB_PATCH
 	Atom utf8string;
 
 	/* clean up any zombies immediately */
@@ -3553,6 +3611,17 @@ setup(void)
 		|LeaveWindowMask|StructureNotifyMask|PropertyChangeMask;
 	XChangeWindowAttributes(dpy, root, CWEventMask|CWCursor, &wa);
 	XSelectInput(dpy, root, wa.event_mask);
+
+	#if XKB_PATCH
+	/* get xkb extension info, events and current state */
+	if (!XkbQueryExtension(dpy, NULL, &xkbEventType, NULL, NULL, NULL))
+		fputs("warning: can not query xkb extension\n", stderr);
+	XkbSelectEventDetails(dpy, XkbUseCoreKbd, XkbStateNotify,
+	                      XkbAllStateComponentsMask, XkbGroupStateMask);
+	XkbGetState(dpy, XkbUseCoreKbd, &xkbstate);
+	xkbGlobal.group = xkbstate.locked_group;
+	#endif // XKB_PATCH
+
 	grabkeys();
 	focus(NULL);
 	#if IPC_PATCH
@@ -4034,6 +4103,9 @@ unmanage(Client *c, int destroyed)
 	unsigned int switchtag = c->switchtag;
 	#endif // SWITCHTAG_PATCH
 	XWindowChanges wc;
+	#if XKB_PATCH
+	XkbInfo *xkb;
+	#endif // XKB_PATCH
 
 	#if SWALLOW_PATCH
 	if (c->swallowing) {
@@ -4064,6 +4136,19 @@ unmanage(Client *c, int destroyed)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+	#if XKB_PATCH
+	else {
+		xkb = findxkb(c->win);
+		if (xkb != NULL) {
+			if (xkb->prev)
+				xkb->prev->next = xkb->next;
+			if (xkb->next)
+				xkb->next->prev = xkb->prev;
+			free(xkb);
+		}
+	}
+	#endif // XKB_PATCH
+
 	free(c);
 	#if SWALLOW_PATCH
 	if (s)

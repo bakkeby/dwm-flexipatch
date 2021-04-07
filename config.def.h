@@ -483,6 +483,9 @@ static const BarRule barrules[] = {
 	#elif BAR_STATUS_PATCH
 	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_status,            "status" },
 	#endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
+	#if XKB_PATCH
+	{  0,       0,     BAR_ALIGN_RIGHT,  width_xkb,               draw_xkb,               click_xkb,               "xkb" },
+	#endif // XKB_PATCH
 	#if BAR_FLEXWINTITLE_PATCH
 	{ -1,       0,     BAR_ALIGN_NONE,   width_flexwintitle,      draw_flexwintitle,      click_flexwintitle,      "flexwintitle" },
 	#elif BAR_TABGROUPS_PATCH
@@ -659,6 +662,14 @@ static const Layout layouts[] = {
 	#endif
 };
 #endif // FLEXTILE_DELUXE_LAYOUT
+
+#if XKB_PATCH
+/* xkb frontend */
+static const char *xkb_layouts[]  = {
+	"en",
+	"ru",
+};
+#endif // XKB_PATCH
 
 /* key definitions */
 #define MODKEY Mod1Mask

@@ -1105,6 +1105,13 @@
  */
 #define WINVIEW_PATCH 0
 
+/* Remember keyboard layout per client.
+ * It is recommended that you configure xkb before using this patch as described in
+ * https://www.x.org/archive/X11R7.5/doc/input/XKB-Config.html
+ * https://dwm.suckless.org/patches/xkb/
+ */
+#define XKB_PATCH 0
+
 /* Allows dwm to read colors from xrdb (.Xresources) during runtime. Compatible with
  * the float border color, awesomebar, urgentborder and titlecolor patches.
  * https://dwm.suckless.org/patches/xrdb/
