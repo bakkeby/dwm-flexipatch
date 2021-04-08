@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-04-07 - Added xkb patch
+
 2021-04-06 - Added the distributetags patch
 
 2021-04-04 - Added option for having different gaps on a per tag basis
@@ -664,6 +666,9 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
    - [winview](http://dwm.suckless.org/patches/winview/)
       - allows switching the view to that of a given client from the all-window view (Mod-0) using a keyboard shortcut
+
+   - [xkb](https://dwm.suckless.org/patches/xkb/)
+      - remembers keyboard layout per client
 
    - [xrdb](http://dwm.suckless.org/patches/xrdb/)
       - allows dwm to read colors from xrdb (.Xresources) during runtime
