@@ -294,6 +294,9 @@
 #if ZOOMSWAP_PATCH
 #include "zoomswap.h"
 #endif
+#if XKB_PATCH
+#include "xkb.h"
+#endif
 #if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 #include "xrdb.h"
 #endif

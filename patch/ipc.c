@@ -9,6 +9,15 @@ handlexevent(struct epoll_event *ev)
 		XEvent ev;
 		while (running && XPending(dpy)) {
 			XNextEvent(dpy, &ev);
+			#if XKB_PATCH
+			/* Unfortunately the xkbEventType is not constant hence it can't be part of the
+			 * normal event handler below */
+			if (ev.type == xkbEventType) {
+				xkbeventnotify(&ev);
+				continue;
+			}
+			#endif // XKB_PATCH
+
 			if (handler[ev.type]) {
 				handler[ev.type](&ev); /* call handler */
 				ipc_send_events(mons, &lastselmon, selmon);
