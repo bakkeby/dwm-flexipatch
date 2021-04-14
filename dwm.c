@@ -1066,6 +1066,11 @@ buttonpress(XEvent *e)
 	const BarRule *br;
 	BarArg carg = { 0, 0, 0, 0 };
 	click = ClkRootWin;
+
+	#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
+	*lastbutton = '0' + ev->button;
+	#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
+
 	/* focus monitor if necessary */
 	if ((m = wintomon(ev->window)) && m != selmon
 		#if FOCUSONCLICK_PATCH
@@ -3751,29 +3756,10 @@ spawn(const Arg *arg)
 	#if RIODRAW_PATCH
 	pid_t pid;
 	#endif // RIODRAW_PATCH
-	#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
-	char *cmd = NULL;
-	#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
 	#if !NODMENU_PATCH
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 	#endif // NODMENU_PATCH
-	#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
-	#if !NODMENU_PATCH
-	else if (arg->v == statuscmd)
-	#else
-	if (arg->v == statuscmd)
-	#endif // NODMENU_PATCH
-	{
-		int len = strlen(statuscmds[statuscmdn]) + 1;
-		if (!(cmd = malloc(sizeof(char)*len + sizeof(statusexport))))
-			die("malloc:");
-		strcpy(cmd, statusexport);
-		strcat(cmd, statuscmds[statuscmdn]);
-		cmd[LENGTH(statusexport)-3] = '0' + lastbutton;
-		statuscmd[2] = cmd;
-	}
-	#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
 
 	#if RIODRAW_PATCH
 	if ((pid = fork()) == 0)
@@ -3783,6 +3769,20 @@ spawn(const Arg *arg)
 	{
 		if (dpy)
 			close(ConnectionNumber(dpy));
+
+		#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
+		if (arg->v == statuscmd) {
+			for (int i = 0; i < LENGTH(statuscmds); i++) {
+				if (statuscmdn == statuscmds[i].id) {
+					statuscmd[2] = statuscmds[i].cmd;
+					setenv("BUTTON", lastbutton, 1);
+					break;
+				}
+			}
+			if (!statuscmd[2])
+				exit(EXIT_SUCCESS);
+		}
+		#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
 		#if SPAWNCMD_PATCH
 		if (selmon->sel) {
 			const char* const home = getenv("HOME");
@@ -3823,9 +3823,6 @@ spawn(const Arg *arg)
 		perror(" failed");
 		exit(EXIT_SUCCESS);
 	}
-	#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
-	free(cmd);
-	#endif // BAR_STATUSCMD_PATCH | BAR_DWMBLOCKS_PATCH
 	#if RIODRAW_PATCH
 	return pid;
 	#endif // RIODRAW_PATCH

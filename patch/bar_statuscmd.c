@@ -1,7 +1,7 @@
 #if !BAR_DWMBLOCKS_PATCH
 static const char statusexport[] = "export BUTTON=-;";
 static int statuscmdn;
-static int lastbutton;
+static char lastbutton[] = "-";
 #endif // BAR_DWMBLOCKS_PATCH
 
 int
@@ -49,7 +49,7 @@ click_statuscmd_text(Arg *arg, int rel_x, char *text)
 			if (x >= rel_x)
 				break;
 			if (ch <= LENGTH(statuscmds))
-				statuscmdn = ch - 1;
+				statuscmdn = ch;
 			#endif // BAR_DWMBLOCKS_PATCH
 		}
 	}

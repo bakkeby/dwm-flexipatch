@@ -780,8 +780,13 @@ static const char *termcmd[]  = { "st", NULL };
 #define STATUSBAR "dwmblocks"
 #else
 /* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
-static const char *statuscmds[] = { "notify-send Mouse$BUTTON", "notify-send Cat$BUTTON", "notify-send Dog$BUTTON" };
-static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
+static const StatusCmd statuscmds[] = {
+	{ "notify-send Volume$BUTTON", 1 },
+	{ "notify-send CPU$BUTTON", 2 },
+	{ "notify-send Battery$BUTTON", 3 },
+};
+/* test the above with: xsetroot -name "$(printf '\x01Volume |\x02 CPU |\x03 Battery')" */
+static const char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
 #endif // BAR_DWMBLOCKS_PATCH
 #endif // BAR_STATUSCMD_PATCH
 
