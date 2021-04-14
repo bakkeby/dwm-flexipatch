@@ -1,6 +1,6 @@
 void
 moveorplace(const Arg *arg) {
-	if ((!selmon->lt[selmon->sellt]->arrange || selmon->sel->isfloating))
+	if ((!selmon->lt[selmon->sellt]->arrange || (selmon->sel && selmon->sel->isfloating)))
 		movemouse(arg);
 	else
 		placemouse(arg);
@@ -122,6 +122,7 @@ placemouse(const Arg *arg)
 		detachstack(c);
 		arrangemon(c->mon);
 		c->mon = m;
+		c->tags = m->tagset[m->seltags];
 		attach(c);
 		attachstack(c);
 		selmon = m;
