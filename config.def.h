@@ -774,11 +774,16 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { "st", NULL };
 
-#if BAR_STATUSCMD_PATCH && !BAR_DWMBLOCKS_PATCH
+#if BAR_STATUSCMD_PATCH
+#if BAR_DWMBLOCKS_PATCH
+/* This defines the name of the executable that handles the bar (used for signalling purposes) */
+#define STATUSBAR "dwmblocks"
+#else
 /* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
-static const char *statuscmds[] = { "notify-send Mouse$BUTTON" };
+static const char *statuscmds[] = { "notify-send Mouse$BUTTON", "notify-send Cat$BUTTON", "notify-send Dog$BUTTON" };
 static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
-#endif // BAR_STATUSCMD_PATCH | DWMBLOCKS_PATCH
+#endif // BAR_DWMBLOCKS_PATCH
+#endif // BAR_STATUSCMD_PATCH
 
 #if ON_EMPTY_KEYS_PATCH
 static const char* firefoxcmd[] = {"firefox", NULL};
@@ -1209,9 +1214,9 @@ static Button buttons[] = {
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	{ ClkWinTitle,          0,                   Button2,        zoom,           {0} },
 	#if BAR_STATUSCMD_PATCH && BAR_DWMBLOCKS_PATCH
-	{ ClkStatusText,        0,                   Button1,        sigdwmblocks,   {.i = 1 } },
-	{ ClkStatusText,        0,                   Button2,        sigdwmblocks,   {.i = 2 } },
-	{ ClkStatusText,        0,                   Button3,        sigdwmblocks,   {.i = 3 } },
+	{ ClkStatusText,        0,                   Button1,        sigstatusbar,   {.i = 1 } },
+	{ ClkStatusText,        0,                   Button2,        sigstatusbar,   {.i = 2 } },
+	{ ClkStatusText,        0,                   Button3,        sigstatusbar,   {.i = 3 } },
 	#elif BAR_STATUSCMD_PATCH
 	{ ClkStatusText,        0,                   Button1,        spawn,          {.v = statuscmd } },
 	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = statuscmd } },
