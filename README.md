@@ -15,6 +15,8 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
 
 ### Changelog:
 
+2021-04-16 - Vanitygaps: replaced smartgaps with smartgaps\_fact, allowing gaps to be disabled or increased when there is only one client.
+
 2021-04-14 - Upgraded the dwmblocks patch for statuscmd which changes the signalling mechanism from SIGUSR1 to SIGRTMIN which is likely to cause issues for those that already have a working setup. A compatibility option has been added which changes this back to SIGUSR1. Note that configuration was also changed.
 
 2021-04-07 - Added xkb patch
