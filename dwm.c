@@ -1559,6 +1559,7 @@ createmon(void)
 			n = MAX(br->bar, n);
 	}
 
+	m->bar = NULL;
 	for (i = 0; i <= n && i < max_bars; i++) {
 		bar = ecalloc(1, sizeof(Bar));
 		bar->mon = m;
@@ -2337,7 +2338,7 @@ manage(Window w, XWindowAttributes *wa)
 		c->y = c->mon->my + c->mon->mh - HEIGHT(c);
 	c->x = MAX(c->x, c->mon->mx);
 	/* only fix client y-offset, if the client center might cover the bar */
-	c->y = MAX(c->y, ((c->mon->bar->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
+	c->y = MAX(c->y, ((!c->mon->bar || c->mon->bar->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
 		&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
 
 	wc.border_width = c->bw;
@@ -2988,7 +2989,7 @@ restack(Monitor *m)
 		return;
 	if (m->sel->isfloating || !m->lt[m->sellt]->arrange)
 		XRaiseWindow(dpy, m->sel->win);
-	if (m->lt[m->sellt]->arrange) {
+	if (m->lt[m->sellt]->arrange && m->bar) {
 		wc.stack_mode = Below;
 		wc.sibling = m->bar->win;
 		for (c = m->stack; c; c = c->snext)

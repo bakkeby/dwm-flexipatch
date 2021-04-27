@@ -12,7 +12,11 @@ managealtbar(Window win, XWindowAttributes *wa)
 		bar->topbar = topbar;
 	} else if (bar && bar->win) {
 		bar->next = ecalloc(1, sizeof(Bar));
+		#if BAR_ANYBAR_STACK_BARS_PATCH
+		bar->next->topbar = topbar;
+		#else
 		bar->next->topbar = !bar->topbar;
+		#endif // BAR_ANYBAR_STACK_BARS_PATCH
 		bar = bar->next;
 	}
 	bar->external = 1;
@@ -43,18 +47,23 @@ void
 unmanagealtbar(Window w)
 {
 	Monitor *m = wintomon(w);
-	Bar *bar;
+	Bar *bar, *next, *prev = NULL;
 
 	if (!m)
 		return;
 
-	for (bar = m->bar; bar && bar->win; bar = bar->next)
+	for (bar = m->bar; bar && bar->win; bar = next) {
+		next = bar->next;
 		if (bar->win == w) {
-			bar->win = 0;
-			bar->by = 0;
-			bar->bh = 0;
+			if (prev)
+				prev->next = next;
+			else
+				m->bar = next;
+			free(bar);
 			break;
 		}
+		prev = bar;
+	}
 	updatebarpos(m);
 	arrange(m);
 }

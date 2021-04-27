@@ -223,11 +223,16 @@
  * togglebar affect the external bar in the same way.
  *
  * NB: Unless you want both anybar + dwm bar(s) then the recommendation is to disable all
- * bar modules and have { 0 } in the barrules.
+ * bar modules and have { -2 } in the barrules.
  *
  * https://dwm.suckless.org/patches/anybar/
  */
 #define BAR_ANYBAR_PATCH 0
+
+/* Anybar option to stack multiple external bars at the top or at the bottom of the monitor
+ * instead of adding a second bar at the opposite side.
+ */
+#define BAR_ANYBAR_STACK_BARS_PATCH 0
 
 /* This patch adds a border around the status bar(s) just like the border of client windows.
  * https://codemadness.org/paste/dwm-border-bar.patch
