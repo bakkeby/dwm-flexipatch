@@ -101,6 +101,8 @@ loadxrdb()
 				XRDB_LOAD_COLOR("color14", termcol14);
 				XRDB_LOAD_COLOR("color15", termcol15);
 				#endif // BAR_STATUS2D_XRDB_TERMCOLORS_PATCH
+
+				XrmDestroyDatabase(xrdb);
 			}
 		}
 	}

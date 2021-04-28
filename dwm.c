@@ -1183,6 +1183,8 @@ cleanup(void)
 		cleanupmon(mons);
 	#if BAR_SYSTRAY_PATCH
 	if (showsystray && systray) {
+		while (systray->icons)
+			removesystrayicon(systray->icons);
 		if (systray->win) {
 			XUnmapWindow(dpy, systray->win);
 			XDestroyWindow(dpy, systray->win);
@@ -1241,6 +1243,9 @@ cleanupmon(Monitor *mon)
 	XUnmapWindow(dpy, mon->tabwin);
 	XDestroyWindow(dpy, mon->tabwin);
 	#endif // TAB_PATCH
+	#if PERTAG_PATCH
+	free(mon->pertag);
+	#endif // PERTAG_PATCH
 	free(mon);
 }
 
