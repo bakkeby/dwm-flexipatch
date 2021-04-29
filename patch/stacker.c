@@ -7,7 +7,13 @@ focusstack(const Arg *arg)
 	if (i < 0)
  		return;
 
- 	#if !LOSEFULLSCREEN_PATCH
+	#if LOSEFULLSCREEN_PATCH
+	if (!selmon->sel)
+		return;
+	#elif FAKEFULLSCREEN_CLIENT_PATCH
+	if (!selmon->sel || (selmon->sel->isfullscreen && !selmon->sel->fakefullscreen))
+		return;
+	#else
 	if (!selmon->sel || selmon->sel->isfullscreen)
 		return;
 	#endif // LOSEFULLSCREEN_PATCH
