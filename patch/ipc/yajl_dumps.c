@@ -6,7 +6,7 @@ int
 dump_tag(yajl_gen gen, const char *name, const int tag_mask)
 {
   if (!name)
-    return;
+    return 0;
 
   // clang-format off
   YMAP(
