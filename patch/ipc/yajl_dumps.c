@@ -5,13 +5,15 @@
 int
 dump_tag(yajl_gen gen, const char *name, const int tag_mask)
 {
+  if (!name)
+    return;
+
   // clang-format off
   YMAP(
     YSTR("bit_mask"); YINT(tag_mask);
     YSTR("name"); YSTR(name);
   )
   // clang-format on
-
   return 0;
 }
 
