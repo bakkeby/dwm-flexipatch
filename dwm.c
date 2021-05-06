@@ -4155,6 +4155,11 @@ unmanage(Client *c, int destroyed)
 	}
 	#endif // XKB_PATCH
 
+	#if SCRATCHPAD_ALT_1_PATCH
+	if (scratchpad_last_showed == c)
+		scratchpad_last_showed = NULL;
+	#endif // SCRATCHPAD_ALT_1_PATCH
+
 	free(c);
 	#if SWALLOW_PATCH
 	if (s)
