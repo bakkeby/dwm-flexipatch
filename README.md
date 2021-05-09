@@ -452,9 +452,10 @@ Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on t
    - [noborder](https://dwm.suckless.org/patches/noborder/)
       - removes the border when there is only one window visible
 
-   - [nodmenu](https://dwm.suckless.org/patches/nodmenu/)
+   - [nodmenu](https://git.suckless.org/sites/commit/ed68e3629de4ef2ca2d3f8893a79fb570b4c0cbc.html)
       - enable modifying dmenu in config.def.h which resulted previously in a compilation error because two lines of code hardcode dmenu into dwm
       - allows complete removal of dmenu, should you want to do that
+      - NB: this patch was removed from the patches listing on the suckless page due to it's simplicity
 
    - nomodbuttons
       - allows for toggleable client button bindings that have no modifiers
