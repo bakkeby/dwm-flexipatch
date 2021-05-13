@@ -502,7 +502,7 @@ typedef struct {
 	int iscentered;
 	#endif // CENTER_PATCH
 	int isfloating;
-	#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+	#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 	int isfakefullscreen;
 	#endif // SELECTIVEFAKEFULLSCREEN_PATCH
 	#if ISPERMANENT_PATCH
@@ -539,7 +539,7 @@ typedef struct {
 #else
 #define PERMANENT
 #endif // ISPERMANENT_PATCH
-#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 #define FAKEFULLSCREEN , .isfakefullscreen = 1
 #else
 #define FAKEFULLSCREEN
@@ -846,7 +846,7 @@ applyrules(Client *c)
 			#if ISPERMANENT_PATCH
 			c->ispermanent = r->ispermanent;
 			#endif // ISPERMANENT_PATCH
-			#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+			#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 			c->fakefullscreen = r->isfakefullscreen;
 			#endif // SELECTIVEFAKEFULLSCREEN_PATCH
 			#if SWALLOW_PATCH
@@ -1308,7 +1308,7 @@ clientmessage(XEvent *e)
 	if (cme->message_type == netatom[NetWMState]) {
 		if (cme->data.l[1] == netatom[NetWMFullscreen]
 		|| cme->data.l[2] == netatom[NetWMFullscreen]) {
-			#if FAKEFULLSCREEN_CLIENT_PATCH
+			#if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 			if (c->fakefullscreen == 2 && c->isfullscreen)
 				c->fakefullscreen = 3;
 			#endif // FAKEFULLSCREEN_CLIENT_PATCH
@@ -2002,7 +2002,7 @@ focusstack(const Arg *arg)
 	#if LOSEFULLSCREEN_PATCH
 	if (!selmon->sel)
 		return;
-	#elif FAKEFULLSCREEN_CLIENT_PATCH
+	#elif FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 	if (!selmon->sel || (selmon->sel->isfullscreen && !selmon->sel->fakefullscreen))
 		return;
 	#else
@@ -2539,7 +2539,7 @@ movemouse(const Arg *arg)
 	if (!(c = selmon->sel))
 		return;
 	#if !FAKEFULLSCREEN_PATCH
-	#if FAKEFULLSCREEN_CLIENT_PATCH
+	#if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 	if (c->isfullscreen && c->fakefullscreen != 1) /* no support moving fullscreen windows by mouse */
 		return;
 	#else
@@ -2803,7 +2803,7 @@ resizeclient(Client *c, int x, int y, int w, int h)
 			 c->mon->nmaster == 0)))
 		#endif //FLEXTILE_DELUXE_LAYOUT
 		)
-		#if FAKEFULLSCREEN_CLIENT_PATCH
+		#if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 		&& (c->fakefullscreen == 1 || !c->isfullscreen)
 		#else
 		&& !c->isfullscreen
