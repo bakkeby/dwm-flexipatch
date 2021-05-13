@@ -11,6 +11,8 @@ Alternatively if you have found the patches you want, but don't want the rest of
 
 Refer to [https://dwm.suckless.org/](https://dwm.suckless.org/) for details on the dwm window manager, how to install it and how it works.
 
+If you are experiencing issues then you may want to check out the [Known Issues](https://github.com/bakkeby/dwm-flexipatch/discussions/categories/known-issues) discussion category.
+
 ---
 
 ### Changelog:
