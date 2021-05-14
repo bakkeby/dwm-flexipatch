@@ -56,7 +56,9 @@ draw_tags(Bar *bar, BarArg *a)
 			: SchemeTagsNorm
 		]);
 		drw_text(drw, x, a->y, w, a->h, lrpad / 2, icon, invert, False);
+		#if !BAR_HIDEVACANTTAGS_PATCH
 		drawindicator(m, NULL, occ, x, a->y, w, a->h, i, -1, invert, tagindicatortype);
+		#endif
 		x += w;
 	}
 
