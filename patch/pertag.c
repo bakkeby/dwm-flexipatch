@@ -19,10 +19,8 @@ struct Pertag {
 	#if ZOOMSWAP_PATCH
 	Client *prevzooms[NUMTAGS + 1]; /* store zoom information */
 	#endif // ZOOMSWAP_PATCH
-	#if VANITYGAPS_PATCH
-	int enablegaps[NUMTAGS + 1];
-	#endif // VANITYGAPS_PATCH
 	#if PERTAG_VANITYGAPS_PATCH && VANITYGAPS_PATCH
+	int enablegaps[NUMTAGS + 1];
 	unsigned int gaps[NUMTAGS + 1];
 	#endif // PERTAG_VANITYGAPS_PATCH | VANITYGAPS_PATCH
 };
