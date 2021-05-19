@@ -1653,11 +1653,13 @@ createmon(void)
 		#endif // MONITOR_RULES_PATCH
 		m->pertag->sellts[i] = m->sellt;
 
-		#if PERTAG_VANITYGAPS_PATCH && VANITYGAPS_PATCH
+		#if VANITYGAPS_PATCH
 		m->pertag->enablegaps[i] = 1;
+		#if PERTAG_VANITYGAPS_PATCH
 		m->pertag->gaps[i] =
 			((gappoh & 0xFF) << 0) | ((gappov & 0xFF) << 8) | ((gappih & 0xFF) << 16) | ((gappiv & 0xFF) << 24);
-		#endif // PERTAG_VANITYGAPS_PATCH | VANITYGAPS_PATCH
+		#endif // PERTAG_VANITYGAPS_PATCH
+		#endif // VANITYGAPS_PATCH
 	}
 	#endif // PERTAG_PATCH
 	#if INSETS_PATCH
