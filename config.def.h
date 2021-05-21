@@ -107,8 +107,9 @@ static const char *fonts[]               = { "monospace:size=10" };
 #endif // BAR_PANGO_PATCH
 static const char dmenufont[]            = "monospace:size=10";
 
-#if BAR_FLEXWINTITLE_PATCH
 static char c000000[]                    = "#000000"; // placeholder value
+
+#if BAR_FLEXWINTITLE_PATCH
 #endif // BAR_FLEXWINTITLE_PATCH
 static char normfgcolor[]                = "#bbbbbb";
 static char normbgcolor[]                = "#222222";
@@ -140,10 +141,10 @@ static char tagsselbgcolor[]             = "#005577";
 static char tagsselbordercolor[]         = "#005577";
 static char tagsselfloatcolor[]          = "#005577";
 
-static char hidfgcolor[]                 = "#005577";
-static char hidbgcolor[]                 = "#222222";
-static char hidbordercolor[]             = "#005577";
-static char hidfloatcolor[]              = "#f76e0c";
+static char hidnormfgcolor[]             = "#005577";
+static char hidselfgcolor[]              = "#227799";
+static char hidnormbgcolor[]             = "#222222";
+static char hidselbgcolor[]              = "#222222";
 
 static char urgfgcolor[]                 = "#bbbbbb";
 static char urgbgcolor[]                 = "#222222";
@@ -197,7 +198,8 @@ static const unsigned int alphas[][3] = {
 	[SchemeTitleSel]     = { OPAQUE, baralpha, borderalpha },
 	[SchemeTagsNorm]     = { OPAQUE, baralpha, borderalpha },
 	[SchemeTagsSel]      = { OPAQUE, baralpha, borderalpha },
-	[SchemeHid]          = { OPAQUE, baralpha, borderalpha },
+	[SchemeHidNorm]      = { OPAQUE, baralpha, borderalpha },
+	[SchemeHidSel]       = { OPAQUE, baralpha, borderalpha },
 	[SchemeUrg]          = { OPAQUE, baralpha, borderalpha },
 	#if BAR_FLEXWINTITLE_PATCH
 	[SchemeFlexActTTB]   = { OPAQUE, baralpha, borderalpha },
@@ -247,7 +249,8 @@ static const int color_ptrs[][ColCount] = {
 	[SchemeTitleSel]     = { 6,      -1,     -1,     -1 },
 	[SchemeTagsNorm]     = { 2,      0,      0,      -1 },
 	[SchemeTagsSel]      = { 6,      5,      5,      -1 },
-	[SchemeHid]          = { 5,      0,      0,      -1 },
+	[SchemeHidNorm]      = { 5,      0,      0,      -1 },
+	[SchemeHidSel]       = { 6,      -1,     -1,     -1 },
 	[SchemeUrg]          = { 7,      9,      9,      15 },
 };
 #endif // BAR_VTCOLORS_PATCH
@@ -260,7 +263,8 @@ static char *colors[][ColCount] = {
 	[SchemeTitleSel]     = { titleselfgcolor,  titleselbgcolor,  titleselbordercolor,  titleselfloatcolor },
 	[SchemeTagsNorm]     = { tagsnormfgcolor,  tagsnormbgcolor,  tagsnormbordercolor,  tagsnormfloatcolor },
 	[SchemeTagsSel]      = { tagsselfgcolor,   tagsselbgcolor,   tagsselbordercolor,   tagsselfloatcolor },
-	[SchemeHid]          = { hidfgcolor,       hidbgcolor,       hidbordercolor,       hidfloatcolor },
+	[SchemeHidNorm]      = { hidnormfgcolor,   hidnormbgcolor,   c000000,              c000000 },
+	[SchemeHidSel]       = { hidselfgcolor,    hidselbgcolor,    c000000,              c000000 },
 	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
 	#if BAR_FLEXWINTITLE_PATCH
 	[SchemeFlexActTTB]   = { titleselfgcolor,  actTTBbgcolor,    actTTBbgcolor,        c000000 },
@@ -308,7 +312,8 @@ static char *statuscolors[][ColCount] = {
 	[SchemeTitleSel]     = { titleselfgcolor,  titleselbgcolor,  titleselbordercolor,  titleselfloatcolor },
 	[SchemeTagsNorm]     = { tagsnormfgcolor,  tagsnormbgcolor,  tagsnormbordercolor,  tagsnormfloatcolor },
 	[SchemeTagsSel]      = { tagsselfgcolor,   tagsselbgcolor,   tagsselbordercolor,   tagsselfloatcolor },
-	[SchemeHid]          = { hidfgcolor,       hidbgcolor,       hidbordercolor,       hidfloatcolor },
+	[SchemeHidNorm]      = { hidnormfgcolor,   hidnormbgcolor,   c000000,              c000000 },
+	[SchemeHidSel]       = { hidselfgcolor,    hidselbgcolor,    c000000,              c000000 },
 	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
 };
 #endif // BAR_POWERLINE_STATUS_PATCH

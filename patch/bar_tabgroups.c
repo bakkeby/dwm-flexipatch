@@ -43,11 +43,14 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 	int i, nclienttags = 0, nviewtags = 0, pad = lrpad / 2;
 	drw_setscheme(drw, scheme[
 		m->sel == c
-		? SchemeSel
 		#ifdef HIDDEN
+		    && HIDDEN(c)
+		? SchemeHidSel
 		: HIDDEN(c)
-		? SchemeHid
+		? SchemeHidNorm
+		: m->sel == c
 		#endif
+		? SchemeSel
 		: groupactive
 		? SchemeTitleSel
 		: SchemeTitleNorm

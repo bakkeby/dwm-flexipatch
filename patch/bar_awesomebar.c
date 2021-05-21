@@ -30,10 +30,12 @@ draw_awesomebar(Bar *bar, BarArg *a)
 		for (i = 0, c = bar->mon->clients; c; c = c->next, i++) {
 			if (!ISVISIBLE(c))
 				continue;
-			if (bar->mon->sel == c)
-				scm = SchemeTitleSel;
+			if (bar->mon->sel == c && HIDDEN(c))
+				scm = SchemeHidSel;
 			else if (HIDDEN(c))
-				scm = SchemeHid;
+				scm = SchemeHidNorm;
+			else if (bar->mon->sel == c)
+				scm = SchemeTitleSel;
 			else
 				scm = SchemeTitleNorm;
 

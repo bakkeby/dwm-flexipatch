@@ -141,7 +141,8 @@ enum {
 	SchemeTitleSel,
 	SchemeTagsNorm,
 	SchemeTagsSel,
-	SchemeHid,
+	SchemeHidNorm,
+	SchemeHidSel,
 	SchemeUrg,
 	#if BAR_FLEXWINTITLE_PATCH
 	SchemeFlexActTTB,

@@ -146,7 +146,7 @@ getschemefor(Monitor *m, int group, int activegroup)
 		#endif // MONOCLE_LAYOUT
 		return SchemeTitleNorm;
 	case GRP_HIDDEN:
-		return SchemeHid;
+		return SchemeHidNorm;
 	case GRP_FLOAT:
 		return (activegroup ? SchemeFlexActFloat : SchemeFlexInaFloat);
 	}
@@ -172,10 +172,12 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 		return;
 	int i, nclienttags = 0, nviewtags = 0, pad = lrpad / 2;
 	int clientscheme = (
-		c == selmon->sel
-		? getselschemefor(tabscheme)
+		c == selmon->sel && HIDDEN(c)
+		? SchemeHidSel
 		: HIDDEN(c)
-		? SchemeHid
+		? SchemeHidNorm
+		: c == selmon->sel
+		? getselschemefor(tabscheme)
 		: c->isurgent
 		? SchemeUrg
 		: tabscheme
