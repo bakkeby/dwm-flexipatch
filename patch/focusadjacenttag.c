@@ -35,6 +35,9 @@ viewtoleft(const Arg *arg)
 		#endif // pertagview
 		focus(NULL);
 		arrange(selmon);
+		#if BAR_EWMHTAGS_PATCH
+		updatecurrentdesktop();
+		#endif // BAR_EWMHTAGS_PATCH
 	}
 }
 
@@ -51,6 +54,9 @@ viewtoright(const Arg *arg)
 		#endif // pertagview
 		focus(NULL);
 		arrange(selmon);
+		#if BAR_EWMHTAGS_PATCH
+		updatecurrentdesktop();
+		#endif // BAR_EWMHTAGS_PATCH
 	}
 }
 
@@ -68,6 +74,9 @@ tagandviewtoleft(const Arg *arg)
 		#endif // pertagview
 		focus(selmon->sel);
 		arrange(selmon);
+		#if BAR_EWMHTAGS_PATCH
+		updatecurrentdesktop();
+		#endif // BAR_EWMHTAGS_PATCH
 	}
 }
 
@@ -85,5 +94,8 @@ tagandviewtoright(const Arg *arg)
 		#endif // pertagview
 		focus(selmon->sel);
 		arrange(selmon);
+		#if BAR_EWMHTAGS_PATCH
+		updatecurrentdesktop();
+		#endif // BAR_EWMHTAGS_PATCH
 	}
 }
