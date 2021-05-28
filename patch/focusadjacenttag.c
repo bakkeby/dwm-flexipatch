@@ -28,7 +28,11 @@ viewtoleft(const Arg *arg)
 	if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
 	&& selmon->tagset[selmon->seltags] > 1) {
 		selmon->seltags ^= 1; /* toggle sel tagset */
+		#if PERTAG_PATCH
+		pertagview(&((Arg) { .ui = selmon->tagset[selmon->seltags ^ 1] >> 1 }));
+		#else
 		selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] >> 1;
+		#endif // pertagview
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -40,7 +44,11 @@ viewtoright(const Arg *arg)
 	if (__builtin_popcount(selmon->tagset[selmon->seltags] & TAGMASK) == 1
 	&& selmon->tagset[selmon->seltags] & (TAGMASK >> 1)) {
 		selmon->seltags ^= 1; /* toggle sel tagset */
+		#if PERTAG_PATCH
+		pertagview(&((Arg) { .ui = selmon->tagset[selmon->seltags ^ 1] << 1 }));
+		#else
 		selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] << 1;
+		#endif // pertagview
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -53,7 +61,11 @@ tagandviewtoleft(const Arg *arg)
 	&& selmon->tagset[selmon->seltags] > 1) {
 		selmon->sel->tags >>= 1;
 		selmon->seltags ^= 1; /* toggle sel tagset */
+		#if PERTAG_PATCH
+		pertagview(&((Arg) { .ui = selmon->tagset[selmon->seltags ^ 1] >> 1 }));
+		#else
 		selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] >> 1;
+		#endif // pertagview
 		focus(selmon->sel);
 		arrange(selmon);
 	}
@@ -66,7 +78,11 @@ tagandviewtoright(const Arg *arg)
 	&& selmon->tagset[selmon->seltags] & (TAGMASK >> 1)) {
 		selmon->sel->tags <<= 1;
 		selmon->seltags ^= 1; /* toggle sel tagset */
+		#if PERTAG_PATCH
+		pertagview(&((Arg) { .ui = selmon->tagset[selmon->seltags ^ 1] << 1 }));
+		#else
 		selmon->tagset[selmon->seltags] = selmon->tagset[selmon->seltags ^ 1] << 1;
+		#endif // pertagview
 		focus(selmon->sel);
 		arrange(selmon);
 	}
