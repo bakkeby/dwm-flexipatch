@@ -1071,6 +1071,18 @@
  */
 #define TOGGLEFULLSCREEN_PATCH 0
 
+/* Minor patch that lets you use the same keyboard shortcut to toggle to the previous layout if the
+ * designated layout is already active.
+ *
+ * This allows you to use e.g. MOD+m to change to the monocle layout and use the same keybinding to
+ * toggle back to what it was previously. The default behaviour in dwm forces you to use either
+ * MOD+space or MOD+t to change back to tiled layout.
+ *
+ * https://github.com/bakkeby/patches/wiki/togglelayout
+ */
+
+#define TOGGLELAYOUT_PATCH 0
+
 /* Lets you transfer the currently focused client between the master and stack area
  * while increasing or decreasing the master area (nmaster) accordingly.
  * https://dwm.suckless.org/patches/transfer/
