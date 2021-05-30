@@ -4615,9 +4615,9 @@ view(const Arg *arg)
 	if ((arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
 	#endif // EMPTYVIEW_PATCH
 	{
-		#if VIEW_SAME_TAG_GIVES_PREVIOUS_TAG_PATCH
+		#if TOGGLETAG_PATCH
 		view(&((Arg) { .ui = 0 }));
-		#endif // VIEW_SAME_TAG_GIVES_PREVIOUS_TAG_PATCH
+		#endif // TOGGLETAG_PATCH
 		return;
 	}
 	selmon->seltags ^= 1; /* toggle sel tagset */

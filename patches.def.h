@@ -1083,6 +1083,19 @@
 
 #define TOGGLELAYOUT_PATCH 0
 
+/* Minor patch that lets you use the same keyboard shortcut to toggle to the previous tag if the
+ * designated tag is already active.
+ *
+ * This allows you to use e.g. MOD+4 to quickly view the 4th tag and use the same keybinding to
+ * toggle back to what it was previously. The default behaviour in dwm forces you to use either
+ * MOD+tab or MOD+1 to change back to the previous tag.
+ *
+ * Idea ref.
+ * https://www.reddit.com/r/suckless/comments/ik27vd/key_toggle_between_next_and_previous_tag_dwm/
+ * https://github.com/bakkeby/patches/wiki/toggletag
+ */
+#define TOGGLETAG_PATCH 0
+
 /* Lets you transfer the currently focused client between the master and stack area
  * while increasing or decreasing the master area (nmaster) accordingly.
  * https://dwm.suckless.org/patches/transfer/
@@ -1118,14 +1131,6 @@
  * https://dwm.suckless.org/patches/viewontag/
  */
 #define VIEWONTAG_PATCH 0
-
-/* By default tags can be changed using MOD+<num> while MOD+Tab toggles between the current and
- * the previous tag. This patch changes this so that if you hit MOD+<num> for the tag you are
- * currently on, then it works the same as MOD+Tab and switches back to the previous tag.
- * Idea ref.
- * https://www.reddit.com/r/suckless/comments/ik27vd/key_toggle_between_next_and_previous_tag_dwm/
- */
-#define VIEW_SAME_TAG_GIVES_PREVIOUS_TAG_PATCH 0
 
 /* This patch warps the mouse cursor to the center of the currently focused window or screen
  * when the mouse cursor is (a) on a different screen or (b) on top of a different window.

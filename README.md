@@ -17,7 +17,7 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
 ### Changelog:
 
-2021-04-30 - Added togglelayout patch
+2021-05-30 - Added togglelayout and toggletag patches
 
 2021-04-16 - Vanitygaps: replaced smartgaps with smartgaps\_fact, allowing gaps to be disabled or increased when there is only one client.
 
