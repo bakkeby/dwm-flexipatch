@@ -35,3 +35,4 @@ keyrelease(XEvent *e)
 	combo = 0;
 	#endif // COMBO_PATCH
 }
+

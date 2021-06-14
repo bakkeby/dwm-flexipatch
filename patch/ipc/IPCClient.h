@@ -59,3 +59,4 @@ void ipc_list_remove_client(IPCClientList *list, IPCClient *c);
 IPCClient *ipc_list_get_client(IPCClientList list, int fd);
 
 #endif  // IPC_CLIENT_H_
+

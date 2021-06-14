@@ -74,3 +74,4 @@ togglescratch(const Arg *arg)
 		spawn(&sparg);
 	}
 }
+

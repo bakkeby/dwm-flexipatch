@@ -50,3 +50,4 @@ rotatestack(const Arg *arg)
 		restack(selmon);
 	}
 }
+

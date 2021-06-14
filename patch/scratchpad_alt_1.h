@@ -6,3 +6,4 @@ static void scratchpad_remove();
 static void scratchpad_show();
 static void scratchpad_show_client(Client *c);
 static void scratchpad_show_first(void);
+

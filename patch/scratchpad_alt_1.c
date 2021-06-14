@@ -69,3 +69,4 @@ scratchpad_show_first(void)
 	if (c)
 		scratchpad_show_client(c);
 }
+

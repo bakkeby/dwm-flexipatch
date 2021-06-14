@@ -66,3 +66,4 @@ void self_restart(const Arg *arg)
 
     execv(argv[0], argv);
 }
+

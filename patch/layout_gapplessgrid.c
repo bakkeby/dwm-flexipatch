@@ -96,3 +96,4 @@ gaplessgrid(Monitor *m)
 	}
 }
 #endif
+

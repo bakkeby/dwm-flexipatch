@@ -16,3 +16,4 @@ updateinset(const Arg *arg)
 	for (Monitor *m = mons; m; m = m->next)
 		setinset(m, *inset);
 }
+

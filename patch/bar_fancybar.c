@@ -67,4 +67,3 @@ click_fancybar(Bar *bar, Arg *arg, BarArg *a)
 	return ClkWinTitle;
 }
 
-

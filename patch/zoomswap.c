@@ -11,3 +11,4 @@ findbefore(Client *c) {
 	for (p = c->mon->clients; p && p->next != c; p = p->next);
 	return p;
 }
+

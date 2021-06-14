@@ -40,3 +40,4 @@ shiftviewclients(const Arg *arg)
 
 	view(&shifted);
 }
+

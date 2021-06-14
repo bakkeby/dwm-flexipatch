@@ -65,3 +65,4 @@ click_xkb(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkXKB;
 }
+

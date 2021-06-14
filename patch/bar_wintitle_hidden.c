@@ -43,3 +43,4 @@ calc_wintitle_hidden(
 	c = flextitledrawarea(m, m->clients, offx, r, w, clientsnhidden, SCHEMEFOR(GRP_HIDDEN), 0, 1, 0, passx, tabfn, arg, barg);
 	return 1;
 }
+

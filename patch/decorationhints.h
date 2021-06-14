@@ -6,3 +6,4 @@
 #define MWM_DECOR_TITLE             (1 << 3)
 
 static void updatemotifhints(Client *c);
+

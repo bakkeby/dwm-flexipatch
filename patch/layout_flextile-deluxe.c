@@ -888,3 +888,4 @@ incnstack(const Arg *arg)
 	#endif // PERTAG_PATCH
 	arrange(selmon);
 }
+

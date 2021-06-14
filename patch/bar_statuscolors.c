@@ -21,3 +21,4 @@ textw_wosc(char *s)
 
 	return sw;
 }
+

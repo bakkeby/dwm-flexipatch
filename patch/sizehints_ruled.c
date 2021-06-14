@@ -22,3 +22,4 @@ checkfloatingrules(Client *c)
 	if (ch.res_name)
 		XFree(ch.res_name);
 }
+

@@ -36,3 +36,4 @@ resizemousescroll(const Arg *arg)
 		focus(NULL);
 	}
 }
+

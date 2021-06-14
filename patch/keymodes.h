@@ -19,3 +19,4 @@ static void setkeymode(const Arg *arg);
 static unsigned int cmdmod[4];
 static unsigned int keymode = INSERTMODE;
 static KeySym cmdkeysym[4];
+

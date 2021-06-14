@@ -13,3 +13,4 @@ sigterm(int unused)
 	Arg a = {.i = 0};
 	quit(&a);
 }
+

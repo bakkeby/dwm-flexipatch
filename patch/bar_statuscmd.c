@@ -72,3 +72,4 @@ copyvalidchars(char *text, char *rawtext)
 	}
 	text[j] = '\0';
 }
+

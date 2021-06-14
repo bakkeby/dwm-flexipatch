@@ -43,3 +43,4 @@ calc_wintitle_floating(
 	c = flextitledrawarea(m, m->clients, offx, r, w, clientsnfloating, SCHEMEFOR(GRP_FLOAT), 0, 0, 1, passx, tabfn, arg, barg);
 	return 1;
 }
+

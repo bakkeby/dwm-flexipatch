@@ -35,3 +35,4 @@ monocle(Monitor *m)
 		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
 }
 #endif // VANITYGAPS_PATCH
+

@@ -71,3 +71,4 @@ col(Monitor *m)
 			#endif
 		}
 }
+

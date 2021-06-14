@@ -5,3 +5,4 @@ togglenomodbuttons(const Arg *arg)
 	if (selmon->sel)
 		grabbuttons(selmon->sel, 1);
 }
+

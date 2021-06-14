@@ -75,3 +75,4 @@ pertagview(const Arg *arg)
 		togglebar(NULL);
 	#endif // PERTAGBAR_PATCH
 }
+

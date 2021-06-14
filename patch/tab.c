@@ -130,3 +130,4 @@ tabmode(const Arg *arg)
 		selmon->showtab = (selmon->showtab + 1 ) % showtab_nmodes;
 	arrange(selmon);
 }
+

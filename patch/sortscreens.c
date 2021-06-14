@@ -13,3 +13,4 @@ sortscreens(XineramaScreenInfo *screens, int n)
                        }
        XFree(screen);
 }
+

@@ -64,3 +64,4 @@ deck(Monitor *m)
 			resize(c, sx, sy, sw - (2*c->bw), sh - (2*c->bw), 0);
 		}
 }
+

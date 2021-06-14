@@ -63,3 +63,4 @@ focusdir(const Arg *arg)
 		restack(f->mon);
 	}
 }
+

@@ -23,3 +23,4 @@ transferall(const Arg *arg)
 	selmon->nmaster = nstackclients;
 	arrange(selmon);
 }
+

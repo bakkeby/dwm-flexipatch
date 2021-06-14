@@ -19,3 +19,4 @@ swapfocus(const Arg *arg)
        }
    }
 }
+

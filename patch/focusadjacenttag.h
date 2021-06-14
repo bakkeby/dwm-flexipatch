@@ -4,3 +4,4 @@ static void viewtoleft(const Arg *arg);
 static void viewtoright(const Arg *arg);
 static void tagandviewtoleft(const Arg *arg);
 static void tagandviewtoright(const Arg *arg);
+

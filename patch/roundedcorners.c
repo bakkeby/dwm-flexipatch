@@ -48,3 +48,4 @@ void drawroundedcorners(Client *c)
     XFreePixmap(dpy, mask);
     XFreeGC(dpy, shape_gc);
 }
+

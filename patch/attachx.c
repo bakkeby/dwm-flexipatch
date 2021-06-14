@@ -40,3 +40,4 @@ attachx(Client *c)
 	#endif
 	attach(c); // master (default)
 }
+

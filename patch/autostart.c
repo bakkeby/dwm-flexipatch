@@ -81,3 +81,4 @@ runautostart(void)
 		free(path);
 	}
 }
+

@@ -101,3 +101,4 @@ horizgrid(Monitor *m) {
 			#endif // VANITYGAPS_PATCH
 		}
 }
+

@@ -41,3 +41,4 @@ tagothermon(const Arg *arg, int dir)
 		arrange(newmon);
 	}
 }
+

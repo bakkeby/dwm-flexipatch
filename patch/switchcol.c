@@ -26,3 +26,4 @@ switchcol(const Arg *arg)
 		}
 	}
 }
+

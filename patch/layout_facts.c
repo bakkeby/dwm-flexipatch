@@ -49,3 +49,4 @@ getfacts(Monitor *m, int msize, int ssize, float *mf, float *sf, int *mr, int *s
 	*sr = ssize - stotal; // the remainder (rest) of pixels after an even stack split
 }
 #endif // CFACTS_PATCH
+

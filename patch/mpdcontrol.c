@@ -142,3 +142,4 @@ void mpdcontrol()
         mpd_connection_free(conn);
     }
 }
+

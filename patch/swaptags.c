@@ -20,3 +20,4 @@ swaptags(const Arg *arg)
    focus(NULL);
    arrange(selmon);
 }
+

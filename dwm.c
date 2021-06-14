@@ -523,9 +523,9 @@ typedef struct {
 } Rule;
 
 #if XKB_PATCH
-#define RULE(...) { .monitor = -1, .xkb_layout = -1, ##__VA_ARGS__ },
+#define RULE(...) { .monitor = -1, .xkb_layout = -1, __VA_ARGS__ },
 #else
-#define RULE(...) { .monitor = -1, ##__VA_ARGS__ },
+#define RULE(...) { .monitor = -1, __VA_ARGS__ },
 #endif // XKB_PATCH
 
 /* Cross patch compatibility rule macro helper macros */
@@ -4892,3 +4892,4 @@ main(int argc, char *argv[])
 	XCloseDisplay(dpy);
 	return EXIT_SUCCESS;
 }
+

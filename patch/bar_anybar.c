@@ -91,3 +91,4 @@ wmclasscontains(Window win, const char *class, const char *name)
 
 	return res;
 }
+

@@ -353,3 +353,4 @@ dump_error_message(yajl_gen gen, const char *reason)
 
   return 0;
 }
+

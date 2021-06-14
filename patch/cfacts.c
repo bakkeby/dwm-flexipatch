@@ -21,3 +21,4 @@ setcfact(const Arg *arg)
 	c->cfact = f;
 	arrange(selmon);
 }
+

@@ -147,3 +147,4 @@ switchtag(const Arg *arg)
 		toggleview (&new_arg);
 	}
 }
+

@@ -11,3 +11,4 @@ static int click_status2d(Bar *bar, Arg *arg, BarArg *a);
 #endif // BAR_STATUSCMD_PATCH
 static int drawstatusbar(BarArg *a, char *text);
 static int status2dtextlength(char *stext);
+
