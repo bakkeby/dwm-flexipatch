@@ -15,3 +15,4 @@ cyclelayout(const Arg *arg)
 			setlayout(&((Arg) { .v = &layouts[LENGTH(layouts) - 2] }));
 	}
 }
+

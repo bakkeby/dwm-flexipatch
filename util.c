@@ -33,3 +33,4 @@ die(const char *fmt, ...) {
 
 	exit(1);
 }
+

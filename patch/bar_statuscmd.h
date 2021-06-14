@@ -9,3 +9,4 @@ typedef struct {
 	const char *cmd;
 	int id;
 } StatusCmd;
+

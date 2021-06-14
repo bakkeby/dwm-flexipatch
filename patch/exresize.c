@@ -193,3 +193,4 @@ togglehorizontalexpand(const Arg *arg)
 	else if (arg->i > 0) expand(EXPAND_RIGHT);
 	else expand(EXPAND_LEFT | EXPAND_RIGHT);
 }
+

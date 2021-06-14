@@ -133,3 +133,4 @@ nullterminate(char **str, size_t *len)
 
   return 0;
 }
+

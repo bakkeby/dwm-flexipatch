@@ -40,3 +40,4 @@ int main(void) {
 	XCloseDisplay(d);
 	exit(0);
 }
+

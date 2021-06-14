@@ -192,3 +192,4 @@ getfloatpos(int pos, char pCh, int size, char sCh, int min_p, int max_s, int cp,
 	*out_p = cp;
 	*out_s = MAX(cs - 2*cbw, 1);
 }
+

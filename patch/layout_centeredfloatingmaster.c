@@ -92,3 +92,4 @@ centeredfloatingmaster(Monitor *m)
 			#endif
 		}
 }
+

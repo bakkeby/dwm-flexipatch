@@ -104,3 +104,4 @@ click_pwrl_tags(Bar *bar, Arg *arg, BarArg *a)
 	}
 	return ClkTagBar;
 }
+

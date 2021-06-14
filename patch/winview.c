@@ -18,3 +18,4 @@ winview(const Arg* arg)
 	a.ui = c->tags;
 	view(&a);
 }
+

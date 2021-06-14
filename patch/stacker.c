@@ -110,3 +110,4 @@ stackpos(const Arg *arg)
 		return arg->i;
 	#endif // BAR_WINTITLEACTIONS_PATCH
 }
+

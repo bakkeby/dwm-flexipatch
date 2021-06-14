@@ -15,3 +15,4 @@ click_stbutton(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkButton;
 }
+

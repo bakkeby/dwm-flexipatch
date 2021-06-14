@@ -31,3 +31,4 @@ transfer(const Arg *arg)
 	}
 	arrange(selmon);
 }
+

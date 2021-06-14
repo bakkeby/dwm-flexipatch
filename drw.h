@@ -100,3 +100,4 @@ void drw_arrow(Drw *drw, int x, int y, unsigned int w, unsigned int h, int direc
 
 /* Map functions */
 void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);
+

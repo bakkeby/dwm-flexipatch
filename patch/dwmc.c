@@ -98,3 +98,4 @@ fake_signal(void)
 	// No fake signal was sent, so proceed with update
 	return 0;
 }
+

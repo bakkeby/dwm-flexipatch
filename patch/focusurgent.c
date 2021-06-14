@@ -13,3 +13,4 @@ focusurgent(const Arg *arg)
 		}
 	}
 }
+

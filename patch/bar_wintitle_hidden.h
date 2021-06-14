@@ -6,3 +6,4 @@ static int calc_wintitle_hidden(
 	void(*tabfn)(Monitor *, Client *, int, int, int, int, Arg *arg, BarArg *barg),
 	Arg *arg, BarArg *barg
 );
+

@@ -6,3 +6,4 @@ void toggleverticalexpand(const Arg *arg);
 void togglehorizontalexpand(const Arg *arg);
 void exresize(const Arg *arg);
 void explace(const Arg *arg);
+

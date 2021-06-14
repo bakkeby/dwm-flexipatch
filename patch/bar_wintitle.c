@@ -48,4 +48,3 @@ click_wintitle(Bar *bar, Arg *arg, BarArg *a)
 	return ClkWinTitle;
 }
 
-

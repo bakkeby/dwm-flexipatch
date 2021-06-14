@@ -40,3 +40,4 @@ xinitvisual()
 		cmap = DefaultColormap(dpy, screen);
 	}
 }
+

@@ -22,3 +22,4 @@ aspectresize(const Arg *arg)
 	XRaiseWindow(dpy, c->win);
 	resize(c, c->x, c->y, nw, nh, True);
 }
+

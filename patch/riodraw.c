@@ -101,3 +101,4 @@ riospawnsync(const Arg *arg)
 	if (riodraw(NULL, slopspawnstyle))
 		riopid = spawncmd(arg);
 }
+

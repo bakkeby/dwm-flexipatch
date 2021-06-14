@@ -79,3 +79,4 @@ click_awesomebar(Bar *bar, Arg *arg, BarArg *a)
 	}
 	return -1;
 }
+

@@ -16,3 +16,4 @@ togglefakefullscreen(const Arg *arg)
 		setfullscreen(c, 1);
 	}
 }
+

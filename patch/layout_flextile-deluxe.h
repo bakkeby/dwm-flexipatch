@@ -118,3 +118,4 @@ static char tilesymb[] = {
 	64,  // "@",
 	84,  // "T",
 };
+

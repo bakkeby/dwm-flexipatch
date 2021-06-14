@@ -157,3 +157,4 @@ centeredmaster(Monitor *m)
 		}
 	}
 }
+

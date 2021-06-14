@@ -11,3 +11,4 @@ static void tagex(const Arg *arg);
 static void toggletagex(const Arg *arg);
 static void tagallex(const Arg *arg);
 static int fake_signal(void);
+

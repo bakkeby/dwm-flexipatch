@@ -317,3 +317,4 @@ int ipc_handle_client_epoll_event(struct epoll_event *ev, Monitor *mons,
 int ipc_handle_socket_epoll_event(struct epoll_event *ev);
 
 #endif /* IPC_H_ */
+

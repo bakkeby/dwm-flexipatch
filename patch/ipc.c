@@ -108,3 +108,4 @@ setstatus(const Arg *arg)
 	for (m = mons; m; m = m->next)
 		drawbar(m);
 }
+

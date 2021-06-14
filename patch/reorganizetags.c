@@ -25,3 +25,4 @@ reorganizetags(const Arg *arg)
        selmon->tagset[selmon->seltags] = selmon->sel->tags;
    arrange(selmon);
 }
+

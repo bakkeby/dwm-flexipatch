@@ -15,3 +15,4 @@ togglefullscreen(const Arg *arg)
 	setfullscreen(c, !c->isfullscreen);
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 }
+

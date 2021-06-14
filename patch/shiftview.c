@@ -16,3 +16,4 @@ shiftview(const Arg *arg)
 
 	view(&shifted);
 }
+

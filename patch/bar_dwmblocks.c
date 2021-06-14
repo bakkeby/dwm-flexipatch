@@ -48,3 +48,4 @@ sigstatusbar(const Arg *arg)
 	sigqueue(statuspid, SIGRTMIN+statussig, sv);
 	#endif // BAR_DWMBLOCKS_SIGUSR1_PATCH
 }
+

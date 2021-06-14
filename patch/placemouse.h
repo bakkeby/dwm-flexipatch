@@ -4,3 +4,4 @@
 static void moveorplace(const Arg *arg);
 static void placemouse(const Arg *arg);
 static Client *recttoclient(int x, int y, int w, int h);
+

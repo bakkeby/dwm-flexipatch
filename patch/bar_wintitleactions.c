@@ -91,3 +91,4 @@ showhideclient(const Arg *arg)
 		hide(c);
 	}
 }
+

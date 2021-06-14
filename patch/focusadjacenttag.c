@@ -99,3 +99,4 @@ tagandviewtoright(const Arg *arg)
 		#endif // BAR_EWMHTAGS_PATCH
 	}
 }
+

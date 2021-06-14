@@ -66,3 +66,4 @@ int get_luminance(char *r)
 
 	return (0.299 * n[0] + 0.587 * n[1] + 0.114 * n[2]) / 2.55;
 }
+

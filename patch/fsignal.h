@@ -5,3 +5,4 @@ typedef struct {
 } Signal;
 
 static int fake_signal(void);
+

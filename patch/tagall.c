@@ -23,3 +23,4 @@ tagall(const Arg *arg)
 		}
 	arrange(selmon);
 }
+

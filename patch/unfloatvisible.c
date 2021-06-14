@@ -12,3 +12,4 @@ unfloatvisible(const Arg *arg)
     else
         arrange(selmon);
 }
+

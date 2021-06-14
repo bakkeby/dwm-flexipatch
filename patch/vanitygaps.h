@@ -17,3 +17,4 @@ static void setgaps(int oh, int ov, int ih, int iv);
 #if IPC_PATCH || DWMC_PATCH
 static void setgapsex(const Arg *arg);
 #endif // IPC_PATCH | DWMC_PATCH
+

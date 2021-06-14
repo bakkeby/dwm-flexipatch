@@ -141,3 +141,4 @@ setkeymode(const Arg *arg)
 	clearcmd(&a);
 	grabkeys();
 }
+

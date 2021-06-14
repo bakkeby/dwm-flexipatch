@@ -119,3 +119,4 @@ drawpowerlinestatus(int xpos, char *stext, BarArg *barg)
 
 	return xpos - x;
 }
+

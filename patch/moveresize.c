@@ -62,3 +62,4 @@ moveresize(const Arg *arg) {
 		XWarpPointer(dpy, None, None, 0, 0, 0, 0, nmx, nmy);
 	}
 }
+

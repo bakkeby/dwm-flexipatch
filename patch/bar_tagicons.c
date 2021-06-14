@@ -18,3 +18,4 @@ tagicon(Monitor *m, int tag)
 	#endif // BAR_ALTERNATIVE_TAGS_PATCH
 	return tagicons[DEFAULT_TAGS][tagindex];
 }
+

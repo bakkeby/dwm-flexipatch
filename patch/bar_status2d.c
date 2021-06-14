@@ -265,3 +265,4 @@ status2dtextlength(char* stext)
 	free(p);
 	return w;
 }
+
