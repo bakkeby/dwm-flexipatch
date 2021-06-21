@@ -734,7 +734,7 @@
  */
 #define NO_TRANSPARENT_BORDERS_PATCH 0
 
-/* Port of InstantVM's on_empty_keys functionality allowing keybindings that apply only when
+/* Port of InstantWM's on_empty_keys functionality allowing keybindings that apply only when
  * a tag is empty. An example use case is being able to launch applications with first hand
  * keys like "f" to launch firefox.
  *
