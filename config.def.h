@@ -1040,13 +1040,13 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
 	#endif // UNFLOATVISIBLE_PATCH
 	#if TOGGLEFULLSCREEN_PATCH
-	/* description: (dwm) toggle fullscreen */		{ MODKEY,			XK_f,			togglefullscreen,	{0} },
+	{ MODKEY|ShiftMask,			XK_f,			togglefullscreen,	{0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-	/* description: (dwm) toggle fullscreen on current container */		{ MODKEY|ControlMask|ShiftMask,			XK_f,			togglefakefullscreen,	{0} },
+	{ MODKEY|ControlMask|ShiftMask,			XK_f,			togglefakefullscreen,	{0} },
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#if FULLSCREEN_PATCH
-	{ MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
+	/* description: (dwm) toggle fullscreen */ { MODKEY,             XK_f,          fullscreen,             {0} },
 	#endif // FULLSCREEN_PATCH
 	#if STICKY_PATCH
 	/* description: (dwm) toggle sticky */ 			{ MODKEY,			XK_s,			togglesticky,	{0} },
