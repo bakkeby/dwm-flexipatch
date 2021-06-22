@@ -60,8 +60,8 @@ static const int bar_height              = 0;   /* 0 means derive from font, >= 
 #endif // BAR_HEIGHT_PATCH
 
 #if BAR_PADDING_PATCH
-static const int vertpad                 = 10;  /* vertical padding of bar */
-static const int sidepad                 = 10;  /* horizontal padding of bar */
+static const int vertpad                 = 0;  /* vertical padding of bar */
+static const int sidepad                 = 0;  /* horizontal padding of bar */
 #endif // BAR_PADDING_PATCH
 
 #if FOCUSONCLICK_PATCH
