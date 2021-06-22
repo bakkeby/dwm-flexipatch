@@ -1,3 +1,4 @@
 - [ ] Raise the notes-and-reminders size
+- [ ] Cyberpunk colors (maybe check the darkula theme for inspiration?)
 - [ ] Detect duplicated keyboard shortcuts
 - [ ] Update the cheatsheet with the commands available from the new patches.
