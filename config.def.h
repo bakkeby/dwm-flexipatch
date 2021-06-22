@@ -940,7 +940,7 @@ static Key keys[] = {
 	#if INSETS_PATCH
 	{ MODKEY|ShiftMask|ControlMask, XK_a,          updateinset,            {.v = &default_inset } },
 	#endif // INSETS_PATCH
-	{ MODKEY,                       XK_Return,     zoom,                   {0} },
+	/* description: (dwm) move window to master */		{ MODKEY,			XK_space,		zoom,		{0} },
 	#if VANITYGAPS_PATCH
 	/* description: (dwm) increase gaps */			{ MODKEY,			XK_n,			incrgaps,	{.i = +3} },
 	/* description: (dwm) decrease gaps */			{ MODKEY|ShiftMask,		XK_n,			incrgaps,	{.i = -3} },
