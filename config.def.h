@@ -2,42 +2,50 @@
 
 /* appearance */
 #if ROUNDED_CORNERS_PATCH
-static const unsigned int borderpx       = 0;   /* border pixel of windows */
+static const unsigned int borderpx       = 2;   /* border pixel of windows */
 static const int corner_radius           = 10;
 #else
-static const unsigned int borderpx       = 1;   /* border pixel of windows */
+static const unsigned int borderpx       = 2;   /* border pixel of windows */
 #endif // ROUNDED_CORNERS_PATCH
 static const unsigned int snap           = 32;  /* snap pixel */
+
 #if SWALLOW_PATCH
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 #endif // SWALLOW_PATCH
+
 #if NO_MOD_BUTTONS_PATCH
 static int nomodbuttons                  = 1;   /* allow client mouse button bindings that have no modifier */
 #endif // NO_MOD_BUTTONS_PATCH
+
 #if VANITYGAPS_PATCH
-static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
+static const unsigned int gappih         = 10;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 10;  /* vert inner gap between windows */
 static const unsigned int gappoh         = 10;  /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov         = 30;  /* vert outer gap between windows and screen edge */
+static const unsigned int gappov         = 10;  /* vert outer gap between windows and screen edge */
 static const int smartgaps_fact          = 1;   /* gap factor when there is only one client; 0 = no gaps, 3 = 3x outer gaps */
 #endif // VANITYGAPS_PATCH
+
 #if AUTOSTART_PATCH
 static const char autostartblocksh[]     = "autostart_blocking.sh";
 static const char autostartsh[]          = "autostart.sh";
 static const char dwmdir[]               = "dwm";
 static const char localshare[]           = ".local/share";
 #endif // AUTOSTART_PATCH
+
 #if BAR_ANYBAR_PATCH
 static const int usealtbar               = 1;        /* 1 means use non-dwm status bar */
 static const char *altbarclass           = "Polybar"; /* Alternate bar class name */
 static const char *altbarcmd             = "$HOME/bar.sh"; /* Alternate bar launch command */
 #endif // BAR_ANYBAR_PATCH
+
 #if BAR_HOLDBAR_PATCH
 static const int showbar                 = 0;   /* 0 means no bar */
 #else
 static const int showbar                 = 1;   /* 0 means no bar */
 #endif // BAR_HOLDBAR_PATCH
+
 static const int topbar                  = 1;   /* 0 means bottom bar */
+
 #if TAB_PATCH
 /*  Display modes of the tab bar: never shown, always shown, shown only in  */
 /*  monocle mode in the presence of several windows.                        */
@@ -46,20 +54,25 @@ enum showtab_modes { showtab_never, showtab_auto, showtab_nmodes, showtab_always
 static const int showtab                 = showtab_auto;        /* Default tab bar show mode */
 static const int toptab                  = False;               /* False means bottom tab bar */
 #endif // TAB_PATCH
+
 #if BAR_HEIGHT_PATCH
 static const int bar_height              = 0;   /* 0 means derive from font, >= 1 explicit height */
 #endif // BAR_HEIGHT_PATCH
+
 #if BAR_PADDING_PATCH
 static const int vertpad                 = 10;  /* vertical padding of bar */
 static const int sidepad                 = 10;  /* horizontal padding of bar */
 #endif // BAR_PADDING_PATCH
+
 #if FOCUSONCLICK_PATCH
 static const int focusonwheel            = 0;
 #endif // FOCUSONCLICK_PATCH
+
 #if FLOATPOS_PATCH
 static int floatposgrid_x                = 5;  /* float grid columns */
 static int floatposgrid_y                = 5;  /* float grid rows */
 #endif // FLOATPOS_PATCH
+
 #if RIODRAW_PATCH
 static const char slopspawnstyle[]       = "-t 0 -c 0.92,0.85,0.69,0.3 -o"; /* do NOT define -f (format) here */
 static const char slopresizestyle[]      = "-t 0 -c 0.92,0.85,0.69,0.3"; /* do NOT define -f (format) here */
@@ -68,31 +81,39 @@ static const int riodraw_borders         = 0;  /* 0 or 1, indicates whether the 
 static const int riodraw_matchpid        = 1;  /* 0 or 1, indicates whether to match the PID of the client that was spawned with riospawn */
 #endif // SWALLOW_PATCH
 #endif // RIODRAW_PATCH
+
 #if BAR_STATUSPADDING_PATCH
 static const int horizpadbar             = 2;   /* horizontal padding for statusbar */
 static const int vertpadbar              = 0;   /* vertical padding for statusbar */
 #endif // BAR_STATUSPADDING_PATCH
+
 #if BAR_STATUSBUTTON_PATCH
 static const char buttonbar[]            = "<O>";
 #endif // BAR_STATUSBUTTON_PATCH
+
 #if BAR_SYSTRAY_PATCH
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 #endif // BAR_SYSTRAY_PATCH
+
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
+
 #if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 static int fakefsindicatortype           = INDICATOR_PLUS;
 static int floatfakefsindicatortype      = INDICATOR_PLUS_AND_LARGER_SQUARE;
 #endif // FAKEFULLSCREEN_CLIENT_PATCH
+
 #if ONLYQUITONEMPTY_PATCH
 static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
 #endif // ONLYQUITONEMPTY_PATCH
+
 #if BAR_EXTRASTATUS_PATCH
 static const char statussep              = ';'; /* separator between status bars */
 #endif // BAR_EXTRASTATUS_PATCH
+
 #if BAR_TABGROUPS_PATCH
 #if MONOCLE_LAYOUT
 static void (*bartabmonfns[])(Monitor *) = { monocle /* , customlayoutfn */ };
@@ -100,25 +121,28 @@ static void (*bartabmonfns[])(Monitor *) = { monocle /* , customlayoutfn */ };
 static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #endif // MONOCLE_LAYOUT
 #endif // BAR_TABGROUPS_PATCH
+
 #if BAR_PANGO_PATCH
 static const char font[]                 = "monospace 10";
 #else
 static const char *fonts[]               = { "monospace:size=10" };
 #endif // BAR_PANGO_PATCH
+
 static const char dmenufont[]            = "monospace:size=10";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
 #if BAR_FLEXWINTITLE_PATCH
 #endif // BAR_FLEXWINTITLE_PATCH
+
 static char normfgcolor[]                = "#bbbbbb";
 static char normbgcolor[]                = "#222222";
 static char normbordercolor[]            = "#444444";
 static char normfloatcolor[]             = "#db8fd9";
 
-static char selfgcolor[]                 = "#eeeeee";
-static char selbgcolor[]                 = "#005577";
-static char selbordercolor[]             = "#005577";
+static char selfgcolor[]                 = "#ffffff";
+static char selbgcolor[]                 = "#000000";
+static char selbordercolor[]             = "#ffffff";
 static char selfloatcolor[]              = "#005577";
 
 static char titlenormfgcolor[]           = "#bbbbbb";
@@ -238,6 +262,7 @@ static const unsigned int alphas[][3] = {
 	#endif // BAR_FLEXWINTITLE_PATCH
 };
 #endif // BAR_ALPHA_PATCH
+
 #if BAR_VTCOLORS_PATCH
 static const char title_bg_dark[]   = "#303030";
 static const char title_bg_light[]  = "#fdfdfd";
@@ -330,10 +355,19 @@ static const char *const autostart[] = {
 #endif // COOL_AUTOSTART_PATCH
 
 #if SCRATCHPADS_PATCH
-const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
+/* const char *spcmd1[] = {"st", "-n", "dropdownterm", "-c", "Dropdownterm", "-g", "120x45", NULL}; */
+/* const char *spcmd1[] = {"urxvt", "-name", "dropdownterm", "-title", "dropdownterm", "--hold", "-e", "tmux",  NULL}; */
+/* const char *spcmd1[] = {"~/apps/scripts/bin/terminal-dropdownterm.sh",  NULL}; */
+const char *spcmd1[] = {"terminal-dropdownterm.sh",  NULL};
+const char *spcmd2[] = {"pcmanfm", NULL };
+/* const char *spcmd3[] = {"urxvt", "-name", "nnn", "-title", "nnn", "--hold", "-e", "nnn", NULL}; */
+const char *spcmd3[] = {"~/apps/scripts/bin/terminal-nnn.sh", NULL};
+
 static Sp scratchpads[] = {
-   /* name          cmd  */
-   {"spterm",      spcmd1},
+	/* name          		cmd  */
+	{"dropdownterm",      		spcmd1},
+	{"pcmanfm",      		spcmd2},
+	{"nnn",      			spcmd3},
 };
 #endif // SCRATCHPADS_PATCH
 
@@ -413,10 +447,15 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-	RULE(.class = "Gimp", .tags = 1 << 4)
-	RULE(.class = "Firefox", .tags = 1 << 7)
+	RULE(.class = "Gimp", .tags = 1 << 8)
+	RULE(.class = "Alacritty", .tags = 0)
+	RULE(.class = "St", .tags = 0)
+	RULE(.class = "Sxiv", .tags = 0)
+	RULE(.class = "arandr", .tags = 0)
 	#if SCRATCHPADS_PATCH
-	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
+	RULE(.instance = "dropdownterm", .tags = SPTAG(0), .isfloating = 1)
+	RULE(.class = "Pcmanfm", .tags = SPTAG(1), .isfloating = 1)
+	RULE(.instance = "nnn", .tags = SPTAG(2), .isfloating = 1)
 	#endif // SCRATCHPADS_PATCH
 };
 
@@ -531,7 +570,7 @@ static const int nmaster     = 1;    /* number of clients in master area */
 #if FLEXTILE_DELUXE_LAYOUT
 static const int nstack      = 0;    /* number of clients in primary stack area */
 #endif // FLEXTILE_DELUXE_LAYOUT
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 #if DECORATION_HINTS_PATCH
 static const int decorhints  = 1;    /* 1 means respect decoration hints */
 #endif // DECORATION_HINTS_PATCH
@@ -619,36 +658,36 @@ static const Layout layouts[] = {
 #else
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	#if TILE_LAYOUT
-	{ "[]=",      tile },    /* first entry is default */
+	#if CENTEREDMASTER_LAYOUT
+	{ "|M|",      centeredmaster },		/* first entry is default - Master in middle, slaves on sides */
 	#endif
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	#if MONOCLE_LAYOUT
-	{ "[M]",      monocle },
+	#if TILE_LAYOUT
+	{ "[]=",      tile },			/*Main on left, others on right */
 	#endif
 	#if BSTACK_LAYOUT
-	{ "TTT",      bstack },
+	{ "TTT",      bstack },		/*Master on top, slaves on bottom */
 	#endif
+	#if FIBONACCI_SPIRAL_LAYOUT
+	{ "(@)",      spiral },		/*Fibonacci spiral */
+	#endif
+	#if FIBONACCI_DWINDLE_LAYOUT
+	{ "[\\]",     dwindle },	/*Decreasing in size right and leftward */
+	#endif
+	#if DECK_LAYOUT
+	{ "[D]",      deck },	/*Master on left, slaves in monocle-like mode on right */
+	#endif
+	#if MONOCLE_LAYOUT
+	{ "[M]",      monocle },	/*All windows on top of eachother */
+	#endif
+	#if CENTEREDFLOATINGMASTER_LAYOUT
+	{ ">M>",      centeredfloatingmaster },	/*Master floats, slaves do not */
+	#endif
+	{ "><>",      NULL },    /* no layout function means floating behavior */
 	#if BSTACKHORIZ_LAYOUT
 	{ "===",      bstackhoriz },
 	#endif
-	#if CENTEREDMASTER_LAYOUT
-	{ "|M|",      centeredmaster },
-	#endif
-	#if CENTEREDFLOATINGMASTER_LAYOUT
-	{ ">M>",      centeredfloatingmaster },
-	#endif
 	#if COLUMNS_LAYOUT
 	{ "|||",      col },
-	#endif
-	#if DECK_LAYOUT
-	{ "[D]",      deck },
-	#endif
-	#if FIBONACCI_SPIRAL_LAYOUT
-	{ "(@)",      spiral },
-	#endif
-	#if FIBONACCI_DWINDLE_LAYOUT
-	{ "[\\]",     dwindle },
 	#endif
 	#if GRIDMODE_LAYOUT
 	{ "HHH",      grid },
@@ -677,7 +716,7 @@ static const char *xkb_layouts[]  = {
 #endif // XKB_PATCH
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #if COMBO_PATCH && SWAPTAGS_PATCH && TAGOTHERMONITOR_PATCH
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      comboview,      {.ui = 1 << TAG} }, \
@@ -756,7 +795,7 @@ static const char *xkb_layouts[]  = {
 #endif // BAR_HOLDBAR_PATCH
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/bash", "-c", cmd, NULL } }
 
 /* commands */
 #if !NODMENU_PATCH
@@ -823,8 +862,8 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_space,      focusmaster,            {0} },
 	#endif // FOCUSMASTER_PATCH
 	#if STACKER_PATCH
-	STACKKEYS(MODKEY,                              focus)
-	STACKKEYS(MODKEY|ShiftMask,                    push)
+	/* description: (dwm:STACKKEYS_MACRO_VALUES) */	STACKKEYS(MODKEY,                              focus)
+	/* description: (dwm:STACKKEYS_MACRO_VALUES) */ STACKKEYS(MODKEY|ShiftMask,                    push)
 	#else
 	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
 	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
@@ -855,14 +894,14 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_j,          pushdown,               {0} },
 	{ MODKEY|ControlMask,           XK_k,          pushup,                 {0} },
 	#endif // PUSH_PATCH / PUSH_NO_MASTER_PATCH
-	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
-	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
+	/* description: (dwm) one more master window */		{ MODKEY,			XK_o,			incnmaster,     {.i = +1} },
+	/* description: (dwm) one less master window */		{ MODKEY|ShiftMask,		XK_o,			incnmaster,     {.i = -1} },
 	#if FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY,                       XK_h,          setmfact,               {.f = -0.05} },
-	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
+	/* description: (dwm) */ 				{ MODKEY,			XK_h,			setmfact,	{.f = -0.05} },
+	/* description: (dwm) */ 				{ MODKEY,			XK_l,			setmfact,      	{.f = +0.05} },
 	#if CFACTS_PATCH
 	{ MODKEY|ShiftMask,             XK_h,          setcfact,               {.f = +0.25} },
 	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
@@ -903,27 +942,27 @@ static Key keys[] = {
 	#endif // INSETS_PATCH
 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
 	#if VANITYGAPS_PATCH
-	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_i,          incrigaps,              {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_i,          incrigaps,              {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_o,          incrogaps,              {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_o,          incrogaps,              {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_6,          incrihgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_6,          incrihgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_7,          incrivgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_7,          incrivgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_8,          incrohgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_8,          incrohgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_9,          incrovgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,          incrovgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,             {0} },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
+	/* description: (dwm) increase gaps */			{ MODKEY,			XK_n,			incrgaps,	{.i = +3} },
+	/* description: (dwm) decrease gaps */			{ MODKEY|ShiftMask,		XK_n,			incrgaps,	{.i = -3} },
+	/* { MODKEY|Mod4Mask,              XK_i,          incrigaps,              {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_i,          incrigaps,              {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_o,          incrogaps,              {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_o,          incrogaps,              {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_6,          incrihgaps,             {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_6,          incrihgaps,             {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_7,          incrivgaps,             {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_7,          incrivgaps,             {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_8,          incrohgaps,             {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_8,          incrohgaps,             {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_9,          incrovgaps,             {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_9,          incrovgaps,             {.i = -1 } }, */
+	/* description: (dwm) toggle gaps */			{ MODKEY,			XK_a,			togglegaps,	{0} },
+	/* description: (dwm) default gaps */ 			{ MODKEY|ShiftMask,		XK_a,			defaultgaps,	{0} },
 	#endif // VANITYGAPS_PATCH
-	{ MODKEY,                       XK_Tab,        view,                   {0} },
+	/* description: (dwm) */ 				{ MODKEY,			XK_Tab,			view,		{0} },
 	#if SHIFTVIEW_PATCH
-	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
-	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
+	/* description: (dwm) */ 				{ MODKEY,			XK_Page_Up,		shiftview,	{.i = -1} },
+	/* description: (dwm) */ 				{ MODKEY,			XK_Page_Down,		shiftview,	{.i = +1} },
   	#endif // SHIFTVIEW_PATCH
   	#if SHIFTVIEW_CLIENTS_PATCH
 	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
@@ -932,7 +971,7 @@ static Key keys[] = {
 	#if BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
 	#endif // BAR_WINTITLEACTIONS_PATCH
-	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
+	/* description: (dwm) kill window */ 			{ MODKEY,			XK_BackSpace,		killclient,	{0} },
 	#if KILLUNSEL_PATCH
 	{ MODKEY|ShiftMask,             XK_x,          killunsel,              {0} },
 	#endif // KILLUNSEL_PATCH
@@ -955,9 +994,15 @@ static Key keys[] = {
 	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
-	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
+	/* description: (dwm:layouts) tile */ 			{ MODKEY,			XK_t,			setlayout,	{.v = &layouts[0]} },
+	/* description: (dwm:layouts) bstack */ 		{ MODKEY|ShiftMask,		XK_t,			setlayout,	{.v = &layouts[1]} },
+	/* description: (dwm:layouts) spiral */ 		{ MODKEY,			XK_y,			setlayout,	{.v = &layouts[2]} },
+	/* description: (dwm:layouts) dwindle */ 		{ MODKEY|ShiftMask,		XK_y,			setlayout,	{.v = &layouts[3]} },
+	/* description: (dwm:layouts) deck */ 			{ MODKEY,			XK_u,			setlayout,	{.v = &layouts[4]} },
+	/* description: (dwm:layouts) monocle */ 		{ MODKEY|ShiftMask,		XK_u,			setlayout,	{.v = &layouts[5]} },
+	/* description: (dwm:layouts) centeredmaster */ 	{ MODKEY,			XK_i,			setlayout,	{.v = &layouts[6]} },
+	/* description: (dwm:layouts) centeredfloatingmaster */ { MODKEY|ShiftMask,		XK_i,			setlayout,	{.v = &layouts[7]} },
+	/* description: (dwm:layouts) floating */ 		{ MODKEY|ShiftMask,		XK_f,			setlayout,	{.v = &layouts[8]} },
 	#if COLUMNS_LAYOUT
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
@@ -972,8 +1017,7 @@ static Key keys[] = {
 	{ MODKEY|Mod5Mask|Mod1Mask,     XK_Tab,        rotatelayoutaxis,       {.i = -4 } },   /* flextile, 4 = secondary stack axis */
 	{ MODKEY|ControlMask,           XK_Return,     mirrorlayout,           {0} },          /* flextile, flip master and stack areas */
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	{ MODKEY,                       XK_space,      setlayout,              {0} },
-	{ MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
+	/* description: (dwm) toggle window floating */		{ MODKEY|ShiftMask,		XK_space,		togglefloating,	{0} },
 	#if MAXIMIZE_PATCH
 	{ MODKEY|ControlMask|ShiftMask, XK_h,          togglehorizontalmax,    {0} },
 	{ MODKEY|ControlMask|ShiftMask, XK_l,          togglehorizontalmax,    {0} },
@@ -985,25 +1029,27 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Escape,     togglenomodbuttons,     {0} },
 	#endif // NO_MOD_BUTTONS_PATCH
 	#if SCRATCHPADS_PATCH
-	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
-	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
-	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
+	/* description: (dwm:scratchpad) dropdownterm */ 	{ Mod1Mask,			XK_t,			togglescratch,	{.ui = 0} },
+	/* description: (dwm:scratchpad) pcmanfm */		{ MODKEY|ShiftMask,		XK_r,			togglescratch,	{.ui = 1} },
+	/* description: (dwm:scratchpad) nnn */			{ MODKEY, 	 		XK_r,			togglescratch,	{.ui = 2} },
+	/* { MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } }, */
+	/* { MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } }, */
 	#endif // SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
 	#endif // UNFLOATVISIBLE_PATCH
 	#if TOGGLEFULLSCREEN_PATCH
-	{ MODKEY,                       XK_y,          togglefullscreen,       {0} },
+	/* description: (dwm) toggle fullscreen */		{ MODKEY,			XK_f,			togglefullscreen,	{0} },
 	#endif // TOGGLEFULLSCREEN_PATCH
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
-	{ MODKEY|ShiftMask,             XK_y,          togglefakefullscreen,   {0} },
+	/* description: (dwm) toggle fullscreen on current container */		{ MODKEY|ControlMask|ShiftMask,			XK_f,			togglefakefullscreen,	{0} },
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#if FULLSCREEN_PATCH
 	{ MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
 	#endif // FULLSCREEN_PATCH
 	#if STICKY_PATCH
-	{ MODKEY|ShiftMask,             XK_s,          togglesticky,           {0} },
+	/* description: (dwm) toggle sticky */ 			{ MODKEY,			XK_s,			togglesticky,	{0} },
 	#endif // STICKY_PATCH
 	#if SCRATCHPAD_ALT_1_PATCH
 	{ MODKEY,                       XK_minus,      scratchpad_show,        {0} },
@@ -1164,15 +1210,66 @@ static Key keys[] = {
 	{ MODKEY,                       XK_F2,         mpdchange,              {.i = +1} },
 	{ MODKEY,                       XK_Escape,     mpdcontrol,             {0} },
 	#endif // MPDCONTROL_PATCH
-	TAGKEYS(                        XK_1,                                  0)
-	TAGKEYS(                        XK_2,                                  1)
-	TAGKEYS(                        XK_3,                                  2)
-	TAGKEYS(                        XK_4,                                  3)
-	TAGKEYS(                        XK_5,                                  4)
-	TAGKEYS(                        XK_6,                                  5)
-	TAGKEYS(                        XK_7,                                  6)
-	TAGKEYS(                        XK_8,                                  7)
-	TAGKEYS(                        XK_9,                                  8)
+
+	// MY CUSTOM COMMAND BINDINGS
+
+	/* description: (cmd) change dwm windows' layout */ 	{ MODKEY|ShiftMask,		XK_w,			spawn,          SHCMD("dwm-change-layouts.py") },
+
+	/* description: (cmd) rofi app menu */			{ MODKEY,			XK_e,			spawn,          SHCMD("rofi -show drun -drun-icon-theme") },
+	/* description: (cmd) dmenu apps */			{ MODKEY|ShiftMask,		XK_e,			spawn,          SHCMD("dmenu_run") },
+	/* description: (cmd) dmenu launcher */ 		{ MODKEY|ShiftMask,     	XK_l,			spawn,          SHCMD("~/apps/scripts/bin/dmlauncher.sh") },
+	/* description: (cmd) rofi shutdown menu */		{ MODKEY, 			XK_z,			spawn,          SHCMD("~/apps/scripts/rofi/shutdown.py") },
+	/* description: (cmd) */ 				{ MODKEY, 			XK_c,			spawn,          SHCMD("clippy_rofi.py") },
+	/* description: (cmd) */ 				{ MODKEY,			XK_Return,		spawn,		SHCMD("~/apps/scripts/bin/terminal.sh")},
+	/* description: (cmd) */ 				{ MODKEY, 			XK_d,			spawn,          SHCMD("~/apps/scripts/bin/dmcheatsheets-menu.sh") },
+	/* description: (cmd) */ 				{ MODKEY|ShiftMask,		XK_Return,		spawn,          SHCMD("~/apps/scripts/bin/terminal-tmux.sh") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_Tab,			spawn,          SHCMD("rofi -show window -drun-icon-theme") },
+	/* description: (cmd) */ 				{ MODKEY|ShiftMask,		XK_d,			spawn,          SHCMD("notify-send -u critical 'Restarting dwm...' && pkill -HUP dwm") },
+	/* description: (cmd) increase screen brightness */ 	{ Mod1Mask|ShiftMask,		XK_Up,			spawn,          SHCMD("xbacklight -inc 20") },
+	/* description: (cmd) decrease screen brightness */	{ Mod1Mask|ShiftMask,		XK_Down,		spawn,          SHCMD("xbacklight -dec 20") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_space,		spawn,          SHCMD("playerctl play-pause && kill -44 $(pidof dwmblocks)") },
+	/* description: (cmd) playerctl next */ 		{ Mod1Mask,			XK_Right,		spawn,          SHCMD("playerctl next && kill -44 $(pidof dwmblocks)") },
+	/* description: (cmd) playerctl previous */		{ Mod1Mask,			XK_Left,		spawn,          SHCMD("playerctl previous && kill -44 $(pidof dwmblocks)") },
+	/* description: (cmd) increase sound volume */		{ Mod1Mask,			XK_Up,			spawn,          SHCMD("pactl set-sink-volume $(pacmd list-sinks | grep index | sed 's/: /:/g'| cut -d ':' -f 2) +5% && kill -44 $(pidof dwmblocks)") },
+	/* description: (cmd) decrease sound volume */		{ Mod1Mask,			XK_Down,		spawn,          SHCMD("pactl set-sink-volume $(pacmd list-sinks | grep index | sed 's/: /:/g'| cut -d ':' -f 2) -5% && kill -44 $(pidof dwmblocks)") },
+	/* description: (cmd) mute/unmute sound volume */	{ Mod1Mask|ShiftMask,		XK_8,			spawn,          SHCMD("pactl set-sink-mute $(pacmd list-sink-inputs | grep -c index) toggle && kill -44 $(pidof dwmblocks)") },
+	/* description: (cmd) */ 				{ MODKEY|ShiftMask, 		XK_b,			spawn,          SHCMD("~/apps/scripts/rofi/bookmarks.py") },
+	/* description: (cmd) wallpaper (m to mark) */   	{ Mod1Mask, 			XK_w,			spawn,          SHCMD("sxiv -r -q -o $(ls -t --color=never ~/Wallpapers/*) | xargs feh --bg-scale") },
+	/* description: (cmd) styli.sh random wallpaper */   	{ Mod1Mask|ShiftMask,		XK_w,			spawn,          SHCMD("/opt/styli.sh/styli.sh -l reddit") },
+	/* description: (cmd) */ 				{ Mod1Mask, 			XK_s,			spawn,          SHCMD("~/apps/scripts/rofi/snippets.sh") },
+	/* description: (cmd) */ 				{ Mod1Mask, 			XK_o,			spawn,          SHCMD("~/apps/scripts/bin/toggle_compositor.sh") },
+	/* description: (cmd) */ 				{ MODKEY, 			XK_m,			spawn,          SHCMD("arandr && reload_wallpaper.sh") },
+	/* description: (cmd) */ 				{ MODKEY, 			XK_w,			spawn,          SHCMD("~/apps/scripts/bin/pass-rofi.sh") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_h,			spawn,		SHCMD("urxvt -name htop -title htop --hold -e htop") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_r,			spawn,		SHCMD("lxappearance") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_c,			spawn,		SHCMD("~/apps/scripts/bin/customize_capslock.sh") },
+	/* description: (cmd) echo keys typed on screen */	{ Mod1Mask,			XK_n,			spawn,		SHCMD("killall screenkey || screenkey &") },
+	/* description: (cmd) vedit.sh: vim edit text field */  { Mod1Mask,			XK_e,			spawn,		SHCMD("~/apps/scripts/bin/vedit.sh") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_v,			spawn,		SHCMD("pavucontrol") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_k,			spawn,		SHCMD("~/apps/scripts/rofi/toggle_keyboards.py") },
+	/* description: (cmd) */ 				{ Mod1Mask|ShiftMask,		XK_k,			spawn,		SHCMD("~/apps/scripts/bin/keyboard-backlight.sh") },
+	/* description: (cmd) */ 				{ MODKEY|ShiftMask,		XK_p,			spawn,		SHCMD("~/apps/scripts/bin/screenshot.py -s full") },
+	/* description: (cmd) */ 				{ MODKEY,			XK_p,			spawn,		SHCMD("~/apps/scripts/bin/screenshot.py -s region") },
+	/* description: (cmd) */ 				{ Mod1Mask,			XK_b,			spawn,		SHCMD("flatpak run --filesystem=host org.qutebrowser.qutebrowser -B ~/.local/share/qutebrowser/personal -C ~/.local/share/qutebrowser/personal/config/config.py") },
+	/* description: (cmd) */ 				{ Mod1Mask|ShiftMask,		XK_b,			spawn,		SHCMD("flatpak run --filesystem=host org.qutebrowser.qutebrowser -B ~/.local/share/qutebrowser/work/dafiti -C ~/.local/share/qutebrowser/work/dafiti/config/config.py") },
+
+	/* OTHER EXAMPLES */
+
+	/* urxvt -name vim -title vim --hold -e bash -c "TERM=screen-256color $TMUXP_BIN load /storage/src/devops/tmuxp/notes.yml"; */
+
+	/* { MODKEY,			XK_e,			spawn,		SHCMD("~/apps/scripts/bin/terminal.sh -e neomutt ; pkill -RTMIN+12 dwmblocks; rmdir ~/.abook") }, */
+	/* { 0,				XK_Print,		spawn,		SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png") }, */
+	/* { MODKEY|ShiftMask,		XK_n,			spawn,		SHCMD("~/apps/scripts/bin/terminal.sh -e newsboat; pkill -RTMIN+6 dwmblocks") }, */
+	/* { MODKEY,			XK_Insert,		spawn,		SHCMD("xdotool type $(cat ~/.local/share/larbs/snippets | dmenu -i -l 50 | cut -d' ' -f1)") }, */
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_1,		0)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_2,		1)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_3,		2)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_4,		3)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_5,		4)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_6,		5)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_7,		6)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_8,		7)
+	/* description: (dwm:TAGKEYS_MACRO_VALUES) */ TAGKEYS(XK_9,		8)
 };
 
 #if KEYMODES_PATCH
@@ -1207,6 +1304,7 @@ static Command commands[] = {
 #else
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 #endif //
+
 static Button buttons[] = {
 	/* click                event mask           button          function        argument */
 	#if BAR_STATUSBUTTON_PATCH
