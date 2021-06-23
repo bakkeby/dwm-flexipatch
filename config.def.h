@@ -1240,6 +1240,7 @@ static Key keys[] = {
 	/* description: (cmd) */ 				{ Mod1Mask, 			XK_o,			spawn,          SHCMD("~/apps/scripts/bin/toggle_compositor.sh") },
 	/* description: (cmd) */ 				{ MODKEY, 			XK_m,			spawn,          SHCMD("arandr && reload_wallpaper.sh") },
 	/* description: (cmd) */ 				{ MODKEY, 			XK_w,			spawn,          SHCMD("~/apps/scripts/bin/pass-rofi.sh") },
+	/* description: (cmd) dunst notifications menu */	{ MODKEY, 			XK_u,			spawn,          SHCMD("~/apps/scripts/bin/dmdunst-menu.sh") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_h,			spawn,		SHCMD("urxvt -name htop -title htop --hold -e htop") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_c,			spawn,		SHCMD("~/apps/scripts/bin/customize_capslock.sh") },
 	/* description: (cmd) echo keys typed on screen */	{ Mod1Mask,			XK_n,			spawn,		SHCMD("killall screenkey || screenkey &") },
