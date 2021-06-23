@@ -1,4 +1,5 @@
-- [ ] Raise the notes-and-reminders size
+- [x] Raise the notes-and-reminders size
+- [ ] Passar por todos os patches ativos, e mapear os atalhos dos que não estiverem mapeados
 - [ ] Cyberpunk colors (maybe check the darkula theme for inspiration?)
 - [ ] Detect duplicated keyboard shortcuts
 - [ ] Update the cheatsheet with the commands available from the new patches.
