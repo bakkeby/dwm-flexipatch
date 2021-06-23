@@ -357,7 +357,7 @@
  * Essentially this way the colors you use in your regular tty is "mirrored" to dwm.
  * https://dwm.suckless.org/patches/vtcolors/
  */
-#define BAR_VTCOLORS_PATCH 1
+#define BAR_VTCOLORS_PATCH 0
 
 /* This patch allows client windows to be hidden. This code was originally part of awesomebar,
  * but has been separated out so that other bar modules can take advantage of it.
