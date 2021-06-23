@@ -995,6 +995,7 @@ static Key keys[] = {
 	/* description: (dwm:update colors from Xresources) */ 	{ MODKEY,             XK_x,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
 
+	/* description: (dwm:) cyclelayout default ( / ) */ 	{ MODKEY,          XK_slash,     setlayout,	{.v = &layouts[0]} },
 	/*  { MODKEY,			XK_t,			setlayout,	{.v = &layouts[0]} }, */
 	/*  { MODKEY|ShiftMask,		XK_t,			setlayout,	{.v = &layouts[1]} }, */
 	/*  { MODKEY,			XK_y,			setlayout,	{.v = &layouts[2]} }, */
@@ -1206,7 +1207,6 @@ static Key keys[] = {
 	#if CYCLELAYOUTS_PATCH
 	/* description: (dwm:) cyclelayout previous ( [ ) */ 	{ MODKEY,          XK_bracketleft,      cyclelayout,            {.i = -1 } },
 	/* description: (dwm:) cyclelayout next ( ] ) */ 	{ MODKEY,          XK_bracketright,     cyclelayout,            {.i = +1 } },
-	/* description: (dwm:) cyclelayout default ( / ) */ 	{ MODKEY,          XK_slash,     	cyclelayout,            {.i = 0 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
