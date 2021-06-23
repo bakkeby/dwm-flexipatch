@@ -1204,7 +1204,7 @@ static Key keys[] = {
 	/* description: (dwm: set window border px) */ { MODKEY|Mod1Mask,           XK_equal, 	setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-	/* description: (dwm:) cyclelayout previous ( [ ) */ 	{ MODKEY           XK_bracketleft,      cyclelayout,            {.i = -1 } },
+	/* description: (dwm:) cyclelayout previous ( [ ) */ 	{ MODKEY,          XK_bracketleft,      cyclelayout,            {.i = -1 } },
 	/* description: (dwm:) cyclelayout next ( ] ) */ 	{ MODKEY,          XK_bracketright,     cyclelayout,            {.i = +1 } },
 	/* description: (dwm:) cyclelayout default ( / ) */ 	{ MODKEY,          XK_slash,     	cyclelayout,            {.i = 0 } },
 	#endif // CYCLELAYOUTS_PATCH
