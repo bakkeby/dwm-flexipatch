@@ -891,8 +891,8 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_k,          inplacerotate,          {.i = -1} },
 	#endif // INPLACEROTATE_PATCH
 	#if PUSH_PATCH || PUSH_NO_MASTER_PATCH
-	{ MODKEY|ControlMask,           XK_j,          pushdown,               {0} },
-	{ MODKEY|ControlMask,           XK_k,          pushup,                 {0} },
+	/* description: (dwm:push) */ { MODKEY|ControlMask,           XK_j,          pushdown,               {0} },
+	/* description: (dwm:push) */ { MODKEY|ControlMask,           XK_k,          pushup,                 {0} },
 	#endif // PUSH_PATCH / PUSH_NO_MASTER_PATCH
 	/* description: (dwm) one more master window */		{ MODKEY,			XK_o,			incnmaster,     {.i = +1} },
 	/* description: (dwm) one less master window */		{ MODKEY|ShiftMask,		XK_o,			incnmaster,     {.i = -1} },
@@ -912,18 +912,18 @@ static Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_r,          aspectresize,           {.i = -24} },
 	#endif // ASPECTRESIZE_PATCH
 	#if MOVERESIZE_PATCH
-	{ MODKEY|Mod4Mask,              XK_Down,       moveresize,             {.v = "0x 25y 0w 0h" } },
-	{ MODKEY|Mod4Mask,              XK_Up,         moveresize,             {.v = "0x -25y 0w 0h" } },
-	{ MODKEY|Mod4Mask,              XK_Right,      moveresize,             {.v = "25x 0y 0w 0h" } },
-	{ MODKEY|Mod4Mask,              XK_Left,       moveresize,             {.v = "-25x 0y 0w 0h" } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_Down,       moveresize,             {.v = "0x 0y 0w 25h" } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_Up,         moveresize,             {.v = "0x 0y 0w -25h" } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_Right,      moveresize,             {.v = "0x 0y 25w 0h" } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_Left,       moveresize,             {.v = "0x 0y -25w 0h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask,              XK_Down,       moveresize,             {.v = "0x 25y 0w 0h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask,              XK_Up,         moveresize,             {.v = "0x -25y 0w 0h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask,              XK_Right,      moveresize,             {.v = "25x 0y 0w 0h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask,              XK_Left,       moveresize,             {.v = "-25x 0y 0w 0h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask|ShiftMask,    XK_Down,       moveresize,             {.v = "0x 0y 0w 25h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask|ShiftMask,    XK_Up,         moveresize,             {.v = "0x 0y 0w -25h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask|ShiftMask,    XK_Right,      moveresize,             {.v = "0x 0y 25w 0h" } },
+	/* description: (dwm:move/resize) */ { MODKEY|Mod4Mask|ShiftMask,    XK_Left,       moveresize,             {.v = "0x 0y -25w 0h" } },
 	#endif // MOVERESIZE_PATCH
 	#if MOVESTACK_PATCH
-	{ MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
+	/* description: (dwm:move stack) */ { MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
+	/* description: (dwm:move stack) */ { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
 	#endif // MOVESTACK_PATCH
 	#if TRANSFER_PATCH
 	{ MODKEY,                       XK_x,          transfer,               {0} },
@@ -992,7 +992,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,          winview,                {0} },
 	#endif // WINVIEW_PATCH
 	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
-	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
+	/* description: (dwm:update colors from Xresources) */ 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
 	/* description: (dwm:layouts) tile */ 			{ MODKEY,			XK_t,			setlayout,	{.v = &layouts[0]} },
 	/* description: (dwm:layouts) bstack */ 		{ MODKEY|ShiftMask,		XK_t,			setlayout,	{.v = &layouts[1]} },
@@ -1019,11 +1019,11 @@ static Key keys[] = {
 	#endif // FLEXTILE_DELUXE_LAYOUT
 	/* description: (dwm) toggle window floating */		{ MODKEY|ShiftMask,		XK_space,		togglefloating,	{0} },
 	#if MAXIMIZE_PATCH
-	{ MODKEY|ControlMask|ShiftMask, XK_h,          togglehorizontalmax,    {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_l,          togglehorizontalmax,    {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_j,          toggleverticalmax,      {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_k,          toggleverticalmax,      {0} },
-	{ MODKEY|ControlMask,           XK_m,          togglemax,              {0} },
+	/* description: (dwm:maximize) */ { MODKEY|ControlMask|ShiftMask, XK_h,          togglehorizontalmax,    {0} },
+	/* description: (dwm:maximize) */ { MODKEY|ControlMask|ShiftMask, XK_l,          togglehorizontalmax,    {0} },
+	/* description: (dwm:maximize) */ { MODKEY|ControlMask|ShiftMask, XK_j,          toggleverticalmax,      {0} },
+	/* description: (dwm:maximize) */ { MODKEY|ControlMask|ShiftMask, XK_k,          toggleverticalmax,      {0} },
+	/* description: (dwm:maximize) */ { MODKEY|ControlMask,           XK_m,          togglemax,              {0} },
 	#endif // MAXIMIZE_PATCH
 	#if NO_MOD_BUTTONS_PATCH
 	{ MODKEY|ShiftMask,             XK_Escape,     togglenomodbuttons,     {0} },
@@ -1197,13 +1197,13 @@ static Key keys[] = {
 	{ Mod3Mask|Mod1Mask,            XK_period,       floatpos,               {.v = " 1p  1p" } }, // ↘
 	#endif // FLOATPOS_PATCH
 	#if SETBORDERPX_PATCH
-	{ MODKEY|ControlMask,           XK_minus,      setborderpx,            {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_plus,       setborderpx,            {.i = +1 } },
-	{ MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
+	/* description: (dwm: set border px) */ { MODKEY|ControlMask,           XK_minus,      setborderpx,            {.i = -1 } },
+	/* description: (dwm: set border px) */ { MODKEY|ControlMask,           XK_plus,       setborderpx,            {.i = +1 } },
+	/* description: (dwm: set border px) */ { MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
+	/* description: (dwm:) cyclelayout */ { MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
+	/* description: (dwm:) cyclelayout */ { MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
