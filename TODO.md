@@ -16,6 +16,6 @@
 	[x] SWALLOW_PATCH
 	[x] VANITYGAPS_PATCH
 	[x] XRDB_PATCH (`~/.Xresources`)
-- [>>> CONTINUAR DAQUI] C) `config.def.h`: detectar os atalhos duplicados e remover as duplicidades com novos atalhos (usar os scripts em `/storage/src/devops/bin/dwm-print-cheatsheet.sh` e `/storage/src/devops/bin/dwm-print-all-mapped-keys.sh` para detectá-los).
+- [-] C) `config.def.h`: detectar os atalhos duplicados e remover as duplicidades com novos atalhos (usar os scripts em `/storage/src/devops/bin/dwm-print-cheatsheet.sh` e `/storage/src/devops/bin/dwm-print-all-mapped-keys.sh` para detectá-los).
 - [ ] D) Configurar cyberpunk colors (maybe check the darkula theme for inspiration?) - to do that, edit `~/.Xresources` and use the color names prefixed with `dmm.*` defined in `/storage/src/dwm-flexipatch/patch/xrdb.c`.
 - [ ] E) Mergear essa branch na master.
