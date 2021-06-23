@@ -18,7 +18,10 @@
 	[x] XRDB_PATCH (`~/.Xresources`)
 - [x] C) `config.def.h`: detectar os atalhos duplicados e remover as duplicidades com novos atalhos (usar os scripts em `/storage/src/devops/bin/dwm-print-cheatsheet.sh` e `/storage/src/devops/bin/dwm-print-all-mapped-keys.sh` para detectá-los).
 - [x] D) Remover atalhos que não fazem mais sentido da cheatsheet
-- [-] E) Recompilar o dwm e testar os bindings de "cyclelayout" e "shiftview" (ver a cheatsheet)
-- [ ] F) Configurar cyberpunk colors (maybe check the darkula theme for inspiration?) - to do that, edit `~/.Xresources` and use the color names prefixed with `dmm.*` defined in `/storage/src/dwm-flexipatch/patch/xrdb.c`.
-- [ ] G) Mergear essa branch na master.
+- [x] E) Recompilar o dwm e testar os bindings de "cyclelayout" e "shiftview" (ver a cheatsheet)
+- [-] F) Notifications:
+  	- [-] binding no dmenu para rodar o `toggle-stalonetray.sh`
+  	- [ ] criar um menu dmenu para lidar com as notificações do dunst (ver comandos disponíveis no dunstctl). Colocar no dwmblocks se as notificações estão ON/OFF.
+- [ ] G) Configurar cyberpunk colors (maybe check the darkula theme for inspiration?) - to do that, edit `~/.Xresources` and use the color names prefixed with `dmm.*` defined in `/storage/src/dwm-flexipatch/patch/xrdb.c`.
+- [ ] H) Mergear essa branch na master.
 

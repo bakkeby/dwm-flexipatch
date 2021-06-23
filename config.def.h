@@ -1246,6 +1246,7 @@ static Key keys[] = {
 	/* description: (cmd) vedit.sh: vim edit text field */  { Mod1Mask,			XK_e,			spawn,		SHCMD("~/apps/scripts/bin/vedit.sh") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_v,			spawn,		SHCMD("pavucontrol") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_k,			spawn,		SHCMD("~/apps/scripts/rofi/toggle_keyboards.py") },
+	/* description: (cmd) toggle systray (stalonetray) */	{ MODKEY,			XK_t,			spawn,		SHCMD("~/apps/scripts/bin/toggle-stalonetray.sh") },
 	/* description: (cmd) */ 				{ MODKEY|ShiftMask,		XK_p,			spawn,		SHCMD("~/apps/scripts/bin/screenshot.py -s full") },
 	/* description: (cmd) */ 				{ MODKEY,			XK_p,			spawn,		SHCMD("~/apps/scripts/bin/screenshot.py -s region") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_b,			spawn,		SHCMD("flatpak run --filesystem=host org.qutebrowser.qutebrowser -B ~/.local/share/qutebrowser/personal -C ~/.local/share/qutebrowser/personal/config/config.py") },
