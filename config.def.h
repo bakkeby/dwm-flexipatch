@@ -891,8 +891,8 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_k,          inplacerotate,          {.i = -1} },
 	#endif // INPLACEROTATE_PATCH
 	#if PUSH_PATCH || PUSH_NO_MASTER_PATCH
-	/* description: (dwm:push) */ { MODKEY|ControlMask,           XK_j,          pushdown,               {0} },
-	/* description: (dwm:push) */ { MODKEY|ControlMask,           XK_k,          pushup,                 {0} },
+	/* description: (dwm:push/move current window on stack) */ { MODKEY|ShiftMask,           XK_j,          pushdown,               {0} },
+	/* description: (dwm:push/move current window on stack) */ { MODKEY|ShiftMask,           XK_k,          pushup,                 {0} },
 	#endif // PUSH_PATCH / PUSH_NO_MASTER_PATCH
 	/* description: (dwm) one more master window */		{ MODKEY,			XK_o,			incnmaster,     {.i = +1} },
 	/* description: (dwm) one less master window */		{ MODKEY|ShiftMask,		XK_o,			incnmaster,     {.i = -1} },
@@ -900,8 +900,8 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	/* description: (dwm) */ 				{ MODKEY,			XK_h,			setmfact,	{.f = -0.05} },
-	/* description: (dwm) */ 				{ MODKEY,			XK_l,			setmfact,      	{.f = +0.05} },
+	/* description: (dwm) larger window */ 				{ MODKEY,			XK_h,			setmfact,	{.f = -0.05} },
+	/* description: (dwm) narrower window */ 			{ MODKEY,			XK_l,			setmfact,      	{.f = +0.05} },
 	#if CFACTS_PATCH
 	{ MODKEY|ShiftMask,             XK_h,          setcfact,               {.f = +0.25} },
 	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
@@ -922,8 +922,8 @@ static Key keys[] = {
 	/* description: (dwm:move/resize) */ { MODKEY|Mod1Mask|ShiftMask,    XK_Left,       moveresize,             {.v = "0x 0y -25w 0h" } },
 	#endif // MOVERESIZE_PATCH
 	#if MOVESTACK_PATCH
-	/* description: (dwm:move stack) */ { MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
-	/* description: (dwm:move stack) */ { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
 	#endif // MOVESTACK_PATCH
 	#if TRANSFER_PATCH
 	{ MODKEY,                       XK_x,          transfer,               {0} },
@@ -959,10 +959,10 @@ static Key keys[] = {
 	/* description: (dwm) toggle gaps */			{ MODKEY,			XK_a,			togglegaps,	{0} },
 	/* description: (dwm) default gaps */ 			{ MODKEY|ShiftMask,		XK_a,			defaultgaps,	{0} },
 	#endif // VANITYGAPS_PATCH
-	/* description: (dwm) */ 				{ MODKEY,			XK_Tab,			view,		{0} },
+	/* description: (dwm: go to previous tag) */		{ MODKEY,			XK_Tab,			view,		{0} },
 	#if SHIFTVIEW_PATCH
-	/* description: (dwm) */ 				{ MODKEY,			XK_Page_Up,		shiftview,	{.i = -1} },
-	/* description: (dwm) */ 				{ MODKEY,			XK_Page_Down,		shiftview,	{.i = +1} },
+	/* description: (dwm) go to previous numbered tag */ 	{ MODKEY|ShiftMask,		XK_comma,		shiftview,	{.i = -1} },
+	/* description: (dwm) go to next numbered tag*/ 	{ MODKEY|ShiftMask,		XK_period,		shiftview,	{.i = +1} },
   	#endif // SHIFTVIEW_PATCH
   	#if SHIFTVIEW_CLIENTS_PATCH
 	{ MODKEY|Mod1Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
@@ -992,17 +992,19 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,          winview,                {0} },
 	#endif // WINVIEW_PATCH
 	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
-	/* description: (dwm:update colors from Xresources) */ 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
+	/* description: (dwm:update colors from Xresources) */ 	{ MODKEY,             XK_x,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
-	/* description: (dwm:layouts) tile */ 			{ MODKEY,			XK_t,			setlayout,	{.v = &layouts[0]} },
-	/* description: (dwm:layouts) bstack */ 		{ MODKEY|ShiftMask,		XK_t,			setlayout,	{.v = &layouts[1]} },
-	/* description: (dwm:layouts) spiral */ 		{ MODKEY,			XK_y,			setlayout,	{.v = &layouts[2]} },
-	/* description: (dwm:layouts) dwindle */ 		{ MODKEY|ShiftMask,		XK_y,			setlayout,	{.v = &layouts[3]} },
-	/* description: (dwm:layouts) deck */ 			{ MODKEY,			XK_u,			setlayout,	{.v = &layouts[4]} },
-	/* description: (dwm:layouts) monocle */ 		{ MODKEY|ShiftMask,		XK_u,			setlayout,	{.v = &layouts[5]} },
-	/* description: (dwm:layouts) centeredmaster */ 	{ MODKEY,			XK_i,			setlayout,	{.v = &layouts[6]} },
-	/* description: (dwm:layouts) centeredfloatingmaster */ { MODKEY|ShiftMask,		XK_i,			setlayout,	{.v = &layouts[7]} },
-	/* description: (dwm:layouts) floating */ 		{ MODKEY|ShiftMask,		XK_f,			setlayout,	{.v = &layouts[8]} },
+
+	/*  { MODKEY,			XK_t,			setlayout,	{.v = &layouts[0]} }, */
+	/*  { MODKEY|ShiftMask,		XK_t,			setlayout,	{.v = &layouts[1]} }, */
+	/*  { MODKEY,			XK_y,			setlayout,	{.v = &layouts[2]} }, */
+	/*  { MODKEY|ShiftMask,		XK_y,			setlayout,	{.v = &layouts[3]} }, */
+	/*  { MODKEY,			XK_u,			setlayout,	{.v = &layouts[4]} }, */
+	/*  { MODKEY|ShiftMask,		XK_u,			setlayout,	{.v = &layouts[5]} }, */
+	/*  { MODKEY,			XK_i,			setlayout,	{.v = &layouts[6]} }, */
+	/*  { MODKEY|ShiftMask,		XK_i,			setlayout,	{.v = &layouts[7]} }, */
+	/*  { MODKEY|ShiftMask,		XK_f,			setlayout,	{.v = &layouts[8]} }, */
+
 	#if COLUMNS_LAYOUT
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
@@ -1017,7 +1019,7 @@ static Key keys[] = {
 	{ MODKEY|Mod5Mask|Mod1Mask,     XK_Tab,        rotatelayoutaxis,       {.i = -4 } },   /* flextile, 4 = secondary stack axis */
 	{ MODKEY|ControlMask,           XK_Return,     mirrorlayout,           {0} },          /* flextile, flip master and stack areas */
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	/* description: (dwm) toggle window floating */		{ MODKEY|ShiftMask,		XK_space,		togglefloating,	{0} },
+	/* description: (dwm) toggle window floating */		{ MODKEY|ShiftMask,		XK_f,		togglefloating,	{0} },
 	#if MAXIMIZE_PATCH
 	/* description: (dwm:maximize) */ { MODKEY|ControlMask|ShiftMask, XK_h,          togglehorizontalmax,    {0} },
 	/* description: (dwm:maximize) */ { MODKEY|ControlMask|ShiftMask, XK_l,          togglehorizontalmax,    {0} },
@@ -1197,13 +1199,14 @@ static Key keys[] = {
 	{ Mod3Mask|Mod1Mask,            XK_period,       floatpos,               {.v = " 1p  1p" } }, // ↘
 	#endif // FLOATPOS_PATCH
 	#if SETBORDERPX_PATCH
-	/* description: (dwm: set border px) */ { MODKEY|ControlMask,           XK_minus,      setborderpx,            {.i = -1 } },
-	/* description: (dwm: set border px) */ { MODKEY|ControlMask,           XK_plus,       setborderpx,            {.i = +1 } },
-	/* description: (dwm: set border px) */ { MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
+	/* description: (dwm: set window border px) */ { MODKEY|Mod1Mask,           XK_j,      setborderpx,            {.i = -1 } },
+	/* description: (dwm: set window border px) */ { MODKEY|Mod1Mask,           XK_k,      setborderpx,            {.i = +1 } },
+	/* description: (dwm: set window border px) */ { MODKEY|Mod1Mask,           XK_equal, 	setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-	/* description: (dwm:) cyclelayout */ { MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
-	/* description: (dwm:) cyclelayout */ { MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
+	/* description: (dwm:) cyclelayout previous ( [ ) */ 	{ MODKEY           XK_bracketleft,      cyclelayout,            {.i = -1 } },
+	/* description: (dwm:) cyclelayout next ( ] ) */ 	{ MODKEY,          XK_bracketright,     cyclelayout,            {.i = +1 } },
+	/* description: (dwm:) cyclelayout default ( / ) */ 	{ MODKEY,          XK_slash,     	cyclelayout,            {.i = 0 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
@@ -1213,8 +1216,6 @@ static Key keys[] = {
 
 	// MY CUSTOM COMMAND BINDINGS
 
-	/* description: (cmd) change dwm windows' layout */ 	{ MODKEY|ShiftMask,		XK_w,			spawn,          SHCMD("dwm-change-layouts.py") },
-
 	/* description: (cmd) rofi app menu */			{ MODKEY,			XK_e,			spawn,          SHCMD("rofi -show drun -drun-icon-theme") },
 	/* description: (cmd) dmenu apps */			{ MODKEY|ShiftMask,		XK_e,			spawn,          SHCMD("dmenu_run") },
 	/* description: (cmd) dmenu launcher */ 		{ MODKEY|ShiftMask,     	XK_l,			spawn,          SHCMD("~/apps/scripts/bin/dmlauncher.sh") },
@@ -1223,7 +1224,6 @@ static Key keys[] = {
 	/* description: (cmd) */ 				{ MODKEY,			XK_Return,		spawn,		SHCMD("~/apps/scripts/bin/terminal.sh")},
 	/* description: (cmd) */ 				{ MODKEY, 			XK_d,			spawn,          SHCMD("~/apps/scripts/bin/dmcheatsheets-menu.sh") },
 	/* description: (cmd) */ 				{ MODKEY|ShiftMask,		XK_Return,		spawn,          SHCMD("~/apps/scripts/bin/terminal-tmux.sh") },
-	/* description: (cmd) */ 				{ Mod1Mask,			XK_Tab,			spawn,          SHCMD("rofi -show window -drun-icon-theme") },
 	/* description: (cmd) */ 				{ MODKEY|ShiftMask,		XK_d,			spawn,          SHCMD("notify-send -u critical 'Restarting dwm...' && pkill -HUP dwm") },
 	/* description: (cmd) increase screen brightness */ 	{ Mod1Mask|ShiftMask,		XK_Up,			spawn,          SHCMD("xbacklight -inc 20") },
 	/* description: (cmd) decrease screen brightness */	{ Mod1Mask|ShiftMask,		XK_Down,		spawn,          SHCMD("xbacklight -dec 20") },
@@ -1241,13 +1241,11 @@ static Key keys[] = {
 	/* description: (cmd) */ 				{ MODKEY, 			XK_m,			spawn,          SHCMD("arandr && reload_wallpaper.sh") },
 	/* description: (cmd) */ 				{ MODKEY, 			XK_w,			spawn,          SHCMD("~/apps/scripts/bin/pass-rofi.sh") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_h,			spawn,		SHCMD("urxvt -name htop -title htop --hold -e htop") },
-	/* description: (cmd) */ 				{ Mod1Mask,			XK_r,			spawn,		SHCMD("lxappearance") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_c,			spawn,		SHCMD("~/apps/scripts/bin/customize_capslock.sh") },
 	/* description: (cmd) echo keys typed on screen */	{ Mod1Mask,			XK_n,			spawn,		SHCMD("killall screenkey || screenkey &") },
 	/* description: (cmd) vedit.sh: vim edit text field */  { Mod1Mask,			XK_e,			spawn,		SHCMD("~/apps/scripts/bin/vedit.sh") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_v,			spawn,		SHCMD("pavucontrol") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_k,			spawn,		SHCMD("~/apps/scripts/rofi/toggle_keyboards.py") },
-	/* description: (cmd) */ 				{ Mod1Mask|ShiftMask,		XK_k,			spawn,		SHCMD("~/apps/scripts/bin/keyboard-backlight.sh") },
 	/* description: (cmd) */ 				{ MODKEY|ShiftMask,		XK_p,			spawn,		SHCMD("~/apps/scripts/bin/screenshot.py -s full") },
 	/* description: (cmd) */ 				{ MODKEY,			XK_p,			spawn,		SHCMD("~/apps/scripts/bin/screenshot.py -s region") },
 	/* description: (cmd) */ 				{ Mod1Mask,			XK_b,			spawn,		SHCMD("flatpak run --filesystem=host org.qutebrowser.qutebrowser -B ~/.local/share/qutebrowser/personal -C ~/.local/share/qutebrowser/personal/config/config.py") },

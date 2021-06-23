@@ -16,6 +16,9 @@
 	[x] SWALLOW_PATCH
 	[x] VANITYGAPS_PATCH
 	[x] XRDB_PATCH (`~/.Xresources`)
-- [-] C) `config.def.h`: detectar os atalhos duplicados e remover as duplicidades com novos atalhos (usar os scripts em `/storage/src/devops/bin/dwm-print-cheatsheet.sh` e `/storage/src/devops/bin/dwm-print-all-mapped-keys.sh` para detectá-los).
-- [ ] D) Configurar cyberpunk colors (maybe check the darkula theme for inspiration?) - to do that, edit `~/.Xresources` and use the color names prefixed with `dmm.*` defined in `/storage/src/dwm-flexipatch/patch/xrdb.c`.
-- [ ] E) Mergear essa branch na master.
+- [x] C) `config.def.h`: detectar os atalhos duplicados e remover as duplicidades com novos atalhos (usar os scripts em `/storage/src/devops/bin/dwm-print-cheatsheet.sh` e `/storage/src/devops/bin/dwm-print-all-mapped-keys.sh` para detectá-los).
+- [x] D) Remover atalhos que não fazem mais sentido da cheatsheet
+- [-] E) Recompilar o dwm e testar os bindings de "cyclelayout" e "shiftview" (ver a cheatsheet)
+- [ ] F) Configurar cyberpunk colors (maybe check the darkula theme for inspiration?) - to do that, edit `~/.Xresources` and use the color names prefixed with `dmm.*` defined in `/storage/src/dwm-flexipatch/patch/xrdb.c`.
+- [ ] G) Mergear essa branch na master.
+
