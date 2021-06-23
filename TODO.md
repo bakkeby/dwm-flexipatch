@@ -1,5 +1,4 @@
-- [x] Raise the notes-and-reminders size
-- [ ] Passar por todos os patches ativos, e mapear os atalhos dos que não estiverem mapeados
-- [ ] Cyberpunk colors (maybe check the darkula theme for inspiration?)
-- [ ] Detect duplicated keyboard shortcuts
-- [ ] Update the cheatsheet with the commands available from the new patches.
+- [x] A) Raise the notes-and-reminders size
+- [ ] B) Ver a lista de todos os active patches em `README.md` marcados com [C], e colocar prefixos para que apareçam nas cheatsheets nos que possuírem bindings.
+- [ ] C) Detectar os atalhos duplicados e remover as duplicidades com novos atalhos (usar os scripts em `/storage/src/devops/bin/dwm-print-cheatsheet.sh` e `/storage/src/devops/bin/dwm-print-all-mapped-keys.sh` para detectá-los).
+- [ ] Configurar cyberpunk colors (maybe check the darkula theme for inspiration?)

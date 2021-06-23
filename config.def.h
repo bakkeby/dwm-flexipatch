@@ -572,7 +572,7 @@ static const int nstack      = 0;    /* number of clients in primary stack area 
 #endif // FLEXTILE_DELUXE_LAYOUT
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 #if DECORATION_HINTS_PATCH
-static const int decorhints  = 1;    /* 1 means respect decoration hints */
+static const int decorhints  = 0;    /* 1 means respect decoration hints */
 #endif // DECORATION_HINTS_PATCH
 
 #if NROWGRID_LAYOUT
