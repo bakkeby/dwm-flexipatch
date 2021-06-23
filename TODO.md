@@ -20,8 +20,9 @@
 - [x] D) Remover atalhos que não fazem mais sentido da cheatsheet
 - [x] E) Recompilar o dwm e testar os bindings de "cyclelayout" e "shiftview" (ver a cheatsheet)
 - [-] F) Notifications:
-  	- [-] binding no dmenu para rodar o `toggle-stalonetray.sh`
-  	- [ ] criar um menu dmenu para lidar com as notificações do dunst (ver comandos disponíveis no dunstctl). Colocar no dwmblocks se as notificações estão ON/OFF.
+  	- [x] binding no dmenu para rodar o `toggle-stalonetray.sh`
+	- [x] Colocar no dwmblocks se as notificações estão ON/OFF.
+  	- [ ] criar um menu dmenu para lidar com as notificações do dunst (ver comandos disponíveis no dunstctl).
 - [ ] G) Configurar cyberpunk colors (maybe check the darkula theme for inspiration?) - to do that, edit `~/.Xresources` and use the color names prefixed with `dmm.*` defined in `/storage/src/dwm-flexipatch/patch/xrdb.c`.
 - [ ] H) Mergear essa branch na master.
 
