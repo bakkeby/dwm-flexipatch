@@ -17,6 +17,8 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
 ### Changelog:
 
+2021-07-27 - Added the winicon patch
+
 2021-05-30 - Added togglelayout and toggletag patches
 
 2021-04-16 - Vanitygaps: replaced smartgaps with smartgaps\_fact, allowing gaps to be disabled or increased when there is only one client.
@@ -758,6 +760,9 @@ If you are experiencing issues then you may want to check out the [Known Issues]
    - [warp](https://dwm.suckless.org/patches/warp/)
       - warps the mouse cursor to the center of the currently focused window or screen when the
         mouse cursor is (a) on a different screen or (b) on top of a different window
+
+   - [winicon](https://dwm.suckless.org/patches/winicon/)
+      - adds the window icon next to the window title in the bar
 
    - [windowrolerule](https://github.com/bakkeby/patches/wiki/windowrolerule/)
       - sometimes a single application opens different windows depending on the task at hand and

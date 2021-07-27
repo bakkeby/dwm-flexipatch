@@ -17,9 +17,10 @@ draw_wintitle(Bar *bar, BarArg *a)
 	int x = a->x, w = a->w;
 	#endif // BAR_TITLE_LEFT_PAD_PATCH | BAR_TITLE_RIGHT_PAD_PATCH
 	Monitor *m = bar->mon;
+	Client *c = m->sel;
 	int pad = lrpad / 2;
 
-	if (!m->sel) {
+	if (!c) {
 		drw_setscheme(drw, scheme[SchemeTitleNorm]);
 		drw_rect(drw, x, a->y, w, a->h, 1, 1);
 		return 0;
@@ -30,15 +31,23 @@ draw_wintitle(Bar *bar, BarArg *a)
 	XSetErrorHandler(xerrordummy);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	#if BAR_CENTEREDWINDOWNAME_PATCH
-	if (TEXTW(m->sel->name) < w)
-		pad = (w - TEXTW(m->sel->name) + lrpad) / 2;
+	if (TEXTW(c->name) < w)
+		pad = (w - TEXTW(c->name) + lrpad) / 2;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
-	drw_text(drw, x, a->y, w, a->h, pad, m->sel->name, 0, False);
+
+	#if BAR_WINICON_PATCH
+	drw_text(drw, x, a->y, w, a->h, pad + (c->icon ? c->icon->width + ICONSPACING : 0), c->name, 0, False);
+	if (c->icon)
+		drw_img(drw, x + pad, a->y + (a->h - c->icon->height) / 2, c->icon, tmpicon);
+	#else
+	drw_text(drw, x, a->y, w, a->h, pad, c->name, 0, False);
+	#endif // BAR_WINICON_PATCH
+
 	#if BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
 	XSync(dpy, False);
 	XSetErrorHandler(xerror);
 	#endif // BAR_IGNORE_XFT_ERRORS_WHEN_DRAWING_TEXT_PATCH
-	drawstateindicator(m, m->sel, 1, x, a->y, w, a->h, 0, 0, m->sel->isfixed);
+	drawstateindicator(m, c, 1, x, a->y, w, a->h, 0, 0, c->isfixed);
 	return 1;
 }
 

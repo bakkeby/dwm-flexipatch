@@ -184,6 +184,9 @@ enum {
 enum {
 	NetSupported, NetWMName, NetWMState, NetWMCheck,
 	NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+	#if BAR_WINICON_PATCH
+	NetWMIcon,
+	#endif // BAR_WINICON_PATCH
 	#if BAR_SYSTRAY_PATCH
 	NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation,
 	NetSystemTrayVisual, NetWMWindowTypeDock, NetSystemTrayOrientationHorz,
@@ -388,6 +391,9 @@ struct Client {
 	#if XKB_PATCH
 	XkbInfo *xkb;
 	#endif // XKB_PATCH
+	#if BAR_WINICON_PATCH
+	XImage *icon;
+	#endif // BAR_WINICON_PATCH
 };
 
 typedef struct {
@@ -2294,6 +2300,10 @@ manage(Window w, XWindowAttributes *wa)
 	#if CFACTS_PATCH
 	c->cfact = 1.0;
 	#endif // CFACTS_PATCH
+	#if BAR_WINICON_PATCH
+	c->icon = NULL;
+	updateicon(c);
+	#endif // BAR_WINICON_PATCH
 	updatetitle(c);
 
 	#if XKB_PATCH
@@ -2703,6 +2713,13 @@ propertynotify(XEvent *e)
 		if (ev->atom == motifatom)
 			updatemotifhints(c);
 		#endif // DECORATION_HINTS_PATCH
+		#if BAR_WINICON_PATCH
+		else if (ev->atom == netatom[NetWMIcon]) {
+			updateicon(c);
+			if (c == c->mon->sel)
+				drawbar(c->mon);
+		}
+		#endif // BAR_WINICON_PATCH
 	}
 }
 
@@ -3526,6 +3543,9 @@ setup(void)
 	netatom[NetCurrentDesktop] = XInternAtom(dpy, "_NET_CURRENT_DESKTOP", False);
 	netatom[NetDesktopNames] = XInternAtom(dpy, "_NET_DESKTOP_NAMES", False);
 	#endif // BAR_EWMHTAGS_PATCH
+	#if BAR_WINICON_PATCH
+	netatom[NetWMIcon] = XInternAtom(dpy, "_NET_WM_ICON", False);
+	#endif // BAR_WINICON_PATCH
 	netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
 	netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
 	netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
@@ -4134,6 +4154,9 @@ unmanage(Client *c, int destroyed)
 
 	detach(c);
 	detachstack(c);
+	#if BAR_WINICON_PATCH
+	freeicon(c);
+	#endif // BAR_WINICON_PATCH
 	if (!destroyed) {
 		wc.border_width = c->oldbw;
 		XGrabServer(dpy); /* avoid race conditions */

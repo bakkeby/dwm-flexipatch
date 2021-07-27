@@ -155,6 +155,24 @@
 /* Show tag symbols in bar */
 #define BAR_TAGS_PATCH 1
 
+/* This patch adds the window icon next to the window title in the bar.
+ *
+ * The patch depends on Imlib2 for icon scaling.
+ * You need to uncomment the corresponding line in config.mk to use the -lImlib2 library
+ *
+ * Arch Linux:
+ *     sudo pacman -S imlib2
+ * Debian:
+ *     sudo apt install libimlib2-dev
+ *
+ * The author recommends adding the compiler flags of -O3 and -march=native to enable auto loop
+ * vectorize for better performance.
+ *
+ * https://github.com/AdamYuan/dwm-winicon
+ * https://dwm.suckless.org/patches/winicon
+ */
+#define BAR_WINICON_PATCH 0
+
 /* Show window title in bar */
 #define BAR_WINTITLE_PATCH 1
 
