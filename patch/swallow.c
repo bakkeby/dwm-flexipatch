@@ -12,6 +12,7 @@ int
 swallow(Client *p, Client *c)
 {
 	Client *s;
+	XWindowChanges wc;
 
 	if (c->noswallow > 0 || c->isterminal)
 		return 0;
@@ -41,7 +42,14 @@ swallow(Client *p, Client *c)
 	#if BAR_EWMHTAGS_PATCH
 	setfloatinghint(s);
 	#endif // BAR_EWMHTAGS_PATCH
+
+	wc.border_width = p->bw;
+	XConfigureWindow(dpy, p->win, CWBorderWidth, &wc);
 	XMoveResizeWindow(dpy, p->win, s->x, s->y, s->w, s->h);
+	#if !BAR_FLEXWINTITLE_PATCH
+	XSetWindowBorder(dpy, p->win, scheme[SchemeNorm][ColBorder].pixel);
+	#endif // BAR_FLEXWINTITLE_PATCH
+
 	arrange(p->mon);
 	configure(p);
 	updateclientlist();
@@ -52,6 +60,7 @@ swallow(Client *p, Client *c)
 void
 unswallow(Client *c)
 {
+	XWindowChanges wc;
 	c->win = c->swallowing->win;
 
 	free(c->swallowing);
@@ -64,7 +73,14 @@ unswallow(Client *c)
 	updatetitle(c);
 	arrange(c->mon);
 	XMapWindow(dpy, c->win);
+
+	wc.border_width = c->bw;
+	XConfigureWindow(dpy, c->win, CWBorderWidth, &wc);
 	XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
+	#if !BAR_FLEXWINTITLE_PATCH
+	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+	#endif // BAR_FLEXWINTITLE_PATCH
+
 	#if BAR_EWMHTAGS_PATCH
 	setfloatinghint(c);
 	#endif // BAR_EWMHTAGS_PATCH
