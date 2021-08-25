@@ -31,9 +31,13 @@ click_statuscmd_text(Arg *arg, int rel_x, char *text)
 	#endif // BAR_DWMBLOCKS_PATCH
 	while (text[++i]) {
 		if ((unsigned char)text[i] < ' ') {
+			#if BAR_STATUSCOLORS_PATCH
+			if (text[i] < 17)
+				continue;
+			#endif // BAR_STATUSCOLORS_PATCH
 			ch = text[i];
 			text[i] = '\0';
-			#if BAR_STATUS2D_PATCH && !BAR_BAR_STATUSCOLORS_PATCH
+			#if BAR_STATUS2D_PATCH && !BAR_STATUSCOLORS_PATCH
 			x += status2dtextlength(text);
 			#else
 			x += TEXTWM(text) - lrpad;

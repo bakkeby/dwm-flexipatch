@@ -361,6 +361,10 @@
 /* This patch enables colored text in the status bar. It changes the way colors are defined
  * in config.h allowing multiple color combinations for use in the status script.
  * This patch is incompatible with and takes precedence over the status2d patch.
+ *
+ * This patch is compatible with the statuscmd patch with the caveat that the first 16 markers
+ * are reserved for status colors restricting block signals to 17 through 31.
+ *
  * https://dwm.suckless.org/patches/statuscolors/
  */
 #define BAR_STATUSCOLORS_PATCH 0

@@ -44,6 +44,9 @@
 #if BAR_STATUSCMD_PATCH
 #include "bar_statuscmd.h"
 #endif
+#if BAR_STATUSCOLORS_PATCH
+#include "bar_statuscolors.h"
+#endif
 #if BAR_WINICON_PATCH
 #include "bar_winicon.h"
 #endif
