@@ -2376,18 +2376,30 @@ manage(Window w, XWindowAttributes *wa)
 	#if DECORATION_HINTS_PATCH
 	updatemotifhints(c);
 	#endif // DECORATION_HINTS_PATCH
-	#if CENTER_PATCH
+
+	#if CENTER_PATCH && (SAVEFLOATS_PATCH || EXRESIZE_PATCH)
+	c->sfx = -9999;
+	c->sfy = -9999;
+	if (c->iscentered) {
+		c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+		c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+	}
+	#elif CENTER_PATCH
 	if (c->iscentered) {
 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 		c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
 	}
+	#elif ALWAYSCENTER_PATCH && (SAVEFLOATS_PATCH || EXRESIZE_PATCH)
+	c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+	c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
 	#elif ALWAYSCENTER_PATCH
-	c->x = c->mon->mx + (c->mon->mw - WIDTH(c)) / 2;
-	c->y = c->mon->my + (c->mon->mh - HEIGHT(c)) / 2;
-	#endif // CENTER_PATCH
-	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
+	c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+	c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+	#elif SAVEFLOATS_PATCH || EXRESIZE_PATCH
 	c->sfx = -9999;
 	c->sfy = -9999;
+	#endif // CENTER_PATCH / ALWAYSCENTER_PATCH / SAVEFLOATS_PATCH
+	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 	c->sfw = c->w;
 	c->sfh = c->h;
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
