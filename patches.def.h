@@ -394,6 +394,13 @@
  * Other patches
  */
 
+/* All floating windows are centered, like the center patch, but without a rule.
+ * The center patch takes precedence over this patch.
+ * This patch interferes with the center transient windows patches.
+ * https://dwm.suckless.org/patches/alwayscenter/
+ */
+#define ALWAYSCENTER_PATCH 0
+
 /* This patch allows windows to be resized with its aspect ratio remaining constant.
  * https://dwm.suckless.org/patches/aspectresize/
  */
@@ -438,7 +445,7 @@
 #define AUTORESIZE_PATCH 0
 
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
- * This patch takes precedence over centeredwindowname and fancybar patches.
+ * This patch takes precedence over centeredwindowname, alwayscenter and fancybar patches.
  * https://dwm.suckless.org/patches/center/
  */
 #define CENTER_PATCH 0

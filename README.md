@@ -17,6 +17,8 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
 ### Changelog:
 
+2021-09-08 - Added the alwayscenter patch
+
 2021-07-27 - Added the winicon patch
 
 2021-05-30 - Added togglelayout and toggletag patches
@@ -216,6 +218,9 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
    - [alttagsdecoration](https://dwm.suckless.org/patches/alttagsdecoration/)
       - provides the ability to use alternative text for tags which contain at least one window
+
+   - [alwayscenter](https://dwm.suckless.org/patches/alwayscenter/)
+      - makes all floating windows centered, like the center patch, but without a rule
 
    - [~alwaysfullscreen~](https://dwm.suckless.org/patches/alwaysfullscreen/)
       - ~prevents the focus to drift from the active fullscreen client when using focusstack\(\)~
