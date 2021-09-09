@@ -2377,7 +2377,7 @@ manage(Window w, XWindowAttributes *wa)
 	updatemotifhints(c);
 	#endif // DECORATION_HINTS_PATCH
 
-	#if CENTER_PATCH && (SAVEFLOATS_PATCH || EXRESIZE_PATCH)
+	#if CENTER_PATCH && SAVEFLOATS_PATCH || CENTER_PATCH && EXRESIZE_PATCH
 	c->sfx = -9999;
 	c->sfy = -9999;
 	if (c->iscentered) {
@@ -2389,7 +2389,7 @@ manage(Window w, XWindowAttributes *wa)
 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 		c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
 	}
-	#elif ALWAYSCENTER_PATCH && (SAVEFLOATS_PATCH || EXRESIZE_PATCH)
+	#elif ALWAYSCENTER_PATCH && SAVEFLOATS_PATCH || ALWAYSCENTER_PATCH && EXRESIZE_PATCH
 	c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 	c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
 	#elif ALWAYSCENTER_PATCH
