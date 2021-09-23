@@ -1,6 +1,7 @@
 /* Bar functionality */
 #include "bar_indicators.h"
 #include "bar_tagicons.h"
+#include "bar.h"
 
 #if BAR_ALPHA_PATCH
 #include "bar_alpha.h"
@@ -58,6 +59,9 @@
 #endif
 #if BAR_TAGLABELS_PATCH
 #include "bar_taglabels.h"
+#endif
+#if BAR_TAGPREVIEW_PATCH
+#include "bar_tagpreview.h"
 #endif
 #if BAR_TAGGRID_PATCH
 #include "bar_taggrid.h"

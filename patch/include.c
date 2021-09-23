@@ -1,6 +1,7 @@
 /* Bar functionality */
 #include "bar_indicators.c"
 #include "bar_tagicons.c"
+#include "bar.c"
 
 #if BAR_ALPHA_PATCH
 #include "bar_alpha.c"
@@ -49,6 +50,9 @@
 #endif
 #if BAR_TABGROUPS_PATCH
 #include "bar_tabgroups.c"
+#endif
+#if BAR_TAGPREVIEW_PATCH
+#include "bar_tagpreview.c"
 #endif
 #if BAR_TAGS_PATCH
 #include "bar_tags.c"
