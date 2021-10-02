@@ -1287,3 +1287,8 @@
  */
 #define MONOCLE_LAYOUT 1
 
+/* Status All Monitors
+ * Show the status bar on all monitors.
+ * https://dwm.suckless.org/patches/statusallmons/
+ */
+#define STATUSALLMONS_PATCH 0
