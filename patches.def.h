@@ -90,7 +90,7 @@
  *
  * Examples:
  *    xsetroot -name "$(echo -e '<\x01a<\x02b<\x03c')"
- *    xsetroot -name "$(echo -e '/\x01d/\x02d/\x03f')"
+ *    xsetroot -name "$(echo -e '/\x01d/\x02e/\x03f')"
  *
  * https://gitlab.com/udiboy1209-suckless/dwm/-/commit/071f5063e8ac4280666828179f92788d893eea40#4b1a539194be7467cefbda22f675a3b7c19ceca7
  * https://dwm.suckless.org/patches/statuscolors/
@@ -357,6 +357,18 @@
  * https://dwm.suckless.org/patches/pango/
  */
 #define BAR_PANGO_PATCH 0
+
+/* This patch allows the status text to be fixed to the bar on a specific
+ * monitor rather than being drawn on the focused monitor.
+ * The statusallmons patch takes precedence over this patch.
+ * https://dwm.suckless.org/patches/staticstatus/
+ */
+#define BAR_STATICSTATUS_PATCH 0
+
+/* This patch draws and updates the statusbar on all monitors.
+ * https://dwm.suckless.org/patches/statusallmons/
+ */
+#define BAR_STATUSALLMONS_PATCH 0
 
 /* This patch enables colored text in the status bar. It changes the way colors are defined
  * in config.h allowing multiple color combinations for use in the status script.

@@ -623,15 +623,15 @@ If you are experiencing issues then you may want to check out the [Known Issues]
    - [stacker](https://dwm.suckless.org/patches/stacker/)
       - provides comprehensive utilities for managing the client stack
 
-   - [~staticstatus~](https://dwm.suckless.org/patches/staticstatus/)
-      - ~allows the status text to be fixed to the bar on a specific monitor rather than being
-        drawn on the focused monitor~
+   - [staticstatus](https://dwm.suckless.org/patches/staticstatus/)
+      - allows the status text to be fixed to the bar on a specific monitor rather than being
+        drawn on the focused monitor
 
    - [status2d](https://dwm.suckless.org/patches/status2d/)
       - allows colors and rectangle drawing in the dwm status bar
 
-   - [~statusallmons~](https://dwm.suckless.org/patches/statuspadding/)
-      - ~this patch draws and updates the statusbar on all monitors~
+   - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
+      - this patch draws and updates the statusbar on all monitors
 
    - [statusbutton](https://dwm.suckless.org/patches/statusbutton/)
       - adds a clickable button to the left hand side of the statusbar
