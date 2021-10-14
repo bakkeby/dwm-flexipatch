@@ -44,10 +44,57 @@ draw_pwrl_status_es(Bar *bar, BarArg *a)
 }
 #endif // BAR_EXTRASTATUS_PATCH
 
+#if BAR_STATUSCMD_PATCH
+int
+click_pwrl_status_text(Arg *arg, int rel_x, char *text)
+{
+	int delimPad = drw->fonts->h;
+	int i = -1;
+	int x = delimPad / 2 - (TEXTW("_") - lrpad);
+	char ch;
+	#if BAR_DWMBLOCKS_PATCH
+	statussig = -1;
+	#else
+	statuscmdn = 0;
+	#endif // BAR_DWMBLOCKS_PATCH
+	while (text[++i]) {
+		if ((unsigned char)text[i] < ' ') {
+			if (text[i] <= LENGTH(statuscolors))
+				continue;
+			ch = text[i];
+			text[i] = '\0';
+			x += TEXTW(text) - lrpad + delimPad;
+			text[i] = ch;
+			text += i+1;
+			i = -1;
+			#if BAR_DWMBLOCKS_PATCH
+			if (x >= rel_x && statussig != -1)
+				break;
+			statussig = ch;
+			#else
+			if (x >= rel_x)
+				break;
+			if (ch <= LENGTH(statuscmds))
+				statuscmdn = ch;
+			#endif // BAR_DWMBLOCKS_PATCH
+		}
+	}
+	#if BAR_DWMBLOCKS_PATCH
+	if (statussig == -1)
+		statussig = 0;
+	#endif // BAR_DWMBLOCKS_PATCH
+	return ClkStatusText;
+}
+#endif // BAR_STATUSCMD_PATCH
+
 int
 click_pwrl_status(Bar *bar, Arg *arg, BarArg *a)
 {
+	#if BAR_STATUSCMD_PATCH
+	return click_pwrl_status_text(arg, a->x, rawstext);
+	#else
 	return ClkStatusText;
+	#endif
 }
 
 int
@@ -87,11 +134,17 @@ drawpowerlinestatus(int xpos, char *stext, BarArg *barg)
 
 	for (i = n, bs = &status[n-1]; i >= 0; i--, bs--) {
 		if (*bs == '<' || *bs == '/' || *bs == '\\' || *bs == '>' || *bs == '|') { /* block start */
-			cn = ((int) *(bs+1)) - 1;
+			#if BAR_STATUSCMD_PATCH
+			int textOffset = 3;
+			#else
+			int textOffset = 2;
+			#endif
 
+			cn = *(bs+textOffset - 1) - 1;
 			if (cn < LENGTH(statuscolors)) {
 				drw_settrans(drw, prevscheme, (nxtscheme = statusscheme[cn]));
 			} else {
+				textOffset--;
 				drw_settrans(drw, prevscheme, (nxtscheme = statusscheme[0]));
 			}
 
@@ -101,8 +154,8 @@ drawpowerlinestatus(int xpos, char *stext, BarArg *barg)
 			}
 
 			drw_setscheme(drw, nxtscheme);
-			w = TEXTW(bs+2);
-			drw_text(drw, x - w, barg->y, w, barg->h, lrpad / 2, bs+2, 0, False);
+			w = TEXTW(bs+textOffset);
+			drw_text(drw, x - w, barg->y, w, barg->h, lrpad / 2, bs+textOffset, 0, False);
 			x -= w;
 
 			bp = *bs;
@@ -119,4 +172,3 @@ drawpowerlinestatus(int xpos, char *stext, BarArg *barg)
 
 	return xpos - x;
 }
-
