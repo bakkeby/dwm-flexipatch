@@ -2843,8 +2843,8 @@ resizeclient(Client *c, int x, int y, int w, int h)
 		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 		&& !c->isfloating
 		&& c->mon->lt[c->mon->sellt]->arrange) {
-		wc.width += c->bw * 2;
-		wc.height += c->bw * 2;
+		c->w = wc.width += c->bw * 2;
+		c->h = wc.height += c->bw * 2;
 		wc.border_width = 0;
 	}
 	#endif // NOBORDER_PATCH
