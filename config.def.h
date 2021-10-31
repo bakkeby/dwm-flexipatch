@@ -100,7 +100,7 @@ static int fakefsindicatortype           = INDICATOR_PLUS;
 static int floatfakefsindicatortype      = INDICATOR_PLUS_AND_LARGER_SQUARE;
 #endif // FAKEFULLSCREEN_CLIENT_PATCH
 #if ONLYQUITONEMPTY_PATCH
-static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
+static const int quit_empty_window_count = 0;   /* only allow dwm to quit if no (<= count) windows are open */
 #endif // ONLYQUITONEMPTY_PATCH
 #if BAR_EXTRASTATUS_PATCH
 static const char statussep              = ';'; /* separator between status bars */

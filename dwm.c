@@ -2744,27 +2744,23 @@ quit(const Arg *arg)
 	#if COOL_AUTOSTART_PATCH
 	size_t i;
 	#endif // COOL_AUTOSTART_PATCH
-	#if ONLYQUITONEMPTY_PATCH
-	unsigned int n;
-	Window *junk = malloc(1);
-
-	XQueryTree(dpy, root, junk, junk, &junk, &n);
-
-	if (n <= quit_empty_window_count)
-	{
-		#if RESTARTSIG_PATCH
-		restart = arg->i;
-		#endif // RESTARTSIG_PATCH
-		running = 0;
-	}
-	else
-		printf("[dwm] not exiting (n=%d)\n", n);
-
-	free(junk);
-	#else // !ONLYQUITONEMPTY_PATCH
 	#if RESTARTSIG_PATCH
 	restart = arg->i;
 	#endif // RESTARTSIG_PATCH
+	#if ONLYQUITONEMPTY_PATCH
+	Monitor *m;
+	Client *c;
+	unsigned int n = 0;
+
+	for (m = mons; m; m = m->next)
+		for (c = m->clients; c; c = c->next, n++);
+
+	if (restart || n <= quit_empty_window_count)
+		running = 0;
+	else
+		fprintf(stderr, "[dwm] not exiting (n=%d)\n", n);
+
+	#else // !ONLYQUITONEMPTY_PATCH
 	running = 0;
 	#endif // ONLYQUITONEMPTY_PATCH
 
