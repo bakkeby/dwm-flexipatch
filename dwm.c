@@ -2755,7 +2755,11 @@ quit(const Arg *arg)
 	for (m = mons; m; m = m->next)
 		for (c = m->clients; c; c = c->next, n++);
 
+	#if RESTARTSIG_PATCH
 	if (restart || n <= quit_empty_window_count)
+	#else
+	if (n <= quit_empty_window_count)
+	#endif // RESTARTSIG_PATCH
 		running = 0;
 	else
 		fprintf(stderr, "[dwm] not exiting (n=%d)\n", n);
