@@ -160,6 +160,11 @@
  */
 #define BAR_TAGLABELS_PATCH 0
 
+/* This patch underlines the selected tag, or optionally all tags.
+ * https://dwm.suckless.org/patches/underlinetags/
+ */
+#define BAR_UNDERLINETAGS_PATCH 0
+
 /* This patch adds the window icon next to the window title in the bar.
  *
  * The patch depends on Imlib2 for icon scaling.

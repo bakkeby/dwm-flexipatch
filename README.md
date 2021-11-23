@@ -17,7 +17,7 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
 ### Changelog:
 
-2021-11-23 - Added the taglabels patch
+2021-11-23 - Added the taglabels and underlinetags patches
 
 2021-09-08 - Added the alwayscenter patch
 
@@ -469,6 +469,9 @@ If you are experiencing issues then you may want to check out the [Known Issues]
       - this patch adds key modes (like in vim or emacs) where chains of keyboard shortcuts can be
         performed
 
+   - [killunsel](https://dwm.suckless.org/patches/killunsel/)
+      - kills all visible clients that are not selected (only the selected client will remain)
+
    - [~leftlayout~](http://dwm.suckless.org/patches/leftlayout/)
       - ~moves the layout symbol in the status bar to the left hand side~
 
@@ -746,12 +749,12 @@ If you are experiencing issues then you may want to check out the [Known Issues]
       - lets you transfer all clients between the master and stack area while increasing or
         decreasing the master area (nmaster) accordingly
 
+   - [underlinetags](https://dwm.suckless.org/patches/underlinetags/)
+      - underlines the selected tag, or optionally all tags
+
    - [unfloatvisible](https://dwm.suckless.org/patches/unfloatvisible/)
       - resets isfloating on any visible windows that have it set and optionally also applies a
         layout
-
-   - [killunsel](https://dwm.suckless.org/patches/killunsel/)
-      - kills all visible clients that are not selected (only the selected client will remain)
 
    - [~urgentborder~](https://dwm.suckless.org/patches/urgentborder/)
       - ~this patch makes "urgent" windows have different colors~
