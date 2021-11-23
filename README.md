@@ -17,6 +17,8 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
 ### Changelog:
 
+2021-11-23 - Added the taglabels patch
+
 2021-09-08 - Added the alwayscenter patch
 
 2021-07-27 - Added the winicon patch
@@ -702,6 +704,9 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
    - [taggrid](https://dwm.suckless.org/patches/taggrid/)
       - adds an option to place tags in rows like in many other window managers
+
+   - [taglabels](https://dwm.suckless.org/patches/taglabels/)
+      - shows tag + class of master client in the tags section of the bar
 
    - [tagmonfixfs](https://github.com/bakkeby/patches/wiki/tagmonfixfs/)
       - allows moving a fullscreen window to another monitor while remaining in fullscreen

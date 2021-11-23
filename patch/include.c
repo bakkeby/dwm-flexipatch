@@ -56,6 +56,9 @@
 #if BAR_TAGS_PATCH
 #include "bar_tags.c"
 #endif
+#if BAR_TAGLABELS_PATCH
+#include "bar_taglabels.c"
+#endif
 #if BAR_TAGGRID_PATCH
 #include "bar_taggrid.c"
 #endif

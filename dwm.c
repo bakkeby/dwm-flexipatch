@@ -485,6 +485,9 @@ struct Monitor {
 	#if INSETS_PATCH
 	Inset inset;
 	#endif // INSETS_PATCH
+	#if BAR_TAGLABELS_PATCH
+	char taglabel[NUMTAGS][64];
+	#endif // BAR_TAGLABELS_PATCH
 	#if IPC_PATCH
 	char lastltsymbol[16];
 	TagState tagstate;
