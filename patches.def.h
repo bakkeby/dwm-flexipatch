@@ -347,6 +347,12 @@
  */
 #define BAR_PADDING_PATCH 0
 
+/* Same as barpadding patch but specifically written for the vanitygaps patch. It adds the same
+ * outer horizontal and vertical padding as vanity gaps. Moreover, the padding is toggled whenever
+ * vanitygaps are toggled.
+ */
+#define BAR_GAPS_PADDING_PATCH 0
+
 /* This patch adds simple markup for status messages using pango markup.
  * This depends on the pango library v1.44 or greater.
  * You need to uncomment the corresponding lines in config.mk to use the pango libraries
