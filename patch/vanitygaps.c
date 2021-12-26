@@ -89,8 +89,9 @@ togglegaps(const Arg *arg)
 
 	#if BAR_GAPS_PADDING_PATCH
 	updatebarpos(selmon);
-	Bar *bar = selmon->bar;
-	XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+	Bar *bar;
+	for (bar = selmon->bar; bar; bar = bar->next)
+		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
 
 	#if BAR_SYSTRAY_PATCH
 	drawbarwin(systray->bar);
