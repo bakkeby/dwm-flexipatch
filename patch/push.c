@@ -40,9 +40,11 @@ pushup(const Arg *arg)
 	} else {
 		/* move to the end */
 		for (c = sel; c->next; c = c->next);
-		detach(sel);
-		sel->next = NULL;
-		c->next = sel;
+		if (sel != c) {
+			detach(sel);
+			sel->next = NULL;
+			c->next = sel;
+		}
 	}
 	focus(sel);
 	arrange(selmon);
