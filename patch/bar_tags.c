@@ -70,7 +70,7 @@ draw_tags(Bar *bar, BarArg *a)
 int
 click_tags(Bar *bar, Arg *arg, BarArg *a)
 {
-	int i = 0, x = lrpad / 2;
+	int i = 0, x = 0;
 	#if BAR_HIDEVACANTTAGS_PATCH
 	Client *c;
 	unsigned int occ = 0;
