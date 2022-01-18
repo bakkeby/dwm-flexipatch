@@ -7,7 +7,10 @@ width_fancybar(Bar *bar, BarArg *a)
 int
 draw_fancybar(Bar *bar, BarArg *a)
 {
-	int ftw, mw, ew = 0, n = 0;
+	int tabw, mw, ew = 0, n = 0, tx, tw;
+	#if BAR_WINICON_PATCH
+	int ipad;
+	#endif // BAR_WINICON_PATCH
 	unsigned int i;
 	Client *c;
 	Monitor *m = bar->mon;
@@ -28,25 +31,25 @@ draw_fancybar(Bar *bar, BarArg *a)
 	}
 
 	if (n > 0) {
-		ftw = TEXTW(m->sel->name);
+		tabw = TEXTW(m->sel->name);
 		#if BAR_WINICON_PATCH
 		if (m->sel->icon)
-			ftw += m->sel->icon->width + ICONSPACING;
+			tabw += m->sel->icon->width + ICONSPACING;
 		#endif // BAR_WINICON_PATCH
-		mw = (ftw >= w || n == 1) ? 0 : (w - ftw) / (n - 1);
+		mw = (tabw >= w || n == 1) ? 0 : (w - tabw) / (n - 1);
 
 		i = 0;
 
 		for (c = m->clients; c; c = c->next) {
 			if (!ISVISIBLE(c) || c == m->sel)
 				continue;
-			ftw = TEXTW(c->name);
+			tabw = TEXTW(c->name);
 			#if BAR_WINICON_PATCH
 			if (c->icon)
-				ftw += c->icon->width + ICONSPACING;
+				tabw += c->icon->width + ICONSPACING;
 			#endif // BAR_WINICON_PATCH
-			if (ftw < mw)
-				ew += (mw - ftw);
+			if (tabw < mw)
+				ew += (mw - tabw);
 			else
 				i++;
 		}
@@ -57,24 +60,36 @@ draw_fancybar(Bar *bar, BarArg *a)
 		for (c = m->clients; c; c = c->next) {
 			if (!ISVISIBLE(c))
 				continue;
-			ftw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
+			tabw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
+			#if BAR_WINICON_PATCH
+			ipad = c->icon ? c->icon->width + ICONSPACING : 0;
+			tabw += ipad;
+			#endif // BAR_WINICON_PATCH
+			tx = x;
+			tw = tabw;
 			drw_setscheme(drw, scheme[m->sel == c ? SchemeTitleSel : SchemeTitleNorm]);
-			if (ftw > 0) { /* trap special handling of 0 in drw_text */
 
-				drw_text(drw, x, a->y, ftw, a->h, lrpad / 2, c->name, 0, False);
+			XSetForeground(drw->dpy, drw->gc, drw->scheme[ColBg].pixel);
+			XFillRectangle(drw->dpy, drw->drawable, drw->gc, tx, a->y, tw, a->h);
 
-				#if BAR_WINICON_PATCH
-				drw_text(drw, x, a->y, ftw, a->h, lrpad / 2 + (c->icon ? c->icon->width + ICONSPACING : 0), c->name, 0, False);
-				if (c->icon)
-					drw_img(drw, x + lrpad / 2, a->y + (a->h - c->icon->height) / 2, c->icon, tmpicon);
-				#else
-				drw_text(drw, x, a->y, ftw, a->h, lrpad / 2, c->name, 0, False);
-				#endif // BAR_WINICON_PATCH
+			if (tabw <= 0) /* trap special handling of 0 in drw_text */
+				continue;
 
+			tx += lrpad / 2;
+			tw -= lrpad;
+
+			#if BAR_WINICON_PATCH
+			if (ipad) {
+				drw_img(drw, tx, a->y + (a->h - c->icon->height) / 2, c->icon, tmpicon);
+				tx += ipad;
+				tw -= ipad;
 			}
-			drawstateindicator(c->mon, c, 1, x, a->y, ftw, a->h, 0, 0, c->isfixed);
-			x += ftw;
-			w -= ftw;
+			#endif // BAR_WINICON_PATCH
+
+			drw_text(drw, tx, a->y, tw, a->h, 0, c->name, 0, False);
+			drawstateindicator(c->mon, c, 1, x, a->y, tabw, a->h, 0, 0, c->isfixed);
+			x += tabw;
+			w -= tabw;
 		}
 	}
 	return n;

@@ -36,11 +36,21 @@ click_bartabgroups(Bar *bar, Arg *arg, BarArg *a)
 }
 
 void
-bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg *arg, BarArg *barg)
+bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg *arg, BarArg *a)
 {
 	if (!c)
 		return;
-	int i, nclienttags = 0, nviewtags = 0, pad = lrpad / 2;
+	int i, nclienttags = 0, nviewtags = 0;
+	int tpad = lrpad / 2;
+	#if BAR_WINICON_PATCH
+	int ipad = c->icon ? c->icon->width + ICONSPACING : 0;
+	#endif // BAR_WINICON_PATCH
+	#if BAR_CENTEREDWINDOWNAME_PATCH
+	int cpad = 0;
+	#endif // BAR_CENTEREDWINDOWNAME_PATCH
+	int tx = x;
+	int tw = w;
+
 	drw_setscheme(drw, scheme[
 		m->sel == c
 		#ifdef HIDDEN
@@ -55,27 +65,44 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 		? SchemeTitleSel
 		: SchemeTitleNorm
 	]);
-	if (w <= TEXTW("A") - lrpad + pad) // reduce text padding if wintitle is too small
-		pad = (w - TEXTW("A") + lrpad < 0 ? 0 : (w - TEXTW("A") + lrpad) / 2);
-	#if BAR_CENTEREDWINDOWNAME_PATCH
+	if (w <= TEXTW("A") - lrpad + tpad) // reduce text padding if wintitle is too small
+		tpad = (w - TEXTW("A") + lrpad < 0 ? 0 : (w - TEXTW("A") + lrpad) / 2);
+	#if BAR_WINICON_PATCH && BAR_CENTEREDWINDOWNAME_PATCH
+	else if (TEXTW(c->name) + ipad < w)
+		cpad = (w - TEXTW(c->name) - ipad) / 2;
+	#elif BAR_CENTEREDWINDOWNAME_PATCH
 	else if (TEXTW(c->name) < w)
-		pad = (w - TEXTW(c->name) + lrpad) / 2;
+		cpad = (w - TEXTW(c->name)) / 2;
 	#endif // BAR_CENTEREDWINDOWNAME_PATCH
 
+	XSetForeground(drw->dpy, drw->gc, drw->scheme[ColBg].pixel);
+	XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, a->y, w, a->h);
+
+	#if BAR_CENTEREDWINDOWNAME_PATCH
+	/* Apply center padding, if any */
+	tx += cpad;
+	tw -= cpad;
+	#endif // BAR_CENTEREDWINDOWNAME_PATCH
+
+	tx += tpad;
+	tw -= lrpad;
+
 	#if BAR_WINICON_PATCH
-	drw_text(drw, x, barg->y, w, barg->h, pad + (c->icon ? c->icon->width + ICONSPACING : 0), c->name, 0, False);
-	if (c->icon)
-		drw_img(drw, x + pad, barg->y + (barg->h - c->icon->height) / 2, c->icon, tmpicon);
-	#else
-	drw_text(drw, x, barg->y, w, barg->h, pad, c->name, 0, False);
+	if (ipad) {
+		drw_img(drw, tx, a->y + (a->h - c->icon->height) / 2, c->icon, tmpicon);
+		tx += ipad;
+		tw -= ipad;
+	}
 	#endif // BAR_WINICON_PATCH
 
-	drawstateindicator(m, c, 1, x, barg->y, w, barg->h, 0, 0, c->isfixed);
+	drw_text(drw, tx, a->y, tw, a->h, 0, c->name, 0, False);
+
+	drawstateindicator(m, c, 1, x, a->y, w, a->h, 0, 0, c->isfixed);
 
 	if (BARTAB_BORDERS) {
 		XSetForeground(drw->dpy, drw->gc, scheme[SchemeSel][ColBorder].pixel);
-		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, barg->y, 1, barg->h);
-		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x + w - (x + w >= barg->w ? 1 : 0), barg->y, 1, barg->h);
+		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, a->y, 1, a->h);
+		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x + w - (x + w >= a->w ? 1 : 0), a->y, 1, a->h);
 	}
 	/* Optional tags icons */
 	for (i = 0; i < NUMTAGS; i++) {
@@ -86,7 +113,7 @@ bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive, Arg
 	}
 
 	if (TAGSINDICATOR == 2 || nclienttags > 1 || nviewtags > 1)
-		drawindicator(m, c, 1, x, barg->y, w, barg->h, 0, 0, 0, INDICATOR_RIGHT_TAGS);
+		drawindicator(m, c, 1, x, a->y, w, a->h, 0, 0, 0, INDICATOR_RIGHT_TAGS);
 }
 
 #ifndef HIDDEN
