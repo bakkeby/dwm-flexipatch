@@ -4081,7 +4081,13 @@ toggleview(const Arg *arg)
 	#if !EMPTYVIEW_PATCH
 	if (newtagset) {
 	#endif // EMPTYVIEW_PATCH
-		selmon->tagset[selmon->seltags] = newtagset;
+		Monitor *tselmon;
+		#if TAGSYNC_PATCH
+		for (tselmon = mons; tselmon; tselmon = tselmon->next) {
+		#else
+		tselmon = selmon;
+		#endif
+		tselmon->tagset[tselmon->seltags] = newtagset;
 
 		#if PERTAG_PATCH
 		#if SCRATCHPADS_PATCH
@@ -4090,35 +4096,40 @@ toggleview(const Arg *arg)
 		if (newtagset == ~0)
 		#endif // SCRATCHPADS_PATCH
 		{
-			selmon->pertag->prevtag = selmon->pertag->curtag;
-			selmon->pertag->curtag = 0;
+			tselmon->pertag->prevtag = tselmon->pertag->curtag;
+			tselmon->pertag->curtag = 0;
 		}
 		/* test if the user did not select the same tag */
-		if (!(newtagset & 1 << (selmon->pertag->curtag - 1))) {
-			selmon->pertag->prevtag = selmon->pertag->curtag;
+		if (!(newtagset & 1 << (tselmon->pertag->curtag - 1))) {
+			tselmon->pertag->prevtag = tselmon->pertag->curtag;
 			for (i = 0; !(newtagset & 1 << i); i++) ;
-			selmon->pertag->curtag = i + 1;
+			tselmon->pertag->curtag = i + 1;
 		}
 
 		/* apply settings for this view */
-		selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
-		selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
-		selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
-		selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
-		selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
+		tselmon->nmaster = tselmon->pertag->nmasters[tselmon->pertag->curtag];
+		tselmon->mfact = tselmon->pertag->mfacts[tselmon->pertag->curtag];
+		tselmon->sellt = tselmon->pertag->sellts[tselmon->pertag->curtag];
+		tselmon->lt[tselmon->sellt] = tselmon->pertag->ltidxs[tselmon->pertag->curtag][tselmon->sellt];
+		tselmon->lt[tselmon->sellt^1] = tselmon->pertag->ltidxs[tselmon->pertag->curtag][tselmon->sellt^1];
 		#if PERTAGBAR_PATCH
-		if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
+		if (tselmon->showbar != tselmon->pertag->showbars[tselmon->pertag->curtag])
 			togglebar(NULL);
 		#endif // PERTAGBAR_PATCH
 		#endif // PERTAG_PATCH
 		focus(NULL);
-		arrange(selmon);
+		arrange(tselmon);
+		#if BAR_EWMHTAGS_PATCH
+		#if TAGSYNC_PATCH
+		updatemonitordesktop(tselmon);
+		}
+		#else
+		updatecurrentdesktop();
+		#endif
+		#endif // BAR_EWMHTAGS_PATCH
 	#if !EMPTYVIEW_PATCH
 	}
 	#endif // EMPTYVIEW_PATCH
-	#if BAR_EWMHTAGS_PATCH
-	updatecurrentdesktop();
-	#endif // BAR_EWMHTAGS_PATCH
 }
 
 void
@@ -4670,23 +4681,34 @@ view(const Arg *arg)
 		#endif // TOGGLETAG_PATCH
 		return;
 	}
-	selmon->seltags ^= 1; /* toggle sel tagset */
+	Monitor *tselmon;
+	#if TAGSYNC_PATCH
+	for (tselmon = mons; tselmon; tselmon = tselmon->next) {
+	#else
+	tselmon = selmon;
+	#endif
+	tselmon->seltags ^= 1; /* toggle sel tagset */
 	#if PERTAG_PATCH
 	pertagview(arg);
 	#if SWAPFOCUS_PATCH
-	Client *unmodified = selmon->pertag->prevclient[selmon->pertag->curtag];
+	Client *unmodified = tselmon->pertag->prevclient[tselmon->pertag->curtag];
 	#endif // SWAPFOCUS_PATCH
 	#else
 	if (arg->ui & TAGMASK)
-		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
+		tselmon->tagset[tselmon->seltags] = arg->ui & TAGMASK;
 	#endif // PERTAG_PATCH
 	focus(NULL);
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
-	selmon->pertag->prevclient[selmon->pertag->curtag] = unmodified;
+	tselmon->pertag->prevclient[tselmon->pertag->curtag] = unmodified;
 	#endif // SWAPFOCUS_PATCH
-	arrange(selmon);
+	arrange(tselmon);
 	#if BAR_EWMHTAGS_PATCH
+	#if TAGSYNC_PATCH
+	updatemonitordesktop(tselmon);
+	}
+	#else
 	updatecurrentdesktop();
+	#endif
 	#endif // BAR_EWMHTAGS_PATCH
 }
 

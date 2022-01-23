@@ -1309,3 +1309,7 @@
  */
 #define MONOCLE_LAYOUT 1
 
+/* Sync tags across all monitors.
+ * This is comparable to a sort of pseudo-workspace environment.
+ */
+#define TAGSYNC_PATCH 0
