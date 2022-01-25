@@ -911,8 +911,15 @@ applyrules(Client *c)
 						view(&((Arg) { .ui = newtagset }));
 						#endif // PERTAG_PATCH
 					} else {
+						#if TAGSYNC_PATCH
+						Monitor *m;
+						for (m = mons; m; m = m->next)
+							m->tagset[m->seltags] = newtagset;
+						arrange(NULL);
+						#else
 						c->mon->tagset[c->mon->seltags] = newtagset;
 						arrange(c->mon);
+						#endif // TAGSYNC_PATCH
 					}
 				}
 			}
