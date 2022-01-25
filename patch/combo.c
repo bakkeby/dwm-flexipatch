@@ -32,8 +32,18 @@ comboview(const Arg *arg)
 {
 	unsigned newtags = arg->ui & TAGMASK;
 	if (combo) {
+		#if TAGSYNC_PATCH
+		Monitor *m;
+		for (m = mons; m; m = m->next)
+			m->tagset[m->seltags] |= newtags;
+		#else
 		selmon->tagset[selmon->seltags] |= newtags;
+		#endif // TAGSYNC_PATCH
 	} else {
+		#if TAGSYNC_PATCH
+		Monitor *origselmon = selmon;
+		for (selmon = mons; selmon; selmon = selmon->next) {
+		#endif // TAGSYNC_PATCH
 		selmon->seltags ^= 1;	/*toggle tagset*/
 		combo = 1;
 		if (newtags) {
@@ -43,8 +53,17 @@ comboview(const Arg *arg)
 			selmon->tagset[selmon->seltags] = newtags;
 			#endif // PERTAG_PATCH
 		}
+		#if TAGSYNC_PATCH
+		}
+		selmon = origselmon;
+		#endif // TAGSYNC_PATCH
 	}
+	#if TAGSYNC_PATCH
+	focus(NULL);
+	arrange(NULL);
+	#else
 	focus(NULL);
 	arrange(selmon);
+	#endif // TAGSYNC_PATCH
 }
 

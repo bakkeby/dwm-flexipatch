@@ -51,3 +51,14 @@ updatecurrentdesktop(void)
 	XChangeProperty(dpy, root, netatom[NetCurrentDesktop], XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data, 1);
 }
 
+void
+updatemonitordesktop(Monitor *m)
+{
+	long rawdata[] = { m->tagset[m->seltags] };
+	int i = 0;
+	while (*rawdata >> (i + 1)) {
+		i++;
+	}
+	long data[] = { i };
+	XChangeProperty(dpy, root, netatom[NetCurrentDesktop], XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data, 1);
+}
