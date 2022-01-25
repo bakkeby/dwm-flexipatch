@@ -5,6 +5,10 @@ shiftviewclients(const Arg *arg)
 	Client *c;
 	unsigned int tagmask = 0;
 
+	#if TAGSYNC_PATCH
+	Monitor *origselmon = selmon;
+	for (selmon = mons; selmon; selmon = selmon->next)
+	#endif // TAGSYNC_PATCH
 	for (c = selmon->clients; c; c = c->next)
 		#if SCRATCHPADS_PATCH
 		if (!(c->tags & SPTAGMASK))
@@ -15,6 +19,10 @@ shiftviewclients(const Arg *arg)
 		#else
 		tagmask = tagmask | c->tags;
 		#endif // SCRATCHPADS_PATCH
+	
+	#if TAGSYNC_PATCH
+	selmon = origselmon;
+	#endif // TAGSYNC_PATCH
 
 	#if SCRATCHPADS_PATCH
 	shifted.ui = selmon->tagset[selmon->seltags] & ~SPTAGMASK;
