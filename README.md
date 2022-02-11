@@ -17,6 +17,8 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
 ### Changelog:
 
+2022-02-11 - Added the isfreesize version of the sizehints patch
+
 2021-11-23 - Added the taglabels and underlinetags patches
 
 2021-09-08 - Added the alwayscenter patch

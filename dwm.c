@@ -368,6 +368,9 @@ struct Client {
 	#if PLACEMOUSE_PATCH
 	int beingmoved;
 	#endif // PLACEMOUSE_PATCH
+	#if SIZEHINTS_ISFREESIZE_PATCH
+	int isfreesize;
+	#endif // SIZEHINTS_ISFREESIZE_PATCH
 	#if SWALLOW_PATCH
 	int isterminal, noswallow;
 	pid_t pid;
@@ -515,6 +518,9 @@ typedef struct {
 	#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 	int isfakefullscreen;
 	#endif // SELECTIVEFAKEFULLSCREEN_PATCH
+	#if SIZEHINTS_ISFREESIZE_PATCH
+	int isfreesize;
+	#endif // SIZEHINTS_ISFREESIZE_PATCH
 	#if ISPERMANENT_PATCH
 	int ispermanent;
 	#endif // ISPERMANENT_PATCH
@@ -825,6 +831,9 @@ applyrules(Client *c)
 	#if SWALLOW_PATCH
 	c->noswallow = -1;
 	#endif // SWALLOW_PATCH
+	#if SIZEHINTS_ISFREESIZE_PATCH
+	c->isfreesize = 1;
+	#endif // SIZEHINTS_ISFREESIZE_PATCH
 	c->isfloating = 0;
 	c->tags = 0;
 	XGetClassHint(dpy, c->win, &ch);
@@ -863,6 +872,9 @@ applyrules(Client *c)
 			c->isterminal = r->isterminal;
 			c->noswallow = r->noswallow;
 			#endif // SWALLOW_PATCH
+			#if SIZEHINTS_ISFREESIZE_PATCH
+			c->isfreesize = r->isfreesize;
+			#endif // SIZEHINTS_ISFREESIZE_PATCH
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
 			#if SCRATCHPADS_PATCH
@@ -4533,11 +4545,11 @@ updatesizehints(Client *c)
 
 	if (!XGetWMNormalHints(dpy, c->win, &size, &msize))
 		/* size is uninitialized, ensure that size.flags aren't used */
-		#if SIZEHINTS_PATCH || SIZEHINTS_RULED_PATCH
+		#if SIZEHINTS_PATCH || SIZEHINTS_RULED_PATCH || SIZEHINTS_ISFREESIZE_PATCH
 		size.flags = 0;
 		#else
 		size.flags = PSize;
-		#endif // SIZEHINTS_PATCH | SIZEHINTS_RULED_PATCH
+		#endif // SIZEHINTS_PATCH | SIZEHINTS_RULED_PATCH | SIZEHINTS_ISFREESIZE_PATCH
 	if (size.flags & PBaseSize) {
 		c->basew = size.base_width;
 		c->baseh = size.base_height;
@@ -4569,8 +4581,13 @@ updatesizehints(Client *c)
 		c->maxa = (float)size.max_aspect.x / size.max_aspect.y;
 	} else
 		c->maxa = c->mina = 0.0;
-	#if SIZEHINTS_PATCH || SIZEHINTS_RULED_PATCH
-	if (size.flags & PSize) {
+	#if SIZEHINTS_PATCH || SIZEHINTS_RULED_PATCH || SIZEHINTS_ISFREESIZE_PATCH
+	#if SIZEHINTS_ISFREESIZE_PATCH
+	if ((size.flags & PSize) && c->isfreesize)
+	#else
+	if (size.flags & PSize)
+	#endif // SIZEHINTS_ISFREESIZE_PATCH
+	{
 		c->basew = size.base_width;
 		c->baseh = size.base_height;
 		c->isfloating = 1;

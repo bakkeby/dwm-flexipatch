@@ -970,6 +970,19 @@
  */
 #define SIZEHINTS_RULED_PATCH 0
 
+/* This patch makes dwm obey even "soft" sizehints for new clients. The isfreesize
+ * version is similar to the sizehints ruled patch except it allows you to specify
+ * via client rules which clients this should apply to. Soft sizehints applies by
+ * default to clients that are not ruled, and will be disabled by default for clients
+ * that are.
+ *
+ * Example client rule enabling soft sizehints:
+ *    - RULE(.wintype = WTYPE "DIALOG", .isfloating = 1, .isfreesize = 1)
+ *
+ * https://dwm.suckless.org/patches/sizehints/
+ */
+#define SIZEHINTS_ISFREESIZE_PATCH 0
+
 /* In a multi-head setup monitor 0 is by default the primary screen, with the left and right
  * screen being monitor 1 and 2 respectively. This patch sorts screens left to right (or
  * top to bottom in a vertical layout) which aims to address some inconsistencies when it
