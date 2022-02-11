@@ -912,7 +912,6 @@ applyrules(Client *c)
 						#endif // PERTAG_PATCH
 					} else {
 						#if TAGSYNC_PATCH
-						Monitor *m;
 						for (m = mons; m; m = m->next)
 							m->tagset[m->seltags] = newtagset;
 						arrange(NULL);
@@ -4047,12 +4046,11 @@ toggletag(const Arg *arg)
 void
 toggleview(const Arg *arg)
 {
-	unsigned int newtagset = 0;
+	unsigned int newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);;
 	#if TAGSYNC_PATCH
 	Monitor *origselmon = selmon;
 	for (selmon = mons; selmon; selmon = selmon->next) {
 	#endif // TAGSYNC_PATCH
-	newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);
 	#if PERTAG_PATCH
 	int i;
 	#endif // PERTAG_PATCH
@@ -4142,11 +4140,7 @@ toggleview(const Arg *arg)
 	}
 	#endif // EMPTYVIEW_PATCH
 	#endif // TAGSYNC_PATCH
-	#if BAR_EWMHTAGS_PATCH && TAGSYNC_PATCH
-	Monitor *m;
-	for (m = mons; m; m = m->next)
-		updatemonitordesktop(m);
-	#elif BAR_EWMHTAGS_PATCH
+	#if BAR_EWMHTAGS_PATCH
 	updatecurrentdesktop();
 	#endif // BAR_EWMHTAGS_PATCH
 }
@@ -4707,9 +4701,6 @@ view(const Arg *arg)
 	selmon->seltags ^= 1; /* toggle sel tagset */
 	#if PERTAG_PATCH
 	pertagview(arg);
-	#if SWAPFOCUS_PATCH
-	Client *unmodified = selmon->pertag->prevclient[selmon->pertag->curtag];
-	#endif // SWAPFOCUS_PATCH
 	#else
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
@@ -4719,19 +4710,12 @@ view(const Arg *arg)
 	selmon = origselmon;
 	#endif // TAGSYNC_PATCH
 	focus(NULL);
-	#if SWAPFOCUS_PATCH && PERTAG_PATCH
-	tselmon->pertag->prevclient[tselmon->pertag->curtag] = unmodified;
-	#endif // SWAPFOCUS_PATCH
 	#if TAGSYNC_PATCH
 	arrange(NULL);
 	#else
 	arrange(selmon);
 	#endif // TAGSYNC_PATCH
-	#if BAR_EWMHTAGS_PATCH && TAGSYNC_PATCH
-	Monitor *m;
-	for (m = mons; m; m = m->next)
-		updatemonitordesktop(m);
-	#elif BAR_EWMHTAGS_PATCH
+	#if BAR_EWMHTAGS_PATCH
 	updatecurrentdesktop();
 	#endif // BAR_EWMHTAGS_PATCH
 }
