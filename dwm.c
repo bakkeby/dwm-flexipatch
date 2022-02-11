@@ -4343,13 +4343,22 @@ updatebarpos(Monitor *m)
 	m->ww = m->mw;
 	m->wh = m->mh;
 	Bar *bar;
-	#if BAR_PADDING_PATCH
-	int y_pad = vertpad;
-	int x_pad = sidepad;
-	#else
 	int y_pad = 0;
 	int x_pad = 0;
-	#endif // BAR_PADDING_PATCH
+	#if BAR_PADDING_VANITYGAPS_PATCH && VANITYGAPS_PATCH
+	#if PERTAG_VANITYGAPS_PATCH && PERTAG_PATCH
+	if (!selmon || selmon->pertag->enablegaps[selmon->pertag->curtag])
+	#else
+	if (enablegaps)
+	#endif // PERTAG_VANITYGAPS_PATCH
+	{
+		y_pad = gappoh;
+		x_pad = gappov;
+	}
+	#elif BAR_PADDING_PATCH
+	y_pad = vertpad;
+	x_pad = sidepad;
+	#endif // BAR_PADDING_PATCH | BAR_PADDING_VANITYGAPS_PATCH
 
 	#if INSETS_PATCH
 	// Custom insets
