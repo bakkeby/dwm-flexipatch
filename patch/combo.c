@@ -30,21 +30,10 @@ combotag(const Arg *arg)
 void
 comboview(const Arg *arg)
 {
-	unsigned newtags = arg->ui & TAGMASK;
 	if (combo) {
-		selmon->tagset[selmon->seltags] |= newtags;
+		view(&((Arg) { .ui = selmon->tagset[selmon->seltags] | (arg->ui & TAGMASK) }));
 	} else {
-		selmon->seltags ^= 1;	/*toggle tagset*/
 		combo = 1;
-		if (newtags) {
-			#if PERTAG_PATCH
-			pertagview(&((Arg) { .ui = newtags }));
-			#else
-			selmon->tagset[selmon->seltags] = newtags;
-			#endif // PERTAG_PATCH
-		}
+		view(arg);
 	}
-	focus(NULL);
-	arrange(selmon);
 }
-

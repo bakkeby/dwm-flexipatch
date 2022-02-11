@@ -1130,6 +1130,13 @@
  */
 #define TAGSWAPMON_PATCH 0
 
+/* Sync tag actions across all monitors.
+ * This is comparable to a sort of pseudo-desktop environment.
+ * Also refer to the desktop patch:
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-desktop-6.3.diff
+ */
+#define TAGSYNC_PATCH 0
+
 /* This patch can be useful to the touchpad users because it allows to
  * resize windows using Mod + two-finger scroll. It is useful when
  * two-finger scrolling is configured in libinput.
@@ -1328,4 +1335,3 @@
  * This can be optionally disabled in favour of other layouts.
  */
 #define MONOCLE_LAYOUT 1
-
