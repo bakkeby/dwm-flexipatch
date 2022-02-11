@@ -17,7 +17,7 @@ If you are experiencing issues then you may want to check out the [Known Issues]
 
 ### Changelog:
 
-2022-02-11 - Added the isfreesize version of the sizehints patch
+2022-02-11 - Added the isfreesize version of the sizehints patch and the [tagsync](https://github.com/bakkeby/dwm-flexipatch/pull/219) patch (contributed by [Bagelli](https://github.com/Bagellll))
 
 2021-11-23 - Added the taglabels and underlinetags patches
 
