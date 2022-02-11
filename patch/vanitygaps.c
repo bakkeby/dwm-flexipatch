@@ -87,16 +87,15 @@ togglegaps(const Arg *arg)
 	enablegaps = !enablegaps;
 	#endif // PERTAG_VANITYGAPS_PATCH
 
-	#if BAR_GAPS_PADDING_PATCH
+	#if BAR_PADDING_VANITYGAPS_PATCH
 	updatebarpos(selmon);
-	Bar *bar;
-	for (bar = selmon->bar; bar; bar = bar->next)
+	for (Bar *bar = selmon->bar; bar; bar = bar->next)
 		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
 
 	#if BAR_SYSTRAY_PATCH
 	drawbarwin(systray->bar);
 	#endif // BAR_SYSTRAY_PATCH
-	#endif // BAR_GAPS_PADDING_PATCH
+	#endif // BAR_PADDING_VANITYGAPS_PATCH
 	arrange(NULL);
 }
 
