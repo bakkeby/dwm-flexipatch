@@ -88,8 +88,10 @@ placemouse(const Arg *arg)
 			if ((r && r != prevr) || (attachmode != prevattachmode)) {
 				detachstack(c);
 				detach(c);
-				if (c->mon != r->mon)
+				if (c->mon != r->mon) {
 					arrangemon(c->mon);
+					c->tags = r->mon->tagset[r->mon->seltags];
+				}
 
 				c->mon = r->mon;
 				r->mon->sel = r;
