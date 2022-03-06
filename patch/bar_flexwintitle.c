@@ -173,7 +173,7 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 	int i, nclienttags = 0, nviewtags = 0;
 	int tpad = lrpad / 2;
 	#if BAR_WINICON_PATCH
-	int ipad = c->icon ? c->icon->width + ICONSPACING : 0;
+	int ipad = c->icon ? c->icw + ICONSPACING : 0;
 	#endif // BAR_WINICON_PATCH
 	#if BAR_CENTEREDWINDOWNAME_PATCH
 	int cpad = 0;
@@ -220,7 +220,7 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 
 	#if BAR_WINICON_PATCH
 	if (ipad) {
-		drw_img(drw, tx, a->y + (a->h - c->icon->height) / 2, c->icon, tmpicon);
+		drw_pic(drw, tx, a->y + (a->h - c->ich) / 2, c->icw, c->ich, c->icon);
 		tx += ipad;
 		tw -= ipad;
 	}

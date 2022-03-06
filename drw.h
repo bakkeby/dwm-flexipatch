@@ -35,6 +35,9 @@ typedef struct {
 	Colormap cmap;
 	#endif // BAR_ALPHA_PATCH
 	Drawable drawable;
+	#if BAR_WINICON_PATCH
+	Picture picture;
+	#endif // BAR_WINICON_PATCH
 	GC gc;
 	Clr *scheme;
 	Fnt *fonts;

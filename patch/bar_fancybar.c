@@ -34,7 +34,7 @@ draw_fancybar(Bar *bar, BarArg *a)
 		tabw = TEXTW(m->sel->name);
 		#if BAR_WINICON_PATCH
 		if (m->sel->icon)
-			tabw += m->sel->icon->width + ICONSPACING;
+			tabw += m->sel->icw + ICONSPACING;
 		#endif // BAR_WINICON_PATCH
 		mw = (tabw >= w || n == 1) ? 0 : (w - tabw) / (n - 1);
 
@@ -46,7 +46,7 @@ draw_fancybar(Bar *bar, BarArg *a)
 			tabw = TEXTW(c->name);
 			#if BAR_WINICON_PATCH
 			if (c->icon)
-				tabw += c->icon->width + ICONSPACING;
+				tabw += c->icw + ICONSPACING;
 			#endif // BAR_WINICON_PATCH
 			if (tabw < mw)
 				ew += (mw - tabw);
@@ -62,7 +62,7 @@ draw_fancybar(Bar *bar, BarArg *a)
 				continue;
 			tabw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 			#if BAR_WINICON_PATCH
-			ipad = c->icon ? c->icon->width + ICONSPACING : 0;
+			ipad = c->icon ? c->icw + ICONSPACING : 0;
 			tabw += ipad;
 			#endif // BAR_WINICON_PATCH
 			tx = x;
@@ -80,7 +80,7 @@ draw_fancybar(Bar *bar, BarArg *a)
 
 			#if BAR_WINICON_PATCH
 			if (ipad) {
-				drw_img(drw, tx, a->y + (a->h - c->icon->height) / 2, c->icon, tmpicon);
+				drw_pic(drw, tx, a->y + (a->h - c->ich) / 2, c->icw, c->ich, c->icon);
 				tx += ipad;
 				tw -= ipad;
 			}
