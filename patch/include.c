@@ -20,9 +20,6 @@
 #if COMBO_PATCH
 #include "combo.c"
 #endif
-#if BAR_HOLDBAR_PATCH
-#include "bar_holdbar.c"
-#endif
 #if BAR_LTSYMBOL_PATCH
 #include "bar_ltsymbol.c"
 #endif
@@ -82,6 +79,9 @@
 #endif
 #if BAR_SYSTRAY_PATCH
 #include "bar_systray.c"
+#endif
+#if BAR_HOLDBAR_PATCH
+#include "bar_holdbar.c"
 #endif
 #if BAR_VTCOLORS_PATCH
 #include "bar_vtcolors.c"

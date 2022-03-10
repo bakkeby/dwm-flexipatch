@@ -8,6 +8,7 @@ holdbar(const Arg *arg)
 	updatebarpos(selmon);
 	for (bar = selmon->bar; bar; bar = bar->next)
 		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+	drawbar(selmon);
 }
 
 void
@@ -29,6 +30,10 @@ keyrelease(XEvent *e)
 		updatebarpos(selmon);
 		for (bar = selmon->bar; bar; bar = bar->next)
 			XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+		#if BAR_SYSTRAY_PATCH
+		if (!selmon->showbar && systray)
+			XMoveWindow(dpy, systray->win, -32000, -32000);
+		#endif // BAR_SYSTRAY_PATCH
 		arrange(selmon);
 	}
 	#if COMBO_PATCH
