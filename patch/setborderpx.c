@@ -2,44 +2,55 @@ void
 setborderpx(const Arg *arg)
 {
 	Client *c;
-	int prev_borderpx = selmon->borderpx;
-
-	if (arg->i == 0)
-		selmon->borderpx = borderpx;
-	else if (selmon->borderpx + arg->i < 0)
-		selmon->borderpx = 0;
-	else
-		selmon->borderpx += arg->i;
+	Monitor *m = selmon;
+	#if BAR_BORDER_PATCH
+	Bar *bar;
+	#endif // BAR_BORDER_PATCH
+	int prev_borderpx = m->borderpx;
+	m->borderpx = arg->i
+		? MAX(m->borderpx + arg->i, 0)
+		: m->borderpx == borderpx
+		? 0
+		: borderpx;
+	int delta = 2 * (m->borderpx - prev_borderpx);
 
 	#if BAR_BORDER_PATCH
-	for (bar = selmon->bar; bar; bar = bar->next) {
-		bar->bh = bar->bh - 2 * bar->borderpx + 2 * selmon->borderpx;
-		bar->borderpx = selmon->borderpx;
+	for (bar = m->bar; bar; bar = bar->next) {
+		bar->bh = bar->bh - 2 * bar->borderpx + 2 * m->borderpx;
+		bar->borderpx = m->borderpx;
 	}
-	updatebarpos(selmon);
-	for (bar = selmon->bar; bar; bar = bar->next)
+	updatebarpos(m);
+	for (bar = m->bar; bar; bar = bar->next)
 		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
 	#endif // BAR_BORDER_PATCH
 
-	for (c = selmon->clients; c; c = c->next)
-	{
-		if (c->bw + arg->i < 0)
-			c->bw = 0;
-		else
-			c->bw = selmon->borderpx;
+	for (c = m->clients; c; c = c->next) {
+		c->bw = m->borderpx;
+		#if !FAKEFULLSCREEN_PATCH
+		#if FAKEFULLSCREEN_CLIENT_PATCH
+		if (c->isfullscreen && !c->fakefullscreen)
+			continue;
+		#else
+		if (c->isfullscreen)
+			continue;
+		#endif // FAKEFULLSCREEN_CLIENT_PATCH
+		#endif // FAKEFULLSCREEN_PATCH
+		#if BAR_WINTITLEACTIONS_PATCH
+		if (HIDDEN(c))
+			continue;
+		#endif // BAR_WINTITLEACTIONS_PATCH
+		#if SCRATCHPADS_PATCH
+		if ((c->tags & SPTAGMASK) && !ISVISIBLE(c))
+			continue;
+		#endif // SCRATCHPADS_PATCH
+		#if SCRATCHPAD_ALT_1_PATCH
+        if ((c->tags & SCRATCHPAD_MASK))
+            continue;
+		#endif // SCRATCHPAD_ALT_1_PATCH
+		if (!c->isfloating && m->lt[m->sellt]->arrange)
+			continue;
 
-		if (c->isfloating || !selmon->lt[selmon->sellt]->arrange)
-		{
-			if (arg->i != 0 && prev_borderpx + arg->i >= 0)
-				resize(c, c->x, c->y, c->w-(arg->i*2), c->h-(arg->i*2), 0);
-			else if (arg->i != 0)
-				resizeclient(c, c->x, c->y, c->w, c->h);
-			else if (prev_borderpx > borderpx)
-				resize(c, c->x, c->y, c->w + 2*(prev_borderpx - borderpx), c->h + 2*(prev_borderpx - borderpx), 0);
-			else if (prev_borderpx < borderpx)
-				resize(c, c->x, c->y, c->w - 2*(borderpx - prev_borderpx), c->h - 2*(borderpx - prev_borderpx), 0);
-		}
+		resizeclient(c, c->x, c->y, c->w - delta, c->h - delta);
 	}
-	arrange(selmon);
+	arrange(m);
 }
-
