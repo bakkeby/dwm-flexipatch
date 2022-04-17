@@ -440,7 +440,6 @@ typedef struct {
 typedef struct Pertag Pertag;
 #endif // PERTAG_PATCH
 struct Monitor {
-	int index;
 	char ltsymbol[16];
 	float mfact;
 	#if FLEXTILE_DELUXE_LAYOUT
@@ -1119,7 +1118,7 @@ buttonpress(XEvent *e)
 				br = &barrules[r];
 				if (br->bar != bar->idx || (br->monitor == 'A' && m != selmon) || br->clickfunc == NULL)
 					continue;
-				if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
+				if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->num)
 					continue;
 				if (bar->x[r] <= ev->x && ev->x <= bar->x[r] + bar->w[r]) {
 					carg.x = ev->x - bar->x[r];
@@ -1556,11 +1555,11 @@ createmon(void)
 	m->gappov = gappov;
 	#endif // VANITYGAPS_PATCH
 	for (mi = 0, mon = mons; mon; mon = mon->next, mi++); // monitor index
-	m->index = mi;
+	m->num = mi;
 	#if MONITOR_RULES_PATCH
 	for (j = 0; j < LENGTH(monrules); j++) {
 		mr = &monrules[j];
-		if ((mr->monitor == -1 || mr->monitor == mi)
+		if ((mr->monitor == -1 || mr->monitor == m->num)
 		#if PERTAG_PATCH
 				&& (mr->tag <= 0 || (m->tagset[0] & (1 << (mr->tag - 1))))
 		#endif // PERTAG_PATCH
@@ -1591,7 +1590,7 @@ createmon(void)
 	/* Derive the number of bars for this monitor based on bar rules */
 	for (n = -1, i = 0; i < LENGTH(barrules); i++) {
 		br = &barrules[i];
-		if (br->monitor == 'A' || br->monitor == -1 || br->monitor == mi)
+		if (br->monitor == 'A' || br->monitor == -1 || br->monitor == m->num)
 			n = MAX(br->bar, n);
 	}
 
@@ -1652,7 +1651,7 @@ createmon(void)
 		#if MONITOR_RULES_PATCH
 		for (j = 0; j < LENGTH(monrules); j++) {
 			mr = &monrules[j];
-			if ((mr->monitor == -1 || mr->monitor == mi) && (mr->tag == -1 || mr->tag == i)) {
+			if ((mr->monitor == -1 || mr->monitor == m->num) && (mr->tag == -1 || mr->tag == i)) {
 				layout = MAX(mr->layout, 0);
 				layout = MIN(layout, LENGTH(layouts) - 1);
 				m->pertag->ltidxs[i][0] = &layouts[layout];
@@ -1817,7 +1816,7 @@ drawbarwin(Bar *bar)
 		br = &barrules[r];
 		if (br->bar != bar->idx || !br->widthfunc || (br->monitor == 'A' && bar->mon != selmon))
 			continue;
-		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->index)
+		if (br->monitor != 'A' && br->monitor != -1 && br->monitor != bar->mon->num)
 			continue;
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		warg.w = (br->alignment < BAR_ALIGN_RIGHT_LEFT ? lw : rw);
@@ -4521,8 +4520,6 @@ updategeom(void)
 				selmon = mons;
 			cleanupmon(m);
 		}
-		for (i = 0, m = mons; m; m = m->next, i++)
-			m->index = i;
 		free(unique);
 	} else
 #endif /* XINERAMA */
