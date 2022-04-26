@@ -2439,7 +2439,7 @@ manage(Window w, XWindowAttributes *wa)
 	#endif // MAXIMIZE_PATCH / EXRESIZE_PATCH
 
 	if (!c->isfloating)
-		c->isfloating = c->oldstate = t || c->isfixed;
+		c->isfloating = c->oldstate = trans != None || c->isfixed;
 	if (c->isfloating) {
 		XRaiseWindow(dpy, c->win);
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
