@@ -2395,6 +2395,7 @@ manage(Window w, XWindowAttributes *wa)
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
 	#endif // BAR_FLEXWINTITLE_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
+	updatesizehints(c);
 	if (getatomprop(c, netatom[NetWMState]) == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
 	updatewmhints(c);
