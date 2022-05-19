@@ -309,6 +309,9 @@
 #if XRDB_PATCH && !BAR_VTCOLORS_PATCH
 #include "xrdb.h"
 #endif
+#if PRESERVECLIENTS_PATCH
+#include "preserveclients.h"
+#endif
 /* Layouts */
 #if BSTACK_LAYOUT
 #include "layout_bstack.h"

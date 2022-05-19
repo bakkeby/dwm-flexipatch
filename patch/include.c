@@ -313,6 +313,9 @@
 #if DRAGMFACT_PATCH
 #include "dragmfact.c"
 #endif
+#if PRESERVECLIENTS_PATCH
+#include "preserveclients.c"
+#endif
 /* Layouts */
 #if BSTACK_LAYOUT || BSTACKHORIZ_LAYOUT || CENTEREDMASTER_LAYOUT || CENTEREDFLOATINGMASTER_LAYOUT || COLUMNS_LAYOUT || DECK_LAYOUT || TILE_LAYOUT
 #include "layout_facts.c"

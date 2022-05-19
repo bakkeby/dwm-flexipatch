@@ -1255,6 +1255,12 @@
  */
 #define ZOOMSWAP_PATCH 0
 
+/* Allows clients to be preserved when dwm is renewed.
+ * This patch can be used with restartsig patch to make restarting dwm on fly efficient.
+ * https://lists.suckless.org/hackers/2205/18344.html
+ */
+#define PRESERVECLIENTS_PATCH 0
+
 /**
  * Layouts
  */
@@ -1335,3 +1341,4 @@
  * This can be optionally disabled in favour of other layouts.
  */
 #define MONOCLE_LAYOUT 1
+

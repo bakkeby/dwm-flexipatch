@@ -198,6 +198,9 @@ enum {
 	#if NET_CLIENT_LIST_STACKING_PATCH
 	NetClientListStacking,
 	#endif // NET_CLIENT_LIST_STACKING_PATCH
+	#if PRESERVECLIENTS_PATCH
+	NetClientInfo,
+	#endif // PRESERVECLIENTS_PATCH
 	NetLast
 }; /* EWMH atoms */
 
@@ -1773,7 +1776,7 @@ void
 drawbar(Monitor *m)
 {
 	Bar *bar;
-	
+
 	#if !BAR_FLEXWINTITLE_PATCH
 	if (m->showbar)
 	#endif // BAR_FLEXWINTITLE_PATCH
@@ -2402,6 +2405,27 @@ manage(Window w, XWindowAttributes *wa)
 	#if DECORATION_HINTS_PATCH
 	updatemotifhints(c);
 	#endif // DECORATION_HINTS_PATCH
+	#if PRESERVECLIENTS_PATCH
+	{
+		int format;
+		unsigned long *data, n, extra;
+		Monitor *m;
+		Atom atom;
+		if (XGetWindowProperty(dpy, c->win, netatom[NetClientInfo], 0L, 2L, False, XA_CARDINAL,
+			&atom, &format, &n, &extra, (unsigned char **)&data) == Success && n == 2) {
+			c->tags = *data;
+			for (m = mons; m; m = m->next) {
+				if (m->num == *(data+1)) {
+					c->mon = m;
+					break;
+				}
+			}
+		}
+		if (n > 0)
+			XFree(data);
+	}
+	setclienttagprop(c);
+	#endif // PRESERVECLIENTS_PATCH
 
 	#if CENTER_PATCH && SAVEFLOATS_PATCH || CENTER_PATCH && EXRESIZE_PATCH
 	c->sfx = -9999;
@@ -2451,6 +2475,9 @@ manage(Window w, XWindowAttributes *wa)
 	attach(c);
 	#endif
 	attachstack(c);
+	#if PRESERVECLIENTS_PATCH
+	setclienttagprop(c);
+	#endif // PRESERVECLIENTS_PATCH
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 		(unsigned char *) &(c->win), 1);
 	#if NET_CLIENT_LIST_STACKING_PATCH
@@ -3596,6 +3623,9 @@ setup(void)
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
+	#if PRESERVECLIENTS_PATCH
+	netatom[NetClientInfo] = XInternAtom(dpy, "_NET_CLIENT_INFO", False);
+	#endif // PRESERVECLIENTS_PATCH
 	#if NET_CLIENT_LIST_STACKING_PATCH
 	netatom[NetClientListStacking] = XInternAtom(dpy, "_NET_CLIENT_LIST_STACKING", False);
 	#endif // NET_CLIENT_LIST_STACKING_PATCH
@@ -3682,6 +3712,9 @@ setup(void)
 	setviewport();
 	#endif // BAR_EWMHTAGS_PATCH
 	XDeleteProperty(dpy, root, netatom[NetClientList]);
+	#if PRESERVECLIENTS_PATCH
+	XDeleteProperty(dpy, root, netatom[NetClientInfo]);
+	#endif // PRESERVECLIENTS_PATCH
 	#if NET_CLIENT_LIST_STACKING_PATCH
 	XDeleteProperty(dpy, root, netatom[NetClientListStacking]);
 	#endif // NET_CLIENT_LIST_STACKING_PATCH
@@ -3910,9 +3943,18 @@ tag(const Arg *arg)
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
 	unsigned int tagmask, tagindex;
 	#endif // SWAPFOCUS_PATCH
+	#if PRESERVECLIENTS_PATCH
+	Client *c;
+	#endif // PRESERVECLIENTS_PATCH
 
 	if (selmon->sel && arg->ui & TAGMASK) {
+		#if PRESERVECLIENTS_PATCH
+		c = selmon->sel;
+		#endif // PRESERVECLIENTS_PATCH
 		selmon->sel->tags = arg->ui & TAGMASK;
+		#if PRESERVECLIENTS_PATCH
+		setclienttagprop(selmon->sel);
+		#endif // PRESERVECLIENTS_PATCH
 		#if SWITCHTAG_PATCH
 		if (selmon->sel->switchtag)
 			selmon->sel->switchtag = 0;
@@ -4045,6 +4087,9 @@ toggletag(const Arg *arg)
 	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
 	if (newtags) {
 		selmon->sel->tags = newtags;
+		#if PRESERVECLIENTS_PATCH
+		setclienttagprop(selmon->sel);
+		#endif // PRESERVECLIENTS_PATCH
 		focus(NULL);
 		#if SWAPFOCUS_PATCH && PERTAG_PATCH
 		for (tagmask = arg->ui & TAGMASK, tagindex = 1; tagmask!=0; tagmask >>= 1, tagindex++)
