@@ -766,19 +766,18 @@ static const char *xkb_layouts[]  = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
 	{ MODKEY|Mod4Mask,              KEY,      tagnextmon,     {.ui = 1 << TAG} }, \
 	{ MODKEY|Mod4Mask|ControlMask,  KEY,      tagprevmon,     {.ui = 1 << TAG} },
+#elif ACCSESSNTHMON_PATCH
+#define TAGKEYS(KEY,TAG) \
+{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
+    { Mod1Mask,                       KEY,      focusnthmon,    {.i  = TAG } }, \
+    { Mod1Mask|ShiftMask,             KEY,      tagnthmon,      {.i  = TAG } },
 #else
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
-#endif // COMBO_PATCH / SWAPTAGS_PATCH / TAGOTHERMONITOR_PATCH
-#if ACCSESSNTHMON_PATCH
-#define TAGKEYS(KEY,TAG) \
-{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
-    { ALTMOD,                       KEY,      focusnthmon,    {.i  = TAG } }, \
-    { ALTMOD|ShiftMask,             KEY,      tagnthmon,      {.i  = TAG } },
-#endif
+#endif // COMBO_PATCH / SWAPTAGS_PATCH / TAGOTHERMONITOR_PATCH / ACCSESSNTHMON_PATCH
 
 #if STACKER_PATCH
 #define STACKKEYS(MOD,ACTION) \
