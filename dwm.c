@@ -607,6 +607,9 @@ static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
+#if ACCSESSNTHMON_PATCH
+static Monitor *numtomon(int num);
+#endif // ACCSESSNTHMON_PATCH
 static void drawbar(Monitor *m);
 static void drawbars(void);
 static void drawbarwin(Bar *bar);
@@ -617,6 +620,9 @@ static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
+#if ACCSESSNTHMON_PATCH
+static void focusnthmon(const Arg *arg);
+#endif
 #if !STACKER_PATCH
 static void focusstack(const Arg *arg);
 #endif // STACKER_PATCH
@@ -678,6 +684,9 @@ static pid_t spawncmd(const Arg *arg);
 #endif // RIODRAW_PATCH
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
+#if ACCSESSNTHMON_PATCH
+static void tagnthmon(const Arg *arg);
+#endif
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void toggletag(const Arg *arg);
@@ -1769,11 +1778,25 @@ dirtomon(int dir)
 	return m;
 }
 
+#if ACCSESSNTHMON_PATCH
+Monitor *
+numtomon(int num)
+{
+	Monitor *m = NULL;
+	int i = 0;
+
+	for(m = mons, i=0; m->next && i < num; m = m->next){
+		i++;
+	}
+	return m;
+}
+#endif
+
 void
 drawbar(Monitor *m)
 {
 	Bar *bar;
-	
+
 	#if !BAR_FLEXWINTITLE_PATCH
 	if (m->showbar)
 	#endif // BAR_FLEXWINTITLE_PATCH
@@ -1939,6 +1962,23 @@ enternotify(XEvent *e)
 	focus(c);
 }
 #endif // FOCUSONCLICK_PATCH
+
+#if ACCSESSNTHMON_PATCH
+void
+focusnthmon(const Arg *arg)
+{
+	Monitor *m;
+
+	if (!mons->next)
+		return;
+
+	if ((m = numtomon(arg->i)) == selmon)
+		return;
+	unfocus(selmon->sel, 0, NULL);
+	selmon = m;
+	focus(NULL);
+}
+#endif
 
 void
 expose(XEvent *e)
@@ -2763,6 +2803,16 @@ propertynotify(XEvent *e)
 		#endif // BAR_WINICON_PATCH
 	}
 }
+
+#if ACCSESSNTHMON_PATCH
+void
+tagnthmon(const Arg *arg)
+{
+	if (!selmon->sel || !mons->next)
+		return;
+	sendmon(selmon->sel, numtomon(arg->i));
+}
+#endif
 
 void
 quit(const Arg *arg)

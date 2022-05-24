@@ -773,6 +773,12 @@ static const char *xkb_layouts[]  = {
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 #endif // COMBO_PATCH / SWAPTAGS_PATCH / TAGOTHERMONITOR_PATCH
+#if ACCSESSNTHMON_PATCH
+#define TAGKEYS(KEY,TAG) \
+{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
+    { ALTMOD,                       KEY,      focusnthmon,    {.i  = TAG } }, \
+    { ALTMOD|ShiftMask,             KEY,      tagnthmon,      {.i  = TAG } },
+#endif
 
 #if STACKER_PATCH
 #define STACKKEYS(MOD,ACTION) \
@@ -1183,7 +1189,7 @@ static Key keys[] = {
 	{ Mod3Mask|Mod1Mask,            XK_m,            floatpos,               {.v = "-1p  1p" } }, // ↙
 	{ Mod3Mask|Mod1Mask,            XK_comma,        floatpos,               {.v = " 0p  1p" } }, // ↓
 	{ Mod3Mask|Mod1Mask,            XK_period,       floatpos,               {.v = " 1p  1p" } }, // ↘
-	#endif // FLOATPOS_PATCH
+#endif // FLOATPOS_PATCH
 	#if SETBORDERPX_PATCH
 	{ MODKEY|ControlMask,           XK_minus,      setborderpx,            {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_plus,       setborderpx,            {.i = +1 } },
