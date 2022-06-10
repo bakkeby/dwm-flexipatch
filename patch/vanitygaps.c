@@ -96,7 +96,11 @@ togglegaps(const Arg *arg)
 	drawbarwin(systray->bar);
 	#endif // BAR_SYSTRAY_PATCH
 	#endif // BAR_PADDING_VANITYGAPS_PATCH
+	#if PERTAG_VANITYGAPS_PATCH && PERTAG_PATCH
+	arrange(selmon);
+	#else
 	arrange(NULL);
+	#endif // PERTAG_VANITYGAPS_PATCH
 }
 
 static void
@@ -188,7 +192,7 @@ getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc)
 {
 	unsigned int n, oe, ie;
 	#if PERTAG_VANITYGAPS_PATCH && PERTAG_PATCH
-	oe = ie = selmon->pertag->enablegaps[selmon->pertag->curtag];
+	oe = ie = m->pertag->enablegaps[m->pertag->curtag];
 	#else
 	oe = ie = enablegaps;
 	#endif // PERTAG_VANITYGAPS_PATCH
