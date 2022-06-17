@@ -1234,6 +1234,9 @@ cleanup(void)
 			removesystrayicon(systray->icons);
 		if (systray->win) {
 			XUnmapWindow(dpy, systray->win);
+			#if RESTARTSIG_PATCH
+			if (!restart)
+			#endif // RESTARTSIG_PATCH
 			XDestroyWindow(dpy, systray->win);
 		}
 		free(systray);
