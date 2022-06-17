@@ -163,7 +163,7 @@ updatesystrayiconstate(Client *i, XPropertyEvent *ev)
 	int code = 0;
 
 	if (!showsystray || !systray || !i || ev->atom != xatom[XembedInfo] ||
-			!(flags = getatomprop(i, xatom[XembedInfo])))
+			!(flags = getatomprop(i, xatom[XembedInfo], xatom[XembedInfo])))
 		return;
 
 	if (flags & XEMBED_MAPPED && !i->tags) {

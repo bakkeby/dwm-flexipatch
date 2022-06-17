@@ -13,7 +13,7 @@ checkfloatingrules(Client *c)
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
-	wintype  = getatomprop(c, netatom[NetWMWindowType]);
+	wintype  = getatomprop(c, netatom[NetWMWindowType], XA_ATOM);
 	#if WINDOWROLERULE_PATCH
 	gettextprop(c->win, wmatom[WMWindowRole], role, sizeof(role));
 	#endif // WINDOWROLERULE_PATCH

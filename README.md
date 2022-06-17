@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2022-06-17 - Ported the seamless restart feature from dusk into dwm-flexipatch
+
 2022-02-11 - Added the isfreesize version of the sizehints patch and the [tagsync](https://github.com/bakkeby/dwm-flexipatch/pull/219) patch (contributed by [Bagelli](https://github.com/Bagellll))
 
 2021-11-23 - Added the taglabels and underlinetags patches
@@ -601,6 +603,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [scratchpad_alt_1](https://github.com/GasparVardanyan/dwm-scratchpad)
       - this alternative patch enables a scratchpad feature in dwm similar to the scratchpad
         feature in i3wm
+
+   - seamless_restart
+      - allows for selected layout, assigned tags, etc. to be persisted across restarts
 
    - [selfrestart](https://dwm.suckless.org/patches/selfrestart/)
       - restart dwm without the unnecessary dependency of an external script

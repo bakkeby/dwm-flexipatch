@@ -212,6 +212,14 @@ enum {
 	WMLast
 }; /* default atoms */
 
+#if SEAMLESS_RESTART_PATCH
+enum {
+	ClientFields,
+	ClientTags,
+	ClientLast
+}; /* dwm client atoms */
+#endif // SEAMLESS_RESTART_PATCH
+
 enum {
 	#if BAR_STATUSBUTTON_PATCH
 	ClkButton,
@@ -335,6 +343,9 @@ struct Client {
 	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 	int sfx, sfy, sfw, sfh; /* stored float geometry, used on mode revert */
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
+	#if SEAMLESS_RESTART_PATCH
+	unsigned int idx;
+	#endif // SEAMLESS_RESTART_PATCH
 	int oldx, oldy, oldw, oldh;
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
 	int bw, oldbw;
@@ -620,7 +631,7 @@ static void focusmon(const Arg *arg);
 #if !STACKER_PATCH
 static void focusstack(const Arg *arg);
 #endif // STACKER_PATCH
-static Atom getatomprop(Client *c, Atom prop);
+static Atom getatomprop(Client *c, Atom prop, Atom req);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
@@ -782,11 +793,13 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	#endif // BAR_SYSTRAY_PATCH
 	[UnmapNotify] = unmapnotify
 };
-#if BAR_SYSTRAY_PATCH
-static Atom wmatom[WMLast], netatom[NetLast], xatom[XLast];
-#else
 static Atom wmatom[WMLast], netatom[NetLast];
+#if BAR_SYSTRAY_PATCH
+static Atom xatom[XLast];
 #endif // BAR_SYSTRAY_PATCH
+#if SEAMLESS_RESTART_PATCH
+static Atom clientatom[ClientLast];
+#endif // SEAMLESS_RESTART_PATCH
 #if ON_EMPTY_KEYS_PATCH
 static int isempty = 0;
 #endif // ON_EMPTY_KEYS_PATCH
@@ -839,7 +852,7 @@ applyrules(Client *c)
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
 	instance = ch.res_name  ? ch.res_name  : broken;
-	wintype  = getatomprop(c, netatom[NetWMWindowType]);
+	wintype  = getatomprop(c, netatom[NetWMWindowType], XA_ATOM);
 	#if WINDOWROLERULE_PATCH
 	gettextprop(c->win, wmatom[WMWindowRole], role, sizeof(role));
 	#endif // WINDOWROLERULE_PATCH
@@ -1199,11 +1212,15 @@ checkotherwm(void)
 void
 cleanup(void)
 {
+	#if !SEAMLESS_RESTART_PATCH
 	Arg a = {.ui = ~0};
+	#endif // SEAMLESS_RESTART_PATCH
 	Layout foo = { "", NULL };
 	Monitor *m;
 	size_t i;
+	#if !SEAMLESS_RESTART_PATCH
 	view(&a);
+	#endif // SEAMLESS_RESTART_PATCH
 	selmon->lt[selmon->sellt] = &foo;
 	for (m = mons; m; m = m->next)
 		while (m->stack)
@@ -1690,6 +1707,11 @@ createmon(void)
 		#endif // PERTAG_VANITYGAPS_PATCH | VANITYGAPS_PATCH
 	}
 	#endif // PERTAG_PATCH
+
+	#if SEAMLESS_RESTART_PATCH
+	restoremonitorstate(m);
+	#endif // SEAMLESS_RESTART_PATCH
+
 	#if INSETS_PATCH
 	m->inset = default_inset;
 	#endif // INSETS_PATCH
@@ -1735,9 +1757,13 @@ void
 detach(Client *c)
 {
 	Client **tc;
+	#if SEAMLESS_RESTART_PATCH
+	c->idx = 0;
+	#endif // SEAMLESS_RESTART_PATCH
 
 	for (tc = &c->mon->clients; *tc && *tc != c; tc = &(*tc)->next);
 	*tc = c->next;
+	c->next = NULL;
 }
 
 void
@@ -1752,6 +1778,7 @@ detachstack(Client *c)
 		for (t = c->mon->stack; t && !ISVISIBLE(t); t = t->snext);
 		c->mon->sel = t;
 	}
+	c->snext = NULL;
 }
 
 Monitor *
@@ -2080,7 +2107,7 @@ focusstack(const Arg *arg)
 #endif // STACKER_PATCH
 
 Atom
-getatomprop(Client *c, Atom prop)
+getatomprop(Client *c, Atom prop, Atom req)
 {
 	int di;
 	unsigned long dl;
@@ -2088,26 +2115,21 @@ getatomprop(Client *c, Atom prop)
 	Atom da, atom = None;
 
 	#if BAR_SYSTRAY_PATCH
-	/* FIXME getatomprop should return the number of items and a pointer to
-	 * the stored data instead of this workaround */
-	Atom req = XA_ATOM;
 	if (prop == xatom[XembedInfo])
 		req = xatom[XembedInfo];
+	#endif // BAR_SYSTRAY_PATCH
 
+	/* FIXME getatomprop should return the number of items and a pointer to
+	 * the stored data instead of this workaround */
 	if (XGetWindowProperty(dpy, c->win, prop, 0L, sizeof atom, False, req,
 		&da, &di, &dl, &dl, &p) == Success && p) {
 		atom = *(Atom *)p;
+		#if BAR_SYSTRAY_PATCH
 		if (da == xatom[XembedInfo] && dl == 2)
 			atom = ((Atom *)p)[1];
+		#endif // BAR_SYSTRAY_PATCH
 		XFree(p);
 	}
-	#else
-	if (XGetWindowProperty(dpy, c->win, prop, 0L, sizeof atom, False, XA_ATOM,
-		&da, &di, &dl, &dl, &p) == Success && p) {
-		atom = *(Atom *)p;
-		XFree(p);
-	}
-	#endif // BAR_SYSTRAY_PATCH
 	return atom;
 }
 
@@ -2310,6 +2332,9 @@ manage(Window w, XWindowAttributes *wa)
 	#if SWALLOW_PATCH
 	Client *term = NULL;
 	#endif // SWALLOW_PATCH
+	#if SEAMLESS_RESTART_PATCH
+	int settings_restored;
+	#endif // SEAMLESS_RESTART_PATCH
 	Window trans = None;
 	XWindowChanges wc;
 
@@ -2319,6 +2344,9 @@ manage(Window w, XWindowAttributes *wa)
 	c->pid = winpid(w);
 	#endif // SWALLOW_PATCH
 	/* geometry */
+	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
+	c->sfx = c->sfy = c->sfw = c->sfh = -9999;
+	#endif // SAVEFLOATS_PATCH | EXRESIZE_PATCH
 	c->x = c->oldx = wa->x;
 	c->y = c->oldy = wa->y;
 	c->w = c->oldw = wa->width;
@@ -2327,6 +2355,9 @@ manage(Window w, XWindowAttributes *wa)
 	#if CFACTS_PATCH
 	c->cfact = 1.0;
 	#endif // CFACTS_PATCH
+	#if SEAMLESS_RESTART_PATCH
+	settings_restored = restoreclientstate(c);
+	#endif // SEAMLESS_RESTART_PATCH
 	#if BAR_WINICON_PATCH
 	updateicon(c);
 	#endif // BAR_WINICON_PATCH
@@ -2359,7 +2390,12 @@ manage(Window w, XWindowAttributes *wa)
 			c->iscentered = 1;
 		#endif // CENTER_TRANSIENT_WINDOWS_PATCH | CENTER_TRANSIENT_WINDOWS_BY_PARENT_PATCH | CENTER_PATCH
 	} else {
+		#if SEAMLESS_RESTART_PATCH
+		if (!settings_restored)
+			c->mon = selmon;
+		#else
 		c->mon = selmon;
+		#endif // SEAMLESS_RESTART_PATCH
 		#if CENTER_PATCH
 		if (c->x == c->mon->wx && c->y == c->mon->wy)
 			c->iscentered = 1;
@@ -2369,7 +2405,12 @@ manage(Window w, XWindowAttributes *wa)
 		#else
 		c->bw = borderpx;
 		#endif // SETBORDERPX_PATCH
+		#if SEAMLESS_RESTART_PATCH
+		if (!settings_restored)
+			applyrules(c);
+		#else
 		applyrules(c);
+		#endif // SEAMLESS_RESTART_PATCH
 		#if SWALLOW_PATCH
 		term = termforwin(c);
 		if (term)
@@ -2396,7 +2437,7 @@ manage(Window w, XWindowAttributes *wa)
 	#endif // BAR_FLEXWINTITLE_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
 	updatesizehints(c);
-	if (getatomprop(c, netatom[NetWMState]) == netatom[NetWMFullscreen])
+	if (getatomprop(c, netatom[NetWMState], XA_ATOM) == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
 	updatewmhints(c);
 	#if DECORATION_HINTS_PATCH
@@ -2404,8 +2445,6 @@ manage(Window w, XWindowAttributes *wa)
 	#endif // DECORATION_HINTS_PATCH
 
 	#if CENTER_PATCH && SAVEFLOATS_PATCH || CENTER_PATCH && EXRESIZE_PATCH
-	c->sfx = -9999;
-	c->sfy = -9999;
 	if (c->iscentered) {
 		c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 		c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
@@ -2421,13 +2460,12 @@ manage(Window w, XWindowAttributes *wa)
 	#elif ALWAYSCENTER_PATCH
 	c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 	c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
-	#elif SAVEFLOATS_PATCH || EXRESIZE_PATCH
-	c->sfx = -9999;
-	c->sfy = -9999;
 	#endif // CENTER_PATCH / ALWAYSCENTER_PATCH / SAVEFLOATS_PATCH
 	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
-	c->sfw = c->w;
-	c->sfh = c->h;
+	if (c->sfw == -9999) {
+		c->sfw = c->w;
+		c->sfh = c->h;
+	}
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 
 	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
@@ -2445,7 +2483,7 @@ manage(Window w, XWindowAttributes *wa)
 		XRaiseWindow(dpy, c->win);
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
 	}
-	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
+	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH || SEAMLESS_RESTART_PATCH
 	attachx(c);
 	#else
 	attach(c);
@@ -2600,8 +2638,8 @@ movemouse(const Arg *arg)
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // FAKEFULLSCREEN_PATCH
 	restack(selmon);
-	ocx = c->x;
-	ocy = c->y;
+	nx = ocx = c->x;
+	ny = ocy = c->y;
 	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
 		None, cursor[CurMove]->cursor, CurrentTime) != GrabSuccess)
 		return;
@@ -2639,14 +2677,7 @@ movemouse(const Arg *arg)
 				togglefloating(NULL);
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
-			#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 				resize(c, nx, ny, c->w, c->h, 1);
-				/* save last known float coordinates */
-				c->sfx = nx;
-				c->sfy = ny;
-			#else
-				resize(c, nx, ny, c->w, c->h, 1);
-			#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 			}
 			#if ROUNDED_CORNERS_PATCH
 			drawroundedcorners(c);
@@ -2654,6 +2685,7 @@ movemouse(const Arg *arg)
 			break;
 		}
 	} while (ev.type != ButtonRelease);
+
 	XUngrabPointer(dpy, CurrentTime);
 	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
 		#if SCRATCHPADS_PATCH
@@ -2666,6 +2698,13 @@ movemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
+	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
+	/* save last known float coordinates */
+	if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
+		c->sfx = nx;
+		c->sfy = ny;
+	}
+	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 	#if ROUNDED_CORNERS_PATCH
 	drawroundedcorners(c);
 	#endif // ROUNDED_CORNERS_PATCH
@@ -2773,8 +2812,13 @@ quit(const Arg *arg)
 	#if RESTARTSIG_PATCH
 	restart = arg->i;
 	#endif // RESTARTSIG_PATCH
-	#if ONLYQUITONEMPTY_PATCH
+	#if SEAMLESS_RESTART_PATCH
 	Monitor *m;
+	#endif // SEAMLESS_RESTART_PATCH
+	#if ONLYQUITONEMPTY_PATCH
+	#if !SEAMLESS_RESTART_PATCH
+	Monitor *m;
+	#endif // SEAMLESS_RESTART_PATCH
 	Client *c;
 	unsigned int n = 0;
 
@@ -2793,6 +2837,11 @@ quit(const Arg *arg)
 	#else // !ONLYQUITONEMPTY_PATCH
 	running = 0;
 	#endif // ONLYQUITONEMPTY_PATCH
+
+	#if SEAMLESS_RESTART_PATCH
+	for (m = mons; m && !running; m = m->next)
+		persistmonitorstate(m);
+	#endif // SEAMLESS_RESTART_PATCH
 
 	#if COOL_AUTOSTART_PATCH
 	/* kill child processes */
@@ -2876,9 +2925,9 @@ resizeclient(Client *c, int x, int y, int w, int h)
 void
 resizemouse(const Arg *arg)
 {
-	int ocx, ocy, nw, nh;
+	int ocx, ocy, nw, nh, nx, ny;
 	#if RESIZEPOINT_PATCH || RESIZECORNERS_PATCH
-	int opx, opy, och, ocw, nx, ny;
+	int opx, opy, och, ocw;
 	int horizcorner, vertcorner;
 	unsigned int dui;
 	Window dummy;
@@ -2900,8 +2949,10 @@ resizemouse(const Arg *arg)
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // !FAKEFULLSCREEN_PATCH
 	restack(selmon);
-	ocx = c->x;
-	ocy = c->y;
+	nx = ocx = c->x;
+	ny = ocy = c->y;
+	nh = c->h;
+	nw = c->w;
 	#if RESIZEPOINT_PATCH
 	och = c->h;
 	ocw = c->w;
@@ -2968,24 +3019,7 @@ resizemouse(const Arg *arg)
 				}
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
-				#if RESIZECORNERS_PATCH || RESIZEPOINT_PATCH
-				resizeclient(c, nx, ny, nw, nh);
-				#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
-				/* save last known float dimensions */
-				c->sfx = nx;
-				c->sfy = ny;
-				c->sfw = nw;
-				c->sfh = nh;
-				#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
-				#else
-				resize(c, c->x, c->y, nw, nh, 1);
-				#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
-				c->sfx = c->x;
-				c->sfy = c->y;
-				c->sfw = nw;
-				c->sfh = nh;
-				#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
-				#endif // RESIZECORNERS_PATCH
+				resize(c, nx, ny, nw, nh, 1);
 				#if ROUNDED_CORNERS_PATCH
 				drawroundedcorners(c);
 				#endif // ROUNDED_CORNERS_PATCH
@@ -2993,6 +3027,7 @@ resizemouse(const Arg *arg)
 			break;
 		}
 	} while (ev.type != ButtonRelease);
+
 	#if !RESIZEPOINT_PATCH
 	#if RESIZECORNERS_PATCH
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0,
@@ -3015,6 +3050,15 @@ resizemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
+	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
+	/* save last known float dimensions */
+	if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
+		c->sfx = nx;
+		c->sfy = ny;
+		c->sfw = nw;
+		c->sfh = nh;
+	}
+	#endif // SAVEFLOATS_PATCH | EXRESIZE_PATCH
 	ignoreconfigurerequests = 0;
 }
 
@@ -3568,6 +3612,10 @@ setup(void)
 	#if WINDOWROLERULE_PATCH
 	wmatom[WMWindowRole] = XInternAtom(dpy, "WM_WINDOW_ROLE", False);
 	#endif // WINDOWROLERULE_PATCH
+	#if SEAMLESS_RESTART_PATCH
+	clientatom[ClientFields] = XInternAtom(dpy, "_DWM_CLIENT_FIELDS", False);
+	clientatom[ClientTags] = XInternAtom(dpy, "_DWM_CLIENT_TAGS", False);
+	#endif // SEAMLESS_RESTART_PATCH
 	netatom[NetActiveWindow] = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 	netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
 	#if BAR_SYSTRAY_PATCH
@@ -3757,7 +3805,7 @@ showhide(Client *c)
 		/* show clients top down */
 		#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 		if (!c->mon->lt[c->mon->sellt]->arrange && c->sfx != -9999 && !c->isfullscreen) {
-			XMoveWindow(dpy, c->win, c->sfx, c->sfy);
+			XMoveResizeWindow(dpy, c->win, c->sfx, c->sfy, c->sfw, c->sfh);
 			resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 0);
 			showhide(c->snext);
 			return;
@@ -3935,13 +3983,26 @@ tag(const Arg *arg)
 void
 tagmon(const Arg *arg)
 {
-	#if TAGMONFIXFS_PATCH
 	Client *c = selmon->sel;
+	Monitor *dest;
+	#if SEAMLESS_RESTART_PATCH && SAVEFLOATS_PATCH
+	int restored;
+	#endif // SEAMLESS_RESTART_PATCH | SAVEFLOATS_PATCH
 	if (!c || !mons->next)
 		return;
+	dest = dirtomon(arg->i);
+	#if SEAMLESS_RESTART_PATCH && SAVEFLOATS_PATCH
+	savewindowfloatposition(c, c->mon);
+	restored = restorewindowfloatposition(c, dest);
+	if (restored && (!dest->lt[dest->sellt]->arrange || c->isfloating)) {
+		XMoveResizeWindow(dpy, c->win, c->sfx, c->sfy, c->sfw, c->sfh);
+		resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 1);
+	}
+	#endif // SEAMLESS_RESTART_PATCH | SAVEFLOATS_PATCH
+	#if TAGMONFIXFS_PATCH
 	if (c->isfullscreen) {
 		c->isfullscreen = 0;
-		sendmon(c, dirtomon(arg->i));
+		sendmon(c, dest);
 		c->isfullscreen = 1;
 		#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 		if (c->fakefullscreen != 1) {
@@ -3953,11 +4014,9 @@ tagmon(const Arg *arg)
 		XRaiseWindow(dpy, c->win);
 		#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	} else
-		sendmon(c, dirtomon(arg->i));
+		sendmon(c, dest);
 	#else
-	if (!selmon->sel || !mons->next)
-		return;
-	sendmon(selmon->sel, dirtomon(arg->i));
+	sendmon(c, dest);
 	#endif // TAGMONFIXFS_PATCH
 }
 
@@ -4991,12 +5050,12 @@ main(int argc, char *argv[])
 	runautostart();
 	#endif
 	run();
+	cleanup();
+	XCloseDisplay(dpy);
 	#if RESTARTSIG_PATCH
 	if (restart)
 		execvp(argv[0], argv);
 	#endif // RESTARTSIG_PATCH
-	cleanup();
-	XCloseDisplay(dpy);
 	return EXIT_SUCCESS;
 }
 

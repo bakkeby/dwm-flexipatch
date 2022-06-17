@@ -97,7 +97,7 @@
 #if ASPECTRESIZE_PATCH
 #include "aspectresize.h"
 #endif
-#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
+#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH || SEAMLESS_RESTART_PATCH
 #include "attachx.h"
 #endif
 #if AUTOSTART_PATCH
@@ -222,6 +222,9 @@
 #endif
 #if SCRATCHPAD_ALT_1_PATCH
 #include "scratchpad_alt_1.h"
+#endif
+#if SEAMLESS_RESTART_PATCH
+#include "seamless_restart.h"
 #endif
 #if SELFRESTART_PATCH
 #include "selfrestart.h"

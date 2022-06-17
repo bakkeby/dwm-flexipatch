@@ -922,6 +922,18 @@
  */
 #define SCRATCHPAD_ALT_1_PATCH 0
 
+/* This patch persists some settings across window manager restarts. These include but are not
+ * limited to:
+ *    - client's assigned tag(s) on which monitor
+ *    - the order of clients
+ *    - nmaster
+ *    - selected layout
+ *    - plus various additions depending on what other patches are used
+ *
+ * The above is not persisted across reboots, however.
+ */
+#define SEAMLESS_RESTART_PATCH 0
+
 /* As opposed to the original patch this only adds a rule option allowing fake fullscreen
  * to be enabled for applications when they start. This is intended to be used in combination
  * with the fakefullscreenclient patch and offers no practical functionality without it.
