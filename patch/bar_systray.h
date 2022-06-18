@@ -32,7 +32,6 @@ static int draw_systray(Bar *bar, BarArg *a);
 static int click_systray(Bar *bar, Arg *arg, BarArg *a);
 
 /* function declarations */
-static Atom getatomprop(Client *c, Atom prop);
 static void removesystrayicon(Client *i);
 static void resizerequest(XEvent *e);
 static void updatesystrayicongeom(Client *i, int w, int h);
