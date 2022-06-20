@@ -218,7 +218,9 @@
 #if ROUNDED_CORNERS_PATCH
 #include "roundedcorners.c"
 #endif
-#if SCRATCHPADS_PATCH
+#if RENAMED_SCRATCHPADS_PATCH
+#include "renamed_scratchpads.c"
+#elif SCRATCHPADS_PATCH
 #include "scratchpad.c"
 #endif
 #if SCRATCHPAD_ALT_1_PATCH

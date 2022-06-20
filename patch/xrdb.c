@@ -48,6 +48,16 @@ loadxrdb()
 				XRDB_LOAD_COLOR("dwm.urgbgcolor", urgbgcolor);
 				XRDB_LOAD_COLOR("dwm.urgbordercolor", urgbordercolor);
 				XRDB_LOAD_COLOR("dwm.urgfloatcolor", urgfloatcolor);
+				#if RENAMED_SCRATCHPADS_PATCH
+				XRDB_LOAD_COLOR("dwm.scratchselfgcolor", scratchselfgcolor);
+				XRDB_LOAD_COLOR("dwm.scratchselbgcolor", scratchselbgcolor);
+				XRDB_LOAD_COLOR("dwm.scratchselbordercolor", scratchselbordercolor);
+				XRDB_LOAD_COLOR("dwm.scratchselfloatcolor", scratchselfloatcolor);
+				XRDB_LOAD_COLOR("dwm.scratchnormfgcolor", scratchnormfgcolor);
+				XRDB_LOAD_COLOR("dwm.scratchnormbgcolor", scratchnormbgcolor);
+				XRDB_LOAD_COLOR("dwm.scratchnormbordercolor", scratchnormbordercolor);
+				XRDB_LOAD_COLOR("dwm.scratchnormfloatcolor", scratchnormfloatcolor);
+				#endif // RENAMED_SCRATCHPADS_PATCH
 				#if BAR_FLEXWINTITLE_PATCH
 				XRDB_LOAD_COLOR("dwm.normTTBbgcolor", normTTBbgcolor);
 				XRDB_LOAD_COLOR("dwm.normLTRbgcolor", normLTRbgcolor);

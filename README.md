@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2022-06-20 - Added the renamed scratchpads patch
+
 2022-06-17 - Ported the seamless restart feature from dusk into dwm-flexipatch
 
 2022-02-11 - Added the isfreesize version of the sizehints patch and the [tagsync](https://github.com/bakkeby/dwm-flexipatch/pull/219) patch (contributed by [Bagelli](https://github.com/Bagellll))
@@ -564,6 +566,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [push](https://dwm.suckless.org/patches/push/)
       - this patch provides a way to move clients up and down inside the client list
+
+   - [renamed_scratchpads](https://github.com/bakkeby/patches/wiki/renamedscratchpads)
+      - variant of the [named scratchpads](https://dwm.suckless.org/patches/namedscratchpads/) patch
 
    - [reorganizetags](https://dwm.suckless.org/patches/reorganizetags/)
       - shifts all clients per tag to leftmost unoccupied tags

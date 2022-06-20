@@ -844,6 +844,18 @@
  */
 #define PUSH_NO_MASTER_PATCH 0
 
+/* Variant of the named scratchpads patch allowing scratch keys to be added or removed
+ * on demand, allowing multiple scratchpad windows to be toggled into and out of view
+ * in unison, as well as including multi-monitor support.
+ *
+ * https://github.com/bakkeby/patches/wiki/renamedscratchpads
+ */
+#define RENAMED_SCRATCHPADS_PATCH 0
+
+/* Renamed scratchpads option to auto-hide scratchpads when moving to a different tag.
+ * This behaviour is similar to that of the (multiple) scratchpads patch. */
+#define RENAMED_SCRATCHPADS_AUTO_HIDE_PATCH 0
+
 /* Shifts all clients per tag to leftmost unoccupied tags.
  *
  * For example, if clients A, B, C are tagged on tags 1, 5, 9 respectively, when

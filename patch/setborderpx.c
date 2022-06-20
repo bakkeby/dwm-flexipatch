@@ -39,7 +39,7 @@ setborderpx(const Arg *arg)
 		if (HIDDEN(c))
 			continue;
 		#endif // BAR_WINTITLEACTIONS_PATCH
-		#if SCRATCHPADS_PATCH
+		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
 		if ((c->tags & SPTAGMASK) && !ISVISIBLE(c))
 			continue;
 		#endif // SCRATCHPADS_PATCH

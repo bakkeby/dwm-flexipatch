@@ -13,7 +13,7 @@ viewex(const Arg *arg)
 void
 viewallex(const Arg *arg)
 {
-	#if SCRATCHPADS_PATCH
+	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
 	view(&((Arg){.ui = ~SPTAGMASK}));
 	#else
 	view(&((Arg){.ui = ~0}));
@@ -41,7 +41,7 @@ toggletagex(const Arg *arg)
 void
 tagallex(const Arg *arg)
 {
-	#if SCRATCHPADS_PATCH
+	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
 	tag(&((Arg){.ui = ~SPTAGMASK}));
 	#else
 	tag(&((Arg){.ui = ~0}));

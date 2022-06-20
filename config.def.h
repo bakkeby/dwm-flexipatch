@@ -173,6 +173,18 @@ static char urgbgcolor[]                 = "#222222";
 static char urgbordercolor[]             = "#ff0000";
 static char urgfloatcolor[]              = "#db8fd9";
 
+#if RENAMED_SCRATCHPADS_PATCH
+static char scratchselfgcolor[]          = "#FFF7D4";
+static char scratchselbgcolor[]          = "#77547E";
+static char scratchselbordercolor[]      = "#894B9F";
+static char scratchselfloatcolor[]       = "#894B9F";
+
+static char scratchnormfgcolor[]         = "#FFF7D4";
+static char scratchnormbgcolor[]         = "#664C67";
+static char scratchnormbordercolor[]     = "#77547E";
+static char scratchnormfloatcolor[]      = "#77547E";
+#endif // RENAMED_SCRATCHPADS_PATCH
+
 #if BAR_FLEXWINTITLE_PATCH
 static char normTTBbgcolor[]             = "#330000";
 static char normLTRbgcolor[]             = "#330033";
@@ -223,6 +235,10 @@ static const unsigned int alphas[][3] = {
 	[SchemeHidNorm]      = { OPAQUE, baralpha, borderalpha },
 	[SchemeHidSel]       = { OPAQUE, baralpha, borderalpha },
 	[SchemeUrg]          = { OPAQUE, baralpha, borderalpha },
+	#if RENAMED_SCRATCHPADS_PATCH
+	[SchemeScratchSel]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeScratchNorm] = { OPAQUE, baralpha, borderalpha },
+	#endif // RENAMED_SCRATCHPADS_PATCH
 	#if BAR_FLEXWINTITLE_PATCH
 	[SchemeFlexActTTB]   = { OPAQUE, baralpha, borderalpha },
 	[SchemeFlexActLTR]   = { OPAQUE, baralpha, borderalpha },
@@ -288,6 +304,10 @@ static char *colors[][ColCount] = {
 	[SchemeHidNorm]      = { hidnormfgcolor,   hidnormbgcolor,   c000000,              c000000 },
 	[SchemeHidSel]       = { hidselfgcolor,    hidselbgcolor,    c000000,              c000000 },
 	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
+	#if RENAMED_SCRATCHPADS_PATCH
+	[SchemeScratchSel]  = { scratchselfgcolor, scratchselbgcolor, scratchselbordercolor, scratchselfloatcolor },
+	[SchemeScratchNorm] = { scratchnormfgcolor, scratchnormbgcolor, scratchnormbordercolor, scratchnormfloatcolor },
+	#endif // RENAMED_SCRATCHPADS_PATCH
 	#if BAR_FLEXWINTITLE_PATCH
 	[SchemeFlexActTTB]   = { titleselfgcolor,  actTTBbgcolor,    actTTBbgcolor,        c000000 },
 	[SchemeFlexActLTR]   = { titleselfgcolor,  actLTRbgcolor,    actLTRbgcolor,        c000000 },
@@ -351,7 +371,9 @@ static const char *const autostart[] = {
 };
 #endif // COOL_AUTOSTART_PATCH
 
-#if SCRATCHPADS_PATCH
+#if RENAMED_SCRATCHPADS_PATCH
+static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
+#elif SCRATCHPADS_PATCH
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 static Sp scratchpads[] = {
    /* name          cmd  */
@@ -437,7 +459,9 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "Firefox", .tags = 1 << 7)
-	#if SCRATCHPADS_PATCH
+	#if RENAMED_SCRATCHPADS_PATCH
+	RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
+	#elif SCRATCHPADS_PATCH
 	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
 	#endif // SCRATCHPADS_PATCH
 };
@@ -1018,11 +1042,15 @@ static Key keys[] = {
 	#if NO_MOD_BUTTONS_PATCH
 	{ MODKEY|ShiftMask,             XK_Escape,     togglenomodbuttons,     {0} },
 	#endif // NO_MOD_BUTTONS_PATCH
-	#if SCRATCHPADS_PATCH
+	#if RENAMED_SCRATCHPADS_PATCH
+	{ MODKEY,                       XK_grave,      togglescratch,          {.v = scratchpadcmd } },
+	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.v = scratchpadcmd } },
+	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.v = scratchpadcmd } },
+	#elif SCRATCHPADS_PATCH
 	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
 	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
 	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
-	#endif // SCRATCHPADS_PATCH
+	#endif // SCRATCHPADS_PATCH | RENAMED_SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
@@ -1043,7 +1071,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_minus,      scratchpad_show,        {0} },
 	{ MODKEY|ShiftMask,             XK_minus,      scratchpad_hide,        {0} },
 	{ MODKEY,                       XK_equal,      scratchpad_remove,      {0} },
-	#elif SCRATCHPADS_PATCH
+	#elif SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~SPTAGMASK } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~SPTAGMASK } },
 	#else
@@ -1447,7 +1475,7 @@ static Signal signals[] = {
 	{ "toggleverticalmax",       toggleverticalmax },
 	{ "togglemax",               togglemax },
 	#endif // MAXIMIZE_PATCH
-	#if SCRATCHPADS_PATCH
+	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
 	{ "togglescratch",           togglescratch },
 	#endif // SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
@@ -1572,7 +1600,7 @@ static IPCCommand ipccommands[] = {
 	#if ROTATESTACK_PATCH
 	IPCCOMMAND( rotatestack, 1, {ARG_TYPE_SINT} ),
 	#endif // ROTATESTACK_PATCH
-	#if SCRATCHPADS_PATCH
+	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
 	IPCCOMMAND( togglescratch, 1, {ARG_TYPE_UINT} ),
 	#endif // SCRATCHPADS_PATCH
 	#if SELFRESTART_PATCH
