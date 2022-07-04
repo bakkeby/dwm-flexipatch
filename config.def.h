@@ -979,6 +979,10 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	#endif // VANITYGAPS_PATCH
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
+	#if SHIFTTAG_PATCH
+	{ MODKEY|ShiftMask,             XK_Left,       shifttag,               { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagtoleft
+	{ MODKEY|ShiftMask,             XK_Right,      shifttag,               { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagtoright
+	#endif // SHIFTTAG_PATCH
 	#if SHIFTVIEW_PATCH
 	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
 	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
@@ -1085,8 +1089,8 @@ static Key keys[] = {
 	#if FOCUSADJACENTTAG_PATCH
 	{ MODKEY,                       XK_Left,       viewtoleft,             {0} }, // note keybinding conflict with focusdir
 	{ MODKEY,                       XK_Right,      viewtoright,            {0} }, // note keybinding conflict with focusdir
-	{ MODKEY|ShiftMask,             XK_Left,       tagtoleft,              {0} },
-	{ MODKEY|ShiftMask,             XK_Right,      tagtoright,             {0} },
+	{ MODKEY|ShiftMask,             XK_Left,       tagtoleft,              {0} }, // note keybinding conflict with shifttag
+	{ MODKEY|ShiftMask,             XK_Right,      tagtoright,             {0} }, // note keybinding conflict with shifttag
 	{ MODKEY|ControlMask,           XK_Left,       tagandviewtoleft,       {0} },
 	{ MODKEY|ControlMask,           XK_Right,      tagandviewtoright,      {0} },
 	#endif // FOCUSADJACENTTAG_PATCH
@@ -1421,6 +1425,9 @@ static Signal signals[] = {
 	{ "viewall",                 viewallex },
 	{ "viewex",                  viewex },
 	{ "toggleview",              toggleview },
+	#if SHIFTTAG_PATCH
+	{ "shifttag",                shifttag },
+	#endif // SHIFTTAG_PATCH
 	#if SHIFTVIEW_PATCH
 	{ "shiftview",               shiftview },
 	#endif // SHIFTVIEW_PATCH
@@ -1609,6 +1616,9 @@ static IPCCommand ipccommands[] = {
 	#if SETBORDERPX_PATCH
 	IPCCOMMAND( setborderpx, 1, {ARG_TYPE_SINT} ),
 	#endif // SETBORDERPX_PATCH
+	#if SHIFTTAG_PATCH
+	IPCCOMMAND( shifttag, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTVIEW_PATCH
 	#if SHIFTVIEW_PATCH
 	IPCCOMMAND( shiftview, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTVIEW_PATCH
@@ -1669,4 +1679,3 @@ static IPCCommand ipccommands[] = {
 	#endif // XRDB_PATCH
 };
 #endif // IPC_PATCH
-
