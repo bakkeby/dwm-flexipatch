@@ -1,5 +1,6 @@
+/* Sends a window to the next/prev tag that has a client, else it moves it to the next/prev one. */
 void
-shiftviewclients(const Arg *arg)
+shifttagclients(const Arg *arg)
 {
 	Arg shifted;
 	Client *c;
@@ -44,5 +45,5 @@ shiftviewclients(const Arg *arg)
 		#endif // SCRATCHPADS_PATCH
 	} while (tagmask && !(shifted.ui & tagmask));
 
-	view(&shifted);
+	tag(&shifted);
 }

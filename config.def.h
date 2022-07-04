@@ -983,6 +983,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Left,       shifttag,               { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagtoleft
 	{ MODKEY|ShiftMask,             XK_Right,      shifttag,               { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagtoright
 	#endif // SHIFTTAG_PATCH
+	#if SHIFTTAGCLIENTS_PATCH
+	{ MODKEY|ShiftMask|ControlMask, XK_Left,       shifttagclients,        { .i = -1 } },
+	{ MODKEY|ShiftMask|ControlMask, XK_Right,      shifttagclients,        { .i = +1 } },
+	#endif // SHIFTTAGCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
 	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
 	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
@@ -1428,6 +1432,9 @@ static Signal signals[] = {
 	#if SHIFTTAG_PATCH
 	{ "shifttag",                shifttag },
 	#endif // SHIFTTAG_PATCH
+	#if SHIFTTAGCLIENTS_PATCH
+	{ "shifttagclients",         shifttagclients },
+	#endif // SHIFTTAGCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
 	{ "shiftview",               shiftview },
 	#endif // SHIFTVIEW_PATCH
@@ -1619,6 +1626,9 @@ static IPCCommand ipccommands[] = {
 	#if SHIFTTAG_PATCH
 	IPCCOMMAND( shifttag, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTVIEW_PATCH
+	#if SHIFTTAGCLIENTS_PATCH
+	IPCCOMMAND( shifttagclients, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTVIEWCLIENTS_PATCH
 	#if SHIFTVIEW_PATCH
 	IPCCOMMAND( shiftview, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTVIEW_PATCH

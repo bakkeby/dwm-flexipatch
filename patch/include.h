@@ -237,6 +237,9 @@
 #if SHIFTTAG_PATCH
 #include "shifttag.h"
 #endif
+#if SHIFTTAGCLIENTS_PATCH
+#include "shifttagclients.h"
+#endif
 #if SHIFTVIEW_PATCH
 #include "shiftview.h"
 #endif
