@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2022-07-04 - Added the shift-tools patch(es) with individual toggles
+
 2022-06-20 - Added the renamed scratchpads patch
 
 2022-06-17 - Ported the seamless restart feature from dusk into dwm-flexipatch
@@ -620,6 +622,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [setborderpx](https://dwm.suckless.org/patches/setborderpx/)
       - this patch allows border pixels to be changed during runtime
+
+   - [shift-tools](https://dwm.suckless.org/patches/shift-tools/)
+      - a group of functions that shift clients or views left or right
 
    - [shiftview](https://github.com/chau-bao-long/dotfiles/blob/master/suckless/dwm/shiftview.diff)
       - adds keybindings for left and right circular shift through tags
