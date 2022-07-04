@@ -999,6 +999,10 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft
 	{ MODKEY|ControlMask,           XK_Right,      shiftboth,              { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoright
 	#endif // SHIFTBOTH_PATCH
+	#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_Left,       shiftswaptags,          { .i = -1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    XK_Right,      shiftswaptags,          { .i = +1 } },
+	#endif // SHIFTSWAPTAGS_PATCH
 	#if BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
 	#endif // BAR_WINTITLEACTIONS_PATCH
@@ -1433,6 +1437,9 @@ static Signal signals[] = {
 	{ "viewall",                 viewallex },
 	{ "viewex",                  viewex },
 	{ "toggleview",              toggleview },
+	#if SHIFTBOTH_PATCH
+	{ "shiftboth",               shiftboth },
+	#endif // SHIFTBOTH_PATCH
 	#if SHIFTTAG_PATCH
 	{ "shifttag",                shifttag },
 	#endif // SHIFTTAG_PATCH
@@ -1445,6 +1452,9 @@ static Signal signals[] = {
 	#if SHIFTVIEW_CLIENTS_PATCH
 	{ "shiftviewclients",        shiftviewclients },
 	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+	{ "shiftswaptags",           shiftswaptags },
+	#endif // SHIFTSWAPTAGS_PATCH
 	#if SELFRESTART_PATCH
 	{ "self_restart",            self_restart },
 	#endif // SELFRESTART_PATCH
@@ -1627,9 +1637,12 @@ static IPCCommand ipccommands[] = {
 	#if SETBORDERPX_PATCH
 	IPCCOMMAND( setborderpx, 1, {ARG_TYPE_SINT} ),
 	#endif // SETBORDERPX_PATCH
+	#if SHIFTBOTH_PATCH
+	IPCCOMMAND( shiftboth, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTBOTH_PATCH
 	#if SHIFTTAG_PATCH
 	IPCCOMMAND( shifttag, 1, {ARG_TYPE_SINT} ),
-	#endif // SHIFTVIEW_PATCH
+	#endif // SHIFTTAG_PATCH
 	#if SHIFTTAGCLIENTS_PATCH
 	IPCCOMMAND( shifttagclients, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTVIEWCLIENTS_PATCH
@@ -1639,6 +1652,9 @@ static IPCCommand ipccommands[] = {
 	#if SHIFTVIEW_CLIENTS_PATCH
 	IPCCOMMAND( shiftviewclients, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+	IPCCOMMAND( shiftswaptags, 1, {ARG_TYPE_SINT} ),
+	#endif // SHIFTSWAPTAGS_PATCH
 	#if STACKER_PATCH
 	IPCCOMMAND( pushstack, 1, {ARG_TYPE_SINT} ),
 	#endif // STACKER_PATCH

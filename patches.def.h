@@ -974,6 +974,12 @@
  */
 #define SHIFTBOTH_PATCH 0
 
+/* Swaps all the clients on the current tag with all the client on the next/prev tag.
+ * Depends on the swaptags patch.
+ * https://dwm.suckless.org/patches/shift-tools/
+ */
+#define SHIFTSWAPTAGS_PATCH 0
+
 /* Moves the current selected client to the adjacent tag.
  * Also see the focusadjacenttag patch.
  * https://dwm.suckless.org/patches/shift-tools/

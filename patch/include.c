@@ -235,6 +235,9 @@
 #if SHIFTBOTH_PATCH
 #include "shiftboth.c"
 #endif
+#if SHIFTSWAPTAGS_PATCH && SWAPTAGS_PATCH
+#include "shiftswaptags.c"
+#endif
 #if SHIFTTAG_PATCH
 #include "shifttag.c"
 #endif

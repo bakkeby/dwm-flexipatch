@@ -28,4 +28,3 @@ swaptags(const Arg *arg)
 
 	view(&((Arg) { .ui = newtag }));
 }
-
