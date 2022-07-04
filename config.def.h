@@ -990,11 +990,15 @@ static Key keys[] = {
 	#if SHIFTVIEW_PATCH
 	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
 	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
-  	#endif // SHIFTVIEW_PATCH
-  	#if SHIFTVIEW_CLIENTS_PATCH
+	#endif // SHIFTVIEW_PATCH
+	#if SHIFTVIEW_CLIENTS_PATCH
 	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_backslash,  shiftviewclients,       { .i = +1 } },
-  	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#endif // SHIFTVIEW_CLIENTS_PATCH
+	#if SHIFTBOTH_PATCH
+	{ MODKEY|ControlMask,           XK_Left,       shiftboth,              { .i = -1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoleft
+	{ MODKEY|ControlMask,           XK_Right,      shiftboth,              { .i = +1 } }, // note keybinding conflict with focusadjacenttag tagandviewtoright
+	#endif // SHIFTBOTH_PATCH
 	#if BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
 	#endif // BAR_WINTITLEACTIONS_PATCH

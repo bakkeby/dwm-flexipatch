@@ -232,6 +232,9 @@
 #if SETBORDERPX_PATCH
 #include "setborderpx.c"
 #endif
+#if SHIFTBOTH_PATCH
+#include "shiftboth.c"
+#endif
 #if SHIFTTAG_PATCH
 #include "shifttag.c"
 #endif

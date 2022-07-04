@@ -968,6 +968,12 @@
  */
 #define SETBORDERPX_PATCH 0
 
+/* Combines shifttag and shiftview. Basically moves the window to the next/prev tag and follows it.
+ * Also see the focusadjacenttag patch.
+ * https://dwm.suckless.org/patches/shift-tools/
+ */
+#define SHIFTBOTH_PATCH 0
+
 /* Moves the current selected client to the adjacent tag.
  * Also see the focusadjacenttag patch.
  * https://dwm.suckless.org/patches/shift-tools/
