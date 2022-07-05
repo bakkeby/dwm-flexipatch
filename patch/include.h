@@ -234,6 +234,9 @@
 #if SETBORDERPX_PATCH
 #include "setborderpx.h"
 #endif
+#if SHIFTBOTH_PATCH || SHIFTSWAPTAGS_PATCH || SHIFTTAG_PATCH || SHIFTTAGCLIENTS_PATCH || SHIFTVIEW_PATCH || SHIFTVIEW_CLIENTS_PATCH
+#include "shift.h"
+#endif
 #if SHIFTBOTH_PATCH
 #include "shiftboth.h"
 #endif

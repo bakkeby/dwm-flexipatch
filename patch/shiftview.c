@@ -1,19 +1,6 @@
 void
 shiftview(const Arg *arg)
 {
-	Arg shifted;
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	unsigned int seltagset = selmon->tagset[selmon->seltags] & ~SPTAGMASK;
-	#else
-	unsigned int seltagset = selmon->tagset[selmon->seltags];
-	#endif // SCRATCHPADS_PATCH
-	if (arg->i > 0) // left circular shift
-		shifted.ui = (seltagset << arg->i) | (seltagset >> (NUMTAGS - arg->i));
-	else // right circular shift
-		shifted.ui = (seltagset >> -arg->i) | (seltagset << (NUMTAGS + arg->i));
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	shifted.ui &= ~SPTAGMASK;
-	#endif // SCRATCHPADS_PATCH
-
+	Arg shifted = shift(arg, 0);
 	view(&shifted);
 }
