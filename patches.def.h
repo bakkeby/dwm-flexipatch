@@ -115,6 +115,23 @@
  */
 #define BAR_TAGGRID_PATCH 0
 
+/* Hover tag icons to see a preview of the windows on that tag.
+ *
+ * The patch depends on Imlib2 for icon scaling.
+ * You need to uncomment the corresponding line in config.mk to use the -lImlib2 library
+ *
+ * Arch Linux:
+ *     sudo pacman -S imlib2
+ * Debian:
+ *     sudo apt install libimlib2-dev
+ *
+ * As with the winicon patch you may want to consider adding the compiler flags of -O3 and
+ * -march=native to enable auto loop vectorize for better performance.
+ *
+ * https://dwm.suckless.org/patches/tag-previews/
+ */
+#define BAR_TAGPREVIEW_PATCH 0
+
 /* Show status in bar */
 #define BAR_STATUS_PATCH 1
 

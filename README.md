@@ -19,6 +19,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+
+2022-07-05 - Added the tagpreview patch
+
 2022-07-04 - Added the shift-tools patch(es) with individual toggles
 
 2022-06-20 - Added the renamed scratchpads patch
@@ -735,6 +738,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [tagothermonitor](https://dwm.suckless.org/patches/tagothermonitor/)
       - adds functions and keybindings to tag a window to a desired tag on an adjacent monitor
+
+   - [tagpreview](https://dwm.suckless.org/patches/tag-previews/)
+      - shows a preview of a tag when hovering the tag icon using the mouse
 
    - [tagswapmon](https://github.com/bakkeby/patches/wiki/tagswapmon/)
       - swap all visible windows on one monitor with those of an adjacent monitor
