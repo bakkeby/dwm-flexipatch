@@ -58,6 +58,28 @@ loadxrdb()
 				XRDB_LOAD_COLOR("dwm.scratchnormbordercolor", scratchnormbordercolor);
 				XRDB_LOAD_COLOR("dwm.scratchnormfloatcolor", scratchnormfloatcolor);
 				#endif // RENAMED_SCRATCHPADS_PATCH
+				#if BAR_COLORFULTAGS_PATCH
+				XRDB_LOAD_COLOR("dwm.tags.fg1", tag1fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg1", tag1bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg2", tag2fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg2", tag2bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg3", tag3fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg3", tag3bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg4", tag4fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg4", tag4bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg5", tag5fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg5", tag5bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg6", tag6fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg6", tag6bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg7", tag7fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg7", tag7bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg8", tag8fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg8", tag8bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.fg9", tag9fgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.bg9", tag9bgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.layoutfg", layoutfgcolor);
+				XRDB_LOAD_COLOR("dwm.tags.layoutbg", layoutbgcolor);
+				#endif // BAR_COLORFULTAGS_PATCH
 				#if BAR_FLEXWINTITLE_PATCH
 				XRDB_LOAD_COLOR("dwm.normTTBbgcolor", normTTBbgcolor);
 				XRDB_LOAD_COLOR("dwm.normLTRbgcolor", normLTRbgcolor);
