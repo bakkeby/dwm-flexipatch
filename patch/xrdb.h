@@ -4,16 +4,21 @@
                                   if (value.addr != NULL && strnlen(value.addr, 8) == 7 && value.addr[0] == '#') { \
                                     int i = 1; \
                                     for (; i <= 6; i++) { \
-                                      if (value.addr[i] < 48) break; \
-                                      if (value.addr[i] > 57 && value.addr[i] < 65) break; \
-                                      if (value.addr[i] > 70 && value.addr[i] < 97) break; \
-                                      if (value.addr[i] > 102) break; \
+                                      if (value.addr[i] < '0') break; \
+                                      if (value.addr[i] > '9' && value.addr[i] < 'A') break; \
+                                      if (value.addr[i] > 'F' && value.addr[i] < 'a') break; \
+                                      if (value.addr[i] > 'f') break; \
                                     } \
                                     if (i == 7) { \
                                       strncpy(V, value.addr, 7); \
                                       V[7] = '\0'; \
                                     } \
                                   } \
+                                }
+
+#define XRDB_LOAD_FLOAT(R,V)    if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
+                                  if (value.addr) \
+                                    V = strtof(value.addr, NULL) * OPAQUE; \
                                 }
 
 static void loadxrdb(void);
