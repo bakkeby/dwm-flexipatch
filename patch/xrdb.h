@@ -16,10 +16,12 @@
                                   } \
                                 }
 
+#if BAR_ALPHA_PATCH
 #define XRDB_LOAD_FLOAT(R,V)    if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
                                   if (value.addr) \
                                     V = strtof(value.addr, NULL) * OPAQUE; \
                                 }
+#endif // BAR_ALPHA_PATCH
 
 static void loadxrdb(void);
 static void xrdb(const Arg *arg);
