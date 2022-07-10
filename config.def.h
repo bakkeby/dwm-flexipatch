@@ -386,13 +386,7 @@ static const char *const autostart[] = {
 
 #if RENAMED_SCRATCHPADS_PATCH
 static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
-#elif SCRATCHPADS_PATCH
-const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
-static Sp scratchpads[] = {
-   /* name          cmd  */
-   {"spterm",      spcmd1},
-};
-#endif // SCRATCHPADS_PATCH
+#endif // RENAMED_SCRATCHPADS_PATCH
 
 /* Tags
  * In a traditional dwm the number of tags in use can be changed simply by changing the number
@@ -479,9 +473,7 @@ static const Rule rules[] = {
 	RULE(.class = "Firefox", .tags = 1 << 7)
 	#if RENAMED_SCRATCHPADS_PATCH
 	RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
-	#elif SCRATCHPADS_PATCH
-	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
-	#endif // SCRATCHPADS_PATCH
+	#endif // RENAMED_SCRATCHPADS_PATCH
 };
 
 #if MONITOR_RULES_PATCH
@@ -1078,11 +1070,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_grave,      togglescratch,          {.v = scratchpadcmd } },
 	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.v = scratchpadcmd } },
-	#elif SCRATCHPADS_PATCH
-	{ MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
-	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
-	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
-	#endif // SCRATCHPADS_PATCH | RENAMED_SCRATCHPADS_PATCH
+	#endif // RENAMED_SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
 	{ MODKEY|ShiftMask,             XK_t,          unfloatvisible,         {.v = &layouts[0]} },
@@ -1103,9 +1091,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_minus,      scratchpad_show,        {0} },
 	{ MODKEY|ShiftMask,             XK_minus,      scratchpad_hide,        {0} },
 	{ MODKEY,                       XK_equal,      scratchpad_remove,      {0} },
-	#elif SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	{ MODKEY,                       XK_0,          view,                   {.ui = ~SPTAGMASK } },
-	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~SPTAGMASK } },
 	#else
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
@@ -1531,9 +1516,6 @@ static const Signal signals[] = {
 	{ "toggleverticalmax",       toggleverticalmax },
 	{ "togglemax",               togglemax },
 	#endif // MAXIMIZE_PATCH
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	{ "togglescratch",           togglescratch },
-	#endif // SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ "unfloatvisible",          unfloatvisible },
 	#endif // UNFLOATVISIBLE_PATCH
@@ -1659,9 +1641,6 @@ static IPCCommand ipccommands[] = {
 	#if ROTATESTACK_PATCH
 	IPCCOMMAND( rotatestack, 1, {ARG_TYPE_SINT} ),
 	#endif // ROTATESTACK_PATCH
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	IPCCOMMAND( togglescratch, 1, {ARG_TYPE_UINT} ),
-	#endif // SCRATCHPADS_PATCH
 	#if SELFRESTART_PATCH
 	IPCCOMMAND( self_restart, 1, {ARG_TYPE_NONE} ),
 	#endif // SELFRESTART_PATCH

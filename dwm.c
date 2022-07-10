@@ -106,14 +106,7 @@
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define WTYPE                   "_NET_WM_WINDOW_TYPE_"
-#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-#define TOTALTAGS               (NUMTAGS + LENGTH(scratchpads))
-#define TAGMASK                 ((1 << TOTALTAGS) - 1)
-#define SPTAG(i)                ((1 << NUMTAGS) << (i))
-#define SPTAGMASK               (((1 << LENGTH(scratchpads))-1) << NUMTAGS)
-#else
 #define TAGMASK                 ((1 << NUMTAGS) - 1)
-#endif // SCRATCHPADS_PATCH
 #define TEXTWM(X)               (drw_fontset_getwidth(drw, (X), True) + lrpad)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X), False) + lrpad)
 #define HIDDEN(C)               ((getstate(C->win) == IconicState))
@@ -926,12 +919,7 @@ applyrules(Client *c)
 			c->tags |= r->tags;
 			#if RENAMED_SCRATCHPADS_PATCH
 			c->scratchkey = r->scratchkey;
-			#elif SCRATCHPADS_PATCH
-			if ((r->tags & SPTAGMASK) && r->isfloating) {
-				c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
-				c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
-			}
-			#endif // SCRATCHPADS_PATCH
+			#endif // RENAMED_SCRATCHPADS_PATCH
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
@@ -999,16 +987,12 @@ applyrules(Client *c)
 		XFree(ch.res_name);
 	#if EMPTYVIEW_PATCH
 	if (c->tags & TAGMASK)                    c->tags = c->tags & TAGMASK;
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	else if (c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags] & ~SPTAGMASK;
-	#elif SCRATCHPAD_ALT_1_PATCH
+	#if SCRATCHPAD_ALT_1_PATCH
 	else if (c->tags != SCRATCHPAD_MASK && c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
 	#else
 	else if (c->mon->tagset[c->mon->seltags]) c->tags = c->mon->tagset[c->mon->seltags];
-	#endif // SCRATCHPADS_PATCH
+	#endif // SCRATCHPAD_ALT_1_PATCH
 	else                                      c->tags = 1;
-	#elif SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : (c->mon->tagset[c->mon->seltags] & ~SPTAGMASK);
 	#elif SCRATCHPAD_ALT_1_PATCH
 	if (c->tags != SCRATCHPAD_MASK)
 		c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
@@ -2778,12 +2762,6 @@ movemouse(const Arg *arg)
 
 	XUngrabPointer(dpy, CurrentTime);
 	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
-		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-		if (c->tags & SPTAGMASK) {
-			c->mon->tagset[c->mon->seltags] ^= (c->tags & SPTAGMASK);
-			m->tagset[m->seltags] |= (c->tags & SPTAGMASK);
-		}
-		#endif // SCRATCHPADS_PATCH
 		sendmon(c, m);
 		selmon = m;
 		focus(NULL);
@@ -3104,12 +3082,6 @@ resizemouse(const Arg *arg)
 	XUngrabPointer(dpy, CurrentTime);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
-		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-		if (c->tags & SPTAGMASK) {
-			c->mon->tagset[c->mon->seltags] ^= (c->tags & SPTAGMASK);
-			m->tagset[m->seltags] |= (c->tags & SPTAGMASK);
-		}
-		#endif // SCRATCHPADS_PATCH
 		sendmon(c, m);
 		selmon = m;
 		focus(NULL);
@@ -3327,9 +3299,6 @@ sendmon(Client *c, Monitor *m)
 	arrange(c->mon);
 	#endif // SENDMON_KEEPFOCUS_PATCH
 	c->mon = m;
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	if (!(c->tags & SPTAGMASK))
-	#endif // SCRATCHPADS_PATCH
 	#if EMPTYVIEW_PATCH
 	c->tags = (m->tagset[m->seltags] ? m->tagset[m->seltags] : 1);
 	#else
@@ -3885,28 +3854,6 @@ showhide(Client *c)
 	if (!c)
 		return;
 	if (ISVISIBLE(c)) {
-		#if !RENAMED_SCRATCHPADS_PATCH
-		#if SCRATCHPADS_PATCH && SCRATCHPADS_KEEP_POSITION_AND_SIZE_PATCH
-		if (
-			(c->tags & SPTAGMASK) &&
-			c->isfloating &&
-			(
-				c->x < c->mon->mx ||
-				c->x > c->mon->mx + c->mon->mw ||
-				c->y < c->mon->my ||
-				c->y > c->mon->my + c->mon->mh
-			)
-		) {
-			c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
-			c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
-		}
-		#elif SCRATCHPADS_PATCH
-		if ((c->tags & SPTAGMASK) && c->isfloating) {
-			c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
-			c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
-		}
-		#endif // SCRATCHPADS_KEEP_POSITION_AND_SIZE_PATCH | SCRATCHPADS_PATCH
-		#endif // RENAMED_SCRATCHPADS_PATCH
 		/* show clients top down */
 		#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 		if (!c->mon->lt[c->mon->sellt]->arrange && c->sfx != -9999 && !c->isfullscreen) {
@@ -4285,11 +4232,7 @@ toggleview(const Arg *arg)
 		selmon->tagset[selmon->seltags] = newtagset;
 
 		#if PERTAG_PATCH
-		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-		if (newtagset == ~SPTAGMASK)
-		#else
 		if (newtagset == ~0)
-		#endif // SCRATCHPADS_PATCH
 		{
 			selmon->pertag->curtag = 0;
 		}

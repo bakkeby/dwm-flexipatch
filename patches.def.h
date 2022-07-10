@@ -963,22 +963,6 @@
  */
 #define SAVEFLOATS_PATCH 0
 
-/* The scratchpad patch allows you to spawn or restore floating terminal windows.
- * It is typically useful when one need to do some short typing.
- *
- * Note that this patch changes TAGMASK to make room for special scratchpad tags,
- * so ~0 does more than select all tags with this patch. Code that relies on ~0 to
- * represent all tags should use ~SPTAGMASK instead.
- *
- * Upgraded to Christian Tenllado's multiple scratchpad version.
- * https://lists.suckless.org/hackers/2004/17205.html
- * https://dwm.suckless.org/patches/scratchpads/
- */
-#define SCRATCHPADS_PATCH 0
-
-/* Minor alteration of the above allowing clients to keep their size and position when shown */
-#define SCRATCHPADS_KEEP_POSITION_AND_SIZE_PATCH 0
-
 /* This alternative patch enables a scratchpad feature in dwm similar to the scratchpad
  * feature in i3wm.
  * https://github.com/GasparVardanyan/dwm-scratchpad

@@ -29,12 +29,7 @@ void
 pertagview(const Arg *arg)
 {
 	int i;
-
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	if (arg->ui == ~SPTAGMASK)
-	#else
 	if (arg->ui == ~0)
-	#endif // SCRATCHPADS_PATCH
 		selmon->pertag->curtag = 0;
 	else {
 		for (i = 0; !(selmon->tagset[selmon->seltags] & 1 << i); i++);
