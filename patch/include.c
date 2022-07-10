@@ -87,9 +87,6 @@
 #if BAR_HOLDBAR_PATCH
 #include "bar_holdbar.c"
 #endif
-#if BAR_VTCOLORS_PATCH
-#include "bar_vtcolors.c"
-#endif
 #if BAR_WINTITLEACTIONS_PATCH
 #include "bar_wintitleactions.c"
 #endif

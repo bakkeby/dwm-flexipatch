@@ -418,13 +418,6 @@
  */
 #define BAR_STATUSPADDING_PATCH 0
 
-/* This patch adds the ability for dwm to read colors from the linux virtual console.
- *    /sys/module/vt/parameters/default_{red,grn,blu}
- * Essentially this way the colors you use in your regular tty is "mirrored" to dwm.
- * https://dwm.suckless.org/patches/vtcolors/
- */
-#define BAR_VTCOLORS_PATCH 0
-
 /* This patch allows client windows to be hidden. This code was originally part of awesomebar,
  * but has been separated out so that other bar modules can take advantage of it.
  * Both awesomebar and bartabgroups patches depend on this patch and it will be auto-enabled
