@@ -1,8 +1,5 @@
 
 static int useargb = 0;
-static Visual *visual;
-static int depth;
-static Colormap cmap;
 
 void
 xinitvisual()

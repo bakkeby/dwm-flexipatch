@@ -29,11 +29,9 @@ typedef struct {
 	Display *dpy;
 	int screen;
 	Window root;
-	#if BAR_ALPHA_PATCH
 	Visual *visual;
 	unsigned int depth;
 	Colormap cmap;
-	#endif // BAR_ALPHA_PATCH
 	Drawable drawable;
 	#if BAR_WINICON_PATCH
 	Picture picture;
@@ -44,11 +42,7 @@ typedef struct {
 } Drw;
 
 /* Drawable abstraction */
-#if BAR_ALPHA_PATCH
 Drw *drw_create(Display *dpy, int screen, Window win, unsigned int w, unsigned int h, Visual *visual, unsigned int depth, Colormap cmap);
-#else
-Drw *drw_create(Display *dpy, int screen, Window win, unsigned int w, unsigned int h);
-#endif // BAR_ALPHA_PATCH
 void drw_resize(Drw *drw, unsigned int w, unsigned int h);
 void drw_free(Drw *drw);
 

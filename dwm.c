@@ -762,6 +762,9 @@ static char estext[512];
 static char rawestext[1024];
 #endif // BAR_STATUS2D_PATCH | BAR_STATUSCMD_PATCH
 #endif // BAR_EXTRASTATUS_PATCH
+static Visual *visual;
+static int depth;
+static Colormap cmap;
 
 #if XKB_PATCH
 static int xkbEventType = 0;
@@ -3639,10 +3642,12 @@ setup(void)
 	root = RootWindow(dpy, screen);
 	#if BAR_ALPHA_PATCH
 	xinitvisual();
-	drw = drw_create(dpy, screen, root, sw, sh, visual, depth, cmap);
 	#else
-	drw = drw_create(dpy, screen, root, sw, sh);
+	visual = DefaultVisual(dpy, screen);
+	depth = DefaultDepth(dpy, screen);
+	cmap = DefaultColormap(dpy, screen);
 	#endif // BAR_ALPHA_PATCH
+	drw = drw_create(dpy, screen, root, sw, sh, visual, depth, cmap);
 	#if BAR_PANGO_PATCH
 	if (!drw_font_create(drw, font))
 	#else
@@ -4449,15 +4454,14 @@ updatebars(void)
 			if (bar->external)
 				continue;
 			if (!bar->win) {
-				#if BAR_ALPHA_PATCH
 				bar->win = XCreateWindow(dpy, root, bar->bx, bar->by, bar->bw, bar->bh, 0, depth,
-				                          InputOutput, visual,
-				                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
-				#else
-				bar->win = XCreateWindow(dpy, root, bar->bx, bar->by, bar->bw, bar->bh, 0, DefaultDepth(dpy, screen),
-						CopyFromParent, DefaultVisual(dpy, screen),
-						CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
-				#endif // BAR_ALPHA_PATCH
+				                         InputOutput, visual,
+				                         #if BAR_ALPHA_PATCH
+				                         CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask,
+				                         #else
+				                         CWOverrideRedirect|CWBackPixmap|CWEventMask,
+				                         #endif // BAR_ALPHA_PATCH
+				                         &wa);
 				XDefineCursor(dpy, bar->win, cursor[CurNormal]->cursor);
 				XMapRaised(dpy, bar->win);
 				XSetClassHint(dpy, bar->win, &ch);
@@ -4465,15 +4469,14 @@ updatebars(void)
 		}
 		#if TAB_PATCH
 		if (!m->tabwin) {
-			#if BAR_ALPHA_PATCH
 			m->tabwin = XCreateWindow(dpy, root, m->wx, m->ty, m->ww, th, 0, depth,
-							InputOutput, visual,
-							CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask, &wa);
-			#else
-			m->tabwin = XCreateWindow(dpy, root, m->wx, m->ty, m->ww, th, 0, DefaultDepth(dpy, screen),
-							CopyFromParent, DefaultVisual(dpy, screen),
-							CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
-			#endif // BAR_ALPHA_PATCH
+			                          InputOutput, visual,
+			                          #if BAR_ALPHA_PATCH
+			                          CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWColormap|CWEventMask,
+			                          #else
+			                          CWOverrideRedirect|CWBackPixmap|CWEventMask
+			                          #endif // BAR_ALPHA_PATCH
+			                          &wa);
 			XDefineCursor(dpy, m->tabwin, cursor[CurNormal]->cursor);
 			XMapRaised(dpy, m->tabwin);
 		}

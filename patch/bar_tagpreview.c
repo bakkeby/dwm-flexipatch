@@ -92,17 +92,11 @@ tagpreviewswitchtag(void)
 				#if BAR_ALPHA_PATCH
 				imlib_image_set_has_alpha(1);
 				imlib_context_set_blend(0);
-				imlib_context_set_visual(visual);
-				#else
-				imlib_context_set_visual(DefaultVisual(dpy, screen));
 				#endif // BAR_ALPHA_PATCH
+				imlib_context_set_visual(visual);
 				imlib_context_set_drawable(root);
 				imlib_copy_drawable_to_image(0, m->mx, m->my, m->mw ,m->mh, 0, 0, 1);
-				#if BAR_ALPHA_PATCH
 				m->tagmap[i] = XCreatePixmap(dpy, m->tagwin, m->mw / scalepreview, m->mh / scalepreview, depth);
-				#else
-				m->tagmap[i] = XCreatePixmap(dpy, m->tagwin, m->mw / scalepreview, m->mh / scalepreview, DefaultDepth(dpy, screen));
-				#endif // BAR_ALPHA_PATCH
 				imlib_context_set_drawable(m->tagmap[i]);
 				imlib_render_image_part_on_drawable_at_size(0, 0, m->mw, m->mh, 0, 0, m->mw / scalepreview, m->mh / scalepreview);
 				imlib_free_image();
