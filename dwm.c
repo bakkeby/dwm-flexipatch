@@ -181,6 +181,7 @@ enum {
 	SchemeFlexInaFloat,
 	SchemeFlexSelFloat,
 	#endif // BAR_FLEXWINTITLE_PATCH
+	SchemeLast
 }; /* color schemes */
 
 enum {
@@ -2040,19 +2041,12 @@ focus(Client *c)
 		grabbuttons(c, 1);
 		#if !BAR_FLEXWINTITLE_PATCH
 		#if RENAMED_SCRATCHPADS_PATCH
-		if (c->scratchkey != 0 && c->isfloating)
-			XSetWindowBorder(dpy, c->win, scheme[SchemeScratchSel][ColFloat].pixel);
-		else if (c->scratchkey != 0)
+		if (c->scratchkey != 0)
 			XSetWindowBorder(dpy, c->win, scheme[SchemeScratchSel][ColBorder].pixel);
-		else if (c->isfloating)
-			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColFloat].pixel);
 		else
 			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 		#else
-		if (c->isfloating)
-			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColFloat].pixel);
-		else
-			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 		#endif // RENAMED_SCRATCHPADS_PATCH
 		#endif // BAR_FLEXWINTITLE_PATCH
 		setfocus(c);
@@ -2497,10 +2491,7 @@ manage(Window w, XWindowAttributes *wa)
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
 	#if !BAR_FLEXWINTITLE_PATCH
-	if (c->isfloating)
-		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
-	else
-		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
+	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
 	#endif // BAR_FLEXWINTITLE_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
 	updatesizehints(c);
@@ -2547,10 +2538,8 @@ manage(Window w, XWindowAttributes *wa)
 
 	if (!c->isfloating)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
-	if (c->isfloating) {
+	if (c->isfloating)
 		XRaiseWindow(dpy, c->win);
-		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
-	}
 	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH || SEAMLESS_RESTART_PATCH
 	attachx(c);
 	#else
@@ -3660,6 +3649,40 @@ setup(void)
 	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
 	#endif // BAR_PANGO_PATCH
 		die("no fonts could be loaded.");
+
+	/* init appearance */
+	#if BAR_STATUS2D_PATCH && !BAR_STATUSCOLORS_PATCH
+	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
+	#if BAR_ALPHA_PATCH
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], alphas[0], ColCount);
+	#else
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], ColCount);
+	#endif // BAR_ALPHA_PATCH
+	#else
+	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+	#endif // BAR_STATUS2D_PATCH
+	for (i = 0; i < LENGTH(colors); i++)
+		#if BAR_ALPHA_PATCH
+		scheme[i] = drw_scm_create(drw, colors[i], alphas[i], ColCount);
+		#else
+		scheme[i] = drw_scm_create(drw, colors[i], ColCount);
+		#endif // BAR_ALPHA_PATCH
+	#if BAR_POWERLINE_STATUS_PATCH
+	statusscheme = ecalloc(LENGTH(statuscolors), sizeof(Clr *));
+	for (i = 0; i < LENGTH(statuscolors); i++)
+		#if BAR_ALPHA_PATCH
+		statusscheme[i] = drw_scm_create(drw, statuscolors[i], alphas[0], ColCount);
+		#else
+		statusscheme[i] = drw_scm_create(drw, statuscolors[i], ColCount);
+		#endif // BAR_ALPHA_PATCH
+	#endif // BAR_POWERLINE_STATUS_PATCH
+
+	#if XRDB_PATCH
+	XrmInitialize();
+	loadxrdb();
+	#endif // XRDB_PATCH
+
+
 	#if BAR_STATUSPADDING_PATCH
 	lrpad = drw->fonts->h + horizpadbar;
 	bh = drw->fonts->h + vertpadbar;
@@ -3739,42 +3762,6 @@ setup(void)
 	cursor[CurIronCross] = drw_cur_create(drw, XC_iron_cross);
 	#endif // DRAGCFACT_PATCH
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
-	/* init appearance */
-	#if BAR_VTCOLORS_PATCH
-	get_vt_colors();
-	if (get_luminance(colors[SchemeTagsNorm][ColBg]) > 50) {
-		strcpy(colors[SchemeTitleNorm][ColBg], title_bg_light);
-		strcpy(colors[SchemeTitleSel][ColBg], title_bg_light);
-	} else {
-		strcpy(colors[SchemeTitleNorm][ColBg], title_bg_dark);
-		strcpy(colors[SchemeTitleSel][ColBg], title_bg_dark);
-	}
-	#endif // BAR_VTCOLORS_PATCH
-	#if BAR_STATUS2D_PATCH && !BAR_STATUSCOLORS_PATCH
-	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
-	#if BAR_ALPHA_PATCH
-	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], alphas[0], ColCount);
-	#else
-	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], ColCount);
-	#endif // BAR_ALPHA_PATCH
-	#else
-	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
-	#endif // BAR_STATUS2D_PATCH
-	for (i = 0; i < LENGTH(colors); i++)
-		#if BAR_ALPHA_PATCH
-		scheme[i] = drw_scm_create(drw, colors[i], alphas[i], ColCount);
-		#else
-		scheme[i] = drw_scm_create(drw, colors[i], ColCount);
-		#endif // BAR_ALPHA_PATCH
-	#if BAR_POWERLINE_STATUS_PATCH
-	statusscheme = ecalloc(LENGTH(statuscolors), sizeof(Clr *));
-	for (i = 0; i < LENGTH(statuscolors); i++)
-		#if BAR_ALPHA_PATCH
-		statusscheme[i] = drw_scm_create(drw, statuscolors[i], alphas[0], ColCount);
-		#else
-		statusscheme[i] = drw_scm_create(drw, statuscolors[i], ColCount);
-		#endif // BAR_ALPHA_PATCH
-	#endif // BAR_POWERLINE_STATUS_PATCH
 
 	updatebars();
 	updatestatus();
@@ -4122,12 +4109,6 @@ togglefloating(const Arg *arg)
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
 	#endif // !FAKEFULLSCREEN_PATCH
 	c->isfloating = !c->isfloating || c->isfixed;
-	#if !BAR_FLEXWINTITLE_PATCH
-	if (c->isfloating)
-		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColFloat].pixel);
-	else
-		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
-	#endif // BAR_FLEXWINTITLE_PATCH
 	if (c->isfloating) {
 		#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
 		if (c->sfx != -9999) {
@@ -4297,19 +4278,12 @@ unfocus(Client *c, int setfocus, Client *nextfocus)
 	grabbuttons(c, 0);
 	#if !BAR_FLEXWINTITLE_PATCH
 	#if RENAMED_SCRATCHPADS_PATCH
-	if (c->scratchkey != 0 && c->isfloating)
-		XSetWindowBorder(dpy, c->win, scheme[SchemeScratchNorm][ColFloat].pixel);
-	else if (c->scratchkey != 0)
+	if (c->scratchkey != 0)
 		XSetWindowBorder(dpy, c->win, scheme[SchemeScratchNorm][ColBorder].pixel);
-	else if (c->isfloating)
-		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColFloat].pixel);
 	else
 		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
 	#else
-	if (c->isfloating)
-		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColFloat].pixel);
-	else
-		XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
 	#endif // RENAMED_SCRATCHPADS_PATCH
 	#endif // BAR_FLEXWINTITLE_PATCH
 	if (setfocus) {
@@ -4843,12 +4817,8 @@ updatewmhints(Client *c)
 			XSetWMHints(dpy, c->win, wmh);
 		} else
 			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
-		if (c->isurgent) {
-			if (c->isfloating)
-				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColFloat].pixel);
-			else
-				XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
-		}
+		if (c->isurgent)
+			XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
 		if (wmh->flags & InputHint)
 			c->neverfocus = !wmh->input;
 		else
@@ -5080,7 +5050,6 @@ main(int argc, char *argv[])
 		#else
 			fonts[0] = argv[++i];
 		#endif // BAR_PANGO_PATCH
-		#if !BAR_VTCOLORS_PATCH
 		else if (!strcmp("-nb", argv[i])) /* normal background color */
 			colors[SchemeNorm][1] = argv[++i];
 		else if (!strcmp("-nf", argv[i])) /* normal foreground color */
@@ -5089,7 +5058,6 @@ main(int argc, char *argv[])
 			colors[SchemeSel][1] = argv[++i];
 		else if (!strcmp("-sf", argv[i])) /* selected foreground color */
 			colors[SchemeSel][0] = argv[++i];
-		#endif // !BAR_VTCOLORS_PATCH
 		#if NODMENU_PATCH
 		else if (!strcmp("-df", argv[i])) /* dmenu font */
 			dmenucmd[2] = argv[++i];
@@ -5129,10 +5097,6 @@ main(int argc, char *argv[])
 		die("dwm: cannot get xcb connection\n");
 	#endif // SWALLOW_PATCH
 	checkotherwm();
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
-	XrmInitialize();
-	loadxrdb();
-	#endif // XRDB_PATCH && !BAR_VTCOLORS_PATCH
 	#if COOL_AUTOSTART_PATCH
 	autostart_exec();
 	#endif // COOL_AUTOSTART_PATCH

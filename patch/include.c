@@ -329,7 +329,7 @@
 #if XKB_PATCH
 #include "xkb.c"
 #endif
-#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+#if XRDB_PATCH
 #include "xrdb.c"
 #endif
 #if DRAGMFACT_PATCH

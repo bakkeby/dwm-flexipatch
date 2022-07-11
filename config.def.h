@@ -154,101 +154,11 @@ static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #endif // MONOCLE_LAYOUT
 #endif // BAR_TABGROUPS_PATCH
 #if BAR_PANGO_PATCH
-static const char font[]                 = "monospace 10";
+static const char font[] = "monospace 10";
 #else
-static const char *fonts[]               = { "monospace:size=10" };
+static const char *fonts[] = { "monospace:size=10" };
 #endif // BAR_PANGO_PATCH
-static const char dmenufont[]            = "monospace:size=10";
-
-static char c000000[]                    = "#000000"; // placeholder value
-
-static char normfgcolor[]                = "#bbbbbb";
-static char normbgcolor[]                = "#222222";
-static char normbordercolor[]            = "#444444";
-static char normfloatcolor[]             = "#db8fd9";
-
-static char selfgcolor[]                 = "#eeeeee";
-static char selbgcolor[]                 = "#005577";
-static char selbordercolor[]             = "#005577";
-static char selfloatcolor[]              = "#005577";
-
-static char titlenormfgcolor[]           = "#bbbbbb";
-static char titlenormbgcolor[]           = "#222222";
-static char titlenormbordercolor[]       = "#444444";
-static char titlenormfloatcolor[]        = "#db8fd9";
-
-static char titleselfgcolor[]            = "#eeeeee";
-static char titleselbgcolor[]            = "#005577";
-static char titleselbordercolor[]        = "#005577";
-static char titleselfloatcolor[]         = "#005577";
-
-static char tagsnormfgcolor[]            = "#bbbbbb";
-static char tagsnormbgcolor[]            = "#222222";
-static char tagsnormbordercolor[]        = "#444444";
-static char tagsnormfloatcolor[]         = "#db8fd9";
-
-static char tagsselfgcolor[]             = "#eeeeee";
-static char tagsselbgcolor[]             = "#005577";
-static char tagsselbordercolor[]         = "#005577";
-static char tagsselfloatcolor[]          = "#005577";
-
-static char hidnormfgcolor[]             = "#005577";
-static char hidselfgcolor[]              = "#227799";
-static char hidnormbgcolor[]             = "#222222";
-static char hidselbgcolor[]              = "#222222";
-
-static char urgfgcolor[]                 = "#bbbbbb";
-static char urgbgcolor[]                 = "#222222";
-static char urgbordercolor[]             = "#ff0000";
-static char urgfloatcolor[]              = "#db8fd9";
-
-#if RENAMED_SCRATCHPADS_PATCH
-static char scratchselfgcolor[]          = "#FFF7D4";
-static char scratchselbgcolor[]          = "#77547E";
-static char scratchselbordercolor[]      = "#894B9F";
-static char scratchselfloatcolor[]       = "#894B9F";
-
-static char scratchnormfgcolor[]         = "#FFF7D4";
-static char scratchnormbgcolor[]         = "#664C67";
-static char scratchnormbordercolor[]     = "#77547E";
-static char scratchnormfloatcolor[]      = "#77547E";
-#endif // RENAMED_SCRATCHPADS_PATCH
-
-#if BAR_FLEXWINTITLE_PATCH
-static char normTTBbgcolor[]             = "#330000";
-static char normLTRbgcolor[]             = "#330033";
-static char normMONObgcolor[]            = "#000033";
-static char normGRIDbgcolor[]            = "#003300";
-static char normGRD1bgcolor[]            = "#003300";
-static char normGRD2bgcolor[]            = "#003300";
-static char normGRDMbgcolor[]            = "#506600";
-static char normHGRDbgcolor[]            = "#b96600";
-static char normDWDLbgcolor[]            = "#003333";
-static char normSPRLbgcolor[]            = "#333300";
-static char normfloatbgcolor[]           = "#115577";
-static char actTTBbgcolor[]              = "#440000";
-static char actLTRbgcolor[]              = "#440044";
-static char actMONObgcolor[]             = "#000044";
-static char actGRIDbgcolor[]             = "#004400";
-static char actGRD1bgcolor[]             = "#004400";
-static char actGRD2bgcolor[]             = "#004400";
-static char actGRDMbgcolor[]             = "#507711";
-static char actHGRDbgcolor[]             = "#b97711";
-static char actDWDLbgcolor[]             = "#004444";
-static char actSPRLbgcolor[]             = "#444400";
-static char actfloatbgcolor[]            = "#116688";
-static char selTTBbgcolor[]              = "#550000";
-static char selLTRbgcolor[]              = "#550055";
-static char selMONObgcolor[]             = "#212171";
-static char selGRIDbgcolor[]             = "#005500";
-static char selGRD1bgcolor[]             = "#005500";
-static char selGRD2bgcolor[]             = "#005500";
-static char selGRDMbgcolor[]             = "#508822";
-static char selHGRDbgcolor[]             = "#b98822";
-static char selDWDLbgcolor[]             = "#005555";
-static char selSPRLbgcolor[]             = "#555500";
-static char selfloatbgcolor[]            = "#117799";
-#endif // BAR_FLEXWINTITLE_PATCH
+static char dmenufont[] = "monospace:size=10";
 
 #if BAR_ALPHA_PATCH
 static const unsigned int baralpha = 0xd0;
@@ -306,72 +216,88 @@ static const unsigned int alphas[][3] = {
 };
 #endif // BAR_ALPHA_PATCH
 
-static char *colors[][ColCount] = {
-	/*                       fg                bg                border                float */
-	[SchemeNorm]         = { normfgcolor,      normbgcolor,      normbordercolor,      normfloatcolor },
-	[SchemeSel]          = { selfgcolor,       selbgcolor,       selbordercolor,       selfloatcolor },
-	[SchemeTitleNorm]    = { titlenormfgcolor, titlenormbgcolor, titlenormbordercolor, titlenormfloatcolor },
-	[SchemeTitleSel]     = { titleselfgcolor,  titleselbgcolor,  titleselbordercolor,  titleselfloatcolor },
-	[SchemeTagsNorm]     = { tagsnormfgcolor,  tagsnormbgcolor,  tagsnormbordercolor,  tagsnormfloatcolor },
-	[SchemeTagsSel]      = { tagsselfgcolor,   tagsselbgcolor,   tagsselbordercolor,   tagsselfloatcolor },
-	[SchemeHidNorm]      = { hidnormfgcolor,   hidnormbgcolor,   c000000,              c000000 },
-	[SchemeHidSel]       = { hidselfgcolor,    hidselbgcolor,    c000000,              c000000 },
-	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
+static char *colors[SchemeLast][5] = {
+	/*                       fg         bg         border     resource prefix */
+	[SchemeNorm]         = { "#bbbbbb", "#222222", "#444444", "norm" },
+	[SchemeSel]          = { "#eeeeee", "#005577", "#005577", "sel" },
+	[SchemeTitleNorm]    = { "#bbbbbb", "#222222", "#444444", "titlenorm" },
+	[SchemeTitleSel]     = { "#eeeeee", "#005577", "#005577", "titlesel" },
+	[SchemeTagsNorm]     = { "#bbbbbb", "#222222", "#444444", "tagsnorm" },
+	[SchemeTagsSel]      = { "#eeeeee", "#005577", "#005577", "tagssel" },
+	[SchemeHidNorm]      = { "#005577", "#222222", "#000000", "hidnorm" },
+	[SchemeHidSel]       = { "#227799", "#222222", "#000000", "hidsel" },
+	[SchemeUrg]          = { "#bbbbbb", "#222222", "#ff0000", "urg" },
 	#if RENAMED_SCRATCHPADS_PATCH
-	[SchemeScratchSel]  = { scratchselfgcolor, scratchselbgcolor, scratchselbordercolor, scratchselfloatcolor },
-	[SchemeScratchNorm] = { scratchnormfgcolor, scratchnormbgcolor, scratchnormbordercolor, scratchnormfloatcolor },
+	[SchemeScratchSel]   = { "#FFF7D4", "#77547E", "#894B9F", "scratchnorm" },
+	[SchemeScratchNorm]  = { "#FFF7D4", "#664C67", "#77547E", "scratchsel" },
 	#endif // RENAMED_SCRATCHPADS_PATCH
 	#if BAR_FLEXWINTITLE_PATCH
-	[SchemeFlexActTTB]   = { titleselfgcolor,  actTTBbgcolor,    actTTBbgcolor,        c000000 },
-	[SchemeFlexActLTR]   = { titleselfgcolor,  actLTRbgcolor,    actLTRbgcolor,        c000000 },
-	[SchemeFlexActMONO]  = { titleselfgcolor,  actMONObgcolor,   actMONObgcolor,       c000000 },
-	[SchemeFlexActGRID]  = { titleselfgcolor,  actGRIDbgcolor,   actGRIDbgcolor,       c000000 },
-	[SchemeFlexActGRD1]  = { titleselfgcolor,  actGRD1bgcolor,   actGRD1bgcolor,       c000000 },
-	[SchemeFlexActGRD2]  = { titleselfgcolor,  actGRD2bgcolor,   actGRD2bgcolor,       c000000 },
-	[SchemeFlexActGRDM]  = { titleselfgcolor,  actGRDMbgcolor,   actGRDMbgcolor,       c000000 },
-	[SchemeFlexActHGRD]  = { titleselfgcolor,  actHGRDbgcolor,   actHGRDbgcolor,       c000000 },
-	[SchemeFlexActDWDL]  = { titleselfgcolor,  actDWDLbgcolor,   actDWDLbgcolor,       c000000 },
-	[SchemeFlexActSPRL]  = { titleselfgcolor,  actSPRLbgcolor,   actSPRLbgcolor,       c000000 },
-	[SchemeFlexActFloat] = { titleselfgcolor,  actfloatbgcolor,  actfloatbgcolor,      c000000 },
-	[SchemeFlexInaTTB]   = { titlenormfgcolor, normTTBbgcolor,   normTTBbgcolor,       c000000 },
-	[SchemeFlexInaLTR]   = { titlenormfgcolor, normLTRbgcolor,   normLTRbgcolor,       c000000 },
-	[SchemeFlexInaMONO]  = { titlenormfgcolor, normMONObgcolor,  normMONObgcolor,      c000000 },
-	[SchemeFlexInaGRID]  = { titlenormfgcolor, normGRIDbgcolor,  normGRIDbgcolor,      c000000 },
-	[SchemeFlexInaGRD1]  = { titlenormfgcolor, normGRD1bgcolor,  normGRD1bgcolor,      c000000 },
-	[SchemeFlexInaGRD2]  = { titlenormfgcolor, normGRD2bgcolor,  normGRD2bgcolor,      c000000 },
-	[SchemeFlexInaGRDM]  = { titlenormfgcolor, normGRDMbgcolor,  normGRDMbgcolor,      c000000 },
-	[SchemeFlexInaHGRD]  = { titlenormfgcolor, normHGRDbgcolor,  normHGRDbgcolor,      c000000 },
-	[SchemeFlexInaDWDL]  = { titlenormfgcolor, normDWDLbgcolor,  normDWDLbgcolor,      c000000 },
-	[SchemeFlexInaSPRL]  = { titlenormfgcolor, normSPRLbgcolor,  normSPRLbgcolor,      c000000 },
-	[SchemeFlexInaFloat] = { titlenormfgcolor, normfloatbgcolor, normfloatbgcolor,     c000000 },
-	[SchemeFlexSelTTB]   = { titleselfgcolor,  selTTBbgcolor,    selTTBbgcolor,        c000000 },
-	[SchemeFlexSelLTR]   = { titleselfgcolor,  selLTRbgcolor,    selLTRbgcolor,        c000000 },
-	[SchemeFlexSelMONO]  = { titleselfgcolor,  selMONObgcolor,   selMONObgcolor,       c000000 },
-	[SchemeFlexSelGRID]  = { titleselfgcolor,  selGRIDbgcolor,   selGRIDbgcolor,       c000000 },
-	[SchemeFlexSelGRD1]  = { titleselfgcolor,  selGRD1bgcolor,   selGRD1bgcolor,       c000000 },
-	[SchemeFlexSelGRD2]  = { titleselfgcolor,  selGRD2bgcolor,   selGRD2bgcolor,       c000000 },
-	[SchemeFlexSelGRDM]  = { titleselfgcolor,  selGRDMbgcolor,   selGRDMbgcolor,       c000000 },
-	[SchemeFlexSelHGRD]  = { titleselfgcolor,  selHGRDbgcolor,   selHGRDbgcolor,       c000000 },
-	[SchemeFlexSelDWDL]  = { titleselfgcolor,  selDWDLbgcolor,   selDWDLbgcolor,       c000000 },
-	[SchemeFlexSelSPRL]  = { titleselfgcolor,  selSPRLbgcolor,   selSPRLbgcolor,       c000000 },
-	[SchemeFlexSelFloat] = { titleselfgcolor,  selfloatbgcolor,  selfloatbgcolor,      c000000 },
+	[SchemeFlexActTTB]   = { "#eeeeee", "#440000", "#440000", "actTTB" },
+	[SchemeFlexActLTR]   = { "#eeeeee", "#440044", "#440044", "actLTR" },
+	[SchemeFlexActMONO]  = { "#eeeeee", "#000044", "#000044", "actMONO" },
+	[SchemeFlexActGRID]  = { "#eeeeee", "#004400", "#004400", "actGRID" },
+	[SchemeFlexActGRD1]  = { "#eeeeee", "#004400", "#004400", "actGRD1" },
+	[SchemeFlexActGRD2]  = { "#eeeeee", "#004400", "#004400", "actGRD2" },
+	[SchemeFlexActGRDM]  = { "#eeeeee", "#507711", "#507711", "actGRDM" },
+	[SchemeFlexActHGRD]  = { "#eeeeee", "#b97711", "#b97711", "actHGRD" },
+	[SchemeFlexActDWDL]  = { "#eeeeee", "#004444", "#004444", "actDWDL" },
+	[SchemeFlexActSPRL]  = { "#eeeeee", "#444400", "#444400", "actSPRL" },
+	[SchemeFlexActFloat] = { "#eeeeee", "#116688", "#116688", "actfloat" },
+	[SchemeFlexInaTTB]   = { "#bbbbbb", "#330000", "#330000", "normTTB" },
+	[SchemeFlexInaLTR]   = { "#bbbbbb", "#330033", "#330033", "normLTR" },
+	[SchemeFlexInaMONO]  = { "#bbbbbb", "#000033", "#000033", "normMONO" },
+	[SchemeFlexInaGRID]  = { "#bbbbbb", "#003300", "#003300", "normGRID" },
+	[SchemeFlexInaGRD1]  = { "#bbbbbb", "#003300", "#003300", "normGRD1" },
+	[SchemeFlexInaGRD2]  = { "#bbbbbb", "#003300", "#003300", "normGRD2" },
+	[SchemeFlexInaGRDM]  = { "#bbbbbb", "#506600", "#506600", "normGRDM" },
+	[SchemeFlexInaHGRD]  = { "#bbbbbb", "#b96600", "#b96600", "normHGRD" },
+	[SchemeFlexInaDWDL]  = { "#bbbbbb", "#003333", "#003333", "normDWDL" },
+	[SchemeFlexInaSPRL]  = { "#bbbbbb", "#333300", "#333300", "normSPRL" },
+	[SchemeFlexInaFloat] = { "#bbbbbb", "#115577", "#115577", "normfloat" },
+	[SchemeFlexSelTTB]   = { "#eeeeee", "#550000", "#550000", "selTTB" },
+	[SchemeFlexSelLTR]   = { "#eeeeee", "#550055", "#550055", "selLTR" },
+	[SchemeFlexSelMONO]  = { "#eeeeee", "#212171", "#212171", "selMONO" },
+	[SchemeFlexSelGRID]  = { "#eeeeee", "#005500", "#005500", "selGRID" },
+	[SchemeFlexSelGRD1]  = { "#eeeeee", "#005500", "#005500", "selGRD1" },
+	[SchemeFlexSelGRD2]  = { "#eeeeee", "#005500", "#005500", "selGRD2" },
+	[SchemeFlexSelGRDM]  = { "#eeeeee", "#508822", "#508822", "selGRDM" },
+	[SchemeFlexSelHGRD]  = { "#eeeeee", "#b98822", "#b98822", "selHGRD" },
+	[SchemeFlexSelDWDL]  = { "#eeeeee", "#005555", "#005555", "selDWDL" },
+	[SchemeFlexSelSPRL]  = { "#eeeeee", "#555500", "#555500", "selSPRL" },
+	[SchemeFlexSelFloat] = { "#eeeeee", "#117799", "#117799", "selfloat" },
 	#endif // BAR_FLEXWINTITLE_PATCH
 };
 
 #if BAR_POWERLINE_STATUS_PATCH
 static char *statuscolors[][ColCount] = {
-	/*                       fg                bg                border                float */
-	[SchemeNorm]         = { normfgcolor,      normbgcolor,      normbordercolor,      normfloatcolor },
-	[SchemeSel]          = { selfgcolor,       selbgcolor,       selbordercolor,       selfloatcolor },
-	[SchemeTitleNorm]    = { titlenormfgcolor, titlenormbgcolor, titlenormbordercolor, titlenormfloatcolor },
-	[SchemeTitleSel]     = { titleselfgcolor,  titleselbgcolor,  titleselbordercolor,  titleselfloatcolor },
-	[SchemeTagsNorm]     = { tagsnormfgcolor,  tagsnormbgcolor,  tagsnormbordercolor,  tagsnormfloatcolor },
-	[SchemeTagsSel]      = { tagsselfgcolor,   tagsselbgcolor,   tagsselbordercolor,   tagsselfloatcolor },
-	[SchemeHidNorm]      = { hidnormfgcolor,   hidnormbgcolor,   c000000,              c000000 },
-	[SchemeHidSel]       = { hidselfgcolor,    hidselbgcolor,    c000000,              c000000 },
-	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
+	/*                       fg         bg         border    */
+	[SchemeNorm]         = { "#bbbbbb", "#222222", "#444444" },
+	[SchemeSel]          = { "#eeeeee", "#005577", "#005577" },
+	[SchemeTitleNorm]    = { "#bbbbbb", "#222222", "#444444" },
+	[SchemeTitleSel]     = { "#eeeeee", "#005577", "#005577" },
+	[SchemeTagsNorm]     = { "#bbbbbb", "#222222", "#444444" },
+	[SchemeTagsSel]      = { "#eeeeee", "#005577", "#005577" },
+	[SchemeHidNorm]      = { "#005577", "#222222", "#000000" },
+	[SchemeHidSel]       = { "#227799", "#222222", "#000000" },
+	[SchemeUrg]          = { "#bbbbbb", "#222222", "#ff0000" },
 };
 #endif // BAR_POWERLINE_STATUS_PATCH
+
+static char dmenunormfgcolor[] = "#bbbbbb";
+static char dmenunormbgcolor[] = "#222222";
+static char dmenuselfgcolor[] = "#eeeeee";
+static char dmenuselbgcolor[] = "#005577";
+
+#if XRDB_PATCH
+/* Xresources preferences to load at startup. */
+static const ResourcePref resources[] = {
+	{ "dmenunormfgcolor", STRING, &dmenunormfgcolor },
+	{ "dmenunormbgcolor", STRING, &dmenunormbgcolor },
+	{ "dmenuselfgcolor", STRING, &dmenuselfgcolor },
+	{ "dmenuselbgcolor", STRING, &dmenuselbgcolor },
+	{ "dmenufont", STRING, &dmenufont },
+};
+#endif // XRDB_PATCH
 
 #if BAR_LAYOUTMENU_PATCH
 static const char *layoutmenu_cmd = "layoutmenu.sh";
@@ -385,7 +311,7 @@ static const char *const autostart[] = {
 #endif // COOL_AUTOSTART_PATCH
 
 #if RENAMED_SCRATCHPADS_PATCH
-static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
+static const char *spcmd_s[] = {"s", "st", "-n", "spterm", NULL};
 #endif // RENAMED_SCRATCHPADS_PATCH
 
 /* Tags
@@ -830,10 +756,10 @@ static const char *dmenucmd[] = {
 	"-m", dmenumon,
 	#endif // NODMENU_PATCH
 	"-fn", dmenufont,
-	"-nb", normbgcolor,
-	"-nf", normfgcolor,
-	"-sb", selbgcolor,
-	"-sf", selfgcolor,
+	"-nb", dmenunormfgcolor,
+	"-nf", dmenunormbgcolor,
+	"-sb", dmenuselfgcolor,
+	"-sf", dmenuselbgcolor,
 	#if BAR_DMENUMATCHTOP_PATCH
 	topbar ? NULL : "-b",
 	#endif // BAR_DMENUMATCHTOP_PATCH
@@ -1034,7 +960,7 @@ static const Key keys[] = {
 	#if WINVIEW_PATCH
 	{ MODKEY,                       XK_o,          winview,                {0} },
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+	#if XRDB_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
@@ -1067,9 +993,9 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Escape,     togglenomodbuttons,     {0} },
 	#endif // NO_MOD_BUTTONS_PATCH
 	#if RENAMED_SCRATCHPADS_PATCH
-	{ MODKEY,                       XK_grave,      togglescratch,          {.v = scratchpadcmd } },
-	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.v = scratchpadcmd } },
-	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.v = scratchpadcmd } },
+	{ MODKEY,                       XK_grave,      togglescratch,          {.v = spcmd_s } },
+	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.v = spcmd_s } },
+	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.v = spcmd_s } },
 	#endif // RENAMED_SCRATCHPADS_PATCH
 	#if UNFLOATVISIBLE_PATCH
 	{ MODKEY|Mod4Mask,              XK_space,      unfloatvisible,         {0} },
@@ -1523,7 +1449,7 @@ static const Signal signals[] = {
 	#if WINVIEW_PATCH
 	{ "winview",                 winview },
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+	#if XRDB_PATCH
 	{ "xrdb",                    xrdb },
 	#endif // XRDB_PATCH
 	#if TAGOTHERMONITOR_PATCH
@@ -1717,7 +1643,7 @@ static IPCCommand ipccommands[] = {
 	#if WINVIEW_PATCH
 	IPCCOMMAND( winview, 1, {ARG_TYPE_NONE} ),
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+	#if XRDB_PATCH
 	IPCCOMMAND( xrdb, 1, {ARG_TYPE_NONE} ),
 	#endif // XRDB_PATCH
 };
