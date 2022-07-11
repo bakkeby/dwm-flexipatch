@@ -1233,15 +1233,27 @@ checkotherwm(void)
 void
 cleanup(void)
 {
-	#if !SEAMLESS_RESTART_PATCH
+	Monitor *m;
+	Layout foo = { "", NULL };
+	size_t i;
+
+	#if SEAMLESS_RESTART_PATCH
+	for (m = mons; m; m = m->next)
+		persistmonitorstate(m);
+	#else
 	Arg a = {.ui = ~0};
 	#endif // SEAMLESS_RESTART_PATCH
-	Layout foo = { "", NULL };
-	Monitor *m;
-	size_t i;
-	#if !SEAMLESS_RESTART_PATCH
-	view(&a);
-	#endif // SEAMLESS_RESTART_PATCH
+
+	#if COOL_AUTOSTART_PATCH
+	/* kill child processes */
+	for (i = 0; i < autostart_len; i++) {
+		if (0 < autostart_pids[i]) {
+			kill(autostart_pids[i], SIGTERM);
+			waitpid(autostart_pids[i], NULL, 0);
+		}
+	}
+	#endif // COOL_AUTOSTART_PATCH
+
 	selmon->lt[selmon->sellt] = &foo;
 	for (m = mons; m; m = m->next)
 		while (m->stack)
@@ -2856,19 +2868,11 @@ propertynotify(XEvent *e)
 void
 quit(const Arg *arg)
 {
-	#if COOL_AUTOSTART_PATCH
-	size_t i;
-	#endif // COOL_AUTOSTART_PATCH
 	#if RESTARTSIG_PATCH
 	restart = arg->i;
 	#endif // RESTARTSIG_PATCH
-	#if SEAMLESS_RESTART_PATCH
-	Monitor *m;
-	#endif // SEAMLESS_RESTART_PATCH
 	#if ONLYQUITONEMPTY_PATCH
-	#if !SEAMLESS_RESTART_PATCH
 	Monitor *m;
-	#endif // SEAMLESS_RESTART_PATCH
 	Client *c;
 	unsigned int n = 0;
 
@@ -2887,21 +2891,6 @@ quit(const Arg *arg)
 	#else // !ONLYQUITONEMPTY_PATCH
 	running = 0;
 	#endif // ONLYQUITONEMPTY_PATCH
-
-	#if SEAMLESS_RESTART_PATCH
-	for (m = mons; m && !running; m = m->next)
-		persistmonitorstate(m);
-	#endif // SEAMLESS_RESTART_PATCH
-
-	#if COOL_AUTOSTART_PATCH
-	/* kill child processes */
-	for (i = 0; i < autostart_len && !running; i++) {
-		if (0 < autostart_pids[i]) {
-			kill(autostart_pids[i], SIGTERM);
-			waitpid(autostart_pids[i], NULL, 0);
-		}
-	}
-	#endif // COOL_AUTOSTART_PATCH
 }
 
 Monitor *
