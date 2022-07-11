@@ -15,7 +15,6 @@ loadxrdbcolor(XrmDatabase xrdb, char **dest, unsigned int *alpha, char *resource
 	switch(sscanf(value.addr, "#%6x%2x", &rgb, &a)) {
 		case 1:
 			sprintf(*dest, "#%.6x", rgb);
-			*alpha = 0xFF;
 			return 1;
 		case 2:
 			sprintf(*dest, "#%.6x", rgb);
@@ -24,6 +23,24 @@ loadxrdbcolor(XrmDatabase xrdb, char **dest, unsigned int *alpha, char *resource
 	}
 	return 1;
 }
+
+#if BAR_ALPHA_PATCH
+int
+loadxrdbalpha(XrmDatabase xrdb, unsigned int *alpha, char *resource)
+{
+	XrmValue value;
+	char *type;
+
+	if (XrmGetResource(xrdb, resource, NULL, &type, &value) != True)
+		return 0;
+
+	if (value.addr == NULL)
+		return 0;
+
+	*alpha = atoi(value.addr);
+	return 1;
+}
+#endif // BAR_ALPHA_PATCH
 
 void
 loadxrdbconfig(XrmDatabase xrdb, char *name, enum resource_type rtype, void *dst)
@@ -70,7 +87,7 @@ loadxrdb()
 
 	int s, c;
 	char resource[40];
-	char *pattern = "dwm.%s%scolor";
+	char *pattern = "dwm.%s.%s.%s";
 
 	char fg[20] = "#00000000";
 	char bg[20] = "#00000000";
@@ -88,17 +105,18 @@ loadxrdb()
 			xrdb = XrmGetStringDatabase(resm);
 
 			if (xrdb != NULL) {
-
 				for (s = 0; s < SchemeLast; s++) {
-
 					/* Skip schemes that do not specify a resource string */
 					if (colors[s][ColCount][0] == '\0')
 						continue;
+
 					for (c = 0; c < LENGTH(columns); c++) {
 						#if BAR_ALPHA_PATCH
-						alphas[c] = default_alphas[c];
+						sprintf(resource, pattern, colors[s][ColCount], columns[c], "alpha");
+						if (!loadxrdbalpha(xrdb, &alphas[c], resource))
+							alphas[c] = default_alphas[c];
 						#endif // BAR_ALPHA_PATCH
-						sprintf(resource, pattern, colors[s][ColCount], columns[c]);
+						sprintf(resource, pattern, colors[s][ColCount], columns[c], "color");
 						if (!loadxrdbcolor(xrdb, &clrnames[c], &alphas[c], resource))
 							strcpy(clrnames[c], colors[s][c]);
 					}
