@@ -1,24 +1,28 @@
 int
-loadxrdbcolor(XrmDatabase xrdb, char **dest, char *resource)
+loadxrdbcolor(XrmDatabase xrdb, char **dest, unsigned int *alpha, char *resource)
 {
 	XrmValue value;
 	char *type;
-	if (XrmGetResource(xrdb, resource, NULL, &type, &value) == True) {
-		if (value.addr != NULL && strnlen(value.addr, 8) == 7 && value.addr[0] == '#') {
-			int i = 1;
-			for (; i <= 6; i++) {
-				if (value.addr[i] < 48) break;
-				if (value.addr[i] > 57 && value.addr[i] < 65) break;
-				if (value.addr[i] > 70 && value.addr[i] < 97) break;
-				if (value.addr[i] > 102) break;
-			}
-			if (i == 7) {
-				strncpy(*dest, value.addr, 7);
-				return 1;
-			}
-		}
+	unsigned int rgb, a;
+
+	if (XrmGetResource(xrdb, resource, NULL, &type, &value) != True)
+		return 0;
+
+	if (value.addr == NULL)
+		return 0;
+
+	strcpy(*dest, value.addr);
+	switch(sscanf(value.addr, "#%6x%2x", &rgb, &a)) {
+		case 1:
+			sprintf(*dest, "#%.6x", rgb);
+			*alpha = 0xFF;
+			return 1;
+		case 2:
+			sprintf(*dest, "#%.6x", rgb);
+			*alpha = a;
+			return 1;
 	}
-	return 0;
+	return 1;
 }
 
 void
@@ -64,14 +68,16 @@ loadxrdb()
 	XrmDatabase xrdb;
 	const ResourcePref *p;
 
-	int s;
+	int s, c;
 	char resource[40];
 	char *pattern = "dwm.%s%scolor";
 
-	char fg[] = "#000000";
-	char bg[] = "#000000";
-	char bd[] = "#000000";
+	char fg[20] = "#00000000";
+	char bg[20] = "#00000000";
+	char bd[20] = "#00000000";
 	char *clrnames[] = { fg, bg, bd };
+	unsigned int alphas[] = { 0, 0, 0 };
+	const char *columns[] = { "fg", "bg", "border" };
 
 	display = XOpenDisplay(NULL);
 
@@ -88,22 +94,18 @@ loadxrdb()
 					/* Skip schemes that do not specify a resource string */
 					if (colors[s][ColCount][0] == '\0')
 						continue;
-
-					sprintf(resource, pattern, colors[s][ColCount], "fg");
-					if (!loadxrdbcolor(xrdb, &clrnames[ColFg], resource))
-						strcpy(clrnames[ColFg], colors[s][ColFg]);
-
-					sprintf(resource, pattern, colors[s][ColCount], "bg");
-					if (!loadxrdbcolor(xrdb, &clrnames[ColBg], resource))
-						strcpy(clrnames[ColBg], colors[s][ColBg]);
-
-					sprintf(resource, pattern, colors[s][ColCount], "border");
-					if (!loadxrdbcolor(xrdb, &clrnames[ColBorder], resource))
-						strcpy(clrnames[ColBorder], colors[s][ColBorder]);
+					for (c = 0; c < LENGTH(columns); c++) {
+						#if BAR_ALPHA_PATCH
+						alphas[c] = default_alphas[c];
+						#endif // BAR_ALPHA_PATCH
+						sprintf(resource, pattern, colors[s][ColCount], columns[c]);
+						if (!loadxrdbcolor(xrdb, &clrnames[c], &alphas[c], resource))
+							strcpy(clrnames[c], colors[s][c]);
+					}
 
 					free(scheme[s]);
 					#if BAR_ALPHA_PATCH
-					scheme[s] = drw_scm_create(drw, clrnames, alphas[s], ColCount);
+					scheme[s] = drw_scm_create(drw, clrnames, alphas, ColCount);
 					#else
 					scheme[s] = drw_scm_create(drw, clrnames, ColCount);
 					#endif // BAR_ALPHA_PATCH

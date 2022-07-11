@@ -158,62 +158,9 @@ static const char font[] = "monospace 10";
 #else
 static const char *fonts[] = { "monospace:size=10" };
 #endif // BAR_PANGO_PATCH
-static char dmenufont[] = "monospace:size=10";
 
 #if BAR_ALPHA_PATCH
-static const unsigned int baralpha = 0xd0;
-static const unsigned int borderalpha = OPAQUE;
-static const unsigned int alphas[][3] = {
-	/*                       fg      bg        border     */
-	[SchemeNorm]         = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]          = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitleNorm]    = { OPAQUE, baralpha, borderalpha },
-	[SchemeTitleSel]     = { OPAQUE, baralpha, borderalpha },
-	[SchemeTagsNorm]     = { OPAQUE, baralpha, borderalpha },
-	[SchemeTagsSel]      = { OPAQUE, baralpha, borderalpha },
-	[SchemeHidNorm]      = { OPAQUE, baralpha, borderalpha },
-	[SchemeHidSel]       = { OPAQUE, baralpha, borderalpha },
-	[SchemeUrg]          = { OPAQUE, baralpha, borderalpha },
-	#if RENAMED_SCRATCHPADS_PATCH
-	[SchemeScratchSel]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeScratchNorm] = { OPAQUE, baralpha, borderalpha },
-	#endif // RENAMED_SCRATCHPADS_PATCH
-	#if BAR_FLEXWINTITLE_PATCH
-	[SchemeFlexActTTB]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActLTR]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActMONO]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActGRID]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActGRD1]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActGRD2]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActGRDM]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActHGRD]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActDWDL]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActSPRL]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexActFloat] = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaTTB]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaLTR]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaMONO]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaGRID]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaGRD1]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaGRD2]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaGRDM]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaHGRD]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaDWDL]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaSPRL]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexInaFloat] = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelTTB]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelLTR]   = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelMONO]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelGRID]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelGRD1]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelGRD2]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelGRDM]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelHGRD]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelDWDL]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelSPRL]  = { OPAQUE, baralpha, borderalpha },
-	[SchemeFlexSelFloat] = { OPAQUE, baralpha, borderalpha },
-	#endif // BAR_FLEXWINTITLE_PATCH
-};
+unsigned int default_alphas[] = { OPAQUE, 0xd0U, OPAQUE };
 #endif // BAR_ALPHA_PATCH
 
 static char *colors[SchemeLast][5] = {
@@ -283,6 +230,7 @@ static char *statuscolors[][ColCount] = {
 };
 #endif // BAR_POWERLINE_STATUS_PATCH
 
+static char dmenufont[] = "monospace:size=10";
 static char dmenunormfgcolor[] = "#bbbbbb";
 static char dmenunormbgcolor[] = "#222222";
 static char dmenuselfgcolor[] = "#eeeeee";
@@ -673,7 +621,6 @@ static const char *xkb_layouts[]  = {
 #define ShiftGr Mod5Mask
 
 #define MODKEY Alt
-
 
 #if COMBO_PATCH && SWAPTAGS_PATCH && TAGOTHERMONITOR_PATCH
 #define TAGKEYS(KEY,TAG) \

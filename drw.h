@@ -76,7 +76,7 @@ Clr *drw_scm_create(
 	Drw *drw,
 	char *clrnames[],
 	#if BAR_ALPHA_PATCH
-	const unsigned int alphas[],
+	unsigned int alphas[],
 	#endif // BAR_ALPHA_PATCH
 	size_t clrcount
 );

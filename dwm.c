@@ -3654,7 +3654,7 @@ setup(void)
 	#if BAR_STATUS2D_PATCH && !BAR_STATUSCOLORS_PATCH
 	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
 	#if BAR_ALPHA_PATCH
-	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], alphas[0], ColCount);
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], default_alphas, ColCount);
 	#else
 	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], ColCount);
 	#endif // BAR_ALPHA_PATCH
@@ -3663,7 +3663,7 @@ setup(void)
 	#endif // BAR_STATUS2D_PATCH
 	for (i = 0; i < LENGTH(colors); i++)
 		#if BAR_ALPHA_PATCH
-		scheme[i] = drw_scm_create(drw, colors[i], alphas[i], ColCount);
+		scheme[i] = drw_scm_create(drw, colors[i], default_alphas, ColCount);
 		#else
 		scheme[i] = drw_scm_create(drw, colors[i], ColCount);
 		#endif // BAR_ALPHA_PATCH
@@ -3671,7 +3671,7 @@ setup(void)
 	statusscheme = ecalloc(LENGTH(statuscolors), sizeof(Clr *));
 	for (i = 0; i < LENGTH(statuscolors); i++)
 		#if BAR_ALPHA_PATCH
-		statusscheme[i] = drw_scm_create(drw, statuscolors[i], alphas[0], ColCount);
+		statusscheme[i] = drw_scm_create(drw, statuscolors[i], default_alphas, ColCount);
 		#else
 		statusscheme[i] = drw_scm_create(drw, statuscolors[i], ColCount);
 		#endif // BAR_ALPHA_PATCH
@@ -3681,7 +3681,6 @@ setup(void)
 	XrmInitialize();
 	loadxrdb();
 	#endif // XRDB_PATCH
-
 
 	#if BAR_STATUSPADDING_PATCH
 	lrpad = drw->fonts->h + horizpadbar;

@@ -335,9 +335,23 @@ drw_clr_create(
 		return;
 
 	#if BAR_ALPHA_PATCH
+	char color[20] = {0};
+	unsigned int rgb, a;
+
+	strncpy(color, clrname, 20);
+	switch(sscanf(clrname, "#%6x%2x", &rgb, &a)) {
+		case 1:
+			sprintf(color, "#%.6x", rgb);
+			break;
+		case 2:
+			sprintf(color, "#%.6x", rgb);
+			alpha = a;
+			break;
+	}
+
 	if (!XftColorAllocName(drw->dpy, drw->visual, drw->cmap,
-	                       clrname, dest))
-		die("error, cannot allocate color '%s'", clrname);
+	                       color, dest))
+		die("error, cannot allocate color '%s'", &color);
 
 	dest->pixel = (dest->pixel & 0x00ffffffU) | (alpha << 24);
 	#else
@@ -359,7 +373,7 @@ drw_scm_create(
 	Drw *drw,
 	char *clrnames[],
 	#if BAR_ALPHA_PATCH
-	const unsigned int alphas[],
+	unsigned int alphas[],
 	#endif // BAR_ALPHA_PATCH
 	size_t clrcount
 ) {
@@ -370,12 +384,13 @@ drw_scm_create(
 	if (!drw || !clrnames || clrcount < 2 || !(ret = ecalloc(clrcount, sizeof(XftColor))))
 		return NULL;
 
-	for (i = 0; i < clrcount; i++)
+	for (i = 0; i < clrcount; i++) {
 		#if BAR_ALPHA_PATCH
 		drw_clr_create(drw, &ret[i], clrnames[i], alphas[i]);
 		#else
 		drw_clr_create(drw, &ret[i], clrnames[i]);
 		#endif // BAR_ALPHA_PATCH
+	}
 	return ret;
 }
 
