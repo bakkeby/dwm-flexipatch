@@ -1240,8 +1240,6 @@ cleanup(void)
 	#if SEAMLESS_RESTART_PATCH
 	for (m = mons; m; m = m->next)
 		persistmonitorstate(m);
-	#else
-	Arg a = {.ui = ~0};
 	#endif // SEAMLESS_RESTART_PATCH
 
 	#if COOL_AUTOSTART_PATCH
