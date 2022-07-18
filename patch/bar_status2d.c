@@ -78,15 +78,19 @@ click_status2d(Bar *bar, Arg *arg, BarArg *a)
 #endif // BAR_STATUSCMD_PATCH
 
 int
-drawstatusbar(BarArg *a, char* stext)
+drawstatusbar(BarArg *barg, char* stext)
 {
-	int i, w, len;
-	int x = a->x;
-	int y = a->y;
+	int i, w, len, s, col, tc;
+	int rx, ry, rw, rh;
+	unsigned int rgb, a;
+	int x = barg->x;
+	int y = barg->y;
 	short isCode = 0;
+	char buf[8];
 	char *text;
 	char *p;
-	Clr oldbg, oldfg;
+	char c;
+	Clr oldbg, oldfg, swp;
 	len = strlen(stext);
 	if (!(text = (char*) malloc(sizeof(char)*(len + 1))))
 		die("malloc");
@@ -116,82 +120,60 @@ drawstatusbar(BarArg *a, char* stext)
 
 			/* process code */
 			while (text[++i] != '^') {
-				if (text[i] == 'c') {
-					char buf[8];
-					if (i + 7 >= len) {
-						i += 7;
-						len = 0;
-						break;
+				s = sscanf(text + i, "%c#%6x%2x", &c, &rgb, &a);
+				switch (c) {
+				case 'c':
+				case 'b':
+					col = c == 'c' ? ColFg : ColBg;
+					switch (s) {
+						case 3:
+							sprintf(buf, "#%.6x", rgb);
+							drw_clr_create(drw, &drw->scheme[col], buf, a);
+							i += 9;
+							break;
+						case 2:
+							sprintf(buf, "#%.6x", rgb);
+							drw_clr_create(drw, &drw->scheme[col], buf, 0xff);
+							i += 7;
+							break;
+						default:
+							len = 0;
+							break;
 					}
-					memcpy(buf, (char*)text+i+1, 7);
-					buf[7] = '\0';
-					#if BAR_ALPHA_PATCH && BAR_STATUS2D_NO_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColFg], buf, 0xff);
-					#elif BAR_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColFg], buf, alphas[SchemeNorm][ColFg]);
-					#else
-					drw_clr_create(drw, &drw->scheme[ColFg], buf);
-					#endif // BAR_ALPHA_PATCH
-					i += 7;
-				} else if (text[i] == 'b') {
-					char buf[8];
-					if (i + 7 >= len) {
-						i += 7;
-						len = 0;
-						break;
-					}
-					memcpy(buf, (char*)text+i+1, 7);
-					buf[7] = '\0';
-					#if BAR_ALPHA_PATCH && BAR_STATUS2D_NO_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColBg], buf, 0xff);
-					#elif BAR_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColBg], buf, alphas[SchemeNorm][ColBg]);
-					#else
-					drw_clr_create(drw, &drw->scheme[ColBg], buf);
-					#endif // BAR_ALPHA_PATCH
-					i += 7;
+					break;
 				#if BAR_STATUS2D_XRDB_TERMCOLORS_PATCH
-				} else if (text[i] == 'C') {
-					int c = atoi(text + ++i) % 16;
-					#if BAR_ALPHA_PATCH && BAR_STATUS2D_NO_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColFg], termcolor[c], 0xff);
-					#elif BAR_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColFg], termcolor[c], alphas[SchemeNorm][ColBg]);
-					#else
-					drw_clr_create(drw, &drw->scheme[ColFg], termcolor[c]);
-					#endif // BAR_ALPHA_PATCH
-				} else if (text[i] == 'B') {
-					int c = atoi(text + ++i) % 16;
-					#if BAR_ALPHA_PATCH && BAR_STATUS2D_NO_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColBg], termcolor[c], 0xff);
-					#elif BAR_ALPHA_PATCH
-					drw_clr_create(drw, &drw->scheme[ColBg], termcolor[c], alphas[SchemeNorm][ColBg]);
-					#else
-					drw_clr_create(drw, &drw->scheme[ColBg], termcolor[c]);
-					#endif // BAR_ALPHA_PATCH
+				case 'C':
+				case 'B':
+					col = c == 'C' ? ColFg : ColBg;
+					tc = atoi(text + ++i) % 16;
+					drw_clr_create(drw, &drw->scheme[col], termcolor[tc], 0xff);
+					break;
 				#endif // BAR_STATUS2D_XRDB_TERMCOLORS_PATCH
-				} else if (text[i] == 'd') {
+				case 'd':
 					drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
 					drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
-				} else if (text[i] == 'w') {
-					Clr swp;
+					break;
+				case 'w':
 					swp = drw->scheme[ColFg];
 					drw->scheme[ColFg] = drw->scheme[ColBg];
 					drw->scheme[ColBg] = swp;
-				} else if (text[i] == 'v') {
+					break;
+				case 'v':
 					oldfg = drw->scheme[ColFg];
 					oldbg = drw->scheme[ColBg];
-				} else if (text[i] == 't') {
+					break;
+				case 't':
 					drw->scheme[ColFg] = oldfg;
 					drw->scheme[ColBg] = oldbg;
-				} else if (text[i] == 'r') {
-					int rx = atoi(text + ++i);
+					break;
+				case 'r':
+					rx = atoi(text + ++i);
 					while (text[++i] != ',');
-					int ry = atoi(text + ++i);
+					ry = atoi(text + ++i);
 					while (text[++i] != ',');
-					int rw = atoi(text + ++i);
+					rw = atoi(text + ++i);
 					while (text[++i] != ',');
-					int rh = atoi(text + ++i);
+					rh = atoi(text + ++i);
 
 					if (ry < 0)
 						ry = 0;
@@ -199,8 +181,10 @@ drawstatusbar(BarArg *a, char* stext)
 						rx = 0;
 
 					drw_rect(drw, rx + x, y + ry, rw, rh, 1, 0);
-				} else if (text[i] == 'f') {
+					break;
+				case 'f':
 					x += atoi(text + ++i);
+					break;
 				}
 			}
 

@@ -307,10 +307,8 @@ void
 drw_clr_create(
 	Drw *drw,
 	Clr *dest,
-	const char *clrname
-	#if BAR_ALPHA_PATCH
-	, unsigned int alpha
-	#endif // BAR_ALPHA_PATCH
+	const char *clrname,
+	unsigned int alpha
 ) {
 	if (!drw || !dest || !clrname)
 		return;
@@ -369,7 +367,7 @@ drw_scm_create(
 		#if BAR_ALPHA_PATCH
 		drw_clr_create(drw, &ret[i], clrnames[i], alphas[i]);
 		#else
-		drw_clr_create(drw, &ret[i], clrnames[i]);
+		drw_clr_create(drw, &ret[i], clrnames[i], 0xff);
 		#endif // BAR_ALPHA_PATCH
 	}
 	return ret;

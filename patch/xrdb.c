@@ -133,7 +133,8 @@ loadxrdb()
 				/* status2d terminal colours */
 				for (s = 0; s < 16; s++) {
 					sprintf(resource, "color%d", s);
-					loadxrdbcolor(xrdb, &termcolor[s], resource);
+					alphas[0] = 0xFF;
+					loadxrdbcolor(xrdb, &termcolor[s], &alphas[0], resource);
 				}
 				#endif // BAR_STATUS2D_XRDB_TERMCOLORS_PATCH
 

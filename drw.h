@@ -61,11 +61,10 @@ unsigned int drw_fontset_getwidth(Drw *drw, const char *text, Bool markup);
 void drw_clr_create(
 	Drw *drw,
 	Clr *dest,
-	const char *clrname
-	#if BAR_ALPHA_PATCH
-	, unsigned int alpha
-	#endif // BAR_ALPHA_PATCH
+	const char *clrname,
+	unsigned int alpha
 );
+
 Clr *drw_scm_create(
 	Drw *drw,
 	char *clrnames[],
