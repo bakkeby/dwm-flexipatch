@@ -1865,7 +1865,7 @@ drawbars(void)
 void
 drawbarwin(Bar *bar)
 {
-	if (!bar || !bar->win || bar->external)
+	if (!bar || !bar->win || bar->external || (hidebarmask & (1 << bar->idx)))
 		return;
 	int r, w, total_drawn = 0;
 	int rx, lx, rw, lw; // bar size, split between left and right if a center module is added
