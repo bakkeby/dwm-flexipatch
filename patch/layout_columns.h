@@ -1,2 +1,2 @@
-static void col(Monitor *);
+static void col(Monitor *m);
 

@@ -1,2 +1,2 @@
-static void tile(Monitor *);
+static void tile(Monitor *m);
 
