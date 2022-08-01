@@ -100,6 +100,9 @@ case $# in
 	setmfact)
 		signal $1 f $2
 		;;
+	floatpos)
+		signal $1 v $2
+		;;
 	*)
 		echo "Unknown command ($1) or too many arguments"
 		exit 1

@@ -1368,6 +1368,9 @@ static Signal signals[] = {
 	#if STACKER_PATCH
 	{ "pushstack",               pushstack },
 	#endif // STACKER_PATCH
+	#if FLOATPOS_PATCH
+	{ "floatpos",                floatpos },
+	#endif // FLOATPOS_PATCH
 	#if FOCUSURGENT_PATCH
 	{ "focusurgent",             focusurgent },
 	#endif // FOCUSURGENT_PATCH
