@@ -9,6 +9,30 @@
 #include "drw.h"
 #include "util.h"
 
+#if BIDI_PATCH
+#include <fribidi.h>
+
+static char fribidi_text[BUFSIZ] = "";
+
+static void
+apply_fribidi(const char *str)
+{
+	FriBidiStrIndex len = strlen(str);
+	FriBidiChar logical[BUFSIZ];
+	FriBidiChar visual[BUFSIZ];
+	FriBidiParType base = FRIBIDI_PAR_ON;
+	FriBidiCharSet charset;
+
+	fribidi_text[0] = 0;
+	if (len > 0) {
+		charset = fribidi_parse_charset("UTF-8");
+		len = fribidi_charset_to_unicode(charset, str, len, logical);
+		fribidi_log2vis(logical, len, &base, visual, NULL, NULL, NULL);
+		len = fribidi_unicode_to_charset(charset, visual, len, fribidi_text);
+	}
+}
+#endif
+
 #if !BAR_PANGO_PATCH
 #define UTF_INVALID 0xFFFD
 #define UTF_SIZ     4
@@ -394,10 +418,15 @@ drw_rect(Drw *drw, int x, int y, unsigned int w, unsigned int h, int filled, int
 		XDrawRectangle(drw->dpy, drw->drawable, drw->gc, x, y, w - 1, h - 1);
 }
 
-#if BAR_PANGO_PATCH
+#if BIDI_PATCH
+int
+_drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup)
+#else
 int
 drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup)
+#endif // BIDI_PATCH
 {
+#if BAR_PANGO_PATCH
 	char buf[1024];
 	int ty;
 	unsigned int ew;
@@ -458,11 +487,7 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 		XftDrawDestroy(d);
 
 	return x + (render ? w : 0);
-}
 #else
-int
-drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool ignored)
-{
 	char buf[1024];
 	int ty;
 	unsigned int ew;
@@ -593,8 +618,17 @@ drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lp
 		XftDrawDestroy(d);
 
 	return x + (render ? w : 0);
-}
 #endif // BAR_PANGO_PATCH
+}
+
+#if BIDI_PATCH
+int
+drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned int lpad, const char *text, int invert, Bool markup)
+{
+	apply_fribidi(text);
+	return _drw_text(drw, x, y, w, h, lpad, fribidi_text, invert, markup);
+}
+#endif // BIDI_PATCH
 
 #if BAR_POWERLINE_TAGS_PATCH || BAR_POWERLINE_STATUS_PATCH
 void

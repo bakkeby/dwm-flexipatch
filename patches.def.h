@@ -490,6 +490,18 @@
  */
 #define AUTORESIZE_PATCH 0
 
+/* This patch adds proper support for Right-To-Left languages. (such as Farsi, Arabic or Hebrew).
+ *
+ * You need to uncomment the corresponding lines in config.mk to use the -lfribidi library
+ * when including this patch.
+ *
+ * This patch depends on the following additional library:
+ *    - fribidi
+ *
+ * https://dwm.suckless.org/patches/bidi/
+ */
+#define BIDI_PATCH 0
+
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
  * This patch takes precedence over centeredwindowname, alwayscenter and fancybar patches.
  * https://dwm.suckless.org/patches/center/

@@ -19,6 +19,7 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2022-08-02 - Added the bidi patch
 
 2022-07-05 - Added the tagpreview patch
 
@@ -286,6 +287,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [bartabgroups](https://dwm.suckless.org/patches/bartabgroups/)
       - turns the titlebar area into a mfact-respecting tab-bar showing each client's title
+
+   - [bidi](https://dwm.suckless.org/patches/bidi/)
+      - adds proper support for Right-To-Left (RTL) languages (such as Farsi, Arabic or Hebrew)
 
    - [center](https://dwm.suckless.org/patches/center/)
       - adds an iscentered rule to automatically center clients on the current monitor
