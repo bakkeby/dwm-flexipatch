@@ -5,18 +5,19 @@ runautostart(void)
 	char *path;
 	char *xdgdatahome;
 	char *home;
+	struct stat sb;
 
 	if ((home = getenv("HOME")) == NULL)
 		/* this is almost impossible */
 		return;
 
-	/* if $XDG_DATA_HOME is defined, use $XDG_DATA_HOME/dwm,
+	/* if $XDG_DATA_HOME is set and not empty, use $XDG_DATA_HOME/dwm,
 	 * otherwise use ~/.local/share/dwm as autostart script directory
 	 */
-	if ((xdgdatahome = getenv("XDG_DATA_HOME")) != NULL) {
+	xdgdatahome = getenv("XDG_DATA_HOME");
+	if (xdgdatahome != NULL && *xdgdatahome != '\0') {
 		/* space for path segments, separators and nul */
-		if ((pathpfx = malloc(strlen(xdgdatahome) + strlen(dwmdir) + 2)) == NULL)
-			return;
+		pathpfx = ecalloc(1, strlen(xdgdatahome) + strlen(dwmdir) + 2);
 
 		if (sprintf(pathpfx, "%s/%s", xdgdatahome, dwmdir) <= 0) {
 			free(pathpfx);
@@ -24,8 +25,8 @@ runautostart(void)
 		}
 	} else {
 		/* space for path segments, separators and nul */
-		if ((pathpfx = malloc(strlen(home) + strlen(localshare) + strlen(dwmdir) + 3)) == NULL)
-			return;
+		pathpfx = ecalloc(1, strlen(home) + strlen(localshare)
+							 + strlen(dwmdir) + 3);
 
 		if (sprintf(pathpfx, "%s/%s/%s", home, localshare, dwmdir) < 0) {
 			free(pathpfx);
@@ -34,16 +35,16 @@ runautostart(void)
 	}
 
 	/* check if the autostart script directory exists */
-	struct stat sb;
-
 	if (! (stat(pathpfx, &sb) == 0 && S_ISDIR(sb.st_mode))) {
-		/* the XDG conformant path does not exist or are not directories
+		/* the XDG conformant path does not exist or is no directory
 		 * so we try ~/.dwm instead
 		 */
-		if (realloc(pathpfx, strlen(home) + strlen(dwmdir) + 3) == NULL) {
+		char *pathpfx_new = realloc(pathpfx, strlen(home) + strlen(dwmdir) + 3);
+		if(pathpfx_new == NULL) {
 			free(pathpfx);
 			return;
 		}
+		pathpfx = pathpfx_new;
 
 		if (sprintf(pathpfx, "%s/.%s", home, dwmdir) <= 0) {
 			free(pathpfx);
@@ -52,33 +53,24 @@ runautostart(void)
 	}
 
 	/* try the blocking script first */
-	if ((path = malloc(strlen(pathpfx) + strlen(autostartblocksh) + 2)) == NULL) {
+	path = ecalloc(1, strlen(pathpfx) + strlen(autostartblocksh) + 2);
+	if (sprintf(path, "%s/%s", pathpfx, autostartblocksh) <= 0) {
+		free(path);
 		free(pathpfx);
-		return;
-	} else
-		if (sprintf(path, "%s/%s", pathpfx, autostartblocksh) <= 0) {
-			free(path);
-			free(pathpfx);
-		}
+	}
 
 	if (access(path, X_OK) == 0)
 		system(path);
 
 	/* now the non-blocking script */
-	if ((path = realloc(path, strlen(pathpfx) + strlen(autostartsh) + 4)) == NULL) {
-		free(pathpfx);
+	if (sprintf(path, "%s/%s", pathpfx, autostartsh) <= 0) {
 		free(path);
-		return;
-	} else
-		if (sprintf(path, "%s/%s", pathpfx, autostartsh) <= 0) {
-			free(path);
-			free(pathpfx);
-		}
-
-	if (access(path, X_OK) == 0) {
-		system(strcat(path, " &"));
 		free(pathpfx);
-		free(path);
 	}
-}
 
+	if (access(path, X_OK) == 0)
+		system(strcat(path, " &"));
+
+	free(pathpfx);
+	free(path);
+}
