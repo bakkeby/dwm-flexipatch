@@ -2222,13 +2222,11 @@ gettextprop(Window w, Atom atom, char *text, unsigned int size)
 	text[0] = '\0';
 	if (!XGetTextProperty(dpy, w, &name, atom) || !name.nitems)
 		return 0;
-	if (name.encoding == XA_STRING)
+	if (name.encoding == XA_STRING) {
 		strncpy(text, (char *)name.value, size - 1);
-	else {
-		if (XmbTextPropertyToTextList(dpy, &name, &list, &n) >= Success && n > 0 && *list) {
-			strncpy(text, *list, size - 1);
-			XFreeStringList(list);
-		}
+	} else if (XmbTextPropertyToTextList(dpy, &name, &list, &n) >= Success && n > 0 && *list) {
+		strncpy(text, *list, size - 1);
+		XFreeStringList(list);
 	}
 	text[size - 1] = '\0';
 	XFree(name.value);
@@ -2625,9 +2623,7 @@ maprequest(XEvent *e)
 	}
 	#endif // BAR_SYSTRAY_PATCH
 
-	if (!XGetWindowAttributes(dpy, ev->window, &wa))
-		return;
-	if (wa.override_redirect)
+	if (!XGetWindowAttributes(dpy, ev->window, &wa) || wa.override_redirect)
 		return;
 	#if BAR_ANYBAR_PATCH
 	if (wmclasscontains(ev->window, altbarclass, ""))
@@ -4961,12 +4957,7 @@ zoom(const Arg *arg)
 	c->mon->pertag->prevclient[c->mon->pertag->curtag] = nexttiled(c->mon->clients);
 	#endif // SWAPFOCUS_PATCH
 
-	if (!c->mon->lt[c->mon->sellt]->arrange
-	|| (c && c->isfloating)
-	#if ZOOMSWAP_PATCH
-	|| !c
-	#endif // ZOOMSWAP_PATCH
-	)
+	if (!c->mon->lt[c->mon->sellt]->arrange || !c || c->isfloating)
 		return;
 
 	#if ZOOMSWAP_PATCH
@@ -5019,14 +5010,13 @@ zoom(const Arg *arg)
 	}
 	focus(c);
 	arrange(c->mon);
+	#elif SWAPFOCUS_PATCH && PERTAG_PATCH
+	if (c == nexttiled(c->mon->clients) && !(c = c->mon->pertag->prevclient[c->mon->pertag->curtag] = nexttiled(c->next)))
+		return;
+	pop(c);
 	#else
-	if (c == nexttiled(c->mon->clients))
-		#if SWAPFOCUS_PATCH && PERTAG_PATCH
-		if (!c || !(c = c->mon->pertag->prevclient[c->mon->pertag->curtag] = nexttiled(c->next)))
-		#else
-		if (!c || !(c = nexttiled(c->next)))
-		#endif // SWAPFOCUS_PATCH
-			return;
+	if (c == nexttiled(selmon->clients) && !(c = nexttiled(c->next)))
+		return;
 	pop(c);
 	#endif // ZOOMSWAP_PATCH
 }
