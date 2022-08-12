@@ -782,6 +782,32 @@
  */
 #define MOVESTACK_PATCH 0
 
+/* This patch allows you to change the names of tags during runtime.
+ *
+ * This is a bespoke version implemented specifically in relation to tagicons, which is integrated
+ * into dwm-flexipatch. By default it uses dmenu to retrieve the new name, but this can be
+ * customised via config along with the maximum text length and the format string.
+ *
+ * Special behaviour:
+ *    - if more than one tag is selected then the name change applies to all selected tags
+ *    - if tagicons is configured to have unique tags per monitor then the change only applies
+ *      for the current monitor
+ *    - the name change applies to the tag set that is active for the current tag:
+ *       * if used in combination with BAR_ALTTAGSDECORATION_PATCH and there are clients on the
+ *         given tag then the name change only applies to the ALT_TAGS_DECORATION tag set
+ *       * if used in combination with the BAR_ALTERNATIVE_TAGS_PATCH and alternative tags are
+ *         shown then the name change only applies to the ALTERNATIVE_TAGS tag set
+ *       * if used in combination with both then BAR_ALTTAGSDECORATION_PATCH takes precedence
+ *       * otherwise the name change applies to the DEFAULT_TAGS tag set
+ *
+ * https://dwm.suckless.org/patches/nametag/
+ */
+#define NAMETAG_PATCH 0
+
+/* Variant of the above which prepends the tag number to the given string.
+ * The toggle does nothing on its own and need to be enabled in combination with the above. */
+#define NAMETAG_PREPEND_PATCH 0
+
 /* Adds support for the _NET_CLIENT_LIST_STACKING atom, needed by certain applications like the
  * Zoom video conferencing application.
  * https://github.com/bakkeby/patches/wiki/netclientliststacking/

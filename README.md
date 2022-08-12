@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2022-08-12 - Added the nametag patch
+
 2022-08-02 - Added the bidi patch
 
 2022-07-05 - Added the tagpreview patch
@@ -527,6 +529,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [movestack](https://dwm.suckless.org/patches/movestack/)
       - allows you to move clients around in the stack and swap them with the master
+
+   - [nametag](https://dwm.suckless.org/patches/nametag/)
+      - allows the names of tags to be changed during runtime
 
    - [netclientliststacking](https://github.com/bakkeby/patches/wiki/netclientliststacking)
       - adds support for the \_NET\_CLIENT\_LIST\_STACKING atom, needed by certain applications

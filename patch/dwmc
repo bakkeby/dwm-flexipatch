@@ -10,6 +10,7 @@ case $# in
 	focusurgent) ;&
 	mirrorlayout) ;&
 	mpdcontrol) ;&
+	nametag) ;&
 	pushdown) ;&
 	pushup) ;&
 	self_restart) ;&

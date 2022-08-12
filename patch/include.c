@@ -193,6 +193,9 @@
 #if MOVESTACK_PATCH
 #include "movestack.c"
 #endif
+#if NAMETAG_PATCH
+#include "nametag.c"
+#endif
 #if NO_MOD_BUTTONS_PATCH
 #include "nomodbuttons.c"
 #endif

@@ -106,6 +106,22 @@ static const unsigned int ulinevoffset = 0;     /* how far above the bottom of t
 static const int ulineall = 0;                  /* 1 to show underline on all tags, 0 for just the active ones */
 #endif // BAR_UNDERLINETAGS_PATCH
 
+#if NAMETAG_PATCH
+#if NAMETAG_PREPEND_PATCH
+/* The format in which the tag is written when named. E.g. %d: %.12s will write the tag number
+ * followed the first 12 characters of the given string. You can also just use "%d: %s" here. */
+#define NAMETAG_FORMAT "%d: %.12s"
+#else
+#define NAMETAG_FORMAT "%s"
+#endif // NAMETAG_PREPEND_PATCH
+/* The maximum amount of bytes reserved for each tag text. */
+#define MAX_TAGLEN 16
+/* The command to run (via popen). This can be tailored by adding a prompt, passing other command
+ * line arguments or providing name options. Optionally you can use other dmenu like alternatives
+ * like rofi -dmenu. */
+#define NAMETAG_COMMAND "dmenu < /dev/null"
+#endif // NAMETAG_PATCH
+
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype            = INDICATOR_NONE;
@@ -411,7 +427,12 @@ static Sp scratchpads[] = {
  * until it an icon matches. Similarly if there are two tag icons then it would alternate between
  * them. This works seamlessly with alternative tags and alttagsdecoration patches.
  */
-static char *tagicons[][NUMTAGS] = {
+#if NAMETAG_PATCH
+static char tagicons[][NUMTAGS][MAX_TAGLEN] =
+#else
+static char *tagicons[][NUMTAGS] =
+#endif // NAMETAG_PATCH
+{
 	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
@@ -1140,6 +1161,9 @@ static Key keys[] = {
 	#if BAR_ALTERNATIVE_TAGS_PATCH
 	{ MODKEY,                       XK_n,          togglealttag,           {0} },
 	#endif // BAR_ALTERNATIVE_TAGS_PATCH
+	#if NAMETAG_PATCH
+	{ MODKEY|ShiftMask,             XK_n,          nametag,                {0} },
+	#endif // NAMETAG_PATCH
 	#if BAR_TAGGRID_PATCH
 	{ MODKEY|ControlMask,           XK_Up,         switchtag,              { .ui = SWITCHTAG_UP    | SWITCHTAG_VIEW } },
 	{ MODKEY|ControlMask,           XK_Down,       switchtag,              { .ui = SWITCHTAG_DOWN  | SWITCHTAG_VIEW } },
@@ -1410,6 +1434,9 @@ static Signal signals[] = {
 	#if MOVEPLACE_PATCH
 	{ "moveplace",               moveplace },
 	#endif // MOVEPLACE_PATCH
+	#if NAMETAG_PATCH
+	{ "nametag",                 nametag },
+	#endif // NAMETAG_PATCH
 	#if EXRESIZE_PATCH
 	{ "explace",                 explace },
 	{ "togglehorizontalexpand",  togglehorizontalexpand },
@@ -1624,6 +1651,9 @@ static IPCCommand ipccommands[] = {
 	#if MOVERESIZE_PATCH
 	IPCCOMMAND( moveresize, 1, {ARG_TYPE_STR} ),
 	#endif // MOVERESIZE_PATCH
+	#if NAMETAG_PATCH
+	IPCCOMMAND( nametag, 1, {ARG_TYPE_NONE} ),
+	#endif // NAMETAG_PATCH
 	#if RIODRAW_PATCH
 	IPCCOMMAND( rioresize, 1, {ARG_TYPE_NONE} ),
 	#endif // RIODRAW_PATCH
