@@ -16,6 +16,7 @@ case $# in
 	self_restart) ;&
 	setlayout) ;&
 	setcfact) ;&
+	showhideclient) ;&
 	switchcol) ;&
 	view) ;&
 	viewall) ;&

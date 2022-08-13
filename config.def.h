@@ -1470,6 +1470,9 @@ static Signal signals[] = {
 	{ "viewall",                 viewallex },
 	{ "viewex",                  viewex },
 	{ "toggleview",              toggleview },
+	#if BAR_WINTITLEACTIONS_PATCH
+	{ "showhideclient",          showhideclient },
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if SHIFTBOTH_PATCH
 	{ "shiftboth",               shiftboth },
 	#endif // SHIFTBOTH_PATCH
@@ -1673,6 +1676,9 @@ static IPCCommand ipccommands[] = {
 	#if SETBORDERPX_PATCH
 	IPCCOMMAND( setborderpx, 1, {ARG_TYPE_SINT} ),
 	#endif // SETBORDERPX_PATCH
+	#if BAR_WINTITLEACTIONS_PATCH
+	IPCCOMMAND( showhideclient, 1, {ARG_TYPE_NONE} ),
+	#endif // BAR_WINTITLEACTIONS_PATCH
 	#if SHIFTBOTH_PATCH
 	IPCCOMMAND( shiftboth, 1, {ARG_TYPE_SINT} ),
 	#endif // SHIFTBOTH_PATCH
