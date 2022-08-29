@@ -55,6 +55,10 @@
 #include <pango/pango.h>
 #endif // BAR_PANGO_PATCH
 
+#if RESTARTSIG_PATCH
+#include <poll.h>
+#endif // RESTARTSIG_PATCH
+
 #if XKB_PATCH
 #include <X11/XKBlib.h>
 #endif // XKB_PATCH
@@ -819,7 +823,11 @@ static Atom clientatom[ClientLast];
 #if ON_EMPTY_KEYS_PATCH
 static int isempty = 0;
 #endif // ON_EMPTY_KEYS_PATCH
+#if RESTARTSIG_PATCH
+static volatile sig_atomic_t running = 1;
+#else
 static int running = 1;
+#endif // RESTARTSIG_PATCH
 static Cur *cursor[CurLast];
 static Clr **scheme;
 static Display *dpy;
@@ -3186,6 +3194,30 @@ run(void)
 		}
 	}
 }
+#elif RESTARTSIG_PATCH
+void
+run(void)
+{
+	XEvent ev;
+	XSync(dpy, False);
+	/* main event loop */
+	while (running) {
+		struct pollfd pfd = {
+			.fd = ConnectionNumber(dpy),
+			.events = POLLIN,
+		};
+		int pending = XPending(dpy) > 0 || poll(&pfd, 1, -1) > 0;
+
+		if (!running)
+			break;
+		if (!pending)
+			continue;
+
+		XNextEvent(dpy, &ev);
+		if (handler[ev.type])
+			handler[ev.type](&ev); /* call handler */
+	}
+}
 #else
 void
 run(void)
@@ -3208,7 +3240,7 @@ run(void)
 			handler[ev.type](&ev); /* call handler */
 	}
 }
-#endif // IPC_PATCH
+#endif // IPC_PATCH | RESTARTSIG_PATCH
 
 void
 scan(void)
