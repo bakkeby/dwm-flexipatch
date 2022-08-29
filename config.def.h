@@ -1572,7 +1572,7 @@ static Signal signals[] = {
 
 #if IPC_PATCH
 static const char *ipcsockpath = "/tmp/dwm.sock";
-static const IPCCommand ipccommands[] = {
+static IPCCommand ipccommands[] = {
 	IPCCOMMAND( focusmon, 1, {ARG_TYPE_SINT} ),
 	IPCCOMMAND( focusstack, 1, {ARG_TYPE_SINT} ),
 	IPCCOMMAND( incnmaster, 1, {ARG_TYPE_SINT} ),
