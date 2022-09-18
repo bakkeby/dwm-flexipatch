@@ -2490,8 +2490,6 @@ manage(Window w, XWindowAttributes *wa)
 	#endif // BAR_FLEXWINTITLE_PATCH
 	configure(c); /* propagates border_width, if size doesn't change */
 	updatesizehints(c);
-	if (getatomprop(c, netatom[NetWMState], XA_ATOM) == netatom[NetWMFullscreen])
-		setfullscreen(c, 1);
 	updatewmhints(c);
 	#if DECORATION_HINTS_PATCH
 	updatemotifhints(c);
@@ -2520,6 +2518,9 @@ manage(Window w, XWindowAttributes *wa)
 		c->sfh = c->h;
 	}
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
+
+	if (getatomprop(c, netatom[NetWMState], XA_ATOM) == netatom[NetWMFullscreen])
+		setfullscreen(c, 1);
 
 	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
 	grabbuttons(c, 0);
