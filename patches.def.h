@@ -307,6 +307,11 @@
  */
 #define BAR_COLOR_EMOJI_PATCH 0
 
+/* Allow configuration of colors for each tag. Looks good with the underline patch.
+ * https://github.com/fitrh/dwm/issues/1
+ */
+#define BAR_COLORFULTAGS_PATCH 0
+
 /* Updates the position of dmenu to match that of the bar. I.e. if topbar is 0 then dmenu
  * will appear at the bottom and if 1 then dmenu will appear at the top.
  * https://dwm.suckless.org/patches/dmenumatchtop

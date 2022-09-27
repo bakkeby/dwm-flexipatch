@@ -152,6 +152,18 @@ enum {
 	SchemeScratchSel,
 	SchemeScratchNorm,
 	#endif // RENAMED_SCRATCHPADS_PATCH
+	#if BAR_COLORFULTAGS_PATCH
+	SchemeTag1,
+	SchemeTag2,
+	SchemeTag3,
+	SchemeTag4,
+	SchemeTag5,
+	SchemeTag6,
+	SchemeTag7,
+	SchemeTag8,
+	SchemeTag9,
+	SchemeLayout,
+	#endif // BAR_COLORFULTAGS_PATCH
 	#if BAR_FLEXWINTITLE_PATCH
 	SchemeFlexActTTB,
 	SchemeFlexActLTR,
@@ -1846,7 +1858,7 @@ void
 drawbar(Monitor *m)
 {
 	Bar *bar;
-	
+
 	#if !BAR_FLEXWINTITLE_PATCH
 	if (m->showbar)
 	#endif // BAR_FLEXWINTITLE_PATCH
