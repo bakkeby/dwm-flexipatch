@@ -7,10 +7,10 @@
 * Fullscreen patch
 * Swallow Patch
 * dwmblocks patch
-<details open>
+<details close>
 <summary>About DWM?</summary>
 <br>
-### dwm - dynamic window manager
+dwm - dynamic window manager
 dwm is an extremely fast, small, and dynamic window manager for X.
 
 
