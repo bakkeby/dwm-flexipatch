@@ -7,6 +7,9 @@
 * Fullscreen patch
 * Swallow Patch
 * dwmblocks patch
+<details open>
+<summary>About DWM?</summary>
+<br>
 ### dwm - dynamic window manager
 dwm is an extremely fast, small, and dynamic window manager for X.
 
@@ -54,4 +57,4 @@ Configuration
 -------------
 The configuration of dwm is done by creating a custom config.h
 and (re)compiling the source code.
-   
+   </details>
