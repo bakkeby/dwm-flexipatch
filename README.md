@@ -1,2 +1,4 @@
-^Heavily Patched Custom Build of [DWM](suckless.org/dwm)
+# Heavily Patched Custom Build of [DWM](https://dwm.suckless.org/)
+> Patches
+* Alpha
 
