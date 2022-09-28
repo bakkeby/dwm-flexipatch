@@ -1,4 +1,10 @@
 # Heavily Patched Custom Build of [DWM](https://dwm.suckless.org/)
-> Patches
+### Patches
 * Alpha
+* Vanity gaps
+* Tags Preview
+* Attach Bottom
+* Fullscreen patch
+* Swallow Patch
+* dwmblocks patch
 
