@@ -438,6 +438,11 @@
  * Other patches
  */
 
+/*
+ * This patch allows to focus a specific monitor or send windows to a specific monitor.
+ */
+#define ACCSESSNTHMON_PATCH 0
+
 /* All floating windows are centered, like the center patch, but without a rule.
  * The center patch takes precedence over this patch.
  * This patch interferes with the center transient windows patches.
