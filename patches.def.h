@@ -438,6 +438,11 @@
  * Other patches
  */
 
+/* Adds a window task switcher toggled using alt-tab.
+ * https://dwm.suckless.org/patches/alt-tab/
+ */
+#define ALT_TAB_PATCH 0
+
 /* All floating windows are centered, like the center patch, but without a rule.
  * The center patch takes precedence over this patch.
  * This patch interferes with the center transient windows patches.

@@ -98,6 +98,9 @@
 #endif
 
 /* Other patches */
+#if ALT_TAB_PATCH
+#include "alttab.h"
+#endif
 #if ASPECTRESIZE_PATCH
 #include "aspectresize.h"
 #endif

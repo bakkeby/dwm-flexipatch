@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2022-10-08 - Added the alt-tab patch
+
 2022-08-12 - Added the nametag patch
 
 2022-08-02 - Added the bidi patch
@@ -229,6 +231,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [alpha](https://dwm.suckless.org/patches/alpha/)
       - adds transparency for the status bar
+
+   - [alt-tab](https://dwm.suckless.org/patches/alt-tab/)
+      - adds a window task switcher toggled using alt-tab
 
    - [alternativetags](https://dwm.suckless.org/patches/alternativetags/)
       - adds alternative tags which can be toggled on the fly for the sole purpose of providing
