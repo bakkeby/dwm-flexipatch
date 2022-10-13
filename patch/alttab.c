@@ -168,13 +168,14 @@ alttabstart(const Arg *arg)
 
 	altsnext = (Client **) malloc(ntabs * sizeof(Client *));
 
-	for (i = 0, c = m->stack; c; c = c->snext, i++) {
+	for (i = 0, c = m->stack; c; c = c->snext) {
 		if (!ISVISIBLE(c))
 			continue;
 		if (HIDDEN(c))
 			continue;
 
 		altsnext[i] = c;
+		i++;
 	}
 
 	drawtab(ntabs, 1, m);
