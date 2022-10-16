@@ -1102,11 +1102,6 @@ arrangemon(Monitor *m)
 	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
-	#if ROUNDED_CORNERS_PATCH
-	Client *c;
-	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
-		drawroundedcorners(c);
-	#endif // ROUNDED_CORNERS_PATCH
 }
 
 void
@@ -2746,9 +2741,6 @@ movemouse(const Arg *arg)
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
 				resize(c, nx, ny, c->w, c->h, 1);
 			}
-			#if ROUNDED_CORNERS_PATCH
-			drawroundedcorners(c);
-			#endif // ROUNDED_CORNERS_PATCH
 			break;
 		}
 	} while (ev.type != ButtonRelease);
@@ -2772,9 +2764,6 @@ movemouse(const Arg *arg)
 		c->sfy = ny;
 	}
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
-	#if ROUNDED_CORNERS_PATCH
-	drawroundedcorners(c);
-	#endif // ROUNDED_CORNERS_PATCH
 	ignoreconfigurerequests = 0;
 }
 
@@ -2932,6 +2921,9 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->expandmask = 0;
 	#endif // EXRESIZE_PATCH
 	wc.border_width = c->bw;
+	#if ROUNDED_CORNERS_PATCH
+	drawroundedcorners(c);
+	#endif // ROUNDED_CORNERS_PATCH
 	#if NOBORDER_PATCH
 	if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
 		#if MONOCLE_LAYOUT
@@ -3064,9 +3056,6 @@ resizemouse(const Arg *arg)
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
 				resize(c, nx, ny, nw, nh, 1);
-				#if ROUNDED_CORNERS_PATCH
-				drawroundedcorners(c);
-				#endif // ROUNDED_CORNERS_PATCH
 			}
 			break;
 		}
@@ -3482,10 +3471,6 @@ setfullscreen(Client *c, int fullscreen)
 		c->bw = 0;
 		c->isfloating = 1;
 		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
-		#if ROUNDED_CORNERS_PATCH
-		XRectangle rect = { .x = 0, .y = 0, .width = c->w, .height = c->h };
-		XShapeCombineRectangles(dpy, c->win, ShapeBounding, 0, 0, &rect, 1, ShapeSet, 1);
-		#endif // ROUNDED_CORNERS_PATCH
 		XRaiseWindow(dpy, c->win);
 	} else if (restorestate && (c->oldstate & (1 << 1))) {
 		c->bw = c->oldbw;
@@ -3520,10 +3505,6 @@ setfullscreen(Client *c, int fullscreen)
 		c->bw = 0;
 		c->isfloating = 1;
 		resizeclient(c, c->mon->mx, c->mon->my, c->mon->mw, c->mon->mh);
-		#if ROUNDED_CORNERS_PATCH
-		XRectangle rect = { .x = 0, .y = 0, .width = c->w, .height = c->h };
-		XShapeCombineRectangles(dpy, c->win, ShapeBounding, 0, 0, &rect, 1, ShapeSet, 1);
-		#endif // ROUNDED_CORNERS_PATCH
 		XRaiseWindow(dpy, c->win);
 		#endif // !FAKEFULLSCREEN_PATCH
 	} else if (!fullscreen && c->isfullscreen){
