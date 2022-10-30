@@ -1,4 +1,4 @@
-This dwm 6.4 (50ad171, 2022-10-04) side project has a different take on dwm patching. It uses preprocessor directives to decide whether or not to include a patch during build time. Essentially this means that this build, for better or worse, contains both the patched _and_ the original code. The aim being that you can select which patches to include and the build will contain that code and nothing more. Due to the complexity of some of the patches dwm-flexipatch has diverged from mainstream dwm by making some core patches non-optional for maintenance reasons. For the classic dwm-flexipatch build refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0).
+This dwm 6.4 (ba56fe9, 2022-10-28) side project has a different take on dwm patching. It uses preprocessor directives to decide whether or not to include a patch during build time. Essentially this means that this build, for better or worse, contains both the patched _and_ the original code. The aim being that you can select which patches to include and the build will contain that code and nothing more. Due to the complexity of some of the patches dwm-flexipatch has diverged from mainstream dwm by making some core patches non-optional for maintenance reasons. For the classic dwm-flexipatch build refer to branch [dwm-flexipatch-1.0](https://github.com/bakkeby/dwm-flexipatch/tree/dwm-flexipatch-1.0).
 
 For example to include the `alpha` patch then you would only need to flip this setting from 0 to 1 in [patches.h](https://github.com/bakkeby/dwm-flexipatch/blob/master/patches.def.h):
 ```c
@@ -545,12 +545,11 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [noborder](https://dwm.suckless.org/patches/noborder/)
       - removes the border when there is only one window visible
 
-   - [~nodmenu~](https://git.suckless.org/sites/commit/ed68e3629de4ef2ca2d3f8893a79fb570b4c0cbc.html)
-      - ~enable modifying dmenu in config.def.h which resulted previously in a compilation error~
-        ~because two lines of code hardcode dmenu into dwm~
-      - ~allows complete removal of dmenu, should you want to do that~
-      - ~NB: this patch was removed from the patches listing on the suckless page due to it's simplicity~
-      - ~merged upstream~
+   - [nodmenu](https://git.suckless.org/sites/commit/ed68e3629de4ef2ca2d3f8893a79fb570b4c0cbc.html)
+      - enable modifying dmenu in config.def.h which resulted previously in a compilation error
+        because two lines of code hardcode dmenu into dwm
+      - allows complete removal of dmenu, should you want to do that
+      - NB: this patch was removed from the patches listing on the suckless page due to it's simplicity
 
    - nomodbuttons
       - allows for toggleable client button bindings that have no modifiers

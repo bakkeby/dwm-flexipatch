@@ -822,6 +822,12 @@
  */
 #define NOBORDER_PATCH 0
 
+/* Enable modifying or removing dmenu in config.def.h which resulted previously in a
+ * compilation error because two lines of code hardcode dmenu into dwm.
+ * https://dwm.suckless.org/patches/nodmenu/
+ */
+#define NODMENU_PATCH 0
+
 /* This patch allows for toggleable client button bindings that have no modifiers.
  * This can, for example, allow you to move or resize using the mouse alone without holding
  * down a modifier key. This can be practical if you have extra buttons on your mouse.
