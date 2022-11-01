@@ -3526,6 +3526,9 @@ setfullscreen(Client *c, int fullscreen)
 		arrange(c->mon);
 		#endif // !FAKEFULLSCREEN_PATCH
 	}
+	#if FAKEFULLSCREEN_PATCH
+	resizeclient(c, c->x, c->y, c->w, c->h);
+	#endif // FAKEFULLSCREEN_PATCH
 }
 #endif // FAKEFULLSCREEN_CLIENT_PATCH
 
