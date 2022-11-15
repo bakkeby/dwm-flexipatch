@@ -1483,6 +1483,9 @@ configurenotify(XEvent *e)
 				#endif // !FAKEFULLSCREEN_PATCH
 				for (bar = m->bar; bar; bar = bar->next)
 					XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+				#if BAR_TAGPREVIEW_PATCH
+				createpreview(m);
+				#endif // BAR_TAGPREVIEW_PATCH
 			}
 			focus(NULL);
 			arrange(NULL);
@@ -3770,9 +3773,6 @@ setup(void)
 
 	updatebars();
 	updatestatus();
-	#if BAR_TAGPREVIEW_PATCH
-	updatepreview();
-	#endif // BAR_TAGPREVIEW_PATCH
 
 	/* supporting window for NetWMCheck */
 	wmcheckwin = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
