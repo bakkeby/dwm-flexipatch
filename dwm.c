@@ -5135,7 +5135,10 @@ main(int argc, char *argv[])
 	loadxrdb();
 	#endif // XRDB_PATCH && !BAR_VTCOLORS_PATCH
 	#if COOL_AUTOSTART_PATCH
-	autostart_exec();
+    #if RESTARTSIG_PATCH
+    if (!restart)
+    #endif // RESTARTSIG_PATCH
+    autostart_exec();
 	#endif // COOL_AUTOSTART_PATCH
 	setup();
 #ifdef __OpenBSD__
@@ -5148,7 +5151,10 @@ main(int argc, char *argv[])
 #endif /* __OpenBSD__ */
 	scan();
 	#if AUTOSTART_PATCH
-	runautostart();
+    #if RESTARTSIG_PATCH
+    if (!restart)
+    #endif // RESTARTSIG_PATCH
+    runautostart();
 	#endif
 	run();
 	cleanup();
