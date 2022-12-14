@@ -466,6 +466,13 @@ restorewindowfloatposition(Client *c, Monitor *m)
 	c->sfw = w;
 	c->sfh = h;
 
+	if (c->isfloating) {
+		c->x = c->sfx;
+		c->y = c->sfy;
+		c->w = c->sfw;
+		c->h = c->sfh;
+	}
+
 	return 1;
 }
 #endif // SAVEFLOATS_PATCH
