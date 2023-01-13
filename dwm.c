@@ -4352,7 +4352,7 @@ unfocus(Client *c, int setfocus, Client *nextfocus)
 void
 unmanage(Client *c, int destroyed)
 {
-	Monitor *m = c->mon;
+	Monitor *m;
 	#if SWITCHTAG_PATCH
 	unsigned int switchtag = c->switchtag;
 	#endif // SWITCHTAG_PATCH
@@ -4360,6 +4360,24 @@ unmanage(Client *c, int destroyed)
 	#if XKB_PATCH
 	XkbInfo *xkb;
 	#endif // XKB_PATCH
+
+	#if ZOOMSWAP_PATCH
+	/* Make sure to clear any previous zoom references to the client being removed. */
+	#if PERTAG_PATCH
+	int i;
+	for (m = mons; m; m = m->next) {
+		for (i = 0; i <= NUMTAGS; i++) {
+			if (m->pertag->prevzooms[i] == c) {
+				m->pertag->prevzooms[i] = NULL;
+			}
+		}
+	}
+	#else
+	if (c == prevzoom)
+		prevzoom = NULL;
+	#endif // PERTAG_PATCH
+	#endif // ZOOMSWAP_PATCH
+	m = c->mon;
 
 	#if SWALLOW_PATCH
 	if (c->swallowing) {
