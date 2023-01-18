@@ -76,6 +76,7 @@
 #define Button8                 8
 #define Button9                 9
 #define NUMTAGS                 9
+#define NUMVIEWHIST             NUMTAGS
 #define BARRULES                20
 #if TAB_PATCH
 #define MAXTABS                 50
@@ -487,7 +488,11 @@ struct Monitor {
 	#endif // SETBORDERPX_PATCH
 	unsigned int seltags;
 	unsigned int sellt;
+	#if VIEW_HISTORY_PATCH
+	unsigned int tagset[NUMVIEWHIST];
+	#else
 	unsigned int tagset[2];
+	#endif // VIEW_HISTORY_PATCH
 	int showbar;
 	#if TAB_PATCH
 	int showtab;
@@ -1595,7 +1600,12 @@ createmon(void)
 
 	m = ecalloc(1, sizeof(Monitor));
 	#if !EMPTYVIEW_PATCH
+	#if VIEW_HISTORY_PATCH
+	for (i = 0; i < LENGTH(m->tagset); i++)
+		m->tagset[i] = 1;
+	#else
 	m->tagset[0] = m->tagset[1] = 1;
+	#endif // VIEW_HISTORY_PATCH
 	#endif // EMPTYVIEW_PATCH
 	m->mfact = mfact;
 	m->nmaster = nmaster;
@@ -4905,7 +4915,20 @@ view(const Arg *arg)
 	#if BAR_TAGPREVIEW_PATCH
 	tagpreviewswitchtag();
 	#endif // BAR_TAGPREVIEW_PATCH
+	#if VIEW_HISTORY_PATCH
+	if (!arg->ui) {
+		selmon->seltags += 1;
+		if (selmon->seltags == LENGTH(selmon->tagset))
+			selmon->seltags = 0;
+	} else {
+		if (selmon->seltags == 0)
+			selmon->seltags = LENGTH(selmon->tagset) - 1;
+		else
+			selmon->seltags -= 1;
+	}
+	#else
 	selmon->seltags ^= 1; /* toggle sel tagset */
+	#endif // VIEW_HISTORY_PATCH
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
 	#if PERTAG_PATCH

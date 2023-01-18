@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2023-01-18 - Added the view history patch
+
 2022-10-08 - Added the alt-tab patch
 
 2022-08-12 - Added the nametag patch
@@ -801,6 +803,11 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [vanitygaps](https://github.com/bakkeby/patches/blob/master/dwm/dwm-vanitygaps-6.2.diff)
       - adds configurable gaps between windows differentiating between outer, inner, horizontal and
         vertical gaps
+
+   - viewhistory
+      - adds a tag change history that is longer than the default current and previous tag
+      - `MOD`+Tab (`view(0)`) can be pressed multiple times to go further back to earlier tag
+        selections
 
    - [viewontag](https://dwm.suckless.org/patches/viewontag/)
       - follow a window to the tag it is being moved to

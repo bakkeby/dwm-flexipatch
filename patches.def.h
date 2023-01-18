@@ -1311,6 +1311,16 @@
  */
 #define VANITYGAPS_MONOCLE_PATCH 0
 
+/* By default MOD+Tab will take the user back to the previous tag only. If the user keeps
+ * using MOD+Tab then the view will switch back and forth between the current and previous tag.
+ * This patch allows dwm to keep a longer history of previous tag changes such that MOD+Tab can
+ * be pressed multiple times to go further back to earlier tag selections.
+ *
+ * The number of history elements is defined by the NUMVIEWHIST macro in dwm.c and defaults to
+ * the number of tags in the system.
+ */
+#define VIEW_HISTORY_PATCH 0
+
 /* Follow a window to the tag it is being moved to.
  * https://dwm.suckless.org/patches/viewontag/
  */
