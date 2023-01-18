@@ -1594,9 +1594,7 @@ createmon(void)
 	#endif // MONITOR_RULES_PATCH
 
 	m = ecalloc(1, sizeof(Monitor));
-	#if EMPTYVIEW_PATCH
-	m->tagset[0] = m->tagset[1] = 0;
-	#else
+	#if !EMPTYVIEW_PATCH
 	m->tagset[0] = m->tagset[1] = 1;
 	#endif // EMPTYVIEW_PATCH
 	m->mfact = mfact;
