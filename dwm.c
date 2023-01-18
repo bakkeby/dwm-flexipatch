@@ -1687,7 +1687,7 @@ createmon(void)
 	#if PERTAG_PATCH
 	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
 		die("fatal: could not malloc() %u bytes\n", sizeof(Pertag));
-	m->pertag->curtag = m->pertag->prevtag = 1;
+	m->pertag->curtag = 1;
 	for (i = 0; i <= NUMTAGS; i++) {
 		#if FLEXTILE_DELUXE_LAYOUT
 		m->pertag->nstacks[i] = m->nstack;
@@ -4261,12 +4261,10 @@ toggleview(const Arg *arg)
 		if (newtagset == ~0)
 		#endif // SCRATCHPADS_PATCH
 		{
-			selmon->pertag->prevtag = selmon->pertag->curtag;
 			selmon->pertag->curtag = 0;
 		}
 		/* test if the user did not select the same tag */
 		if (!(newtagset & 1 << (selmon->pertag->curtag - 1))) {
-			selmon->pertag->prevtag = selmon->pertag->curtag;
 			for (i = 0; !(newtagset & 1 << i); i++) ;
 			selmon->pertag->curtag = i + 1;
 		}
@@ -4908,11 +4906,10 @@ view(const Arg *arg)
 	tagpreviewswitchtag();
 	#endif // BAR_TAGPREVIEW_PATCH
 	selmon->seltags ^= 1; /* toggle sel tagset */
-	#if PERTAG_PATCH
-	pertagview(arg);
-	#else
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
+	#if PERTAG_PATCH
+	pertagview(arg);
 	#endif // PERTAG_PATCH
 	#if TAGSYNC_PATCH
 	}

@@ -1,5 +1,5 @@
 struct Pertag {
-	unsigned int curtag, prevtag; /* current and previous tag */
+	unsigned int curtag; /* current tag index */
 	int nmasters[NUMTAGS + 1]; /* number of windows in master area */
 	#if FLEXTILE_DELUXE_LAYOUT
 	int nstacks[NUMTAGS + 1]; /* number of windows in primary stack area */
@@ -29,25 +29,18 @@ void
 pertagview(const Arg *arg)
 {
 	int i;
-	unsigned int tmptag;
-	if (arg->ui & TAGMASK) {
-		selmon->pertag->prevtag = selmon->pertag->curtag;
-		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
-		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-		if (arg->ui == ~SPTAGMASK)
-		#else
-		if (arg->ui == ~0)
-		#endif // SCRATCHPADS_PATCH
-			selmon->pertag->curtag = 0;
-		else {
-			for (i = 0; !(arg->ui & 1 << i); i++) ;
-			selmon->pertag->curtag = i + 1;
-		}
-	} else {
-		tmptag = selmon->pertag->prevtag;
-		selmon->pertag->prevtag = selmon->pertag->curtag;
-		selmon->pertag->curtag = tmptag;
+
+	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
+	if (arg->ui == ~SPTAGMASK)
+	#else
+	if (arg->ui == ~0)
+	#endif // SCRATCHPADS_PATCH
+		selmon->pertag->curtag = 0;
+	else {
+		for (i = 0; !(selmon->tagset[selmon->seltags] & 1 << i); i++);
+		selmon->pertag->curtag = i + 1;
 	}
+
 	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
 	#if FLEXTILE_DELUXE_LAYOUT
 	selmon->nstack = selmon->pertag->nstacks[selmon->pertag->curtag];
