@@ -213,6 +213,29 @@ static char scratchnormbgcolor[]         = "#664C67";
 static char scratchnormbordercolor[]     = "#77547E";
 static char scratchnormfloatcolor[]      = "#77547E";
 #endif // RENAMED_SCRATCHPADS_PATCH
+// COLORFULTAGS_PATCH
+#if BAR_COLORFULTAGS_PATCH
+static char tag1fgcolor[] = "#f92672";
+static char tag1bgcolor[] = "#272822";
+static char tag2fgcolor[] = "#a6e22e";
+static char tag2bgcolor[] = "#272822";
+static char tag3fgcolor[] = "#f4bf75";
+static char tag3bgcolor[] = "#272822";
+static char tag4fgcolor[] = "#66d9ef";
+static char tag4bgcolor[] = "#272822";
+static char tag5fgcolor[] = "#ae81ff";
+static char tag5bgcolor[] = "#272822";
+static char tag6fgcolor[] = "#f8f8f2";
+static char tag6bgcolor[] = "#272822";
+static char tag7fgcolor[] = "#75715e";
+static char tag7bgcolor[] = "#272822";
+static char tag8fgcolor[] = "#f4bf75";
+static char tag8bgcolor[] = "#272822";
+static char tag9fgcolor[] = "#a1efe4";
+static char tag9bgcolor[] = "#272822";
+static char layoutfgcolor[] = "#ae81ff";
+static char layoutbgcolor[] = "#272822";
+#endif
 
 #if BAR_FLEXWINTITLE_PATCH
 static char normTTBbgcolor[]             = "#330000";
@@ -268,6 +291,20 @@ static const unsigned int alphas[][3] = {
 	[SchemeScratchSel]  = { OPAQUE, baralpha, borderalpha },
 	[SchemeScratchNorm] = { OPAQUE, baralpha, borderalpha },
 	#endif // RENAMED_SCRATCHPADS_PATCH
+
+  #if BAR_COLORFULTAGS_PATCH
+	[SchemeTag1]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag2]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag3]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag4]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag5]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag6]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag7]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag8]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeTag9]         = { OPAQUE, baralpha, borderalpha},
+	[SchemeLayout]       = { OPAQUE, baralpha, borderalpha},
+	#endif // BAR_COLORFULTAGS_PATCH
+
 	#if BAR_FLEXWINTITLE_PATCH
 	[SchemeFlexActTTB]   = { OPAQUE, baralpha, borderalpha },
 	[SchemeFlexActLTR]   = { OPAQUE, baralpha, borderalpha },
@@ -337,6 +374,20 @@ static char *colors[][ColCount] = {
 	[SchemeScratchSel]  = { scratchselfgcolor, scratchselbgcolor, scratchselbordercolor, scratchselfloatcolor },
 	[SchemeScratchNorm] = { scratchnormfgcolor, scratchnormbgcolor, scratchnormbordercolor, scratchnormfloatcolor },
 	#endif // RENAMED_SCRATCHPADS_PATCH
+
+  #if BAR_COLORFULTAGS_PATCH
+	[SchemeTag1]         = { tag1fgcolor,      tag1bgcolor,      c000000 },
+	[SchemeTag2]         = { tag2fgcolor,      tag2bgcolor,      c000000 },
+	[SchemeTag3]         = { tag3fgcolor,      tag3bgcolor,	     c000000 },
+	[SchemeTag4]         = { tag4fgcolor,      tag4bgcolor,	     c000000 },
+	[SchemeTag5]         = { tag5fgcolor,      tag5bgcolor,      c000000 },
+	[SchemeTag6]         = { tag6fgcolor,      tag6bgcolor,      c000000 },
+	[SchemeTag7]         = { tag7fgcolor,      tag7bgcolor,      c000000 },
+	[SchemeTag8]         = { tag8fgcolor,      tag8bgcolor,      c000000 },
+	[SchemeTag9]         = { tag9fgcolor,      tag9bgcolor,      c000000 },
+	[SchemeLayout]       = { layoutfgcolor,    layoutbgcolor,    c000000 },
+	#endif // BAR_COLORFULTAGS_PATCH
+
 	#if BAR_FLEXWINTITLE_PATCH
 	[SchemeFlexActTTB]   = { titleselfgcolor,  actTTBbgcolor,    actTTBbgcolor,        c000000 },
 	[SchemeFlexActLTR]   = { titleselfgcolor,  actLTRbgcolor,    actLTRbgcolor,        c000000 },
