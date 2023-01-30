@@ -706,8 +706,10 @@ static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
-static void showhide(Client *c);
+#if COOL_AUTOSTART_PATCH
 static void sigchld(int unused);
+#endif // COOL_AUTOSTART_PATCH
+static void showhide(Client *c);
 static void spawn(const Arg *arg);
 #if RIODRAW_PATCH
 static pid_t spawncmd(const Arg *arg);
@@ -3648,9 +3650,21 @@ setup(void)
 	XkbStateRec xkbstate;
 	#endif // XKB_PATCH
 	Atom utf8string;
-
+	#if COOL_AUTOSTART_PATCH
 	/* clean up any zombies immediately */
 	sigchld(0);
+	#else
+	struct sigaction sa;
+
+	/* do not transform children into zombies when they terminate */
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_NOCLDSTOP | SA_NOCLDWAIT | SA_RESTART;
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGCHLD, &sa, NULL);
+
+	/* clean up any zombies (inherited from .xinitrc etc) immediately */
+	while (waitpid(-1, NULL, WNOHANG) > 0);
+	#endif // COOL_AUTOSTART_PATCH
 
 	#if RESTARTSIG_PATCH
 	signal(SIGHUP, sighup);
@@ -3931,15 +3945,15 @@ showhide(Client *c)
 	}
 }
 
+#if COOL_AUTOSTART_PATCH
 void
 sigchld(int unused)
 {
-	#if COOL_AUTOSTART_PATCH
 	pid_t pid;
-	#endif // COOL_AUTOSTART_PATCH
+
 	if (signal(SIGCHLD, sigchld) == SIG_ERR)
 		die("can't install SIGCHLD handler:");
-	#if COOL_AUTOSTART_PATCH
+
 	while (0 < (pid = waitpid(-1, NULL, WNOHANG))) {
 		pid_t *p, *lim;
 
@@ -3954,10 +3968,8 @@ sigchld(int unused)
 			}
 		}
 	}
-	#else
-	while (0 < waitpid(-1, NULL, WNOHANG));
-	#endif // COOL_AUTOSTART_PATCH
 }
+#endif // COOL_AUTOSTART_PATCH
 
 #if RIODRAW_PATCH
 void
