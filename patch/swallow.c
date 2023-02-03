@@ -37,6 +37,9 @@ swallow(Client *p, Client *c)
 	XChangeProperty(dpy, c->win, netatom[NetClientList], XA_WINDOW, 32, PropModeReplace,
 		(unsigned char *) &(p->win), 1);
 
+	#if BAR_WINICON_PATCH
+	updateicon(p);
+	#endif
 	updatetitle(p);
 	s = scanner ? c : p;
 	#if BAR_EWMHTAGS_PATCH
@@ -70,6 +73,9 @@ unswallow(Client *c)
 
 	/* unfullscreen the client */
 	setfullscreen(c, 0);
+	#if BAR_WINICON_PATCH
+	updateicon(c);
+	#endif
 	updatetitle(c);
 	arrange(c->mon);
 	XMapWindow(dpy, c->win);
