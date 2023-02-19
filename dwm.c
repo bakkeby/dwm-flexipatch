@@ -482,6 +482,9 @@ struct Monitor {
 	int gappiv;           /* vertical gap between windows */
 	int gappoh;           /* horizontal outer gaps */
 	int gappov;           /* vertical outer gaps */
+	#if PERMON_VANITYGAPS_PATCH
+	int enablegaps;       /* whether gaps are enabled  */
+	#endif // PERMON_VANITYGAPS_PATCH
 	#endif // VANITYGAPS_PATCH
 	#if SETBORDERPX_PATCH
 	unsigned int borderpx;
@@ -1765,6 +1768,10 @@ createmon(void)
 		#endif // PERTAG_VANITYGAPS_PATCH | VANITYGAPS_PATCH
 	}
 	#endif // PERTAG_PATCH
+
+	#if PERMON_VANITYGAPS_PATCH
+	m->enablegaps = 1;
+	#endif // PERMON_VANITYGAPS_PATCH
 
 	#if SEAMLESS_RESTART_PATCH
 	restoremonitorstate(m);
@@ -4575,6 +4582,8 @@ updatebarpos(Monitor *m)
 	#if BAR_PADDING_VANITYGAPS_PATCH && VANITYGAPS_PATCH
 	#if PERTAG_VANITYGAPS_PATCH && PERTAG_PATCH
 	if (!selmon || selmon->pertag->enablegaps[selmon->pertag->curtag])
+	#elif PERMON_VANITYGAPS_PATCH
+	if (!selmon || selmon->enablegaps)
 	#else
 	if (enablegaps)
 	#endif // PERTAG_VANITYGAPS_PATCH
