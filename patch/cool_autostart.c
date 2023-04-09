@@ -7,6 +7,7 @@ static void
 autostart_exec()
 {
 	const char *const *p;
+	struct sigaction sa;
 	size_t i = 0;
 
 	/* count entries */
@@ -17,6 +18,13 @@ autostart_exec()
 	for (p = autostart; *p; i++, p++) {
 		if ((autostart_pids[i] = fork()) == 0) {
 			setsid();
+
+			/* Restore SIGCHLD sighandler to default before spawning a program */
+			sigemptyset(&sa.sa_mask);
+			sa.sa_flags = 0;
+			sa.sa_handler = SIG_DFL;
+			sigaction(SIGCHLD, &sa, NULL);
+
 			execvp(*p, (char *const *)p);
 			fprintf(stderr, "dwm: execvp %s\n", *p);
 			perror(" failed");
