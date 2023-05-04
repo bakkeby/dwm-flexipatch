@@ -1067,6 +1067,12 @@ static const Key keys[] = {
 	#if COLUMNS_LAYOUT
 	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[3]} },
 	#endif // COLUMNS_LAYOUT
+	#if CENTEREDMASTER_LAYOUT
+	{ MODKEY,                       XK_u,          setlayout,              {.v = &layouts[3]} },
+        #endif // CENTEREDMASTER_LAYOUT
+	#if CENTEREDFLOATINGMASTER_LAYOUT
+	{ MODKEY,                       XK_o,          setlayout,              {.v = &layouts[4]} },
+        #endif // CENTEREDFLOATINGMASTER_LAYOUT
 	#if FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,       {.i = +1 } },   /* flextile, 1 = layout axis */
 	{ MODKEY|ControlMask,           XK_Tab,        rotatelayoutaxis,       {.i = +2 } },   /* flextile, 2 = master axis */
