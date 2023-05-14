@@ -21,7 +21,7 @@ struct Pertag {
 	#endif // ZOOMSWAP_PATCH
 	#if PERTAG_VANITYGAPS_PATCH && VANITYGAPS_PATCH
 	int enablegaps[NUMTAGS + 1];
-	unsigned int gaps[NUMTAGS + 1];
+	int gaps[NUMTAGS + 1];
 	#endif // PERTAG_VANITYGAPS_PATCH | VANITYGAPS_PATCH
 };
 
