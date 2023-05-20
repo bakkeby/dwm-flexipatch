@@ -965,12 +965,7 @@ applyrules(Client *c)
 					if (r->switchtag == 3 || r->switchtag == 4)
 						c->switchtag = c->mon->tagset[c->mon->seltags];
 					if (r->switchtag == 1 || r->switchtag == 3) {
-						#if PERTAG_PATCH
-						pertagview(&((Arg) { .ui = newtagset }));
-						arrange(c->mon);
-						#else
 						view(&((Arg) { .ui = newtagset }));
-						#endif // PERTAG_PATCH
 					} else {
 						#if TAGSYNC_PATCH
 						for (m = mons; m; m = m->next)
