@@ -616,7 +616,7 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [rotatestack](https://dwm.suckless.org/patches/rotatestack/)
       - let's you rotate through the stack using keyboard shortcuts
 
-   - [roundedcorners](https://github.com/mitchweaver/suckless/blob/master/dwm/patches/mitch-06-rounded_corners-f04cac6d6e39cd9e3fc4fae526e3d1e8df5e34b2.patch)
+   - [roundedcorners](https://github.com/mitchweaver/suckless/blob/master/dwm/inactive/mitch-06-rounded_corners-f04cac6d6e39cd9e3fc4fae526e3d1e8df5e34b2.patch)
       - adds rounded corners to client windows
 
    - [savefloats](https://dwm.suckless.org/patches/save_floats/)
