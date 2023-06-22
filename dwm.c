@@ -2400,6 +2400,18 @@ killclient(const Arg *arg)
 		force_warp = 1;
 		#endif // WARP_PATCH
 	}
+	
+	#if FOCUS_FOLLOW_MOUSE_ON_KILL_PATCH
+		Window child;
+		int rootx, rooty, winx, winy;
+		unsigned int mask;
+		XQueryPointer(dpy, root, &root, &child, &rootx, &rooty, &winx, &winy, &mask);
+
+		Client *c = wintoclient(child);
+		if (c)
+			focus(c);
+	#endif //FOCUS_FOLLOW_MOUSE_ON_KILL_PATCH
+	
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
 	selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
 	#endif // SWAPFOCUS_PATCH
