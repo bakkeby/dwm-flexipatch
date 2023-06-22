@@ -1250,6 +1250,19 @@
  */
 #define TAPRESIZE_PATCH 0
 
+/* This very simple patch adds a keybind (by default MODKEY + t) which changes
+ * the position of the bar during runtime.
+ *
+ * Because of the way the barpadding patch works, there needs to be a special
+ * patch for barpadding users as otherwise the bar will be positioned outside the screen.
+ *
+ * This patch should be applied on top of barpadding.
+ * The systray patch will also conflict, but only if barpadding is patched as well.
+ *
+ * https://dwm.suckless.org/patches/toggletopbar/
+ */
+#define TOGGLETOPBAR_PATCH 0
+
 /* This patch allows you to toggle fullscreen on and off using a single shortcut key.
  * https://github.com/bakkeby/patches/blob/master/dwm/dwm-togglefullscreen-6.2.diff
  */

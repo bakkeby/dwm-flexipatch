@@ -717,6 +717,9 @@ static pid_t spawncmd(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
+#if TOGGLETOPBAR_PATCH
+static void toggletopbar(const Arg *arg);
+#endif // TOGGLETOPBAR_PATCH
 static void togglefloating(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
@@ -4151,6 +4154,17 @@ togglebar(const Arg *arg)
 	#endif // BAR_SYSTRAY_PATCH
 	arrange(selmon);
 }
+
+#if TOGGLETOPBAR_PATCH
+void
+toggletopbar(const Arg *arg)
+{
+    selmon->bar->topbar = !selmon->bar->topbar;
+	updatebarpos(selmon);
+	XMoveResizeWindow(dpy, selmon->bar->win, selmon->wx, selmon->bar->by, selmon->ww, selmon->bar->bh);
+	arrange(selmon);
+}
+#endif // TOGGLETOPBAR_PATCH
 
 void
 togglefloating(const Arg *arg)
