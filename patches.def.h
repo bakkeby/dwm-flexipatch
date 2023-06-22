@@ -646,6 +646,11 @@
  */
 #define FOCUSDIR_PATCH 0
 
+/* Focuses client below the mouse whenever a window/client is terminated. 
+ * If there is no client below the mouse, it follows the default focusing behavior of dwm.
+ */
+#define FOCUS_FOLLOW_MOUSE_ON_KILL_PATCH
+
 /* A simple patch that just puts focus back to the master client.
  * https://dwm.suckless.org/patches/focusmaster/
  */
