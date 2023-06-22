@@ -1676,7 +1676,7 @@ createmon(void)
 		bar->showbar = 1;
 		bar->external = 0;
 		#if BAR_BORDER_PATCH
-		bar->borderpx = borderpx;
+		bar->borderpx = barborderpx;
 		#else
 		bar->borderpx = 0;
 		#endif // BAR_BORDER_PATCH
