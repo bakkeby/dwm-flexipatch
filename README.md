@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2023-06-25 - Added the toggletopbar patch
+
 2023-01-18 - Added the view history patch
 
 2022-10-08 - Added the alt-tab patch
@@ -772,15 +774,18 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [togglefullscreen](https://github.com/bakkeby/patches/wiki/togglefullscreen/)
       - allows you to toggle fullscreen on and off using a single shortcut key
 
+   - [togglelayout](https://github.com/bakkeby/patches/wiki/togglelayout)
+      - toggle layout using the same keyboard shortcuts to set the layout
+      - e.g. hitting `MOD+m` switches to monocle layout, hitting the same keybinding again brings
+        you back to the previous layout
+
    - [toggletag](https://github.com/bakkeby/patches/wiki/toggletag)
       - toggle tags using the same keyboard shortcuts to view tags
       - e.g. hitting `MOD+4` lets you view tag 4 and hitting the keybinding a second time brings
         you back to where you were before
 
-   - [togglelayout](https://github.com/bakkeby/patches/wiki/togglelayout)
-      - toggle layout using the same keyboard shortcuts to set the layout
-      - e.g. hitting `MOD+m` switches to monocle layout, hitting the same keybinding again brings
-        you back to the previous layout
+   - [toggletopbar](https://dwm.suckless.org/patches/toggletopbar/)
+      - allows for the bar position (top or bottom) to be toggled during runtime
 
    - [transfer](https://dwm.suckless.org/patches/transfer/)
       - lets you transfer the currently focused client between the master and stack area while

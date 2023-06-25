@@ -312,6 +312,9 @@
 #if TOGGLEFULLSCREEN_PATCH
 #include "togglefullscreen.h"
 #endif
+#if TOGGLETOPBAR_PATCH
+#include "toggletopbar.h"
+#endif
 #if TRANSFER_PATCH
 #include "transfer.h"
 #endif

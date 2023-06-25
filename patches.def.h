@@ -1255,6 +1255,11 @@
  */
 #define TOGGLEFULLSCREEN_PATCH 0
 
+/* This patch allows for the bar position (top or bottom) to be toggled during runtime.
+ * https://dwm.suckless.org/patches/toggletopbar/
+ */
+#define TOGGLETOPBAR_PATCH 0
+
 /* Minor patch that lets you use the same keyboard shortcut to toggle to the previous layout if the
  * designated layout is already active.
  *
