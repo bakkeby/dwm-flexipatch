@@ -19,7 +19,7 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
-2023-06-27 - Added the focusfollowmouse patch
+2023-06-27 - Added the focusfollowmouse and unmanaged patches
 
 2023-06-25 - Added the toggletopbar patch
 
@@ -807,6 +807,10 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [unfloatvisible](https://dwm.suckless.org/patches/unfloatvisible/)
       - resets isfloating on any visible windows that have it set and optionally also applies a
         layout
+
+   - [unmanaged](https://github.com/bakkeby/patches/wiki/unmanaged)
+      - adds a client rule that allows for windows to not be managed by the window manager
+      - this can be useful for external bars, widgets, launchers, docks, desktop icons and more
 
    - [~urgentborder~](https://dwm.suckless.org/patches/urgentborder/)
       - ~this patch makes "urgent" windows have different colors~

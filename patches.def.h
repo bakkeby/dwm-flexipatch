@@ -1309,6 +1309,13 @@
  */
 #define UNFLOATVISIBLE_PATCH 0
 
+/* This patch adds a client rule that allows for windows that do not specify the override-redirect
+ * to not be managed by the window manager. This can be useful for external bars, widgets,
+ * launchers, docks, desktop icons and more.
+ * https://github.com/bakkeby/patches/wiki/unmanaged
+ */
+#define UNMANAGED_PATCH 0
+
 /* This patch adds configurable gaps between windows differentiating between outer, inner,
  * horizontal and vertical gaps.
  * https://github.com/bakkeby/patches/blob/master/dwm/dwm-vanitygaps-6.2.diff

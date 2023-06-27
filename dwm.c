@@ -568,6 +568,9 @@ typedef struct {
 	#if RENAMED_SCRATCHPADS_PATCH
 	const char scratchkey;
 	#endif // RENAMED_SCRATCHPADS_PATCH
+	#if UNMANAGED_PATCH
+	int unmanaged;
+	#endif // UNMANAGED_PATCH
 	#if XKB_PATCH
 	int xkb_layout;
 	#endif // XKB_PATCH
@@ -775,6 +778,9 @@ static int xkbEventType = 0;
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar geometry */
+#if UNMANAGED_PATCH
+static int unmanaged = 0;    /* whether the window manager should manage the new window or not */
+#endif // UNMANAGED_PATCH
 static int lrpad;            /* sum of left and right padding for text */
 /* Some clients (e.g. alacritty) helpfully send configure requests with a new size or position
  * when they detect that they have been moved to another monitor. This can cause visual glitches
@@ -932,6 +938,9 @@ applyrules(Client *c)
 				c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
 			}
 			#endif // SCRATCHPADS_PATCH
+			#if UNMANAGED_PATCH
+			unmanaged = r->unmanaged;
+			#endif // UNMANAGED_PATCH
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
@@ -2501,6 +2510,25 @@ manage(Window w, XWindowAttributes *wa)
 			c->mon = term->mon;
 		#endif // SWALLOW_PATCH
 	}
+
+	#if UNMANAGED_PATCH
+	if (unmanaged) {
+		XMapWindow(dpy, c->win);
+		if (unmanaged == 1)
+			XRaiseWindow(dpy, c->win);
+		else if (unmanaged == 2)
+			XLowerWindow(dpy, c->win);
+
+		updatewmhints(c);
+		if (!c->neverfocus)
+			XSetInputFocus(dpy, c->win, RevertToPointerRoot, CurrentTime);
+		sendevent(c, wmatom[WMTakeFocus]);
+
+		free(c);
+		unmanaged = 0;
+		return;
+	}
+	#endif // UNMANAGED_PATCH
 
 	if (c->x + WIDTH(c) > c->mon->wx + c->mon->ww)
 		c->x = c->mon->wx + c->mon->ww - WIDTH(c);
