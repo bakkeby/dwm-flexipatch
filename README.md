@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2023-06-27 - Added the focusfollowmouse patch
+
 2023-06-25 - Added the toggletopbar patch
 
 2023-01-18 - Added the view history patch
@@ -432,6 +434,10 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [focusdir](https://github.com/bakkeby/patches/wiki/focusdir)
       - allows focusing on clients based on direction (up, down, left, right) instead of client
         order
+
+   - [focusfollowmouse](https://github.com/bakkeby/patches/wiki/focusfollowmouse)
+      - the window under the mouse cursor will receive focus when changing tags, closing windows or
+        moving client out of view (as opposed to the most recently focused client)
 
    - [focusmaster](https://dwm.suckless.org/patches/focusmaster/)
       - a simple patch that just puts focus back to the master client

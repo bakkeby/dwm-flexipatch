@@ -62,8 +62,8 @@ togglescratch(const Arg *arg)
 	if (found) {
 		if (newtagset) {
 			selmon->tagset[selmon->seltags] = newtagset;
-			focus(NULL);
 			arrange(selmon);
+			focus(NULL);
 		}
 		if (ISVISIBLE(found)) {
 			focus(found);

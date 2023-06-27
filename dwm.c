@@ -1489,8 +1489,8 @@ configurenotify(XEvent *e)
 				createpreview(m);
 				#endif // BAR_TAGPREVIEW_PATCH
 			}
-			focus(NULL);
 			arrange(NULL);
+			focus(NULL);
 		}
 	}
 }
@@ -2037,6 +2037,10 @@ expose(XEvent *e)
 void
 focus(Client *c)
 {
+	#if FOCUSFOLLOWMOUSE_PATCH
+	if (!c || !ISVISIBLE(c))
+		c = getpointerclient();
+	#endif // FOCUSFOLLOWMOUSE_PATCH
 	if (!c || !ISVISIBLE(c))
 		for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
 	if (selmon->sel && selmon->sel != c)
@@ -3347,11 +3351,12 @@ sendmon(Client *c, Monitor *m)
 	if (hadfocus) {
 		focus(c);
 		restack(m);
-	} else
+	} else {
 		focus(NULL);
+	}
 	#else
-	focus(NULL);
 	arrange(NULL);
+	focus(NULL);
 	#endif // EXRESIZE_PATCH / SENDMON_KEEPFOCUS_PATCH
 	#if SWITCHTAG_PATCH
 	if (c->switchtag)
@@ -4074,6 +4079,7 @@ tag(const Arg *arg)
 		if (selmon->sel->switchtag)
 			selmon->sel->switchtag = 0;
 		#endif // SWITCHTAG_PATCH
+		arrange(selmon);
 		focus(NULL);
 		#if SWAPFOCUS_PATCH && PERTAG_PATCH
 		selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
@@ -4081,7 +4087,6 @@ tag(const Arg *arg)
 			if (tagmask & 1)
 				selmon->pertag->prevclient[tagindex] = NULL;
 		#endif // SWAPFOCUS_PATCH
-		arrange(selmon);
 		#if VIEWONTAG_PATCH
 		if ((arg->ui & TAGMASK) != selmon->tagset[selmon->seltags])
 			view(arg);
@@ -4213,13 +4218,13 @@ toggletag(const Arg *arg)
 	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
 	if (newtags) {
 		selmon->sel->tags = newtags;
+		arrange(selmon);
 		focus(NULL);
 		#if SWAPFOCUS_PATCH && PERTAG_PATCH
 		for (tagmask = arg->ui & TAGMASK, tagindex = 1; tagmask!=0; tagmask >>= 1, tagindex++)
 			if (tagmask & 1)
 				selmon->pertag->prevclient[tagindex] = NULL;
 		#endif // SWAPFOCUS_PATCH
-		arrange(selmon);
 	}
 	#if BAR_EWMHTAGS_PATCH
 	updatecurrentdesktop();
@@ -4306,8 +4311,8 @@ toggleview(const Arg *arg)
 		#endif // PERTAGBAR_PATCH
 		#endif // PERTAG_PATCH
 		#if !TAGSYNC_PATCH
-		focus(NULL);
 		arrange(selmon);
+		focus(NULL);
 		#endif // TAGSYNC_PATCH
 	#if !EMPTYVIEW_PATCH
 	}
@@ -4318,8 +4323,8 @@ toggleview(const Arg *arg)
 	#if !EMPTYVIEW_PATCH
 	if (newtagset) {
 	#endif // EMPTYVIEW_PATCH
-		focus(NULL);
 		arrange(NULL);
+		focus(NULL);
 	#if !EMPTYVIEW_PATCH
 	}
 	#endif // EMPTYVIEW_PATCH
@@ -4456,9 +4461,9 @@ unmanage(Client *c, int destroyed)
 	if (s)
 		return;
 	#endif // SWALLOW_PATCH
+	arrange(m);
 	focus(NULL);
 	updateclientlist();
-	arrange(m);
 	#if SWITCHTAG_PATCH
 	if (switchtag && ((switchtag & TAGMASK) != selmon->tagset[selmon->seltags]))
 		view(&((Arg) { .ui = switchtag }));
@@ -4953,12 +4958,12 @@ view(const Arg *arg)
 	}
 	selmon = origselmon;
 	#endif // TAGSYNC_PATCH
-	focus(NULL);
 	#if TAGSYNC_PATCH
 	arrange(NULL);
 	#else
 	arrange(selmon);
 	#endif // TAGSYNC_PATCH
+	focus(NULL);
 	#if BAR_EWMHTAGS_PATCH
 	updatecurrentdesktop();
 	#endif // BAR_EWMHTAGS_PATCH

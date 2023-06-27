@@ -151,6 +151,9 @@
 #if FOCUSDIR_PATCH
 #include "focusdir.c"
 #endif
+#if FOCUSFOLLOWMOUSE_PATCH
+#include "focusfollowmouse.c"
+#endif
 #if FOCUSMASTER_PATCH
 #include "focusmaster.c"
 #endif

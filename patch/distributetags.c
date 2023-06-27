@@ -22,10 +22,10 @@ distributetags(const Arg *arg)
 	#if TAGSYNC_PATCH
 	}
 	selmon = origselmon;
-	focus(NULL);
 	arrange(NULL);
-	#else
 	focus(NULL);
+	#else
 	arrange(selmon);
+	focus(NULL);
 	#endif // TAGSYNC_PATCH
 }

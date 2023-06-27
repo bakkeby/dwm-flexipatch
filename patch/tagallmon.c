@@ -43,7 +43,7 @@ tagallmon(const Arg *arg)
 		}
 	}
 
-	focus(NULL);
 	arrange(NULL);
+	focus(NULL);
 }
 

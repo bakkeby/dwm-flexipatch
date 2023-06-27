@@ -91,8 +91,8 @@ unswallow(Client *c)
 	setfloatinghint(c);
 	#endif // BAR_EWMHTAGS_PATCH
 	setclientstate(c, NormalState);
-	focus(NULL);
 	arrange(c->mon);
+	focus(NULL);
 }
 
 pid_t

@@ -6,8 +6,8 @@ scratchpad_hide()
 	if (selmon->sel) {
 		selmon->sel->tags = SCRATCHPAD_MASK;
 		selmon->sel->isfloating = 1;
-		focus(NULL);
 		arrange(selmon);
+		focus(NULL);
 	}
 }
 
@@ -36,8 +36,8 @@ scratchpad_show()
 
 	if (scratchpad_last_showed->tags != SCRATCHPAD_MASK) {
 		scratchpad_last_showed->tags = SCRATCHPAD_MASK;
-		focus(NULL);
 		arrange(selmon);
+		focus(NULL);
 		return;
 	}
 
