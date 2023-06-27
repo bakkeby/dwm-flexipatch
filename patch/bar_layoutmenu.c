@@ -9,7 +9,7 @@ layoutmenu(const Arg *arg) {
 	s = fgets(c, sizeof(c), p);
 	pclose(p);
 
-	if (!s || *s == '\0' || c == '\0')
+	if (!s || *s == '\0' || c[0] == '\0')
 		 return;
 
 	i = atoi(c);
