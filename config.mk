@@ -52,8 +52,8 @@ XRENDER = -lXrender
 #IMLIB2LIBS = -lImlib2
 
 # Uncomment for the bidi patch
-#BDINC = -I/usr/include/fribidi
-#BDLIBS = -lfribidi
+#BDINC = `pkg-config --cflags fribidi`
+#BDLIBS = `pkg-config --libs fribidi`
 
 # includes and libs
 INCS = -I${X11INC} -I${FREETYPEINC} ${YAJLINC} ${PANGOINC} ${BDINC}
