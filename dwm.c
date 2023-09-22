@@ -2522,7 +2522,11 @@ manage(Window w, XWindowAttributes *wa)
 		updatewmhints(c);
 		if (!c->neverfocus)
 			XSetInputFocus(dpy, c->win, RevertToPointerRoot, CurrentTime);
+		#if BAR_SYSTRAY_PATCH
+		sendevent(c->win, wmatom[WMTakeFocus], NoEventMask, wmatom[WMTakeFocus], CurrentTime, 0, 0, 0);
+		#else
 		sendevent(c, wmatom[WMTakeFocus]);
+		#endif // BAR_SYSTRAY_PATCH
 
 		free(c);
 		unmanaged = 0;
