@@ -549,13 +549,13 @@ static const BarRule barrules[] = {
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_stbutton,           draw_stbutton,          click_stbutton,          NULL,                    "statusbutton" },
 	#endif // BAR_STATUSBUTTON_PATCH
 	#if BAR_POWERLINE_TAGS_PATCH
-	{  0,        0,     BAR_ALIGN_LEFT,   width_pwrl_tags,          draw_pwrl_tags,         click_pwrl_tags,         NULL,                    "powerline_tags" },
+	{  0,        0,     BAR_ALIGN_LEFT,   width_pwrl_tags,          draw_pwrl_tags,         click_pwrl_tags,         hover_pwrl_tags,         "powerline_tags" },
 	#endif // BAR_POWERLINE_TAGS_PATCH
 	#if BAR_TAGS_PATCH
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_tags,               draw_tags,              click_tags,              hover_tags,              "tags" },
 	#endif // BAR_TAGS_PATCH
 	#if BAR_TAGLABELS_PATCH
-	{ -1,        0,     BAR_ALIGN_LEFT,   width_taglabels,          draw_taglabels,         click_taglabels,         NULL,                    "taglabels" },
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_taglabels,          draw_taglabels,         click_taglabels,         hover_taglabels,         "taglabels" },
 	#endif // BAR_TAGLABELS_PATCH
 	#if BAR_TAGGRID_PATCH
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_taggrid,            draw_taggrid,           click_taggrid,           NULL,                    "taggrid" },

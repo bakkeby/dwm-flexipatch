@@ -89,3 +89,48 @@ click_taglabels(Bar *bar, Arg *arg, BarArg *a)
 	}
 	return ClkTagBar;
 }
+
+int
+hover_taglabels(Bar *bar, BarArg *a, XMotionEvent *ev)
+{
+	#if BAR_TAGPREVIEW_PATCH
+	int i = 0, x = lrpad / 2;
+	int px, py;
+	Monitor *m = bar->mon;
+	#if VANITYGAPS_PATCH
+	int ov = gappov;
+	int oh = gappoh;
+	#else
+	int ov = 0;
+	int oh = 0;
+	#endif // VANITYGAPS_PATCH
+
+	do {
+		if (!m->taglabel[i][0])
+			continue;
+		x += TEXTW(m->taglabel[i]);
+	} while (a->x >= x && ++i < NUMTAGS);
+
+	if (i < NUMTAGS) {
+		if ((i + 1) != selmon->previewshow && !(selmon->tagset[selmon->seltags] & 1 << i)) {
+			if (bar->by > m->my + m->mh / 2) // bottom bar
+				py = bar->by - m->mh / scalepreview - oh;
+			else // top bar
+				py = bar->by + bar->bh + oh;
+			px = bar->bx + ev->x - m->mw / scalepreview / 2;
+			if (px + m->mw / scalepreview > m->mx + m->mw)
+				px = m->wx + m->ww - m->mw / scalepreview - ov;
+			else if (px < bar->bx)
+				px = m->wx + ov;
+			selmon->previewshow = i + 1;
+			showtagpreview(i, px, py);
+		} else if (selmon->tagset[selmon->seltags] & 1 << i) {
+			hidetagpreview(selmon);
+		}
+	} else if (selmon->previewshow != 0) {
+		hidetagpreview(selmon);
+	}
+	#endif // BAR_TAGPREVIEW_PATCH
+
+	return 1;
+}
