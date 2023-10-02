@@ -66,12 +66,13 @@ togglescratch(const Arg *arg)
 			if (c->scratchkey != ((char**)arg->v)[0][0])
 				continue;
 
-			/* awesomebar / wintitleactions compatibility, unhide scratchpad if hidden
+			#if BAR_WINTITLEACTIONS_PATCH
+			/* unhide scratchpad if hidden */
 			if (HIDDEN(c)) {
 				XMapWindow(dpy, c->win);
 				setclientstate(c, NormalState);
 			}
-			*/
+			#endif // BAR_WINTITLEACTIONS_PATCH
 
 			/* Record the first found scratchpad client for focus purposes, but prioritise the
 			   scratchpad on the current monitor if one exists */
