@@ -2704,11 +2704,11 @@ motionnotify(XEvent *e)
 	#if !FOCUSONCLICK_PATCH
 	static Monitor *mon = NULL;
 	Monitor *m;
-	#endif // FOCUSONCLICK_PATCH
-	Bar *bar;
 	#if LOSEFULLSCREEN_PATCH
 	Client *sel;
 	#endif // LOSEFULLSCREEN_PATCH
+	#endif // FOCUSONCLICK_PATCH
+	Bar *bar;
 	XMotionEvent *ev = &e->xmotion;
 
 	if ((bar = wintobar(ev->window))) {
@@ -4373,13 +4373,24 @@ unfocus(Client *c, int setfocus, Client *nextfocus)
 	selmon->pertag->prevclient[selmon->pertag->curtag] = c;
 	#endif // SWAPFOCUS_PATCH
 	#if LOSEFULLSCREEN_PATCH
-	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon && nextfocus && !nextfocus->isfloating)
+	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon && nextfocus && !nextfocus->isfloating) {
+		#if RENAMED_SCRATCHPADS_PATCH && RENAMED_SCRATCHPADS_AUTO_HIDE_PATCH
+		#if FAKEFULLSCREEN_CLIENT_PATCH
+		if (c->scratchkey != 0 && c->fakefullscreen != 1)
+			togglescratch(&((Arg) {.v = (const char*[]){ &c->scratchkey, NULL } }));
+		#else
+		if (c->scratchkey != 0)
+			togglescratch(&((Arg) {.v = (const char*[]){ &c->scratchkey, NULL } }));
+		#endif // FAKEFULLSCREEN_CLIENT_PATCH
+		else
+		#endif // RENAMED_SCRATCHPADS_AUTO_HIDE_PATCH
 		#if FAKEFULLSCREEN_CLIENT_PATCH
 		if (c->fakefullscreen != 1)
 			setfullscreen(c, 0);
 		#else
 		setfullscreen(c, 0);
 		#endif // #if FAKEFULLSCREEN_CLIENT_PATCH
+	}
 	#endif // LOSEFULLSCREEN_PATCH
 	grabbuttons(c, 0);
 	#if !BAR_FLEXWINTITLE_PATCH
