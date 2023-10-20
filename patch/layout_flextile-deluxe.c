@@ -643,7 +643,7 @@ arrange_tatami(Monitor *m, int x, int y, int h, int w, int ih, int iv, int n, in
 			if (j < ai + cats) {
 				/* Arrange cats (all excess clients that can't be tiled as mats). Cats sleep on mats. */
 
-	 			switch (cats) {
+				switch (cats) {
 				case 1: // fill
 					break;
 				case 2: // up and down
