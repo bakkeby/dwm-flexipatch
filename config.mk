@@ -43,7 +43,7 @@ XRENDER = -lXrender
 #YAJLINC = -I/usr/include/yajl
 
 # Uncomment this for the rounded corners patch / ROUNDED_CORNERS_PATCH
-#XEXTLIB = -lXext
+XEXTLIB = -lXext
 
 # Uncomment this for the swallow patch / SWALLOW_PATCH
 #XCBLIBS = -lX11-xcb -lxcb -lxcb-res
