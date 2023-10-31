@@ -46,10 +46,10 @@ dist: clean
 	rm -rf dwm-${VERSION}
 
 install: all
-	mkdir -p ${DESTDIR}${PREFIX}/bin
-	install -C -m 0755 dwm ${DESTDIR}${PREFIX}/bin/
+	#mkdir -p ${DESTDIR}${PREFIX}/bin
+	install -C -D -m 0755 dwm ${DESTDIR}${PREFIX}/bin/dwm
 ifdef YAJLLIBS
-	install -C -m 0755 dwm-msg ${DESTDIR}${PREFIX}/bin/
+	install -C -D -m 0755 dwm-msg ${DESTDIR}${PREFIX}/bin/dwm-msg
 endif
 	#cp -f patch/dwmc ${DESTDIR}${PREFIX}/bin
 	#chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
@@ -59,8 +59,8 @@ endif
 	#mkdir -p ${DESTDIR}${MANPREFIX}/man1
 	install -C -m 0755 dwm.1 -D ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
-	mkdir -p ${DESTDIR}${PREFIX}/share/xsessions
-	install -C -m 0644 dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions
+	#mkdir -p ${DESTDIR}${PREFIX}/share/xsessions
+	install -C -D -m 0644 dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
