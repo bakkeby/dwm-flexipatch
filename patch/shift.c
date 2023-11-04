@@ -6,7 +6,7 @@ shift(const Arg *arg, int clients)
 	unsigned int tagmask = 0;
 
 	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	shifted.ui = selmon->tagset[selmon->seltags];
+	shifted.ui = selmon->tagset[selmon->seltags] & ~SPTAGMASK;
 	#else
 	shifted.ui = selmon->tagset[selmon->seltags];
 	#endif // SCRATCHPADS_PATCH
