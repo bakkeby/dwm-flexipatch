@@ -2085,6 +2085,9 @@ focus(Client *c)
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
 	selmon->sel = c;
+    #if PERTAG_PATCH && PERTAGSEL_PATCH
+	selmon->pertag->sel[selmon->pertag->curtag] = c;
+    #endif // PERTAG_PATCH && PERTAGSEL_PATCH
 	drawbars();
 
 	#if ON_EMPTY_KEYS_PATCH
@@ -4462,6 +4465,13 @@ unmanage(Client *c, int destroyed)
 	}
 	#endif // SWALLOW_PATCH
 
+    #if PERTAG_PATCH && PERTAGSEL_PATCH
+    int i;
+	for (i = 0; i <= NUMTAGS; i++)
+		if (c->mon->pertag->sel[i] == c)
+			c->mon->pertag->sel[i] = NULL;
+    #endif // PERTAG_PATCH && PERTAGSEL_PATCH
+
 	detach(c);
 	detachstack(c);
 	#if BAR_WINICON_PATCH
@@ -4999,12 +5009,16 @@ view(const Arg *arg)
 	}
 	selmon = origselmon;
 	#endif // TAGSYNC_PATCH
+    #if PERTAG_PATCH && PERTAGSEL_PATCH
+	focus(selmon->pertag->sel[selmon->pertag->curtag]);
+    #else
+	focus(NULL);
+    #endif // PERTAG_PATCH && PERTAGSEL_PATCH
 	#if TAGSYNC_PATCH
 	arrange(NULL);
 	#else
 	arrange(selmon);
 	#endif // TAGSYNC_PATCH
-	focus(NULL);
 	#if BAR_EWMHTAGS_PATCH
 	updatecurrentdesktop();
 	#endif // BAR_EWMHTAGS_PATCH

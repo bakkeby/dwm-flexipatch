@@ -890,6 +890,11 @@
  */
 #define PERTAGBAR_PATCH 0
 
+/* This controls whether or not to also store focused client on a per
+ * tag basis. If you use sticky patch, you might need this.
+ */
+#define PERTAGSEL_PATCH 0
+
 /* This patch lets you change the position of a client in the stack using the mouse.
  * https://github.com/bakkeby/patches/wiki/placemouse
  */

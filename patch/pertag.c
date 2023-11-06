@@ -23,6 +23,9 @@ struct Pertag {
 	int enablegaps[NUMTAGS + 1];
 	int gaps[NUMTAGS + 1];
 	#endif // PERTAG_VANITYGAPS_PATCH | VANITYGAPS_PATCH
+    #if PERTAGSEL_PATCH
+	Client *sel[NUMTAGS + 1]; /* selected client */
+    #endif // PERTAGSEL_PATCH
 };
 
 void
