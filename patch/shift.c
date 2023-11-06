@@ -16,8 +16,6 @@ shift(const Arg *arg, int clients)
 	for (selmon = mons; selmon; selmon = selmon->next)
 	#endif // TAGSYNC_PATCH
 	for (c = selmon->clients; c && clients; c = c->next) {
-		if (c == selmon->sel)
-			continue;
 		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
 		if (!(c->tags & SPTAGMASK))
 			tagmask |= c->tags;
