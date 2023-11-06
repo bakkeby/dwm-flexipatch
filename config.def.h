@@ -629,7 +629,11 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int nstack      = 0;    /* number of clients in primary stack area */
 #endif // FLEXTILE_DELUXE_LAYOUT
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+#if FAKEFULLSCREEN_PATCH
+static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
+#else
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+#endif // FAKEFULLSCREEN_PATCH
 #if DECORATION_HINTS_PATCH
 static const int decorhints  = 1;    /* 1 means respect decoration hints */
 #endif // DECORATION_HINTS_PATCH
