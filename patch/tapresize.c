@@ -10,8 +10,15 @@ resizemousescroll(const Arg *arg)
 
 	if (!(c = selmon->sel))
 		return;
+	#if !FAKEFULLSCREEN_PATCH
+	#if FAKEFULLSCREEN_CLIENT_PATCH
+	if (c->isfullscreen && c->fakefullscreen != 1) /* no support resizing fullscreen windows by mouse */
+		return;
+	#else
 	if (c->isfullscreen) /* no support resizing fullscreen windows by mouse */
 		return;
+	#endif // FAKEFULLSCREEN_CLIENT_PATCH
+	#endif // !FAKEFULLSCREEN_PATCH
 	restack(selmon);
 	if (XGrabPointer(dpy, root, False, MOUSEMASK, GrabModeAsync, GrabModeAsync,
 		None, cursor[CurResize]->cursor, CurrentTime) != GrabSuccess)
