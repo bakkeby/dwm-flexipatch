@@ -6,7 +6,11 @@ width_tags(Bar *bar, BarArg *a)
 	Client *c;
 	unsigned int occ = 0;
 	for (c = bar->mon->clients; c; c = c->next)
+		#if STICKY_PATCH
+		occ |= c->tags == 255 || c->issticky ? 0 : c->tags;
+		#else
 		occ |= c->tags == 255 ? 0 : c->tags;
+		#endif // STICKY_PATCH
 	#endif // BAR_HIDEVACANTTAGS_PATCH
 
 	for (w = 0, i = 0; i < NUMTAGS; i++) {
@@ -30,7 +34,9 @@ draw_tags(Bar *bar, BarArg *a)
 	Monitor *m = bar->mon;
 
 	for (c = m->clients; c; c = c->next) {
-		#if BAR_HIDEVACANTTAGS_PATCH
+		#if BAR_HIDEVACANTTAGS_PATCH && STICKY_PATCH
+		occ |= c->tags == 255 || c->issticky ? 0 : c->tags;
+		#elif BAR_HIDEVACANTTAGS_PATCH
 		occ |= c->tags == 255 ? 0 : c->tags;
 		#else
 		occ |= c->tags;
@@ -75,7 +81,11 @@ click_tags(Bar *bar, Arg *arg, BarArg *a)
 	Client *c;
 	unsigned int occ = 0;
 	for (c = bar->mon->clients; c; c = c->next)
+		#if STICKY_PATCH
+		occ |= c->tags == 255 || c->issticky ? 0 : c->tags;
+		#else
 		occ |= c->tags == 255 ? 0 : c->tags;
+		#endif // STICKY_PATCH
 	#endif // BAR_HIDEVACANTTAGS_PATCH
 
 	do {
@@ -110,7 +120,11 @@ hover_tags(Bar *bar, BarArg *a, XMotionEvent *ev)
 	Client *c;
 	unsigned int occ = 0;
 	for (c = bar->mon->clients; c; c = c->next)
+		#if STICKY_PATCH
+		occ |= c->tags == 255 || c->issticky ? 0 : c->tags;
+		#else
 		occ |= c->tags == 255 ? 0 : c->tags;
+		#endif // STICKY_PATCH
 	#endif // BAR_HIDEVACANTTAGS_PATCH
 
 	do {
