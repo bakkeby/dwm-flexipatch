@@ -92,7 +92,7 @@ unswallow(Client *c)
 	#endif // BAR_EWMHTAGS_PATCH
 	setclientstate(c, NormalState);
 	arrange(c->mon);
-	focus(NULL);
+	focus(c);
 }
 
 pid_t
