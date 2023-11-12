@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2023-11-12 - Added the focusmaster-return patch variant
+
 2023-06-27 - Added the focusfollowmouse and unmanaged patches
 
 2023-06-25 - Added the toggletopbar patch
@@ -441,6 +443,10 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [focusmaster](https://dwm.suckless.org/patches/focusmaster/)
       - a simple patch that just puts focus back to the master client
+
+   - [focusmaster-return](https://dwm.suckless.org/patches/focusmaster/)
+      - a simple patch that just puts focus back to the master client
+      - additionally allows focus to be switched back to the previous client
 
    - [focusonclick](https://dwm.suckless.org/patches/focusonclick/)
       - this patch makes you switch focus only by mouse click and not sloppy (focus follows mouse

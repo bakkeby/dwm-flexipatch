@@ -914,9 +914,9 @@ static const Key keys[] = {
 	#if TAB_PATCH
 	{ MODKEY|ControlMask,           XK_b,          tabmode,                {-1} },
 	#endif // TAB_PATCH
-	#if FOCUSMASTER_PATCH
+	#if FOCUSMASTER_PATCH || FOCUSMASTER_RETURN_PATCH
 	{ MODKEY|ControlMask,           XK_space,      focusmaster,            {0} },
-	#endif // FOCUSMASTER_PATCH
+	#endif // FOCUSMASTER_PATCH / FOCUSMASTER_RETURN_PATCH
 	#if STACKER_PATCH
 	STACKKEYS(MODKEY,                              focus)
 	STACKKEYS(MODKEY|ShiftMask,                    push)

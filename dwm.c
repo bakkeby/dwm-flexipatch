@@ -504,6 +504,9 @@ struct Monitor {
 	Client *clients;
 	Client *sel;
 	Client *stack;
+	#if FOCUSMASTER_RETURN_PATCH
+	Client *tagmarked[32];
+	#endif // FOCUSMASTER_RETURN_PATCH
 	Monitor *next;
 	Bar *bar;
 	const Layout *lt[2];
@@ -1818,6 +1821,11 @@ detach(Client *c)
 	#if SEAMLESS_RESTART_PATCH
 	c->idx = 0;
 	#endif // SEAMLESS_RESTART_PATCH
+	#if FOCUSMASTER_RETURN_PATCH
+	for (int i = 1; i < NUMTAGS; i++)
+		if (c == c->mon->tagmarked[i])
+			c->mon->tagmarked[i] = NULL;
+	#endif // FOCUSMASTER_RETURN_PATCH
 
 	for (tc = &c->mon->clients; *tc && *tc != c; tc = &(*tc)->next);
 	*tc = c->next;
@@ -2846,6 +2854,13 @@ nexttiled(Client *c)
 void
 pop(Client *c)
 {
+	#if FOCUSMASTER_RETURN_PATCH
+	int i;
+	for (i = 0; !(selmon->tagset[selmon->seltags] & 1 << i); i++);
+	i++;
+
+	c->mon->tagmarked[i] = nexttiled(c->mon->clients);
+	#endif // FOCUSMASTER_RETURN_PATCH
 	detach(c);
 	attach(c);
 	focus(c);
@@ -5086,6 +5101,9 @@ void
 zoom(const Arg *arg)
 {
 	Client *c = selmon->sel;
+	#if FOCUSMASTER_RETURN_PATCH && ZOOMSWAP_PATCH
+	int i;
+	#endif // FOCUSMASTER_RETURN_PATCH
 	if (arg && arg->v)
 		c = (Client*)arg->v;
 	if (!c)
@@ -5139,6 +5157,12 @@ zoom(const Arg *arg)
 	cold = nexttiled(c->mon->clients);
 	if (c != cold && !at)
 		at = findbefore(c);
+	#if FOCUSMASTER_RETURN_PATCH
+	for (i = 0; !(selmon->tagset[selmon->seltags] & 1 << i); i++);
+	i++;
+
+	c->mon->tagmarked[i] = cold;
+	#endif // FOCUSMASTER_RETURN_PATCH
 	detach(c);
 	attach(c);
 	/* swap windows instead of pushing the previous one down */

@@ -154,7 +154,7 @@
 #if FOCUSFOLLOWMOUSE_PATCH
 #include "focusfollowmouse.c"
 #endif
-#if FOCUSMASTER_PATCH
+#if FOCUSMASTER_PATCH || FOCUSMASTER_RETURN_PATCH
 #include "focusmaster.c"
 #endif
 #if FOCUSURGENT_PATCH

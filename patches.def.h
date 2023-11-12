@@ -657,6 +657,12 @@
  */
 #define FOCUSMASTER_PATCH 0
 
+/* A variant of the focusmaster patch that additionally allows the focus to be returned to the
+ * previously focused client
+ * https://dwm.suckless.org/patches/focusmaster/
+ */
+#define FOCUSMASTER_RETURN_PATCH 0
+
 /* Switch focus only by mouse click and not sloppy (focus follows mouse pointer).
  * https://dwm.suckless.org/patches/focusonclick/
  */
