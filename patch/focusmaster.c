@@ -38,4 +38,5 @@ focusmaster(const Arg *arg)
 	#else
 	focus(master);
 	#endif // FOCUSMASTER_RETURN_PATCH
+	restack(m);
 }
