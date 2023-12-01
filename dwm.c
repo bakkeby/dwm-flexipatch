@@ -3383,6 +3383,14 @@ sendmon(Client *c, Monitor *m)
 	#else
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
 	#endif // EMPTYVIEW_PATCH
+	#if SENDMON_CENTER_PATCH
+	c->x = m->mx + (m->mw - WIDTH(c)) / 2;
+	c->y = m->my + (m->mh - HEIGHT(c)) / 2;
+	#if SAVEFLOATS_PATCH
+	c->sfx = m->mx + (m->mw - c->sfw - 2 * c->bw) / 2;
+	c->sfy = m->my + (m->mh - c->sfh - 2 * c->bw) / 2;
+	#endif // SAVEFLOATS_PATCH
+	#endif // SENDMON_CENTER_PATCH
 	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH
 	attachx(c);
 	#else
