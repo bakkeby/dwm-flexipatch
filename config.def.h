@@ -622,6 +622,10 @@ static const BarRule barrules[] = {
 	#endif // BAR_FLEXWINTITLE_PATCH
 };
 
+#if BAR_STATUS2D_PATCH
+  #define BAR_STATUS2D_DEFAULT_COLOR "#000000"
+#endif
+
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */

@@ -77,6 +77,20 @@ click_status2d(Bar *bar, Arg *arg, BarArg *a)
 }
 #endif // BAR_STATUSCMD_PATCH
 
+static int is_valid_hex_color(const char* buf) {
+        if(buf == NULL) return 0;
+        int i = -1;
+        char c;
+        while((c = buf[++i])) {
+                if(i == 0 && c != '#') return 0;
+                int is_valid_code = (c >= '0' && c <= '9') ||
+                  (c >= 'A' && c <= 'F') ||
+                  (c >= 'a' && c <= 'f');
+                if(!is_valid_code && i > 0) return 0;
+        }
+        return i == 7;
+}
+
 int
 drawstatusbar(BarArg *a, char* stext)
 {
@@ -125,6 +139,7 @@ drawstatusbar(BarArg *a, char* stext)
 					}
 					memcpy(buf, (char*)text+i+1, 7);
 					buf[7] = '\0';
+                                        if(!is_valid_hex_color(buf)) memcpy(buf, BAR_STATUS2D_DEFAULT_COLOR, 8);
 					#if BAR_ALPHA_PATCH && BAR_STATUS2D_NO_ALPHA_PATCH
 					drw_clr_create(drw, &drw->scheme[ColFg], buf, 0xff);
 					#elif BAR_ALPHA_PATCH
@@ -142,6 +157,7 @@ drawstatusbar(BarArg *a, char* stext)
 					}
 					memcpy(buf, (char*)text+i+1, 7);
 					buf[7] = '\0';
+                                        if(!is_valid_hex_color(buf)) memcpy(buf, BAR_STATUS2D_DEFAULT_COLOR, 8);
 					#if BAR_ALPHA_PATCH && BAR_STATUS2D_NO_ALPHA_PATCH
 					drw_clr_create(drw, &drw->scheme[ColBg], buf, 0xff);
 					#elif BAR_ALPHA_PATCH
