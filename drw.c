@@ -337,14 +337,22 @@ drw_clr_create(
 	#if BAR_ALPHA_PATCH
 	if (!XftColorAllocName(drw->dpy, drw->visual, drw->cmap,
 	                       clrname, dest))
+		#if DO_NOT_DIE_ON_COLOR_ALLOCATION_FAILURE_PATCH
+		fprintf(stderr, "warning, cannot allocate color '%s'", clrname);
+		#else
 		die("error, cannot allocate color '%s'", clrname);
+		#endif // DO_NOT_DIE_ON_COLOR_ALLOCATION_FAILURE_PATCH
 
 	dest->pixel = (dest->pixel & 0x00ffffffU) | (alpha << 24);
 	#else
 	if (!XftColorAllocName(drw->dpy, DefaultVisual(drw->dpy, drw->screen),
 	                       DefaultColormap(drw->dpy, drw->screen),
 	                       clrname, dest))
+		#if DO_NOT_DIE_ON_COLOR_ALLOCATION_FAILURE_PATCH
+		fprintf(stderr, "warning, cannot allocate color '%s'", clrname);
+		#else
 		die("error, cannot allocate color '%s'", clrname);
+		#endif // DO_NOT_DIE_ON_COLOR_ALLOCATION_FAILURE_PATCH
 
 	#if NO_TRANSPARENT_BORDERS_PATCH
 	dest->pixel |= 0xff << 24;
