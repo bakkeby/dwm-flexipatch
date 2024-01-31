@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2024-01-31 - Added the placedir patch
+
 2023-12-22 - Added the do-not-die-on-color-allocation-failure patch
 
 2023-12-01 - Added the sendmoncenter patch
@@ -600,6 +602,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [pertag](https://dwm.suckless.org/patches/pertag/)
       - adds nmaster, mfact, layouts and more per tag rather than per monitor
+
+   - [placedir](https://github.com/bakkeby/patches/wiki/placedir)
+      - allows tiled windows to be moved in any direction (up, down, left, right)
 
    - [placemouse](https://github.com/bakkeby/patches/wiki/placemouse)
       - lets the user change the position of a client in the stack using the mouse.

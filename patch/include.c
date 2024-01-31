@@ -208,6 +208,9 @@
 #if PERTAG_PATCH
 #include "pertag.c"
 #endif
+#if PLACEDIR_PATCH
+#include "placedir.c"
+#endif
 #if PLACEMOUSE_PATCH
 #include "placemouse.c"
 #endif
