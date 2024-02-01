@@ -21,7 +21,7 @@ alttab()
 
 	/* redraw tab */
 	XRaiseWindow(dpy, alttabwin);
-	drawtab(ntabs, 0, m);
+	drawalttab(ntabs, 0, m);
 }
 
 void
@@ -66,7 +66,7 @@ alttabend()
 }
 
 void
-drawtab(int nwins, int first, Monitor *m)
+drawalttab(int nwins, int first, Monitor *m)
 {
 	Client *c;
 	int i, h;
@@ -178,7 +178,7 @@ alttabstart(const Arg *arg)
 		i++;
 	}
 
-	drawtab(ntabs, 1, m);
+	drawalttab(ntabs, 1, m);
 
 	struct timespec ts = { .tv_sec = 0, .tv_nsec = 1000000 };
 
