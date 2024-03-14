@@ -903,6 +903,11 @@
  */
 #define PERTAG_VANITYGAPS_PATCH 0
 
+/* This patch allows configuring vanity gaps on a per-monitor basis rather than
+ * all monitors (default).
+ */
+#define PERMON_VANITYGAPS_PATCH 0
+
 /* This controls whether or not to also store bar position on a per
  * tag basis, or leave it as one bar per monitor.
  */
