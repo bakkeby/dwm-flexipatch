@@ -1,5 +1,5 @@
 # dwm version
-VERSION = 6.4
+VERSION = 6.5
 
 # Customize below to fit your system
 
@@ -29,7 +29,7 @@ FREETYPEINC = /usr/include/freetype2
 #KVMLIB = -lkvm
 
 # Uncomment this for the alpha patch and the winicon patch (BAR_ALPHA_PATCH, BAR_WINICON_PATCH)
-XRENDER = -lXrender
+#XRENDER = -lXrender
 
 # Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
 #MPDCLIENT = -lmpdclient
