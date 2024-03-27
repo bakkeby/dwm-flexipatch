@@ -87,6 +87,11 @@ click_taglabels(Bar *bar, Arg *arg, BarArg *a)
 	if (i < NUMTAGS) {
 		arg->ui = 1 << i;
 	}
+	#if BAR_TAGPREVIEW_PATCH
+	if (selmon->previewshow != 0) {
+		hidetagpreview(selmon);
+	}
+	#endif // BAR_TAGPREVIEW_PATCH
 	return ClkTagBar;
 }
 
