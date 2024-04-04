@@ -1108,6 +1108,11 @@ arrange(Monitor *m)
 void
 arrangemon(Monitor *m)
 {
+	#if BAR_PADDING_SMART_PATCH
+	updatebarpos(selmon);
+	for (Bar *bar = selmon->bar; bar; bar = bar->next)
+		XMoveResizeWindow(dpy, bar->win, bar->bx, bar->by, bar->bw, bar->bh);
+	#endif // BAR_PADDING_SMART_PATCH
 	#if TAB_PATCH
 	updatebarpos(m);
 	XMoveResizeWindow(dpy, m->tabwin, m->wx, m->ty, m->ww, th);
@@ -4664,12 +4669,30 @@ updatebarpos(Monitor *m)
 	if (enablegaps)
 	#endif // PERTAG_VANITYGAPS_PATCH
 	{
+		#if BAR_PADDING_SMART_PATCH
+		unsigned int n; Client *c;
+		for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+		if (n > 1) {
+			y_pad = gappoh;
+			x_pad = gappov;
+		}
+		#else
 		y_pad = gappoh;
 		x_pad = gappov;
+		#endif // BAR_PADDING_SMART_PATCH
 	}
 	#elif BAR_PADDING_PATCH
+	#if BAR_PADDING_SMART_PATCH
+	unsigned int n; Client *c;
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	if (n > 1) {
+		y_pad = vertpad;
+		x_pad = sidepad;
+	}
+	#else
 	y_pad = vertpad;
 	x_pad = sidepad;
+	#endif // BAR_PADDING_SMART_PATCH
 	#endif // BAR_PADDING_PATCH | BAR_PADDING_VANITYGAPS_PATCH
 
 	#if INSETS_PATCH
