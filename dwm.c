@@ -688,6 +688,9 @@ static void maprequest(XEvent *e);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
+#if NOBORDER_PATCH
+static int noborder(Client *c);
+#endif // NOBORDER_PATCH
 #if !ZOOMSWAP_PATCH || TAGINTOSTACK_ALLMASTER_PATCH || TAGINTOSTACK_ONEMASTER_PATCH
 static void pop(Client *c);
 #endif // !ZOOMSWAP_PATCH / TAGINTOSTACK_ALLMASTER_PATCH / TAGINTOSTACK_ONEMASTER_PATCH
@@ -1466,6 +1469,15 @@ configure(Client *c)
 	ce.width = c->w;
 	ce.height = c->h;
 	ce.border_width = c->bw;
+
+	#if NOBORDER_PATCH
+	if (noborder(c)) {
+		ce.width += c->bw * 2;
+		ce.height += c->bw * 2;
+		ce.border_width = 0;
+	}
+	#endif // NOBORDER_PATCH
+
 	ce.above = None;
 	ce.override_redirect = False;
 	XSendEvent(dpy, c->win, False, StructureNotifyMask, (XEvent *)&ce);
@@ -2862,6 +2874,52 @@ nexttiled(Client *c)
 	return c;
 }
 
+#if NOBORDER_PATCH
+int
+noborder(Client *c)
+{
+	int monocle_layout = 0;
+
+	#if MONOCLE_LAYOUT
+	if (&monocle == c->mon->lt[c->mon->sellt]->arrange)
+		monocle_layout = 1;
+	#endif // MONOCLE_LAYOUT
+
+	#if DECK_LAYOUT
+	if (&deck == c->mon->lt[c->mon->sellt]->arrange && c->mon->nmaster == 0)
+		monocle_layout = 1;
+	#endif // DECK_LAYOUT
+
+	#if FLEXTILE_DELUXE_LAYOUT
+	if (&flextile == c->mon->lt[c->mon->sellt]->arrange && (
+		(c->mon->ltaxis[LAYOUT] == NO_SPLIT && c->mon->ltaxis[MASTER] == MONOCLE) ||
+		(c->mon->ltaxis[STACK] == MONOCLE && c->mon->nmaster == 0)
+	)) {
+		monocle_layout = 1;
+	}
+	#endif //FLEXTILE_DELUXE_LAYOUT
+
+	if (!monocle_layout && (nexttiled(c->mon->clients) != c || nexttiled(c->next)))
+		return 0;
+
+	if (c->isfloating)
+		return 0;
+
+	if (!c->mon->lt[c->mon->sellt]->arrange)
+		return 0;
+
+	#if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
+	if (c->fakefullscreen != 1 && c->isfullscreen)
+		return 0;
+	#elif !FAKEFULLSCREEN_PATCH
+	if (c->isfullscreen)
+		return 0;
+	#endif // FAKEFULLSCREEN_CLIENT_PATCH
+
+	return 1;
+}
+#endif // NOBORDER_PATCH
+
 #if !ZOOMSWAP_PATCH || TAGINTOSTACK_ALLMASTER_PATCH || TAGINTOSTACK_ONEMASTER_PATCH
 void
 pop(Client *c)
@@ -3016,31 +3074,9 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	drawroundedcorners(c);
 	#endif // ROUNDED_CORNERS_PATCH
 	#if NOBORDER_PATCH
-	if (((nexttiled(c->mon->clients) == c && !nexttiled(c->next))
-		#if MONOCLE_LAYOUT
-		|| &monocle == c->mon->lt[c->mon->sellt]->arrange
-		#endif // MONOCLE_LAYOUT
-		#if DECK_LAYOUT
-		|| (&deck == c->mon->lt[c->mon->sellt]->arrange &&
-			c->mon->nmaster == 0)
-		#endif // DECK_LAYOUT
-		#if FLEXTILE_DELUXE_LAYOUT
-		|| (&flextile == c->mon->lt[c->mon->sellt]->arrange && (
-			(c->mon->ltaxis[LAYOUT] == NO_SPLIT &&
-			 c->mon->ltaxis[MASTER] == MONOCLE) ||
-			(c->mon->ltaxis[STACK] == MONOCLE &&
-			 c->mon->nmaster == 0)))
-		#endif //FLEXTILE_DELUXE_LAYOUT
-		)
-		#if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
-		&& (c->fakefullscreen == 1 || !c->isfullscreen)
-		#else
-		&& !c->isfullscreen
-		#endif // FAKEFULLSCREEN_CLIENT_PATCH
-		&& !c->isfloating
-		&& c->mon->lt[c->mon->sellt]->arrange) {
-		c->w = wc.width += c->bw * 2;
-		c->h = wc.height += c->bw * 2;
+	if (noborder(c)) {
+		wc.width += c->bw * 2;
+		wc.height += c->bw * 2;
 		wc.border_width = 0;
 	}
 	#endif // NOBORDER_PATCH
