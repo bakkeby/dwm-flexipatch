@@ -39,12 +39,12 @@ persistclientstate(Client *c)
 int
 restoreclientstate(Client *c)
 {
-	return getclienttags(c)
-		| getclientfields(c)
-		#if SAVEFLOATS_PATCH
-		| restorewindowfloatposition(c, c->mon ? c->mon : selmon)
-		#endif // SAVEFLOATS_PATCH
-	;
+	int restored = getclientfields(c);
+	getclienttags(c);
+	#if SAVEFLOATS_PATCH
+	restorewindowfloatposition(c, c->mon ? c->mon : selmon);
+	#endif // SAVEFLOATS_PATCH
+	return restored;
 }
 
 void setmonitorfields(Monitor *m)
