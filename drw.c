@@ -713,7 +713,7 @@ drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w,
 	if (w)
 		*w = r.width / PANGO_SCALE;
 	if (h)
-		*h = font->h;
+		*h = r.height / PANGO_SCALE;
 }
 #else
 void
