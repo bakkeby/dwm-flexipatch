@@ -21,6 +21,9 @@
 #if COMBO_PATCH
 #include "combo.c"
 #endif
+#if BAR_LAUNCHER_PATCH
+#include "bar_launcher.c"
+#endif
 #if BAR_LTSYMBOL_PATCH
 #include "bar_ltsymbol.c"
 #endif

@@ -67,6 +67,11 @@
  */
 #define BAR_FLEXWINTITLE_PATCH 0
 
+/* Adds buttons to the bar that can be used to launch applications.
+ * https://dwm.suckless.org/patches/launcher/
+ */
+#define BAR_LAUNCHER_PATCH 0
+
 /* This patch adds a context menu for layout switching.
  *   - xmenu needs to be installed.
  *   - Edit layoutmenu.sh with the installed layouts and with correct indexes.

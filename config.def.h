@@ -1,5 +1,9 @@
 /* See LICENSE file for copyright and license details. */
 
+/* Helper macros for spawning commands */
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define CMD(...)   { .v = (const char*[]){ __VA_ARGS__, NULL } }
+
 /* appearance */
 #if ROUNDED_CORNERS_PATCH
 static const unsigned int borderpx       = 0;   /* border pixel of windows */
@@ -399,6 +403,13 @@ static char *statuscolors[][ColCount] = {
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 #endif
 
+#if BAR_LAUNCHER_PATCH
+static const Launcher launchers[] = {
+	/* icon to display      command        */
+	{ "surf",               CMD("surf", "duckduckgo.com") },
+};
+#endif // BAR_LAUNCHER_PATCH
+
 #if COOL_AUTOSTART_PATCH
 static const char *const autostart[] = {
 	"st", NULL,
@@ -548,6 +559,9 @@ static const BarRule barrules[] = {
 	#if BAR_STATUSBUTTON_PATCH
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_stbutton,           draw_stbutton,          click_stbutton,          NULL,                    "statusbutton" },
 	#endif // BAR_STATUSBUTTON_PATCH
+	#if BAR_LAUNCHER_PATCH
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_launcher,           draw_launcher,          click_launcher,          NULL,                    "launcher" },
+	#endif // BAR_LAUNCHER_PATCH
 	#if BAR_POWERLINE_TAGS_PATCH
 	{  0,        0,     BAR_ALIGN_LEFT,   width_pwrl_tags,          draw_pwrl_tags,         click_pwrl_tags,         hover_pwrl_tags,         "powerline_tags" },
 	#endif // BAR_POWERLINE_TAGS_PATCH
@@ -846,9 +860,6 @@ static const char *xkb_layouts[]  = {
 #if BAR_HOLDBAR_PATCH
 #define HOLDKEY 0 // replace 0 with the keysym to activate holdbar
 #endif // BAR_HOLDBAR_PATCH
-
-/* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
 #if !NODMENU_PATCH

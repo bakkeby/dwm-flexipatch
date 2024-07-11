@@ -15,4 +15,3 @@ click_ltsymbol(Bar *bar, Arg *arg, BarArg *a)
 {
 	return ClkLtSymbol;
 }
-

@@ -24,6 +24,9 @@
 #if BAR_HOLDBAR_PATCH
 #include "bar_holdbar.h"
 #endif
+#if BAR_LAUNCHER_PATCH
+#include "bar_launcher.h"
+#endif
 #if BAR_LTSYMBOL_PATCH
 #include "bar_ltsymbol.h"
 #endif

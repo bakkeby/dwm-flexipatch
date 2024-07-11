@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2024-07-11 - Added variant of the launcher patch
+
 2024-01-31 - Added the placedir patch
 
 2023-12-22 - Added the do-not-die-on-color-allocation-failure patch
@@ -521,6 +523,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [killunsel](https://dwm.suckless.org/patches/killunsel/)
       - kills all visible clients that are not selected (only the selected client will remain)
+
+   - [launcher](https://dwm.suckless.org/patches/launcher/)
+      - adds buttons to the bar that can be used to launch applications
 
    - [~leftlayout~](http://dwm.suckless.org/patches/leftlayout/)
       - ~moves the layout symbol in the status bar to the left hand side~
