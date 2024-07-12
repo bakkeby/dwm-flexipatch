@@ -96,6 +96,7 @@ drawstatusbar(BarArg *a, char* stext)
 	#else
 	memcpy(text, stext, len);
 	#endif // BAR_STATUSCMD_PATCH
+	text[len] = '\0';
 
 	x += lrpad / 2;
 	drw_setscheme(drw, scheme[LENGTH(colors)]);
