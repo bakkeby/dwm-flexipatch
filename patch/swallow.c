@@ -13,6 +13,9 @@ swallow(Client *p, Client *c)
 {
 	Client *s;
 	XWindowChanges wc;
+	#if NOBORDER_PATCH
+	int border_padding = 0;
+	#endif // NOBORDER_PATCH
 
 	if (c->noswallow > 0 || c->isterminal)
 		return 0;
@@ -46,9 +49,21 @@ swallow(Client *p, Client *c)
 	setfloatinghint(s);
 	#endif // BAR_EWMHTAGS_PATCH
 
+	#if NOBORDER_PATCH
+	wc.border_width = p->bw;
+	if (noborder(p)) {
+		wc.border_width = 0;
+		border_padding = p->bw * 2;
+	}
+
+	XConfigureWindow(dpy, p->win, CWBorderWidth, &wc);
+	XMoveResizeWindow(dpy, p->win, s->x, s->y, s->w + border_padding, s->h + border_padding);
+	#else
 	wc.border_width = p->bw;
 	XConfigureWindow(dpy, p->win, CWBorderWidth, &wc);
 	XMoveResizeWindow(dpy, p->win, s->x, s->y, s->w, s->h);
+	#endif // NOBORDER_PATCH
+
 	#if !BAR_FLEXWINTITLE_PATCH
 	XSetWindowBorder(dpy, p->win, scheme[SchemeNorm][ColBorder].pixel);
 	#endif // BAR_FLEXWINTITLE_PATCH
@@ -65,6 +80,9 @@ unswallow(Client *c)
 {
 	XWindowChanges wc;
 	c->win = c->swallowing->win;
+	#if NOBORDER_PATCH
+	int border_padding = 0;
+	#endif // NOBORDER_PATCH
 
 	free(c->swallowing);
 	c->swallowing = NULL;
@@ -80,9 +98,20 @@ unswallow(Client *c)
 	arrange(c->mon);
 	XMapWindow(dpy, c->win);
 
+	#if NOBORDER_PATCH
+	wc.border_width = c->bw;
+	if (noborder(c)) {
+		wc.border_width = 0;
+		border_padding = c->bw * 2;
+	}
+
+	XConfigureWindow(dpy, c->win, CWBorderWidth, &wc);
+	XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w + border_padding, c->h + border_padding);
+	#else
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, c->win, CWBorderWidth, &wc);
 	XMoveResizeWindow(dpy, c->win, c->x, c->y, c->w, c->h);
+	#endif // NOBORDER_PATCH
 	#if !BAR_FLEXWINTITLE_PATCH
 	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
 	#endif // BAR_FLEXWINTITLE_PATCH
