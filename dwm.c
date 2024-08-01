@@ -3313,7 +3313,6 @@ run(void)
 				event_fd, events[i].data.ptr, events[i].data.u32,
 				events[i].data.u64);
 				fprintf(stderr, " with events %d\n", events[i].events);
-				return;
 			}
 		}
 	}
