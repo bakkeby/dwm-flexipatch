@@ -7,6 +7,7 @@
 #define MIN(A, B)               ((A) < (B) ? (A) : (B))
 #endif
 #define BETWEEN(X, A, B)        ((A) <= (X) && (X) <= (B))
+#define LENGTH(X)               (sizeof (X) / sizeof (X)[0])
 
 #ifdef _DEBUG
 #define DEBUG(...) fprintf(stderr, __VA_ARGS__)
