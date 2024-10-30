@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2024-10-30 - Added the border rule patch
+
 2024-07-11 - Added variant of the launcher patch
 
 2024-01-31 - Added the placedir patch
@@ -313,6 +315,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [bidi](https://dwm.suckless.org/patches/bidi/)
       - adds proper support for Right-To-Left (RTL) languages (such as Farsi, Arabic or Hebrew)
+
+   - [borderrule](https://dwm.suckless.org/patches/borderrule/)
+      - adds a client rule option to set border width on a per client basis
 
    - [center](https://dwm.suckless.org/patches/center/)
       - adds an iscentered rule to automatically center clients on the current monitor

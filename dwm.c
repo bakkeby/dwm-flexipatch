@@ -579,10 +579,17 @@ typedef struct {
 	#if XKB_PATCH
 	int xkb_layout;
 	#endif // XKB_PATCH
+	#if BORDER_RULE_PATCH
+	int bw;
+	#endif // BORDER_RULE_PATCH
 } Rule;
 
-#if XKB_PATCH
+#if BORDER_RULE_PATCH && XKB_PATCH
+#define RULE(...) { .monitor = -1, .xkb_layout = -1, .bw = -1, __VA_ARGS__ },
+#elif XKB_PATCH
 #define RULE(...) { .monitor = -1, .xkb_layout = -1, __VA_ARGS__ },
+#elif BORDER_RULE_PATCH
+#define RULE(...) { .monitor = -1, .bw = -1, __VA_ARGS__ },
 #else
 #define RULE(...) { .monitor = -1, __VA_ARGS__ },
 #endif // XKB_PATCH
@@ -919,6 +926,10 @@ applyrules(Client *c)
 			#if CENTER_PATCH
 			c->iscentered = r->iscentered;
 			#endif // CENTER_PATCH
+			#if BORDER_RULE_PATCH
+			if (r->bw != -1)
+				c->bw = r->bw;
+			#endif // BORDER_RULE_PATCH
 			#if ISPERMANENT_PATCH
 			c->ispermanent = r->ispermanent;
 			#endif // ISPERMANENT_PATCH

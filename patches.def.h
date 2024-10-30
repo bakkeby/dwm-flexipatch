@@ -516,6 +516,16 @@
  */
 #define BIDI_PATCH 0
 
+/* This patch adds a client rule option to allow the border width to be specified on a per
+ * client basis.
+ *
+ * Example rule:
+ *    RULE(.class = "Gimp", .bw = 0)
+ *
+ * https://dwm.suckless.org/patches/borderrule/
+ */
+#define BORDER_RULE_PATCH 0
+
 /* This patch adds an iscentered rule to automatically center clients on the current monitor.
  * This patch takes precedence over centeredwindowname, alwayscenter and fancybar patches.
  * https://dwm.suckless.org/patches/center/
