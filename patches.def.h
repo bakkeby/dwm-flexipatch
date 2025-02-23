@@ -1427,6 +1427,13 @@
  */
 #define XKB_PATCH 0
 
+/* This patch allows to handle settings from Xresources.
+ * It differs from xrdb patch in that it can handle any kind of setting as opposed to only color settings.
+ * Xresources takes precedence over xrdb.
+ * https://dwm.suckless.org/patches/xresources/
+ */
+#define XRESOURCES_PATCH 0
+
 /* Allows dwm to read colors from xrdb (.Xresources) during runtime. Compatible with
  * the float border color, awesomebar, urgentborder and titlecolor patches.
  * https://dwm.suckless.org/patches/xrdb/

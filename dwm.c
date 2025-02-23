@@ -5354,7 +5354,10 @@ main(int argc, char *argv[])
 		die("dwm: cannot get xcb connection\n");
 	#endif // SWALLOW_PATCH
 	checkotherwm();
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+	#if XRESOURCES_PATCH && !BAR_VTCOLORS_PATCH
+	XrmInitialize();
+	load_xresources();
+	#elif XRDB_PATCH && !BAR_VTCOLORS_PATCH
 	XrmInitialize();
 	loadxrdb();
 	#endif // XRDB_PATCH && !BAR_VTCOLORS_PATCH

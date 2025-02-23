@@ -6,10 +6,10 @@
 
 /* appearance */
 #if ROUNDED_CORNERS_PATCH
-static const unsigned int borderpx       = 0;   /* border pixel of windows */
+static unsigned int borderpx             = 0;   /* border pixel of windows */
 static const int corner_radius           = 10;
 #else
-static const unsigned int borderpx       = 1;   /* border pixel of windows */
+static unsigned int borderpx             = 1;   /* border pixel of windows */
 #endif // ROUNDED_CORNERS_PATCH
 #if BAR_BORDER_PATCH
 /* This allows the bar border size to be explicitly set separately from borderpx.
@@ -17,7 +17,7 @@ static const unsigned int borderpx       = 1;   /* border pixel of windows */
  * automatically update with setborderpx. */
 static const unsigned int barborderpx    = 0;  /* border pixel of bar */
 #endif // BAR_BORDER_PATCH
-static const unsigned int snap           = 32;  /* snap pixel */
+static unsigned int snap                 = 32;  /* snap pixel */
 #if SWALLOW_PATCH
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 #endif // SWALLOW_PATCH
@@ -46,18 +46,18 @@ static const char *altbarclass           = "Polybar"; /* Alternate bar class nam
 static const char *altbarcmd             = "$HOME/bar.sh"; /* Alternate bar launch command */
 #endif // BAR_ANYBAR_PATCH
 #if BAR_HOLDBAR_PATCH
-static const int showbar                 = 0;   /* 0 means no bar */
+static int showbar                       = 0;   /* 0 means no bar */
 #else
-static const int showbar                 = 1;   /* 0 means no bar */
+static int showbar                       = 1;   /* 0 means no bar */
 #endif // BAR_HOLDBAR_PATCH
-static const int topbar                  = 1;   /* 0 means bottom bar */
+static int topbar                        = 1;   /* 0 means bottom bar */
 #if TAB_PATCH
 /*  Display modes of the tab bar: never shown, always shown, shown only in  */
 /*  monocle mode in the presence of several windows.                        */
 /*  Modes after showtab_nmodes are disabled.                                */
 enum showtab_modes { showtab_never, showtab_auto, showtab_nmodes, showtab_always};
-static const int showtab                 = showtab_auto;        /* Default tab bar show mode */
-static const int toptab                  = False;               /* False means bottom tab bar */
+static int showtab                       = showtab_auto;        /* Default tab bar show mode */
+static int toptab                        = False;               /* False means bottom tab bar */
 #endif // TAB_PATCH
 #if BAR_HEIGHT_PATCH
 static const int bar_height              = 0;   /* 0 means derive from font, >= 1 explicit height */
@@ -906,6 +906,48 @@ static const Key on_empty_keys[] = {
 };
 #endif // ON_EMPTY_KEYS_PATCH
 
+#if XRESOURCES_PATCH
+/*
+* Xresources preferences to load at startup
+*/
+ResourcePref resources[] = {
+	{ "borderpx",             INTEGER, &borderpx },
+	{ "snap",                 INTEGER, &snap },
+	{ "showbar",              INTEGER, &showbar },
+	{ "topbar",               INTEGER, &topbar },
+	/* SchemeNorm, SchemeSel */
+	{ "normfgcolor",          STRING,  &normfgcolor },
+	{ "normbgcolor",          STRING,  &normbgcolor },
+	{ "normbordercolor",      STRING,  &normbordercolor },
+	{ "selfgcolor",           STRING,  &selfgcolor },
+	{ "selbgcolor",           STRING,  &selbgcolor },
+	{ "selbordercolor",       STRING,  &selbordercolor },
+	/* SchemeTitleNorm, SchemeTitleSel */
+	{ "titlenormfgcolor",     STRING,  &titlenormfgcolor },
+	{ "titlenormbgcolor",     STRING,  &titlenormbgcolor },
+	{ "titlenormbordercolor", STRING,  &titlenormbordercolor },
+	{ "titleselfgcolor",      STRING,  &titleselfgcolor },
+	{ "titleselbgcolor",      STRING,  &titleselbgcolor },
+	{ "titleselbordercolor",  STRING,  &titleselbordercolor },
+	/* SchemeTagsNorm, SchemeTagsSel */
+	{ "tagsnormfgcolor",      STRING,  &tagsnormfgcolor },
+	{ "tagsnormbgcolor",      STRING,  &tagsnormbgcolor },
+	{ "tagsnormbordercolor",  STRING,  &tagsnormbordercolor },
+	{ "tagsselfgcolor",       STRING,  &tagsselfgcolor },
+	{ "tagsselbgcolor",       STRING,  &tagsselbgcolor },
+	{ "tagsselbordercolor",   STRING,  &tagsselbordercolor },
+	/* SchemeHidNorm, SchemeHidSel */
+	{ "hidnormfgcolor",       STRING,  &hidnormfgcolor },
+	{ "hidnormbgcolor",       STRING,  &hidnormbgcolor },
+	{ "hidselfgcolor",        STRING,  &hidselfgcolor },
+	{ "hidselbgcolor",        STRING,  &hidselbgcolor },
+	/* SchemeUrg */
+	{ "urgfgcolor",           STRING,  &urgfgcolor },
+	{ "urgbgcolor",           STRING,  &urgbgcolor },
+	{ "urgbordercolor",       STRING,  &urgbordercolor },
+};
+#endif // XRESOURCES_PATCH
+
 static const Key keys[] = {
 	/* modifier                     key            function                argument */
 	#if KEYMODES_PATCH
@@ -1084,7 +1126,7 @@ static const Key keys[] = {
 	#if WINVIEW_PATCH
 	{ MODKEY,                       XK_o,          winview,                {0} },
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH && !XRESOURCES_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
@@ -1586,7 +1628,7 @@ static const Signal signals[] = {
 	#if WINVIEW_PATCH
 	{ "winview",                 winview },
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH && !XRESOURCES_PATCH
 	{ "xrdb",                    xrdb },
 	#endif // XRDB_PATCH
 	#if TAGOTHERMONITOR_PATCH
@@ -1786,7 +1828,7 @@ static IPCCommand ipccommands[] = {
 	#if WINVIEW_PATCH
 	IPCCOMMAND( winview, 1, {ARG_TYPE_NONE} ),
 	#endif // WINVIEW_PATCH
-	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+	#if XRDB_PATCH && !BAR_VTCOLORS_PATCH && !XRESOURCES_PATCH
 	IPCCOMMAND( xrdb, 1, {ARG_TYPE_NONE} ),
 	#endif // XRDB_PATCH
 };

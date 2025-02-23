@@ -348,7 +348,9 @@
 #if XKB_PATCH
 #include "xkb.h"
 #endif
-#if XRDB_PATCH && !BAR_VTCOLORS_PATCH
+#if XRESOURCES_PATCH && !BAR_VTCOLORS_PATCH
+#include "xresources.h"
+#elif XRDB_PATCH && !BAR_VTCOLORS_PATCH
 #include "xrdb.h"
 #endif
 /* Layouts */
