@@ -6,10 +6,10 @@
 
 /* appearance */
 #if ROUNDED_CORNERS_PATCH
-static unsigned int borderpx             = 0;   /* border pixel of windows */
+static const unsigned int borderpx       = 1;   /* border pixel of windows */
 static const int corner_radius           = 10;
 #else
-static unsigned int borderpx             = 1;   /* border pixel of windows */
+static const unsigned int borderpx       = 0;   /* border pixel of windows */
 #endif // ROUNDED_CORNERS_PATCH
 #if BAR_BORDER_PATCH
 /* This allows the bar border size to be explicitly set separately from borderpx.
@@ -17,7 +17,7 @@ static unsigned int borderpx             = 1;   /* border pixel of windows */
  * automatically update with setborderpx. */
 static const unsigned int barborderpx    = 0;  /* border pixel of bar */
 #endif // BAR_BORDER_PATCH
-static unsigned int snap                 = 32;  /* snap pixel */
+static unsigned const int snap           = 32;  /* snap pixel */
 #if SWALLOW_PATCH
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 #endif // SWALLOW_PATCH
@@ -46,9 +46,9 @@ static const char *altbarclass           = "Polybar"; /* Alternate bar class nam
 static const char *altbarcmd             = "$HOME/bar.sh"; /* Alternate bar launch command */
 #endif // BAR_ANYBAR_PATCH
 #if BAR_HOLDBAR_PATCH
-static int showbar                       = 0;   /* 0 means no bar */
+static const int showbar                 = 0;   /* 0 means no bar */
 #else
-static int showbar                       = 1;   /* 0 means no bar */
+static const int showbar                 = 1;   /* 0 means no bar */
 #endif // BAR_HOLDBAR_PATCH
 static int topbar                        = 1;   /* 0 means bottom bar */
 #if TAB_PATCH
@@ -56,8 +56,8 @@ static int topbar                        = 1;   /* 0 means bottom bar */
 /*  monocle mode in the presence of several windows.                        */
 /*  Modes after showtab_nmodes are disabled.                                */
 enum showtab_modes { showtab_never, showtab_auto, showtab_nmodes, showtab_always};
-static int showtab                       = showtab_auto;        /* Default tab bar show mode */
-static int toptab                        = False;               /* False means bottom tab bar */
+static const int showtab                 = showtab_auto;        /* Default tab bar show mode */
+static const int toptab                  = False;               /* False means bottom tab bar */
 #endif // TAB_PATCH
 #if BAR_HEIGHT_PATCH
 static const int bar_height              = 0;   /* 0 means derive from font, >= 1 explicit height */
@@ -911,40 +911,83 @@ static const Key on_empty_keys[] = {
 * Xresources preferences to load at startup
 */
 ResourcePref resources[] = {
-	{ "borderpx",             INTEGER, &borderpx },
-	{ "snap",                 INTEGER, &snap },
-	{ "showbar",              INTEGER, &showbar },
-	{ "topbar",               INTEGER, &topbar },
-	/* SchemeNorm, SchemeSel */
-	{ "normfgcolor",          STRING,  &normfgcolor },
-	{ "normbgcolor",          STRING,  &normbgcolor },
-	{ "normbordercolor",      STRING,  &normbordercolor },
-	{ "selfgcolor",           STRING,  &selfgcolor },
-	{ "selbgcolor",           STRING,  &selbgcolor },
-	{ "selbordercolor",       STRING,  &selbordercolor },
-	/* SchemeTitleNorm, SchemeTitleSel */
-	{ "titlenormfgcolor",     STRING,  &titlenormfgcolor },
-	{ "titlenormbgcolor",     STRING,  &titlenormbgcolor },
-	{ "titlenormbordercolor", STRING,  &titlenormbordercolor },
-	{ "titleselfgcolor",      STRING,  &titleselfgcolor },
-	{ "titleselbgcolor",      STRING,  &titleselbgcolor },
-	{ "titleselbordercolor",  STRING,  &titleselbordercolor },
-	/* SchemeTagsNorm, SchemeTagsSel */
-	{ "tagsnormfgcolor",      STRING,  &tagsnormfgcolor },
-	{ "tagsnormbgcolor",      STRING,  &tagsnormbgcolor },
-	{ "tagsnormbordercolor",  STRING,  &tagsnormbordercolor },
-	{ "tagsselfgcolor",       STRING,  &tagsselfgcolor },
-	{ "tagsselbgcolor",       STRING,  &tagsselbgcolor },
-	{ "tagsselbordercolor",   STRING,  &tagsselbordercolor },
-	/* SchemeHidNorm, SchemeHidSel */
-	{ "hidnormfgcolor",       STRING,  &hidnormfgcolor },
-	{ "hidnormbgcolor",       STRING,  &hidnormbgcolor },
-	{ "hidselfgcolor",        STRING,  &hidselfgcolor },
-	{ "hidselbgcolor",        STRING,  &hidselbgcolor },
-	/* SchemeUrg */
-	{ "urgfgcolor",           STRING,  &urgfgcolor },
-	{ "urgbgcolor",           STRING,  &urgbgcolor },
-	{ "urgbordercolor",       STRING,  &urgbordercolor },
+	{ "dwm.normfgcolor",          STRING,  &normfgcolor },
+	{ "dwm.normbgcolor",          STRING,  &normbgcolor },
+	{ "dwm.normbordercolor",      STRING,  &normbordercolor },
+	{ "dwm.normfloatcolor",       STRING,  &normfloatcolor },
+	{ "dwm.selfgcolor",           STRING,  &selfgcolor },
+	{ "dwm.selbgcolor",           STRING,  &selbgcolor },
+	{ "dwm.selbordercolor",       STRING,  &selbordercolor },
+	{ "dwm.selfloatcolor",        STRING,  &selfloatcolor },
+	{ "dwm.titlenormfgcolor",     STRING,  &titlenormfgcolor },
+	{ "dwm.titlenormbgcolor",     STRING,  &titlenormbgcolor },
+	{ "dwm.titlenormbordercolor", STRING,  &titlenormbordercolor },
+	{ "dwm.titlenormfloatcolor",  STRING,  &titlenormfloatcolor },
+	{ "dwm.titleselfgcolor",      STRING,  &titleselfgcolor },
+	{ "dwm.titleselbgcolor",      STRING,  &titleselbgcolor },
+	{ "dwm.titleselbordercolor",  STRING,  &titleselbordercolor },
+	{ "dwm.titleselfloatcolor",   STRING,  &titleselfloatcolor },
+	{ "dwm.tagsnormfgcolor",      STRING,  &tagsnormfgcolor },
+	{ "dwm.tagsnormbgcolor",      STRING,  &tagsnormbgcolor },
+	{ "dwm.tagsnormbordercolor",  STRING,  &tagsnormbordercolor },
+	{ "dwm.tagsnormfloatcolor",   STRING,  &tagsnormfloatcolor },
+	{ "dwm.tagsselfgcolor",       STRING,  &tagsselfgcolor },
+	{ "dwm.tagsselbgcolor",       STRING,  &tagsselbgcolor },
+	{ "dwm.tagsselbordercolor",   STRING,  &tagsselbordercolor },
+	{ "dwm.tagsselfloatcolor",    STRING,  &tagsselfloatcolor },
+	{ "dwm.hidnormfgcolor",       STRING,  &hidnormfgcolor },
+	{ "dwm.hidnormbgcolor",       STRING,  &hidnormbgcolor },
+	{ "dwm.hidselfgcolor",        STRING,  &hidselfgcolor },
+	{ "dwm.hidselbgcolor",        STRING,  &hidselbgcolor },
+	{ "dwm.urgfgcolor",           STRING,  &urgfgcolor },
+	{ "dwm.urgbgcolor",           STRING,  &urgbgcolor },
+	{ "dwm.urgbordercolor",       STRING,  &urgbordercolor },
+	{ "dwm.urgfloatcolor",        STRING,  &urgfloatcolor },
+	#if RENAMED_SCRATCHPADS_PATCH
+	{ "dwm.scratchselfgcolor",      STRING, &scratchselfgcolor },
+	{ "dwm.scratchselbgcolor",      STRING, &scratchselbgcolor },
+	{ "dwm.scratchselbordercolor",  STRING, &scratchselbordercolor },
+	{ "dwm.scratchselfloatcolor",   STRING, &scratchselfloatcolor },
+	{ "dwm.scratchnormfgcolor",     STRING, &scratchnormfgcolor },
+	{ "dwm.scratchnormbgcolor",     STRING, &scratchnormbgcolor },
+	{ "dwm.scratchnormbordercolor", STRING, &scratchnormbordercolor },
+	{ "dwm.scratchnormfloatcolor",  STRING, &scratchnormfloatcolor },
+	#endif // RENAMED_SCRATCHPADS_PATCH
+	#if BAR_FLEXWINTITLE_PATCH
+	{ "dwm.normTTBbgcolor",   STRING, &normTTBbgcolor },
+	{ "dwm.normLTRbgcolor",   STRING, &normLTRbgcolor },
+	{ "dwm.normMONObgcolor",  STRING, &normMONObgcolor },
+	{ "dwm.normGRIDbgcolor",  STRING, &normGRIDbgcolor },
+	{ "dwm.normGRD1bgcolor",  STRING, &normGRD1bgcolor },
+	{ "dwm.normGRD2bgcolor",  STRING, &normGRD2bgcolor },
+	{ "dwm.normGRDMbgcolor",  STRING, &normGRDMbgcolor },
+	{ "dwm.normHGRDbgcolor",  STRING, &normHGRDbgcolor },
+	{ "dwm.normDWDLbgcolor",  STRING, &normDWDLbgcolor },
+	{ "dwm.normSPRLbgcolor",  STRING, &normSPRLbgcolor },
+	{ "dwm.normfloatbgcolor", STRING, &normfloatbgcolor },
+	{ "dwm.actTTBbgcolor",    STRING, &actTTBbgcolor },
+	{ "dwm.actLTRbgcolor",    STRING, &actLTRbgcolor },
+	{ "dwm.actMONObgcolor",   STRING, &actMONObgcolor },
+	{ "dwm.actGRIDbgcolor",   STRING, &actGRIDbgcolor },
+	{ "dwm.actGRD1bgcolor",   STRING, &actGRD1bgcolor },
+	{ "dwm.actGRD2bgcolor",   STRING, &actGRD2bgcolor },
+	{ "dwm.actGRDMbgcolor",   STRING, &actGRDMbgcolor },
+	{ "dwm.actHGRDbgcolor",   STRING, &actHGRDbgcolor },
+	{ "dwm.actDWDLbgcolor",   STRING, &actDWDLbgcolor },
+	{ "dwm.actSPRLbgcolor",   STRING, &actSPRLbgcolor },
+	{ "dwm.actfloatbgcolor",  STRING, &actfloatbgcolor },
+	{ "dwm.selTTBbgcolor",    STRING, &selTTBbgcolor },
+	{ "dwm.selLTRbgcolor",    STRING, &selLTRbgcolor },
+	{ "dwm.selMONObgcolor",   STRING, &selMONObgcolor },
+	{ "dwm.selGRIDbgcolor",   STRING, &selGRIDbgcolor },
+	{ "dwm.selGRD1bgcolor",   STRING, &selGRD1bgcolor },
+	{ "dwm.selGRD2bgcolor",   STRING, &selGRD2bgcolor },
+	{ "dwm.selGRDMbgcolor",   STRING, &selGRDMbgcolor },
+	{ "dwm.selHGRDbgcolor",   STRING, &selHGRDbgcolor },
+	{ "dwm.selDWDLbgcolor",   STRING, &selDWDLbgcolor },
+	{ "dwm.selSPRLbgcolor",   STRING, &selSPRLbgcolor },
+	{ "dwm.selfloatbgcolor",  STRING, &selfloatbgcolor },
+	#endif // BAR_FLEXWINTITLE_PATCH
 };
 #endif // XRESOURCES_PATCH
 
