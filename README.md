@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2025-02-25 - Added the xresources patch
+
 2024-10-30 - Added the border rule patch
 
 2024-07-11 - Added variant of the launcher patch
@@ -886,6 +888,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [xrdb](http://dwm.suckless.org/patches/xrdb/)
       - allows dwm to read colors from xrdb (.Xresources) during runtime
+
+   - [xresources](https://dwm.suckless.org/patches/xresources/)
+      - allows dwm to read strings, integers and float values from xrdb (.Xresources) during runtime
 
    - [zoomfloating](https://www.reddit.com/r/suckless/comments/ie5fe3/zoomfloating_my_own_simple_original_patch/)
       - a simple patch that allows floating windows to be zoomed into the master stack position

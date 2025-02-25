@@ -1,5 +1,5 @@
 void
-loadxrdb()
+load_xresources()
 {
 	Display *display;
 	char * resm;
@@ -123,7 +123,7 @@ loadxrdb()
 void
 xrdb(const Arg *arg)
 {
-	loadxrdb();
+	load_xresources();
 	int i;
 	for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i],
