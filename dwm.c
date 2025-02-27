@@ -3033,7 +3033,12 @@ quit(const Arg *arg)
 	unsigned int n = 0;
 
 	for (m = mons; m; m = m->next)
-		for (c = m->clients; c; c = c->next, n++);
+		for (c = m->clients; c; c = c->next)
+		#if RESTARTSIG_PATCH && BAR_WINTITLEACTIONS_PATCH
+			if (c && HIDDEN(c)) show(c);
+		#else
+			++n;
+		#endif // RESTARTSIG_PATCH && BAR_WINTITLEACTIONS_PATCH
 
 	#if RESTARTSIG_PATCH
 	if (restart || n <= quit_empty_window_count)
@@ -3045,6 +3050,11 @@ quit(const Arg *arg)
 		fprintf(stderr, "[dwm] not exiting (n=%d)\n", n);
 
 	#else // !ONLYQUITONEMPTY_PATCH
+	#if RESTARTSIG_PATCH && BAR_WINTITLEACTIONS_PATCH
+	for (Monitor *m = mons; m; m = m->next)
+		for (Client *c = m->clients; c; c = c->next)
+			if (c && HIDDEN(c)) show(c);
+	#endif // RESTARTSIG_PATCH && BAR_WINTITLEACTIONS_PATCH
 	running = 0;
 	#endif // ONLYQUITONEMPTY_PATCH
 }
