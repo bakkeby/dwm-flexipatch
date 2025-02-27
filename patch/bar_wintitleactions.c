@@ -92,3 +92,18 @@ showhideclient(const Arg *arg)
 	}
 }
 
+void
+showall(const Arg *arg)
+{
+	Client *c = NULL;
+	for (c = selmon->clients; c; c = c->next) {
+		if (ISVISIBLE(c))
+			show(c);
+	}
+	if (!selmon->sel) {
+		for (c = selmon->clients; c && !ISVISIBLE(c); c = c->next);
+		if (c)
+			focus(c);
+	}
+	restack(selmon);
+}
