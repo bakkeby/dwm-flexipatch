@@ -92,3 +92,15 @@ showhideclient(const Arg *arg)
 	}
 }
 
+void
+unhideall(const Arg *arg)
+{
+	Client *c = NULL;
+	for (c = selmon->clients; c; c = c->next) {
+		if (ISVISIBLE(c)) {
+			XMapWindow(dpy, c->win);
+			setclientstate(c, NormalState);
+		}
+	}
+	arrange(selmon);
+}
