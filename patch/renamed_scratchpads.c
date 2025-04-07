@@ -22,11 +22,14 @@ void spawnscratch(const Arg *arg)
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
-		setsid();
+		struct sigaction sa;
+		setsid(); 
+		sigemptyset(&sa.sa_mask); 
+		sa.sa_flags = 0; 
+		sa.sa_handler = SIG_DFL; 
+		sigaction(SIGCHLD, &sa, NULL); 
 		execvp(((char **)arg->v)[1], ((char **)arg->v)+1);
-		fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[1]);
-		perror(" failed");
-		exit(EXIT_SUCCESS);
+		die("dwm: execvp '%s' failed:", ((char **)arg->v)[0]);
 	}
 }
 
