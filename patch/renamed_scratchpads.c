@@ -29,7 +29,7 @@ void spawnscratch(const Arg *arg)
 		sa.sa_handler = SIG_DFL; 
 		sigaction(SIGCHLD, &sa, NULL); 
 		execvp(((char **)arg->v)[1], ((char **)arg->v)+1);
-		die("dwm: execvp '%s' failed:", ((char **)arg->v)[0]);
+		die("dwm: execvp '%s' failed:", ((char **)arg->v)[1]);
 	}
 }
 
