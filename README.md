@@ -715,7 +715,7 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [status2d](https://dwm.suckless.org/patches/status2d/)
       - allows colors and rectangle drawing in the dwm status bar
 
-   - [statusallmons](https://dwm.suckless.org/patches/statuspadding/)
+   - [statusallmons](https://dwm.suckless.org/patches/statusallmons/)
       - this patch draws and updates the statusbar on all monitors
 
    - [statusbutton](https://dwm.suckless.org/patches/statusbutton/)
