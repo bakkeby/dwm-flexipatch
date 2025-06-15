@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2025-06-15 - Added the always on top patch
+
 2025-02-25 - Added the xresources patch
 
 2024-10-30 - Added the border rule patch
@@ -267,6 +269,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [~alwaysfullscreen~](https://dwm.suckless.org/patches/alwaysfullscreen/)
       - ~prevents the focus to drift from the active fullscreen client when using focusstack\(\)~
+
+   - [alwaysontop](https://dwm.suckless.org/patches/alwaysontop/)
+      - allows for floating windows to be toggled to be always on top of other windows
 
    - [anybar](https://dwm.suckless.org/patches/anybar/)
       - enables dwm to manage external status bars such as lemonbar and polybar

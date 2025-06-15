@@ -107,5 +107,9 @@ drawstateindicator(Monitor *m, Client *c, unsigned int occ, int x, int y, int w,
 		drawindicator(m, c, occ, x, y, w, h, tag, filled, invert, floatindicatortype);
 	else
 		drawindicator(m, c, occ, x, y, w, h, tag, filled, invert, tiledindicatortype);
+	#if ALWAYSONTOP_PATCH
+	if (c->isfloating && c->alwaysontop)
+		drawindicator(m, c, occ, x, y, w, h, tag, filled, invert, aotindicatortype);
+	#endif // ALWAYSONTOP_PATCH
 }
 

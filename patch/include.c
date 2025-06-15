@@ -104,6 +104,9 @@
 #if ALT_TAB_PATCH
 #include "alttab.c"
 #endif
+#if ALWAYSONTOP_PATCH
+#include "alwaysontop.c"
+#endif
 #if ASPECTRESIZE_PATCH
 #include "aspectresize.c"
 #endif

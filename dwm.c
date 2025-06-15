@@ -363,6 +363,9 @@ struct Client {
 	unsigned int switchtag;
 	#endif // SWITCHTAG_PATCH
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+	#if ALWAYSONTOP_PATCH
+	int alwaysontop;
+	#endif // ALWAYSONTOP_PATCH
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 	int fakefullscreen;
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
@@ -3244,6 +3247,9 @@ restack(Monitor *m)
 	#if WARP_PATCH && FLEXTILE_DELUXE_LAYOUT
 	int n;
 	#endif // WARP_PATCH
+	#if ALWAYSONTOP_PATCH
+	Monitor *mon;
+	#endif // ALWAYSONTOP_PATCH
 
 	drawbar(m);
 	#if TAB_PATCH
@@ -3253,6 +3259,18 @@ restack(Monitor *m)
 		return;
 	if (m->sel->isfloating || !m->lt[m->sellt]->arrange)
 		XRaiseWindow(dpy, m->sel->win);
+
+	#if ALWAYSONTOP_PATCH
+	/* raise the aot windows */
+	for (mon = mons; mon; mon = mon->next) {
+		for (c = mon->clients; c; c = c->next) {
+			if (c->alwaysontop) {
+				XRaiseWindow(dpy, c->win);
+			}
+		}
+	}
+	#endif // ALWAYSONTOP_PATCH
+
 	if (m->lt[m->sellt]->arrange) {
 		wc.stack_mode = Below;
 		if (m->bar) {
@@ -4324,7 +4342,13 @@ togglefloating(const Arg *arg)
 		c->sfy = c->y;
 		c->sfw = c->w;
 		c->sfh = c->h;
-	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
+		#if ALWAYSONTOP_PATCH
+		c->alwaysontop = 0;
+		#endif // ALWAYSONTOP_PATCH
+	#elif ALWAYSONTOP_PATCH
+	} else {
+		c->alwaysontop = 0;
+	#endif // SAVEFLOATS_PATCH | EXRESIZE_PATCH | ALWAYSONTOP_PATCH
 	}
 	arrange(c->mon);
 
