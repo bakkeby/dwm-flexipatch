@@ -59,7 +59,7 @@ draw_tags(Bar *bar, BarArg *a)
 		drawindicator(m, NULL, occ, x, a->y, w, a->h, i, -1, invert, tagindicatortype);
 		#if BAR_UNDERLINETAGS_PATCH
 		if (ulineall || m->tagset[m->seltags] & 1 << i)
-			drw_rect(drw, x + ulinepad, bh - ulinestroke - ulinevoffset, w - (ulinepad * 2), ulinestroke, 1, 0);
+			drw_rect(drw, x + ulinepad, a->y + bh - ulinestroke - ulinevoffset, w - (ulinepad * 2), ulinestroke, 1, 0);
 		#endif // BAR_UNDERLINETAGS_PATCH
 		x += w;
 	}
