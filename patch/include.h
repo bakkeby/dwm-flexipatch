@@ -116,6 +116,9 @@
 #if AUTOSTART_PATCH
 #include "autostart.h"
 #endif
+#if BANISH_PATCH || PLACEMOUSE_PATCH
+#include "recttoclient.h"
+#endif
 #if BANISH_PATCH
 #include "banish.h"
 #endif

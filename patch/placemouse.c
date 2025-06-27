@@ -74,7 +74,7 @@ placemouse(const Arg *arg)
 				py = ev.xmotion.y;
 			}
 
-			r = recttoclient(px, py, 1, 1);
+			r = recttoclient(px, py, 1, 1, 0);
 
 			if (!r || r == c)
 				break;
@@ -137,19 +137,3 @@ placemouse(const Arg *arg)
 		resize(c, nx, ny, c->w, c->h, 0);
 	arrangemon(c->mon);
 }
-
-Client *
-recttoclient(int x, int y, int w, int h)
-{
-	Client *c, *r = NULL;
-	int a, area = 0;
-
-	for (c = nexttiled(selmon->clients); c; c = nexttiled(c->next)) {
-		if ((a = INTERSECTC(x, y, w, h, c)) > area) {
-			area = a;
-			r = c;
-		}
-	}
-	return r;
-}
-
