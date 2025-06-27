@@ -829,6 +829,9 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	[EnterNotify] = enternotify,
 	#endif // FOCUSONCLICK_PATCH
 	[Expose] = expose,
+	#if BANISH_PATCH
+	[GenericEvent] = genericevent,
+	#endif // BANISH_PATCH
 	[FocusIn] = focusin,
 	[KeyPress] = keypress,
 	#if COMBO_PATCH || BAR_HOLDBAR_PATCH
@@ -1187,6 +1190,27 @@ buttonpress(XEvent *e)
 		focus(NULL);
 	}
 
+	#if BANISH_PATCH
+	c = wintoclient(ev->window);
+
+	if (!c && cursor_hidden) {
+		c = recttoclient(mouse_x, mouse_y, 1, 1, 1);
+		showcursor(NULL);
+	}
+
+	if (c) {
+		#if FOCUSONCLICK_PATCH
+		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
+			focus(c);
+		#else
+		focus(c);
+		restack(selmon);
+		#endif // FOCUSONCLICK_PATCH
+		XAllowEvents(dpy, ReplayPointer, CurrentTime);
+		click = ClkClientWin;
+	}
+	#endif // BANISH_PATCH
+
 	for (bar = selmon->bar; bar; bar = bar->next) {
 		if (ev->window == bar->win) {
 			for (r = 0; r < LENGTH(barrules); r++) {
@@ -1230,6 +1254,7 @@ buttonpress(XEvent *e)
 	}
 	#endif // TAB_PATCH
 
+	#if !BANISH_PATCH
 	if (click == ClkRootWin && (c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
 		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
@@ -1241,6 +1266,7 @@ buttonpress(XEvent *e)
 		XAllowEvents(dpy, ReplayPointer, CurrentTime);
 		click = ClkClientWin;
 	}
+	#endif // BANISH_PATCH
 
 	for (i = 0; i < LENGTH(buttons); i++) {
 		if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
@@ -1258,6 +1284,10 @@ buttonpress(XEvent *e)
 			);
 		}
 	}
+
+	#if BANISH_PATCH
+	last_button_press = now();
+	#endif // BANISH_PATCH
 }
 
 void
@@ -2059,6 +2089,11 @@ enternotify(XEvent *e)
 	Monitor *m;
 	XCrossingEvent *ev = &e->xcrossing;
 
+	#if BANISH_PATCH
+	if (cursor_hidden)
+		return;
+	#endif // BANISH_PATCH
+
 	if ((ev->mode != NotifyNormal || ev->detail == NotifyInferior) && ev->window != root)
 		return;
 	c = wintoclient(ev->window);
@@ -2273,6 +2308,14 @@ getrootptr(int *x, int *y)
 	int di;
 	unsigned int dui;
 	Window dummy;
+
+	#if BANISH_PATCH
+	if (cursor_hidden) {
+		*x = mouse_x;
+		*y = mouse_y;
+		return 1;
+	}
+	#endif // BANISH_PATCH
 
 	return XQueryPointer(dpy, root, &dummy, &dummy, x, y, &di, &di, &dui);
 }
@@ -3995,6 +4038,26 @@ setup(void)
 	XkbGetState(dpy, XkbUseCoreKbd, &xkbstate);
 	xkbGlobal.group = xkbstate.locked_group;
 	#endif // XKB_PATCH
+
+	#if BANISH_PATCH
+	if (!XQueryExtension(dpy, "XInputExtension", &xi_opcode, &i, &i)) {
+		fprintf(stderr, "Warning: XInput is not available.");
+	}
+	/* Tell XInput to send us all RawMotion events. */
+	unsigned char mask_bytes[XIMaskLen(XI_LASTEVENT)];
+	memset(mask_bytes, 0, sizeof(mask_bytes));
+	XISetMask(mask_bytes, XI_RawMotion);
+	XISetMask(mask_bytes, XI_RawKeyRelease);
+	XISetMask(mask_bytes, XI_RawTouchBegin);
+	XISetMask(mask_bytes, XI_RawTouchEnd);
+	XISetMask(mask_bytes, XI_RawTouchUpdate);
+
+	XIEventMask mask;
+	mask.deviceid = XIAllMasterDevices;
+	mask.mask_len = sizeof(mask_bytes);
+	mask.mask = mask_bytes;
+	XISelectEvents(dpy, root, &mask, 1);
+	#endif // BANISH_PATCH
 
 	grabkeys();
 	focus(NULL);

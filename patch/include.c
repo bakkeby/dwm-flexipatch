@@ -116,6 +116,9 @@
 #if AUTOSTART_PATCH
 #include "autostart.c"
 #endif
+#if BANISH_PATCH
+#include "banish.c"
+#endif
 #if CFACTS_PATCH
 #include "cfacts.c"
 #endif

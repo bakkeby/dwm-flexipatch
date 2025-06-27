@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2025-06-27 - Added the banish patch
+
 2025-06-15 - Added the always on top patch
 
 2025-02-25 - Added the xresources patch
@@ -303,6 +305,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [awesomebar](https://dwm.suckless.org/patches/awesomebar/)
       - enhanced taskbar that allows focus / hiding / unhiding of windows by clicking on the status
         bar
+
+   - [banish](https://github.com/bakkeby/patches/wiki/banish/)
+      - hides cursor when using the keyboard, akin to xbanish
 
    - [bar_border](https://codemadness.org/paste/dwm-border-bar.patch)
       - adds a border around the bar similarly to how client windows have borders

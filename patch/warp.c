@@ -13,6 +13,14 @@ warp(const Client *c)
 		return;
 	}
 
+	#if BANISH_PATCH
+	if (cursor_hidden) {
+		mouse_x = c->x + c->w/2;
+		mouse_y = c->y + c->h/2;
+		return;
+	}
+	#endif // BANISH_PATCH
+
 	if (!getrootptr(&x, &y))
 		return;
 
