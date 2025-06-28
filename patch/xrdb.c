@@ -48,6 +48,10 @@ load_xresources()
 				XRDB_LOAD_COLOR("dwm.urgbgcolor", urgbgcolor);
 				XRDB_LOAD_COLOR("dwm.urgbordercolor", urgbordercolor);
 				XRDB_LOAD_COLOR("dwm.urgfloatcolor", urgfloatcolor);
+				#if BAR_LTSYMBOL_SCHEME_PATCH
+				XRDB_LOAD_COLOR("dwm.ltsymbolfgcolor", ltsymbolfgcolor);
+				XRDB_LOAD_COLOR("dwm.ltsymbolbgcolor", ltsymbolbgcolor);
+				#endif // BAR_LTSYMBOL_SCHEME_PATCH
 				#if RENAMED_SCRATCHPADS_PATCH
 				XRDB_LOAD_COLOR("dwm.scratchselfgcolor", scratchselfgcolor);
 				XRDB_LOAD_COLOR("dwm.scratchselbgcolor", scratchselbgcolor);
