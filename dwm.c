@@ -4893,6 +4893,12 @@ updatebarpos(Monitor *m)
 	for (bar = m->bar; bar; bar = bar->next) {
 		if (!bar->showbar)
 			continue;
+		#if BAR_HOLDBAR_PATCH
+		if (m->showbar == 2) {
+			bar->by = (bar->topbar ? m->wy : m->wy + m->wh - bar->bh);
+			continue;
+		}
+		#endif // BAR_HOLDBAR_PATCH
 		if (bar->topbar)
 			m->wy = m->wy + bar->bh + y_pad;
 		m->wh -= y_pad + bar->bh;
