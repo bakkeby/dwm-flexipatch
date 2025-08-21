@@ -168,7 +168,7 @@ dragmfact(const Arg *arg)
 			handler[ev.type](&ev);
 			break;
 		case MotionNotify:
-			if ((ev.xmotion.time - lasttime) <= (1000 / 40))
+			if ((ev.xmotion.time - lasttime) <= (1000 / refreshrate_dragmfact))
 				continue;
 			if (lasttime != 0) {
 				px = ev.xmotion.x;
