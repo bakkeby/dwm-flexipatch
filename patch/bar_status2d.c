@@ -24,26 +24,22 @@ static char *termcolor[] = {
 int
 width_status2d(Bar *bar, BarArg *a)
 {
-	int width;
 	#if BAR_EXTRASTATUS_PATCH || BAR_STATUSCMD_PATCH
-	width = status2dtextlength(rawstext);
+	return status2dtextlength(rawstext);
 	#else
-	width = status2dtextlength(stext);
+	return status2dtextlength(stext);
 	#endif // #if BAR_EXTRASTATUS_PATCH | BAR_STATUSCMD_PATCH
-	return width ? width + lrpad : 0;
 }
 
 #if BAR_EXTRASTATUS_PATCH
 int
 width_status2d_es(Bar *bar, BarArg *a)
 {
-	int width;
 	#if BAR_STATUSCMD_PATCH
-	width = status2dtextlength(rawestext);
+	return status2dtextlength(rawestext);
 	#else
-	width = status2dtextlength(estext);
+	return status2dtextlength(estext);
 	#endif // BAR_STATUSCMD_PATCH
-	return width ? width + lrpad : 0;
 }
 #endif // BAR_EXTRASTATUS_PATCH
 
@@ -98,7 +94,6 @@ drawstatusbar(BarArg *a, char* stext)
 	#endif // BAR_STATUSCMD_PATCH
 	text[len] = '\0';
 
-	x += lrpad / 2;
 	drw_setscheme(drw, scheme[LENGTH(colors)]);
 	drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
 	drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
@@ -266,4 +261,3 @@ status2dtextlength(char* stext)
 	free(p);
 	return w;
 }
-
