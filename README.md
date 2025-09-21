@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2025-09-21 - Added the games patch
+
 2025-06-27 - Added the banish patch
 
 2025-06-15 - Added the always on top patch
@@ -498,6 +500,11 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
       - applies the monocle layout with the focused client on top and hides the bar
       - when pressed again it shows the bar and restores the layout that was active before going
         fullscreen
+
+   - [games](https://github.com/bakkeby/patches/wiki/steam)
+      - adds a new client rule option to flag clients as a "game", the effect of which is that
+      - if the client is in fullscreen and it loses focus (e.g. by moving to another tag) then it will automatically be minimized
+      - and the window will automatically be unminimized when receving focus (e.g. by going back to its tag)
 
    - [hidevacanttags](https://dwm.suckless.org/patches/hide_vacant_tags/)
       - prevents dwm from drawing tags with no clients (i.e. vacant) on the bar

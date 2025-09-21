@@ -758,6 +758,18 @@
  */
 #define FULLSCREEN_PATCH 0
 
+/* Adds a rule identifying clients as a "game" such that if the client is in fullscreen and it
+ * loses focus (e.g. by moving to another tag) then it will automatically be minimized (set to
+ * IconicState and unmapped).
+ *
+ * When the client receives focus again (e.g. by going back to its tag) then it will
+ * automatically be unminimized (set to NormalState and mapped). This should address many of the
+ * black screen or window is tiny issues after having moved to another tag and back again.
+ *
+ * https://github.com/bakkeby/patches/wiki/steam
+ */
+#define GAMES_PATCH 0
+
 /* This patch provides a keybinding to rotate all clients in the currently selected
  * area (master or stack) without affecting the other area.
  * https://dwm.suckless.org/patches/inplacerotate/

@@ -372,6 +372,9 @@ struct Client {
 	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
 	int fakefullscreen;
 	#endif // FAKEFULLSCREEN_CLIENT_PATCH
+	#if GAMES_PATCH
+	int isgame;
+	#endif // GAMES_PATCH
 	#if EXRESIZE_PATCH
 	unsigned char expandmask;
 	int expandx1, expandy1, expandx2, expandy2;
@@ -588,6 +591,9 @@ typedef struct {
 	#if BORDER_RULE_PATCH
 	int bw;
 	#endif // BORDER_RULE_PATCH
+	#if GAMES_PATCH
+	int isgame;
+	#endif // GAMES_PATCH
 } Rule;
 
 #if BORDER_RULE_PATCH && XKB_PATCH
@@ -945,6 +951,9 @@ applyrules(Client *c)
 			#if SELECTIVEFAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
 			c->fakefullscreen = r->isfakefullscreen;
 			#endif // SELECTIVEFAKEFULLSCREEN_PATCH
+			#if GAMES_PATCH
+			c->isgame = r->isgame;
+			#endif // GAMES_PATCH
 			#if SWALLOW_PATCH
 			c->isterminal = r->isterminal;
 			c->noswallow = r->noswallow;
@@ -3630,6 +3639,12 @@ setfocus(Client *c)
 		XkbLockGroup(dpy, XkbUseCoreKbd, c->xkb->group);
 		#endif // XKB_PATCH
 	}
+
+	#if GAMES_PATCH
+	if (c->isgame && c->isfullscreen)
+		unminimize(c);
+	#endif // GAMES_PATCH
+
 	#if BAR_SYSTRAY_PATCH
 	sendevent(c->win, wmatom[WMTakeFocus], NoEventMask, wmatom[WMTakeFocus], CurrentTime, 0, 0, 0);
 	#else
@@ -4561,9 +4576,18 @@ unfocus(Client *c, int setfocus, Client *nextfocus)
 {
 	if (!c)
 		return;
+
 	#if SWAPFOCUS_PATCH && PERTAG_PATCH
 	selmon->pertag->prevclient[selmon->pertag->curtag] = c;
 	#endif // SWAPFOCUS_PATCH
+	#if GAMES_PATCH
+	if (c->isgame && c->isfullscreen) {
+		minimize(c);
+	}
+	#endif // GAMES_PATCH
+	#if GAMES_PATCH && LOSEFULLSCREEN_PATCH
+	else
+	#endif // GAMES_PATCH | LOSEFULLSCREEN_PATCH
 	#if LOSEFULLSCREEN_PATCH
 	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon && nextfocus && !nextfocus->isfloating) {
 		#if RENAMED_SCRATCHPADS_PATCH && RENAMED_SCRATCHPADS_AUTO_HIDE_PATCH
