@@ -1032,6 +1032,10 @@ ResourcePref resources[] = {
 	{ "selSPRLbgcolor",         STRING,    &selSPRLbgcolor },
 	{ "selfloatbgcolor",        STRING,    &selfloatbgcolor },
 	#endif // BAR_FLEXWINTITLE_PATCH
+	#if BAR_LTSYMBOL_SCHEME_PATCH
+	{ "ltsymbolfgcolor",        STRING,    &ltsymbolfgcolor },
+	{ "ltsymbolbgcolor",        STRING,    &ltsymbolbgcolor },
+	#endif // BAR_LTSYMBOL_SCHEME_PATCH
 };
 #endif // XRESOURCES_PATCH
 
