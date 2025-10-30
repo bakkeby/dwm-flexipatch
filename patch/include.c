@@ -205,6 +205,9 @@
 #if MPDCONTROL_PATCH
 #include "mpdcontrol.c"
 #endif
+#if MOVECENTER_PATCH
+#include "movecenter.c"
+#endif
 #if MOVEPLACE_PATCH
 #include "moveplace.c"
 #endif

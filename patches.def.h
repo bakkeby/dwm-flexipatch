@@ -856,6 +856,11 @@
  */
 #define MONOCLESYMBOL_PATCH 0
 
+/* This patch provides a keybinding to center the focused window.
+ * https://dwm.suckless.org/patches/movecenter/
+ */
+#define MOVECENTER_PATCH 0
+
 /* Makes a window floating and 1/3rd the height and 1/3rd the width of the screen and is
  * positioned in either the center or one of the 8 cardinal directions depending on which
  * key is pressed.

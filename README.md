@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2025-10-30 - Added the movecenter patch
+
 2025-09-21 - Added the games patch
 
 2025-06-27 - Added the banish patch
@@ -583,6 +585,13 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
       - always display the the monocle-symbol as defined in config.h if the monocle-layout is
         activated
       - do not display the number of open clients in the current tag
+
+   - [movecenter](https://dwm.suckless.org/patches/movecenter/)
+      - adds a keybinding to center the focused window
+
+   - [moveplace](https://dwm.suckless.org/patches/moveplace/)
+      - adds a function to place a window either centered or in one of 8 cardinal directions
+      - based on he exresize patch
 
    - [moveresize](https://dwm.suckless.org/patches/moveresize/)
       - allows you to move and resize dwm's clients using keyboard bindings
