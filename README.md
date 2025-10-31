@@ -591,7 +591,7 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [moveplace](https://dwm.suckless.org/patches/moveplace/)
       - adds a function to place a window either centered or in one of 8 cardinal directions
-      - based on he exresize patch
+      - based on the exresize patch
 
    - [moveresize](https://dwm.suckless.org/patches/moveresize/)
       - allows you to move and resize dwm's clients using keyboard bindings
