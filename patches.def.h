@@ -618,6 +618,11 @@
  */
 #define DECORATION_HINTS_PATCH 0
 
+/* Allows dmenu to use only desktop files from /usr/share/applications.
+ * https://dwm.suckless.org/patches/desktoponly
+ */
+#define DESKTOPONLY 0
+
 /* This feature distributes all clients on the current monitor evenly across all tags.
  * It is a variant of the reorganizetags patch.
  * https://dwm.suckless.org/patches/reorganizetags/

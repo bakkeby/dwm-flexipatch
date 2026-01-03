@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2026-01-03 - Added the desktoponly patch
+
 2025-10-30 - Added the movecenter patch
 
 2025-09-21 - Added the games patch

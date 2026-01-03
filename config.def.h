@@ -890,6 +890,9 @@ static const char *xkb_layouts[]  = {
 
 /* commands */
 #if !NODMENU_PATCH
+#if DESKTOPONLY
+static const int dmenudesktop = 1; /* 1 means dmenu will use only desktop files from [/usr/share/applications/] */
+#endif // DESKTOPONLY
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 #endif // NODMENU_PATCH
 static const char *dmenucmd[] = {

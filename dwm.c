@@ -1946,7 +1946,7 @@ void
 drawbar(Monitor *m)
 {
 	Bar *bar;
-	
+
 	#if !BAR_FLEXWINTITLE_PATCH
 	if (m->showbar)
 	#endif // BAR_FLEXWINTITLE_PATCH
@@ -4211,6 +4211,10 @@ spawn(const Arg *arg)
 	pid_t pid;
 	#endif // RIODRAW_PATCH
 	#if !NODMENU_PATCH
+	#if DESKTOPONLY
+	if (dmenudesktop)
+		dmenucmd[0] = "dmenu_run_desktop";
+	#endif // DESKTOPONLY
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 	#endif // NODMENU_PATCH
