@@ -3633,14 +3633,12 @@ setfocus(Client *c)
 {
 	if (!c->neverfocus) {
 		XSetInputFocus(dpy, c->win, RevertToPointerRoot, CurrentTime);
-		XChangeProperty(dpy, root, netatom[NetActiveWindow],
-			XA_WINDOW, 32, PropModeReplace,
-			(unsigned char *) &(c->win), 1);
 		#if XKB_PATCH
 		XkbLockGroup(dpy, XkbUseCoreKbd, c->xkb->group);
 		#endif // XKB_PATCH
 	}
-
+	XChangeProperty(dpy, root, netatom[NetActiveWindow], XA_WINDOW, 32,
+		PropModeReplace, (unsigned char *) &(c->win), 1);
 	#if GAMES_PATCH
 	if (c->isgame && c->isfullscreen)
 		unminimize(c);
