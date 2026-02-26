@@ -267,14 +267,14 @@ enum {
 #if IPC_PATCH
 typedef struct TagState TagState;
 struct TagState {
-       int selected;
-       int occupied;
-       int urgent;
+	int selected;
+	int occupied;
+	int urgent;
 };
 
 typedef struct ClientState ClientState;
 struct ClientState {
-       int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
 };
 #endif // IPC_PATCH
 
@@ -2340,10 +2340,10 @@ getstate(Window w)
 	Atom real;
 
 	if (XGetWindowProperty(dpy, w, wmatom[WMState], 0L, 2L, False, wmatom[WMState],
-		&real, &format, &n, &extra, (unsigned char **)&p) != Success)
+		&real, &format, &n, &extra, &p) != Success)
 		return -1;
-	if (n != 0)
-		result = *p;
+	if (n != 0 && format == 32)
+		result = *(long *)p;
 	XFree(p);
 	return result;
 }
