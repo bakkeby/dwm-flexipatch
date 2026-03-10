@@ -3535,6 +3535,15 @@ sendmon(Client *c, Monitor *m)
 	attach(c);
 	#endif
 	attachstack(c);
+	#if !FAKEFULLSCREEN_PATCH
+	#if FAKEFULLSCREEN_CLIENT_PATCH
+	if (c->isfullscreen && c->fakefullscreen != 1)
+		resizeclient(c, m->mx, m->my, m->mw, m->mh);
+	#else
+	if (c->isfullscreen)
+		resizeclient(c, m->mx, m->my, m->mw, m->mh);
+	#endif // FAKEFULLSCREEN_CLIENT_PATCH
+	#endif // FAKEFULLSCREEN_PATCH
 	#if EXRESIZE_PATCH
 	if (oldm != m)
 		arrange(oldm);
