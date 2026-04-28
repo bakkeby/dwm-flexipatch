@@ -1,14 +1,18 @@
 void
 movecenter(const Arg *arg)
 {
-	Client *c = selmon->sel;
+	Monitor *m = selmon;
+	Client *c = m->sel;
 	XEvent ev;
 
-	if (!c || !c->isfloating)
+	if (!c)
 		return;
 
-	c->x = c->mon->mx + (c->mon->mw - WIDTH(c)) / 2;
-	c->y = c->mon->my + (c->mon->mh - HEIGHT(c)) / 2;
+	if (m->lt[m->sellt]->arrange != NULL && !c->isfloating)
+		return;
+
+	c->x = m->mx + (m->mw - WIDTH(c)) / 2;
+	c->y = m->my + (m->mh - HEIGHT(c)) / 2;
 	XMoveWindow(dpy, c->win, c->x, c->y);
 	XSync(dpy, False);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
