@@ -1209,8 +1209,10 @@ buttonpress(XEvent *e)
 
 	if (c) {
 		#if FOCUSONCLICK_PATCH
-		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
+		if (focusonwheel || (ev->button != Button4 && ev->button != Button5)) {
 			focus(c);
+			restack(c->mon);
+		}
 		#else
 		focus(c);
 		restack(selmon);
@@ -1266,8 +1268,10 @@ buttonpress(XEvent *e)
 	#if !BANISH_PATCH
 	if (click == ClkRootWin && (c = wintoclient(ev->window))) {
 		#if FOCUSONCLICK_PATCH
-		if (focusonwheel || (ev->button != Button4 && ev->button != Button5))
+		if (focusonwheel || (ev->button != Button4 && ev->button != Button5)) {
 			focus(c);
+			restack(c->mon);
+		}
 		#else
 		focus(c);
 		restack(selmon);
