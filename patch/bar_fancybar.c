@@ -33,8 +33,13 @@ draw_fancybar(Bar *bar, BarArg *a)
 	if (n > 0) {
 		tabw = TEXTW(m->sel->name);
 		#if BAR_WINICON_PATCH
-		if (m->sel->icon)
+		#if BAR_WINICON_NOTITLE_PATCH
+		if (m->sel && m->sel->icon)
+			tabw = m->sel->icw + lrpad;
+		#else
+		if (m->sel && m->sel->icon)
 			tabw += m->sel->icw + ICONSPACING;
+		#endif // BAR_WINICON_NOTITLE_PATCH
 		#endif // BAR_WINICON_PATCH
 		mw = (tabw >= w || n == 1) ? 0 : (w - tabw) / (n - 1);
 
@@ -45,8 +50,13 @@ draw_fancybar(Bar *bar, BarArg *a)
 				continue;
 			tabw = TEXTW(c->name);
 			#if BAR_WINICON_PATCH
+			#if BAR_WINICON_NOTITLE_PATCH
+			if (c->icon)
+				tabw = c->icw + lrpad;
+			#else
 			if (c->icon)
 				tabw += c->icw + ICONSPACING;
+			#endif // BAR_WINICON_NOTITLE_PATCH
 			#endif // BAR_WINICON_PATCH
 			if (tabw < mw)
 				ew += (mw - tabw);
@@ -62,8 +72,13 @@ draw_fancybar(Bar *bar, BarArg *a)
 				continue;
 			tabw = MIN(m->sel == c ? w : mw, TEXTW(c->name));
 			#if BAR_WINICON_PATCH
+			#if BAR_WINICON_NOTITLE_PATCH
+			if ((ipad = c->icon ? c->icw : 0))
+				tabw = ipad + lrpad;
+			#else
 			ipad = c->icon ? c->icw + ICONSPACING : 0;
 			tabw += ipad;
+			#endif // BAR_WINICON_NOTITLE_PATCH
 			#endif // BAR_WINICON_PATCH
 			tx = x;
 			tw = tabw;
@@ -76,7 +91,7 @@ draw_fancybar(Bar *bar, BarArg *a)
 				continue;
 
 			tx += lrpad / 2;
-			tw -= lrpad;
+			tw -= lrpad / 2;
 
 			#if BAR_WINICON_PATCH
 			if (ipad) {
@@ -84,6 +99,9 @@ draw_fancybar(Bar *bar, BarArg *a)
 				tx += ipad;
 				tw -= ipad;
 			}
+			#if BAR_WINICON_NOTITLE_PATCH
+			else
+			#endif // BAR_WINICON_NOTITLE_PATCH
 			#endif // BAR_WINICON_PATCH
 
 			drw_text(drw, tx, a->y, tw, a->h, 0, c->name, 0, False);

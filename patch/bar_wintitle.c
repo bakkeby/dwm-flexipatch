@@ -68,6 +68,9 @@ draw_wintitle(Bar *bar, BarArg *a)
 		tx += ipad;
 		tw -= ipad;
 	}
+	#if BAR_WINICON_NOTITLE_PATCH
+	else
+	#endif // BAR_WINICON_NOTITLE_PATCH
 	#endif // BAR_WINICON_PATCH
 
 	drw_text(drw, tx, a->y, tw, a->h, 0, c->name, 0, False);

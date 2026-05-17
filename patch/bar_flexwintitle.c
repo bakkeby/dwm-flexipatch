@@ -173,7 +173,11 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 	int i, nclienttags = 0, nviewtags = 0;
 	int tpad = lrpad / 2;
 	#if BAR_WINICON_PATCH
+	#if BAR_WINICON_NOTITLE_PATCH
+	int ipad = c->icon ? c->icw + lrpad : 0;
+	#else
 	int ipad = c->icon ? c->icw + ICONSPACING : 0;
+	#endif // BAR_WINICON_NOTITLE_PATCH
 	#endif // BAR_WINICON_PATCH
 	#if BAR_CENTEREDWINDOWNAME_PATCH
 	int cpad = 0;
@@ -231,6 +235,9 @@ flextitledraw(Monitor *m, Client *c, int unused, int x, int w, int tabscheme, Ar
 		tx += ipad;
 		tw -= ipad;
 	}
+	#if BAR_WINICON_NOTITLE_PATCH
+	else
+	#endif // BAR_WINICON_NOTITLE_PATCH
 	#endif // BAR_WINICON_PATCH
 
 	drw_text(drw, tx, a->y, tw, a->h, 0, c->name, 0, False);

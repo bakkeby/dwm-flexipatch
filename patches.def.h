@@ -208,6 +208,9 @@
  */
 #define BAR_WINICON_PATCH 0
 
+/* Addon for the winicon patch - do not display window title if icon exists */
+#define BAR_WINICON_NOTITLE_PATCH 0
+
 /* Show window title in bar */
 #define BAR_WINTITLE_PATCH 1
 
