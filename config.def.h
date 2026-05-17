@@ -1530,7 +1530,12 @@ static const Button buttons[] = {
 	{ ClkClientWin,         MODKEY,              Button1,        movemouse,      {0} },
 	#endif // PLACEMOUSE_PATCH
 	{ ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
+	#if DRAGFACT_PATCH && CFACTS_PATCH
+	{ ClkClientWin,         MODKEY,              Button3,        resizeorfacts,  {0} },
+	{ ClkClientWin,         MODKEY|ShiftMask,    Button3,        resizemouse,    {0} },
+	#else
 	{ ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
+	#endif // DRAGFACT_PATCH
 	#if TAPRESIZE_PATCH
 	{ ClkClientWin,         MODKEY,              Button4,        resizemousescroll, {.v = &scrollargs[0]} },
 	{ ClkClientWin,         MODKEY,              Button5,        resizemousescroll, {.v = &scrollargs[1]} },

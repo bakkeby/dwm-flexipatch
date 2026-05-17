@@ -59,14 +59,14 @@ enum {
 	SPLIT_CENTERED_VERTICAL,           // centered master vertical split
 	SPLIT_CENTERED_HORIZONTAL,         // centered master horizontal split
 	SPLIT_VERTICAL_DUAL_STACK,         // master stack vertical split with dual stack
-	SPLIT_HORIZONTAL_DUAL_STACK,       // master stack vertical split with dual stack
+	SPLIT_HORIZONTAL_DUAL_STACK,       // master stack horizontal split with dual stack
 	FLOATING_MASTER,                   // (fake) floating master
 	SPLIT_VERTICAL_FIXED,              // master stack vertical fixed split
 	SPLIT_HORIZONTAL_FIXED,            // master stack horizontal fixed split
 	SPLIT_CENTERED_VERTICAL_FIXED,     // centered master vertical fixed split
 	SPLIT_CENTERED_HORIZONTAL_FIXED,   // centered master horizontal fixed split
 	SPLIT_VERTICAL_DUAL_STACK_FIXED,   // master stack vertical split with fixed dual stack
-	SPLIT_HORIZONTAL_DUAL_STACK_FIXED, // master stack vertical split with fixed dual stack
+	SPLIT_HORIZONTAL_DUAL_STACK_FIXED, // master stack horizontal split with fixed dual stack
 	FLOATING_MASTER_FIXED,             // (fake) fixed floating master
 	LAYOUT_LAST,
 };

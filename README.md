@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2026-05-17 - Added the dragfact patch
+
 2025-10-30 - Added the movecenter patch
 
 2025-09-21 - Added the games patch
@@ -393,6 +395,9 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [dragcfact](https://github.com/bakkeby/patches/wiki/dragcfact/)
       - lets you resize clients' size (i.e. modify cfact) by holding modkey + shift + right-click
         and dragging the mouse
+
+   - dragfact
+      - patch that combines dragcfact and dragmfact
 
    - [dragmfact](https://github.com/bakkeby/patches/wiki/dragmfact/)
       - lets you resize the split in layouts (i.e. modify mfact) by holding the modkey + shift

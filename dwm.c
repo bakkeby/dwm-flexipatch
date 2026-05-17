@@ -132,6 +132,9 @@ enum {
 	#if DRAGCFACT_PATCH
 	CurIronCross,
 	#endif // DRAGCFACT_PATCH
+	#if DRAGFACT_PATCH
+	CurDragFact,
+	#endif // DRAGFACT_PATCH
 	CurNormal,
 	CurResize,
 	CurMove,
@@ -3978,9 +3981,12 @@ setup(void)
 	cursor[CurResizeHorzArrow] = drw_cur_create(drw, XC_sb_h_double_arrow);
 	cursor[CurResizeVertArrow] = drw_cur_create(drw, XC_sb_v_double_arrow);
 	#endif // DRAGMFACT_PATCH
-	#if DRAGCFACT_PATCH
+	#if DRAGCFACT_PATCH && CFACTS_PATCH
 	cursor[CurIronCross] = drw_cur_create(drw, XC_iron_cross);
 	#endif // DRAGCFACT_PATCH
+	#if DRAGFACT_PATCH && CFACTS_PATCH
+	cursor[CurDragFact] = drw_cur_create(drw, XC_rightbutton);
+	#endif // DRAGFACT_PATCH
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
 	#if BAR_VTCOLORS_PATCH

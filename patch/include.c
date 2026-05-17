@@ -143,6 +143,9 @@
 #if DRAGCFACT_PATCH && CFACTS_PATCH
 #include "dragcfact.c"
 #endif
+#if DRAGFACT_PATCH && CFACTS_PATCH
+#include "dragfact.c"
+#endif
 #if DWMC_PATCH
 #include "dwmc.c"
 #elif FSIGNAL_PATCH

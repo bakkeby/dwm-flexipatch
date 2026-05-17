@@ -641,6 +641,10 @@
  */
 #define DRAGCFACT_PATCH 0
 
+/* Patch that combines dragfact and dragmfact.
+ */
+#define DRAGFACT_PATCH 0
+
 /* This patch lets you resize the split in the tile layout (i.e. modify mfact) by holding
  * the modkey and dragging the mouse.
  * This patch can be a bit wonky with other layouts, but generally works.
