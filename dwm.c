@@ -3772,6 +3772,20 @@ setfullscreen(Client *c, int fullscreen)
 	if (!c->isfullscreen)
 		while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 }
+#elif FAKEFULLSCREEN_PATCH
+void
+setfullscreen(Client *c, int fullscreen)
+{
+	if (fullscreen && !c->isfullscreen) {
+		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+			PropModeReplace, (unsigned char*)&netatom[NetWMFullscreen], 1);
+		c->isfullscreen = 1;
+	} else if (!fullscreen && c->isfullscreen){
+		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+			PropModeReplace, (unsigned char*)0, 0);
+		c->isfullscreen = 0;
+	}
+}
 #else
 void
 setfullscreen(Client *c, int fullscreen)
@@ -3782,19 +3796,16 @@ setfullscreen(Client *c, int fullscreen)
 		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
 			PropModeReplace, (unsigned char*)&netatom[NetWMFullscreen], 1);
 		c->isfullscreen = 1;
-		#if !FAKEFULLSCREEN_PATCH
 		c->oldbw = c->bw;
 		c->oldstate = c->isfloating;
 		c->bw = 0;
 		c->isfloating = 1;
 		resizeclient(c, m->mx, m->my, m->mw, m->mh);
 		XRaiseWindow(dpy, c->win);
-		#endif // !FAKEFULLSCREEN_PATCH
 	} else if (!fullscreen && c->isfullscreen){
 		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
 			PropModeReplace, (unsigned char*)0, 0);
 		c->isfullscreen = 0;
-		#if !FAKEFULLSCREEN_PATCH
 		c->bw = c->oldbw;
 		c->isfloating = c->oldstate;
 		c->x = MAX(m->mx, c->oldx);
@@ -3803,11 +3814,9 @@ setfullscreen(Client *c, int fullscreen)
 		c->h = MIN(c->oldh, m->mh - (c->y - m->my));
 		resizeclient(c, c->x, c->y, c->w, c->h);
 		arrange(m);
-		#endif // !FAKEFULLSCREEN_PATCH
 	}
-	#if FAKEFULLSCREEN_PATCH
+
 	resizeclient(c, c->x, c->y, c->w, c->h);
-	#endif // FAKEFULLSCREEN_PATCH
 }
 #endif // FAKEFULLSCREEN_CLIENT_PATCH
 
