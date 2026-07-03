@@ -4726,6 +4726,10 @@ unmanage(Client *c, int destroyed)
 	#endif // ZOOMSWAP_PATCH
 	m = c->mon;
 
+	#if SWAPFOCUS_PATCH && PERTAG_PATCH
+	removeswapfocusclient(c);
+	#endif // SWAPFOCUS_PATCH
+
 	#if SWALLOW_PATCH
 	if (c->swallowing) {
 		unswallow(c);
