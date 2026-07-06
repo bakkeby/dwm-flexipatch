@@ -8,8 +8,13 @@ swapfocus(const Arg *arg)
 	if (!m->sel)
 		return;
 
-	if (p->prevclient[p->curtag] != NULL && ISVISIBLE(p->prevclient[p->curtag]))
+	if (
+		p->prevclient[p->curtag] != NULL &&
+		p->prevclient[p->curtag] != m->sel &&
+		ISVISIBLE(p->prevclient[p->curtag])
+	) {
 		c = p->prevclient[p->curtag];
+	}
 
 	if (!c)
 		for (c = m->sel->next; c && !ISVISIBLE(c); c = c->next);
