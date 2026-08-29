@@ -868,6 +868,12 @@
  */
 #define MOVECENTER_PATCH 0
 
+/* This patch modifies resizemouse function to center the focused window and resize it at
+ * the same time using mouse. Only works if argument 1 is passed to resizemouse.
+ * Depends on movecenter patch.
+ */
+#define MOVECENTER_RESIZE_PATCH 0
+
 /* Makes a window floating and 1/3rd the height and 1/3rd the width of the screen and is
  * positioned in either the center or one of the 8 cardinal directions depending on which
  * key is pressed.

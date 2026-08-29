@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2026-08-29 - Added the movecenter_resize patch
+
 2026-05-17 - Added the dragfact patch
 
 2025-10-30 - Added the movecenter patch

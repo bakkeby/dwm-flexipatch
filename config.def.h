@@ -1554,6 +1554,9 @@ static const Button buttons[] = {
 	{ ClkTagBar,            0,                   Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,              Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,              Button3,        toggletag,      {0} },
+    #if MOVECENTER_PATCH && MOVECENTER_RESIZE_PATCH
+    { ClkClientWin,         Mod4Mask,            Button3,        resizemouse,    {1} },
+    #endif // MOVECENTER_RESIZE_PATCH
 	#if TAB_PATCH
 	{ ClkTabBar,            0,                   Button1,        focuswin,       {0} },
 	#endif // TAB_PATCH
