@@ -3300,6 +3300,11 @@ resizemouse(const Arg *arg)
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
 				resize(c, nx, ny, nw, nh, 1);
+                #if MOVECENTER_PATCH && MOVECENTER_RESIZE_PATCH
+                if (arg->i == 1) {
+                    movecenter(0);
+                }
+                #endif // MOVECENTER_RESIZE_PATCH
 			}
 			break;
 		}
