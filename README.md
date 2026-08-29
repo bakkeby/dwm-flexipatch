@@ -596,6 +596,12 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
    - [movecenter](https://dwm.suckless.org/patches/movecenter/)
       - adds a keybinding to center the focused window
 
+   - [movecenter_resize](https://github.com/alexskywalker8000/dwm-flexipatch/tree/movecenter_resize/)
+      - center resize the selected window using mouse.
+      - depends on movecenter.
+      - modifies resizemouse function.
+      - only works if provided argument is 1.
+
    - [moveplace](https://dwm.suckless.org/patches/moveplace/)
       - adds a function to place a window either centered or in one of 8 cardinal directions
       - based on the exresize patch
