@@ -1,5 +1,5 @@
 struct Pertag {
-	unsigned int curtag; /* current tag index */
+	unsigned int curtag, prevtag; /* current tag index */
 	int nmasters[NUMTAGS + 1]; /* number of windows in master area */
 	#if FLEXTILE_DELUXE_LAYOUT
 	int nstacks[NUMTAGS + 1]; /* number of windows in primary stack area */
@@ -23,6 +23,9 @@ struct Pertag {
 	int enablegaps[NUMTAGS + 1];
 	int gaps[NUMTAGS + 1];
 	#endif // PERTAG_VANITYGAPS_PATCH | VANITYGAPS_PATCH
+	#if PERTAG_WITH_SEL_PATCH
+	Client *sel[NUMTAGS + 1]; /* selected client */
+	#endif // PERTAG_WITH_SEL_PATCH
 };
 
 void
@@ -30,16 +33,28 @@ pertagview(const Arg *arg)
 {
 	int i;
 
-	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-	if (arg->ui == ~SPTAGMASK)
-	#else
-	if (arg->ui == ~0)
-	#endif // SCRATCHPADS_PATCH
-		selmon->pertag->curtag = 0;
-	else {
-		for (i = 0; !(selmon->tagset[selmon->seltags] & 1 << i); i++);
-		selmon->pertag->curtag = i + 1;
+	#if PERTAG_WITH_SEL_PATCH
+	unsigned int tmptag;
+	if (arg->ui & TAGMASK) {
+		selmon->pertag->prevtag = selmon->pertag->curtag;
+	#endif // PERTAG_WITH_SEL_PATCH
+		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
+		if (arg->ui == ~SPTAGMASK)
+		#else
+		if (arg->ui == ~0)
+		#endif // SCRATCHPADS_PATCH
+			selmon->pertag->curtag = 0;
+		else {
+			for (i = 0; !(selmon->tagset[selmon->seltags] & 1 << i); i++);
+			selmon->pertag->curtag = i + 1;
+		}
+	#if PERTAG_WITH_SEL_PATCH
+	} else {
+	    tmptag = selmon->pertag->prevtag;
+	    selmon->pertag->prevtag = selmon->pertag->curtag;
+	    selmon->pertag->curtag = tmptag;
 	}
+	#endif // PERTAG_WITH_SEL_PATCH
 
 	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
 	#if FLEXTILE_DELUXE_LAYOUT
@@ -63,6 +78,40 @@ pertagview(const Arg *arg)
 	selmon->ltaxis[STACK]  = selmon->pertag->ltaxis[selmon->pertag->curtag][STACK];
 	selmon->ltaxis[STACK2] = selmon->pertag->ltaxis[selmon->pertag->curtag][STACK2];
 	#endif // FLEXTILE_DELUXE_LAYOUT
+
+	#if PERTAGBAR_PATCH
+	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
+		togglebar(NULL);
+	#endif // PERTAGBAR_PATCH
+}
+
+void
+pertagtoggleview(const Arg *arg)
+{
+	int i;
+	unsigned int newtagset = selmon->tagset[selmon->seltags];
+
+	#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
+	if (newtagset == ~SPTAGMASK)
+	#else
+	if (newtagset == ~0)
+	#endif // SCRATCHPADS_PATCH
+	{
+		selmon->pertag->curtag = 0;
+	}
+	/* test if the user did not select the same tag */
+	if (!(newtagset & 1 << (selmon->pertag->curtag - 1))) {
+		for (i = 0; !(newtagset & 1 << i); i++) ;
+		selmon->pertag->curtag = i + 1;
+	}
+
+	/* apply settings for this view */
+	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
+	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
+	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
+	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
+	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
+
 	#if PERTAGBAR_PATCH
 	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
 		togglebar(NULL);

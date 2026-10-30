@@ -2233,6 +2233,9 @@ focus(Client *c)
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
 	selmon->sel = c;
+	#if PERTAG_PATCH && PERTAG_WITH_SEL_PATCH
+	selmon->pertag->sel[selmon->pertag->curtag] = c;
+	#endif // PERTAG_WITH_SEL_PATCH
 	drawbars();
 
 	#if ON_EMPTY_KEYS_PATCH
@@ -3854,16 +3857,17 @@ setlayout(const Arg *arg)
 	}
 	#endif // TOGGLELAYOUT_PATCH
 	#if TOGGLELAYOUT_PATCH
-	if (arg && arg->v && arg->v != selmon->lt[selmon->sellt ^ 1])
+	if (arg && arg->v && arg->v != selmon->lt[selmon->sellt ^ 1]) {
 	#else
-	if (arg && arg->v)
+	if (arg && arg->v) {
 	#endif // TOGGLELAYOUT_PATCH
-	#if PERTAG_PATCH
+		#if PERTAG_PATCH
 		selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt] = (Layout *)arg->v;
-	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
-	#else
+		selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
+		#else
 		selmon->lt[selmon->sellt] = (Layout *)arg->v;
-	#endif // PERTAG_PATCH
+		#endif // PERTAG_PATCH
+	}
 
 	#if FLEXTILE_DELUXE_LAYOUT
 	if (selmon->lt[selmon->sellt]->preset.nmaster && selmon->lt[selmon->sellt]->preset.nmaster != -1)
@@ -4541,14 +4545,11 @@ toggletag(const Arg *arg)
 void
 toggleview(const Arg *arg)
 {
-	unsigned int newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);;
+	unsigned int newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);
 	#if TAGSYNC_PATCH
 	Monitor *origselmon = selmon;
 	for (selmon = mons; selmon; selmon = selmon->next) {
 	#endif // TAGSYNC_PATCH
-	#if PERTAG_PATCH
-	int i;
-	#endif // PERTAG_PATCH
 
 	#if TAGINTOSTACK_ALLMASTER_PATCH
 	Client *const selected = selmon->sel;
@@ -4592,30 +4593,7 @@ toggleview(const Arg *arg)
 		selmon->tagset[selmon->seltags] = newtagset;
 
 		#if PERTAG_PATCH
-		#if SCRATCHPADS_PATCH && !RENAMED_SCRATCHPADS_PATCH
-		if (newtagset == ~SPTAGMASK)
-		#else
-		if (newtagset == ~0)
-		#endif // SCRATCHPADS_PATCH
-		{
-			selmon->pertag->curtag = 0;
-		}
-		/* test if the user did not select the same tag */
-		if (!(newtagset & 1 << (selmon->pertag->curtag - 1))) {
-			for (i = 0; !(newtagset & 1 << i); i++) ;
-			selmon->pertag->curtag = i + 1;
-		}
-
-		/* apply settings for this view */
-		selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
-		selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
-		selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
-		selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
-		selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
-		#if PERTAGBAR_PATCH
-		if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
-			togglebar(NULL);
-		#endif // PERTAGBAR_PATCH
+		pertagtoggleview(arg);
 		#endif // PERTAG_PATCH
 		#if !TAGSYNC_PATCH
 		arrange(selmon);
@@ -4718,6 +4696,13 @@ unmanage(Client *c, int destroyed)
 	/* Make sure to clear any previous zoom references to the client being removed. */
 	#if PERTAG_PATCH
 	int i;
+
+	#if PERTAG_WITH_SEL_PATCH
+	for (i = 0; i <= NUMTAGS; i++)
+		if (c->mon->pertag->sel[i] == c)
+			c->mon->pertag->sel[i] = NULL;
+	#endif // PERTAG_WITH_SEL_PATCH
+
 	for (m = mons; m; m = m->next) {
 		for (i = 0; i <= NUMTAGS; i++) {
 			if (m->pertag->prevzooms[i] == c) {
@@ -5322,7 +5307,11 @@ view(const Arg *arg)
 	#else
 	arrange(selmon);
 	#endif // TAGSYNC_PATCH
+	#if PERTAG_PATCH && PERTAG_WITH_SEL_PATCH
+	focus(selmon->pertag->sel[selmon->pertag->curtag]);
+	#else
 	focus(NULL);
+	#endif // PERTAG_WITH_SEL_PATCH
 	#if BAR_EWMHTAGS_PATCH
 	updatecurrentdesktop();
 	#endif // BAR_EWMHTAGS_PATCH
