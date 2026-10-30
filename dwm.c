@@ -3883,7 +3883,8 @@ setlayout(const Arg *arg)
 	selmon->pertag->ltaxis[selmon->pertag->curtag][STACK2] = selmon->ltaxis[STACK2];
 	#endif // PERTAG_PATCH
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof selmon->ltsymbol);
+	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof(selmon->ltsymbol) - 1);
+	selmon->ltsymbol[sizeof(selmon->ltsymbol) - 1] = '\0';
 	if (selmon->sel)
 		arrange(selmon);
 	else
