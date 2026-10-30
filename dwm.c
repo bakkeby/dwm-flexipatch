@@ -4796,10 +4796,12 @@ unmanage(Client *c, int destroyed)
 	#if BETTERSWALLOW_PATCH || !SWALLOW_PATCH
 	if(c->swallower) {
 		Client **prev = &c->swallower->swallowed;
-		for(; *prev != c; prev = &(*prev)->next_swallowed)
+		for(; *prev && *prev != c; prev = &(*prev)->next_swallowed)
 			;
-		*prev = c->next_swallowed;
-		c->next_swallowed = NULL;
+		if (*prev) {
+			*prev = c->next_swallowed;
+			c->next_swallowed = NULL;
+		}
 
 		if(c->swallower->swallowed == NULL) {
 			detach(c->swallower);

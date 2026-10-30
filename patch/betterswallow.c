@@ -13,11 +13,16 @@ void
 checkswallowed(Client *c) {
 	pid_t pid = wintopid(c->win);
 
-	if(pid < 0) return;
-	for(SwallowDef *sd = swallowlist; sd != NULL; sd = sd->next) {
-		if(pid == sd->pid) {
-			c->swallower = sd->swallower;
-			copyclientpos(c, sd->swallower);
+	if (pid < 0)
+		return;
+
+	SwallowDef **curr = &swallowlist;
+	while (*curr) {
+		if (pid == (*curr)->pid) {
+			SwallowDef *matched = *curr;
+
+			c->swallower = matched->swallower;
+			copyclientpos(c, matched->swallower);
 
 			c->next_swallowed = c->swallower->swallowed;
 			c->swallower->swallowed = c;
@@ -28,8 +33,12 @@ checkswallowed(Client *c) {
 			c->snext = c->swallower->snext;
 			c->swallower->snext = c;
 
+			*curr = matched->next;
+			free(matched);
+
 			return;
 		}
+		curr = &(*curr)->next;
 	}
 }
 
