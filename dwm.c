@@ -4277,21 +4277,19 @@ spawn(const Arg *arg)
 #endif // RIODRAW_PATCH
 {
 	struct sigaction sa;
-
-	#if RIODRAW_PATCH
 	pid_t pid;
-	#endif // RIODRAW_PATCH
+
 	#if !NODMENU_PATCH
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 	#endif // NODMENU_PATCH
 
-	#if RIODRAW_PATCH
-	if ((pid = fork()) == 0)
-	#else
-	if (fork() == 0)
-	#endif // RIODRAW_PATCH
-	{
+	if ((pid = fork()) == -1) {
+		fprintf(stderr, "dwm: fork failed: %s\n", strerror(errno));
+		return;
+	}
+
+	if (pid == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
 
