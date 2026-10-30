@@ -1153,7 +1153,8 @@ arrangemon(Monitor *m)
 	updatebarpos(m);
 	XMoveResizeWindow(dpy, m->tabwin, m->wx, m->ty, m->ww, th);
 	#endif // TAB_PATCH
-	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof m->ltsymbol);
+	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof(m->ltsymbol) - 1);
+	m->ltsymbol[sizeof(m->ltsymbol) - 1] = '\0';
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
 }
@@ -1733,7 +1734,8 @@ createmon(void)
 			layout = MIN(layout, LENGTH(layouts) - 1);
 			m->lt[0] = &layouts[layout];
 			m->lt[1] = &layouts[1 % LENGTH(layouts)];
-			strncpy(m->ltsymbol, layouts[layout].symbol, sizeof m->ltsymbol);
+			strncpy(m->ltsymbol, layouts[layout].symbol, sizeof(m->ltsymbol) - 1);
+			m->ltsymbol[sizeof(m->ltsymbol) - 1] = '\0';
 
 			if (mr->mfact > -1)
 				m->mfact = mr->mfact;
@@ -1749,7 +1751,8 @@ createmon(void)
 	#else
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
-	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
+	strncpy(m->ltsymbol, layouts[0].symbol, sizeof(m->ltsymbol) - 1);
+	m->ltsymbol[sizeof(m->ltsymbol) - 1] = '\0';
 	#endif // MONITOR_RULES_PATCH
 
 	/* Derive the number of bars for this monitor based on bar rules */
