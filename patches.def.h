@@ -1276,7 +1276,7 @@
  * 4. Optional: Move better-swallow to $PATH and alias to bs
  * https://github.com/afishhh/better-swallow
  */
-#define BETTERSWALLOW_PATCH 1
+#define BETTERSWALLOW_PATCH 0
 
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (MOD+s) instead of having to think if you should use mod-j or mod-k for reaching
