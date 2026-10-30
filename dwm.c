@@ -90,12 +90,22 @@
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
 #endif // BAR_ANYBAR_PATCH
-#if ATTACHASIDE_PATCH && STICKY_PATCH
+#if ATTACHASIDE_PATCH && STICKY_PATCH && BETTERSWALLOW_PATCH
+#define ISVISIBLEONTAG(C, T)    ((C->tags & T) || C->issticky)
+#define ISVISIBLE(C)            (ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags]) && C->swallowed == NULL)
+#elif ATTACHASIDE_PATCH && STICKY_PATCH
 #define ISVISIBLEONTAG(C, T)    ((C->tags & T) || C->issticky)
 #define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])
+#elif ATTACHASIDE_PATCH && BETTERSWALLOW_PATCH
+#define ISVISIBLEONTAG(C, T)    ((C->tags & T))
+#define ISVISIBLE(C)            (ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags]) && C->swallowed == NULL)
 #elif ATTACHASIDE_PATCH
 #define ISVISIBLEONTAG(C, T)    ((C->tags & T))
 #define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])
+#elif STICKY_PATCH && BETTERSWALLOW_PATCH
+#define ISVISIBLE(C)            (((C->tags & C->mon->tagset[C->mon->seltags]) && C->swallowed == NULL) || C->issticky)
+#elif BETTERSWALLOW_PATCH
+#define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]) && C->swallowed == NULL)
 #elif STICKY_PATCH
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]) || C->issticky)
 #else
@@ -413,6 +423,11 @@ struct Client {
 	#if STICKY_PATCH
 	int issticky;
 	#endif // STICKY_PATCH
+	#if BETTERSWALLOW_PATCH
+	Client *swallower;
+	Client *swallowed;
+	Client *next_swallowed;
+	#endif // BETTERSWALLOW_PATCH
 	Client *next;
 	Client *snext;
 	#if SWALLOW_PATCH
@@ -1516,6 +1531,14 @@ clientmessage(XEvent *e)
 		if (c != selmon->sel && !c->isurgent)
 			seturgent(c, 1);
 		#endif // FOCUSONNETACTIVE_PATCH
+	#if BETTERSWALLOW_PATCH
+	} else if(cme->message_type == swallow_atom) {
+		SwallowDef *node = ecalloc(1, sizeof(SwallowDef));
+		node->pid = cme->data.l[0];
+		node->swallower = c;
+		node->next = swallowlist;
+		swallowlist = node;
+	#endif // BETTERSWALLOW_PATCH
 	}
 }
 
@@ -2689,6 +2712,9 @@ manage(Window w, XWindowAttributes *wa)
 		c->y = c->mon->wy + c->mon->wh - HEIGHT(c);
 	c->x = MAX(c->x, c->mon->wx);
 	c->y = MAX(c->y, c->mon->wy);
+	#if BETTERSWALLOW_PATCH
+	checkswallowed(c);
+	#endif // BETTERSWALLOW_PATCH
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
@@ -2747,12 +2773,18 @@ manage(Window w, XWindowAttributes *wa)
 		XRaiseWindow(dpy, c->win);
 		XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColFloat].pixel);
 	}
-	#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH || SEAMLESS_RESTART_PATCH
-	attachx(c);
-	#else
-	attach(c);
-	#endif
-	attachstack(c);
+	#if BETTERSWALLOW_PATCH
+	if (!c->swallower) {
+	#endif // BETTERSWALLOW_PATCH
+		#if ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH || SEAMLESS_RESTART_PATCH
+		attachx(c);
+		#else
+		attach(c);
+		#endif // ATTACHABOVE_PATCH || ATTACHASIDE_PATCH || ATTACHBELOW_PATCH || ATTACHBOTTOM_PATCH || SEAMLESS_RESTART_PATCH
+		attachstack(c);
+	#if BETTERSWALLOW_PATCH
+	}
+	#endif // BETTERSWALLOW_PATCH
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 		(unsigned char *) &(c->win), 1);
 	#if NET_CLIENT_LIST_STACKING_PATCH
@@ -2928,6 +2960,10 @@ movemouse(const Arg *arg)
 		case Expose:
 		case MapRequest:
 			handler[ev.type](&ev);
+			#if BETTERSWALLOW_PATCH
+			if(c->swallowed)
+				c = c->swallowed;
+			#endif // BETTERSWALLOW_PATCH
 			break;
 		case MotionNotify:
 			if ((ev.xmotion.time - lasttime) <= (1000 / refreshrate))
@@ -3267,6 +3303,10 @@ resizemouse(const Arg *arg)
 		case Expose:
 		case MapRequest:
 			handler[ev.type](&ev);
+			#if BETTERSWALLOW_PATCH
+			if(c->swallowed)
+				c = c->swallowed;
+			#endif // BETTERSWALLOW_PATCH
 			break;
 		case MotionNotify:
 			if ((ev.xmotion.time - lasttime) <= (1000 / refreshrate))
@@ -4008,6 +4048,9 @@ setup(void)
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
+	#if BETTERSWALLOW_PATCH
+	swallow_atom = XInternAtom(dpy, "_BETTER_SWALLOW", False);
+	#endif // BETTERSWALLOW_PATCH
 	#if NET_CLIENT_LIST_STACKING_PATCH
 	netatom[NetClientListStacking] = XInternAtom(dpy, "_NET_CLIENT_LIST_STACKING", False);
 	#endif // NET_CLIENT_LIST_STACKING_PATCH
@@ -4085,6 +4128,10 @@ setup(void)
 	XChangeProperty(dpy, wmcheckwin, netatom[NetWMName], utf8string, 8,
 		PropModeReplace, (unsigned char *) "dwm", 3);
 	#endif // LG3D_PATCH
+	#if BETTERSWALLOW_PATCH
+	XChangeProperty(dpy, root, swallow_atom, utf8string, 8,
+		PropModeReplace, (unsigned char *) "supported", 9);
+	#endif // BETTERSWALLOW_PATCH
 	XChangeProperty(dpy, root, netatom[NetWMCheck], XA_WINDOW, 32,
 		PropModeReplace, (unsigned char *) &wmcheckwin, 1);
 	/* EWMH support per view */
@@ -4730,7 +4777,7 @@ unmanage(Client *c, int destroyed)
 	removeswapfocusclient(c);
 	#endif // SWAPFOCUS_PATCH
 
-	#if SWALLOW_PATCH
+	#if SWALLOW_PATCH && !BETTERSWALLOW_PATCH 
 	if (c->swallowing) {
 		unswallow(c);
 		return;
@@ -4745,6 +4792,28 @@ unmanage(Client *c, int destroyed)
 		return;
 	}
 	#endif // SWALLOW_PATCH
+
+	#if BETTERSWALLOW_PATCH || !SWALLOW_PATCH
+	if(c->swallower) {
+		Client **prev = &c->swallower->swallowed;
+		for(; *prev != c; prev = &(*prev)->next_swallowed)
+			;
+		*prev = c->next_swallowed;
+		c->next_swallowed = NULL;
+
+		if(c->swallower->swallowed == NULL) {
+			detach(c->swallower);
+			detachstack(c->swallower);
+
+			c->swallower->next = c->next;
+			c->next = c->swallower;
+			c->swallower->snext = c->snext;
+			c->snext = c->swallower;
+
+			copyclientpos(c->swallower, c);
+		}
+	}
+	#endif // BETTERSWALLOW_PATCH
 
 	detach(c);
 	detachstack(c);
@@ -4764,8 +4833,13 @@ unmanage(Client *c, int destroyed)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
-	#if XKB_PATCH
+	#if XKB_PATCH || BETTERSWALLOW_PATCH
 	else {
+	#if BETTERSWALLOW_PATCH
+		if(c->swallower) focus(c->swallower);
+		else focus(NULL);
+	#endif // BETTERSWALLOW_PATCH
+	#if XKB_PATCH
 		xkb = findxkb(c->win);
 		if (xkb != NULL) {
 			if (xkb->prev)
@@ -4774,6 +4848,7 @@ unmanage(Client *c, int destroyed)
 				xkb->next->prev = xkb->prev;
 			free(xkb);
 		}
+	#endif // XKB_PATCH
 	}
 	#endif // XKB_PATCH
 
@@ -4788,7 +4863,9 @@ unmanage(Client *c, int destroyed)
 		return;
 	#endif // SWALLOW_PATCH
 	arrange(m);
+	#if !BETTERSWALLOW_PATCH
 	focus(NULL);
+	#endif // !BETTERSWALLOW_PATCH
 	updateclientlist();
 	#if SWITCHTAG_PATCH
 	if (switchtag && ((switchtag & TAGMASK) != selmon->tagset[selmon->seltags]))

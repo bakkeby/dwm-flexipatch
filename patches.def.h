@@ -965,6 +965,9 @@
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/
+ *
+ * NOTE: If you are looking for a DOUBLEPRESSQUIT_PATCH, this patch is a better
+ * alternative that's already built into the source code.
  */
 #define ONLYQUITONEMPTY_PATCH 0
 
@@ -1261,6 +1264,19 @@
  * https://dwm.suckless.org/patches/swallow/
  */
 #define SWALLOW_PATCH 0
+
+/* Unlike the existing dynamicswallow patch, betterswallow uses PID-based
+ * swallowing and a non-standard X11 ClientMessage for communication.
+ * https://dwm.suckless.org/patches/betterswallow/
+ *
+ * Usage (It's tutorial time):
+ * 1. Compile dwm-flexipatch with BETTERSWALLOW_PATCH
+ * 2. Compile the better-swallow binary from the repository below
+ * 3. Launch better-swallow followed by the command and arguments
+ * 4. Optional: Move better-swallow to $PATH and alias to bs
+ * https://github.com/afishhh/better-swallow
+ */
+#define BETTERSWALLOW_PATCH 1
 
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (MOD+s) instead of having to think if you should use mod-j or mod-k for reaching
