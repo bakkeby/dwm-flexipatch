@@ -103,7 +103,7 @@
 #define ISVISIBLEONTAG(C, T)    ((C->tags & T))
 #define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])
 #elif STICKY_PATCH && BETTERSWALLOW_PATCH
-#define ISVISIBLE(C)            (((C->tags & C->mon->tagset[C->mon->seltags]) && C->swallowed == NULL) || C->issticky)
+#define ISVISIBLE(C)            (((C->tags & C->mon->tagset[C->mon->seltags]) || C->issticky) && C->swallowed == NULL)
 #elif BETTERSWALLOW_PATCH
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]) && C->swallowed == NULL)
 #elif STICKY_PATCH
@@ -1532,7 +1532,7 @@ clientmessage(XEvent *e)
 			seturgent(c, 1);
 		#endif // FOCUSONNETACTIVE_PATCH
 	#if BETTERSWALLOW_PATCH
-	} else if(cme->message_type == swallow_atom) {
+	} else if (cme->message_type == swallow_atom) {
 		SwallowDef *node = ecalloc(1, sizeof(SwallowDef));
 		node->pid = cme->data.l[0];
 		node->swallower = c;
@@ -2964,7 +2964,7 @@ movemouse(const Arg *arg)
 		case MapRequest:
 			handler[ev.type](&ev);
 			#if BETTERSWALLOW_PATCH
-			if(c->swallowed)
+			if (c->swallowed)
 				c = c->swallowed;
 			#endif // BETTERSWALLOW_PATCH
 			break;
@@ -3307,7 +3307,7 @@ resizemouse(const Arg *arg)
 		case MapRequest:
 			handler[ev.type](&ev);
 			#if BETTERSWALLOW_PATCH
-			if(c->swallowed)
+			if (c->swallowed)
 				c = c->swallowed;
 			#endif // BETTERSWALLOW_PATCH
 			break;
@@ -4762,7 +4762,31 @@ unmanage(Client *c, int destroyed)
 	removeswapfocusclient(c);
 	#endif // SWAPFOCUS_PATCH
 
-	#if SWALLOW_PATCH && !BETTERSWALLOW_PATCH 
+	#if BETTERSWALLOW_PATCH
+	if (c->swallower) {
+		Client **prev = &c->swallower->swallowed;
+		for (; *prev && *prev != c; prev = &(*prev)->next_swallowed)
+			;
+		if (*prev) {
+			*prev = c->next_swallowed;
+			c->next_swallowed = NULL;
+		}
+
+		if (c->swallower->swallowed == NULL) {
+			detach(c->swallower);
+			detachstack(c->swallower);
+
+			c->swallower->next = c->next;
+			c->next = c->swallower;
+			c->swallower->snext = c->snext;
+			c->snext = c->swallower;
+
+			copyclientpos(c->swallower, c);
+		}
+	}
+	#endif // BETTERSWALLOW_PATCH
+
+	#if SWALLOW_PATCH
 	if (c->swallowing) {
 		unswallow(c);
 		return;
@@ -4777,30 +4801,6 @@ unmanage(Client *c, int destroyed)
 		return;
 	}
 	#endif // SWALLOW_PATCH
-
-	#if BETTERSWALLOW_PATCH || !SWALLOW_PATCH
-	if(c->swallower) {
-		Client **prev = &c->swallower->swallowed;
-		for(; *prev && *prev != c; prev = &(*prev)->next_swallowed)
-			;
-		if (*prev) {
-			*prev = c->next_swallowed;
-			c->next_swallowed = NULL;
-		}
-
-		if(c->swallower->swallowed == NULL) {
-			detach(c->swallower);
-			detachstack(c->swallower);
-
-			c->swallower->next = c->next;
-			c->next = c->swallower;
-			c->swallower->snext = c->snext;
-			c->snext = c->swallower;
-
-			copyclientpos(c->swallower, c);
-		}
-	}
-	#endif // BETTERSWALLOW_PATCH
 
 	detach(c);
 	detachstack(c);
@@ -4822,11 +4822,10 @@ unmanage(Client *c, int destroyed)
 	}
 	#if XKB_PATCH || BETTERSWALLOW_PATCH
 	else {
-	#if BETTERSWALLOW_PATCH
-		if(c->swallower) focus(c->swallower);
-		else focus(NULL);
-	#endif // BETTERSWALLOW_PATCH
-	#if XKB_PATCH
+		#if BETTERSWALLOW_PATCH
+		deleteswallower(c);
+		#endif // BETTERSWALLOW_PATCH
+		#if XKB_PATCH
 		xkb = findxkb(c->win);
 		if (xkb != NULL) {
 			if (xkb->prev)
@@ -4835,9 +4834,13 @@ unmanage(Client *c, int destroyed)
 				xkb->next->prev = xkb->prev;
 			free(xkb);
 		}
-	#endif // XKB_PATCH
+		#endif // XKB_PATCH
 	}
-	#endif // XKB_PATCH
+	#endif // XKB_PATCH | BETTERSWALLOW_PATCH
+
+	#if BETTERSWALLOW_PATCH
+	focus(c->swallower); // NULL or swallower client
+	#endif // BETTERSWALLOW_PATCH
 
 	#if SCRATCHPAD_ALT_1_PATCH
 	if (scratchpad_last_showed == c)
@@ -4852,7 +4855,7 @@ unmanage(Client *c, int destroyed)
 	arrange(m);
 	#if !BETTERSWALLOW_PATCH
 	focus(NULL);
-	#endif // !BETTERSWALLOW_PATCH
+	#endif // BETTERSWALLOW_PATCH
 	updateclientlist();
 	#if SWITCHTAG_PATCH
 	if (switchtag && ((switchtag & TAGMASK) != selmon->tagset[selmon->seltags]))
