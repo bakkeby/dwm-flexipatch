@@ -1153,8 +1153,7 @@ arrangemon(Monitor *m)
 	updatebarpos(m);
 	XMoveResizeWindow(dpy, m->tabwin, m->wx, m->ty, m->ww, th);
 	#endif // TAB_PATCH
-	strncpy(m->ltsymbol, m->lt[m->sellt]->symbol, sizeof(m->ltsymbol) - 1);
-	m->ltsymbol[sizeof(m->ltsymbol) - 1] = '\0';
+	snprintf(m->ltsymbol, sizeof(m->ltsymbol), "%s", m->lt[m->sellt]->symbol);
 	if (m->lt[m->sellt]->arrange)
 		m->lt[m->sellt]->arrange(m);
 }
@@ -1734,8 +1733,7 @@ createmon(void)
 			layout = MIN(layout, LENGTH(layouts) - 1);
 			m->lt[0] = &layouts[layout];
 			m->lt[1] = &layouts[1 % LENGTH(layouts)];
-			strncpy(m->ltsymbol, layouts[layout].symbol, sizeof(m->ltsymbol) - 1);
-			m->ltsymbol[sizeof(m->ltsymbol) - 1] = '\0';
+			snprintf(m->ltsymbol, sizeof(m->ltsymbol), "%s", layouts[layout].symbol);
 
 			if (mr->mfact > -1)
 				m->mfact = mr->mfact;
@@ -1751,8 +1749,7 @@ createmon(void)
 	#else
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
-	strncpy(m->ltsymbol, layouts[0].symbol, sizeof(m->ltsymbol) - 1);
-	m->ltsymbol[sizeof(m->ltsymbol) - 1] = '\0';
+	snprintf(m->ltsymbol, sizeof(m->ltsymbol), "%s", layouts[0].symbol);
 	#endif // MONITOR_RULES_PATCH
 
 	/* Derive the number of bars for this monitor based on bar rules */
@@ -2408,10 +2405,10 @@ gettextprop(Window w, Atom atom, char *text, unsigned int size)
 	if (!XGetTextProperty(dpy, w, &name, atom) || !name.nitems)
 		return 0;
 	if (name.encoding == XA_STRING) {
-		strncpy(text, (char *)name.value, size - 1);
+		snprintf(text, size, "%s", (char *)name.value);
 	} else if (XmbTextPropertyToTextList(dpy, &name, &list, &n) >= Success) {
 		if (n > 0 && *list)
-			strncpy(text, *list, size - 1);
+			snprintf(text, size, "%s", *list);
 		XFreeStringList(list);
 	}
 	text[size - 1] = '\0';
@@ -3883,8 +3880,7 @@ setlayout(const Arg *arg)
 	selmon->pertag->ltaxis[selmon->pertag->curtag][STACK2] = selmon->ltaxis[STACK2];
 	#endif // PERTAG_PATCH
 	#endif // FLEXTILE_DELUXE_LAYOUT
-	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof(selmon->ltsymbol) - 1);
-	selmon->ltsymbol[sizeof(selmon->ltsymbol) - 1] = '\0';
+	snprintf(selmon->ltsymbol, sizeof(selmon->ltsymbol), "%s", selmon->lt[selmon->sellt]->symbol);
 	if (selmon->sel)
 		arrange(selmon);
 	else
