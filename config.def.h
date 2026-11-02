@@ -662,7 +662,7 @@ static const BarRule barrules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.618; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 #if FLEXTILE_DELUXE_LAYOUT
 static const int nstack      = 0;    /* number of clients in primary stack area */
@@ -763,17 +763,14 @@ static const Layout layouts[] = {
 #else
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	#if FIBONACCI_SPIRAL_LAYOUT
-	{ "(@)",      spiral },  /* first entry is default */
-	#endif
 	#if TILE_LAYOUT
-	{ "[]=",      tile },
+	{ "[]=",      tile },    /* first entry is default */
+	#endif
+	#if FLOATING_LAYOUT
+ 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	#endif
 	#if MONOCLE_LAYOUT
 	{ "[M]",      monocle },
-	#endif
-	#if DECK_LAYOUT
-	{ "[D]",      deck },
 	#endif
 	#if BSTACK_LAYOUT
 	{ "TTT",      bstack },
@@ -789,6 +786,12 @@ static const Layout layouts[] = {
 	#endif
 	#if COLUMNS_LAYOUT
 	{ "|||",      col },
+	#endif
+	#if DECK_LAYOUT
+	{ "[D]",      deck },
+	#endif
+	#if FIBONACCI_SPIRAL_LAYOUT
+	{ "(@)",      spiral },
 	#endif
 	#if FIBONACCI_DWINDLE_LAYOUT
 	{ "[\\]",     dwindle },
@@ -1095,18 +1098,25 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_v,          switchcol,              {0} },
 	#endif // SWITCHCOL_PATCH
 	#if INPLACEROTATE_PATCH
-	{ Mod1Mask,                     XK_j,          inplacerotate,          {.i = +2 } }, // same as rotatestack
-	{ Mod1Mask,                     XK_k,          inplacerotate,          {.i = -2 } }, // same as rotatestack
-	{ Mod1Mask|ShiftMask,           XK_j,          inplacerotate,          {.i = +1} },
-	{ Mod1Mask|ShiftMask,           XK_k,          inplacerotate,          {.i = -1} },
+	{ Mod1Mask,                     XK_j,          inplacerotate,          {.i = +1} },
+	{ Mod1Mask,                     XK_k,          inplacerotate,          {.i = -1} },
+	{ Mod1Mask|ShiftMask,           XK_j,          inplacerotate,          {.i = +2 } }, // same as rotatestack
+	{ Mod1Mask|ShiftMask,           XK_k,          inplacerotate,          {.i = -2 } }, // same as rotatestack
 	#elif ROTATESTACK_PATCH
-	{ Mod1Mask,                     XK_j,          rotatestack,            {.i = +1 } },
-	{ Mod1Mask,                     XK_k,          rotatestack,            {.i = -1 } },
+	{ Mod1Mask|ShiftMask,           XK_j,          rotatestack,            {.i = +1 } },
+	{ Mod1Mask|ShiftMask,           XK_k,          rotatestack,            {.i = -1 } },
 	#endif // INPLACEROTATE_PATCH | ROTATESTACK_PATCH
 	#if PUSH_PATCH || PUSH_NO_MASTER_PATCH
 	{ MODKEY|ControlMask,           XK_j,          pushdown,               {0} },
 	{ MODKEY|ControlMask,           XK_k,          pushup,                 {0} },
 	#endif // PUSH_PATCH / PUSH_NO_MASTER_PATCH
+	#if DECK_LAYOUT
+	{ MODKEY|ShiftMask,             XK_i,          incnmaster,             {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_d,          incnmaster,             {.i = -1 } },
+	#else
+	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
+	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
+	#endif // DECK_LAYOUT
 	#if FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
@@ -1171,7 +1181,7 @@ static const Key keys[] = {
 	{ Mod1Mask|ShiftMask,           XK_0,          defaultgaps,            {0} },
 	#endif // VANITYGAPS_PATCH
 	#if ALT_TAB_PATCH
-	{ Mod1Mask,                     XK_Tab,        alttabstart,            {0} },
+	{ Mod1Mask|ControlMask,         XK_Tab,        alttabstart,            {0} },
 	#else
 	{ MODKEY|ControlMask,           XK_Tab,        view,                   {0} },
 	#endif // ALT_TAB_PATCH
@@ -1228,28 +1238,16 @@ static const Key keys[] = {
 	#if XRDB_PATCH || XRESOURCES_PATCH
 	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	#endif // XRDB_PATCH | XRESOURCES_PATCH
-	{ MODKEY,                       XK_r,          setlayout,              {.v = &layouts[0]} },
-	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
+	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
+	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,             XK_m,          setlayout,              {.v = &layouts[2]} },
 	#if DECK_LAYOUT
 	{ MODKEY,                       XK_d,          setlayout,              {.v = &layouts[3]} },
-	{ MODKEY|ShiftMask,             XK_i,          incnmaster,             {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_d,          incnmaster,             {.i = -1 } },
-	#else
-	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
-	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
 	#endif // DECK_LAYOUT
-	#if CENTEREDMASTER_LAYOUT
-	{ MODKEY,                       XK_c,          setlayout,              {.v = &layouts[4]} },
-	#endif // CENTEREDMASTER_LAYOUT
-	#if BSTACK_LAYOUT
-	{ MODKEY,                       XK_g,          setlayout,              {.v = &layouts[5]} },
-	#elif (GRIDMODE_LAYOUT || GAPPLESSGRID_LAYOUT) && (HORIZGRID_LAYOUT || NROWGRID_LAYOUT)
-	{ MODKEY,                       XK_g,          setlayout,              {.v = &layouts[5]} },
-	{ MODKEY|ShiftMask,             XK_g,          setlayout,              {.v = &layouts[6]} },
-	#elif GRIDMODE_LAYOUT || GAPPLESSGRID_LAYOUT || HORIZGRID_LAYOUT || NROWGRID_LAYOUT
-	{ MODKEY,                       XK_g,          setlayout,              {.v = &layouts[5]} },
-	#endif // BSTACK_LAYOUT
+	{ MODKEY,                       XK_r,          setlayout,              {.v = &layouts[4]} },
+	{ MODKEY|ShiftMask,             XK_r,          setlayout,              {.v = &layouts[5]} },
+	{ MODKEY,                       XK_g,          setlayout,              {.v = &layouts[6]} },
+	{ MODKEY|ShiftMask,             XK_g,          setlayout,              {.v = &layouts[7]} },
 	#if FLEXTILE_DELUXE_LAYOUT
 	{ MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,       {.i = +1 } },   /* flextile, 1 = layout axis */
 	{ MODKEY|ControlMask,           XK_backslash,  rotatelayoutaxis,       {.i = +2 } },   /* flextile, 2 = master axis */
@@ -1612,11 +1610,15 @@ static const Button buttons[] = {
 	#else
 	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
 	#endif // BAR_LAYOUTMENU_PATCH
+	{ ClkLtSymbol,          0,                   Button4,        cyclelayout,    {.i = -1} },
+	{ ClkLtSymbol,          0,                   Button5,        cyclelayout,    {.i = +1} },
 	#if BAR_WINTITLEACTIONS_PATCH
 	{ ClkWinTitle,          0,                   Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	{ ClkWinTitle,          0,                   Button2,        zoom,           {0} },
+	{ ClkWinTitle,          0,                   Button4,        focusstack,     {.i = -1} },
+	{ ClkWinTitle,          0,                   Button5,        focusstack,     {.i = +1} },
 	#if BAR_STATUSCMD_PATCH && BAR_DWMBLOCKS_PATCH
 	{ ClkStatusText,        0,                   Button1,        sigstatusbar,   {.i = 1 } },
 	{ ClkStatusText,        0,                   Button2,        sigstatusbar,   {.i = 2 } },
@@ -1657,9 +1659,6 @@ static const Button buttons[] = {
 	{ ClkClientWin,         MODKEY,              Button5,        resizemousescroll, {.v = &scrollargs[1]} },
 	{ ClkClientWin,         MODKEY,              Button6,        resizemousescroll, {.v = &scrollargs[2]} },
 	{ ClkClientWin,         MODKEY,              Button7,        resizemousescroll, {.v = &scrollargs[3]} },
-	#else
-	{ ClkClientWin,         MODKEY,              Button4,        focusstack,     {.i = -1} },
-	{ ClkClientWin,         MODKEY,              Button5,        focusstack,     {.i = +1} },
 	#endif // TAPRESIZE_PATCH
 	#if DRAGCFACT_PATCH && CFACTS_PATCH
 	{ ClkClientWin,         MODKEY|ShiftMask,    Button3,        dragcfact,      {0} },

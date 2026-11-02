@@ -320,7 +320,7 @@
  * will appear at the bottom and if 1 then dmenu will appear at the top.
  * https://dwm.suckless.org/patches/dmenumatchtop
  */
-#define BAR_DMENUMATCHTOP_PATCH 0
+#define BAR_DMENUMATCHTOP_PATCH 1
 
 /* Originally this was the extrabar patch, but as the handling of extra bars is now built-in
  * only the splitting of the status by a designated separator remains. As such this has been
@@ -480,12 +480,12 @@
  *
  * https://dwm.suckless.org/patches/alwaysontop/
  */
-#define ALWAYSONTOP_PATCH 0
+#define ALWAYSONTOP_PATCH 1
 
 /* This patch allows windows to be resized with its aspect ratio remaining constant.
  * https://dwm.suckless.org/patches/aspectresize/
  */
-#define ASPECTRESIZE_PATCH 0
+#define ASPECTRESIZE_PATCH 1
 
 /* This patch adds new clients above the selected client, instead of always
  * becoming the new master. This behaviour is known from Xmonad.
@@ -523,7 +523,7 @@
  * get resized/moved. With this patch, they will.
  * https://dwm.suckless.org/patches/autoresize/
  */
-#define AUTORESIZE_PATCH 0
+#define AUTORESIZE_PATCH 1
 
 /* This patch allows for the mouse cursor to automatically hide when the user uses the keyboard.
  *
@@ -551,7 +551,7 @@
  *
  * https://dwm.suckless.org/patches/betterswallow/
  */
-#define BETTERSWALLOW_PATCH 0
+#define BETTERSWALLOW_PATCH 1
 
 /* This patch adds proper support for Right-To-Left languages. (such as Farsi, Arabic or Hebrew).
  *
@@ -579,7 +579,7 @@
  * This patch takes precedence over centeredwindowname, alwayscenter and fancybar patches.
  * https://dwm.suckless.org/patches/center/
  */
-#define CENTER_PATCH 1
+#define CENTER_PATCH 0
 
 /* A transient window is one that is meant to be short lived and is usually raised by a
  * parent window. Such windows are typically dialog boxes and the like.
@@ -640,7 +640,7 @@
  * It is a variant of the reorganizetags patch.
  * https://dwm.suckless.org/patches/reorganizetags/
  */
-#define DISTRIBUTETAGS_PATCH 0
+#define DISTRIBUTETAGS_PATCH 1
 
 /* By default dwm will terminate on color allocation failure and the behaviour is intended to
  * catch and inform the user of color configuration issues.
@@ -796,7 +796,7 @@
  * area (master or stack) without affecting the other area.
  * https://dwm.suckless.org/patches/inplacerotate/
  */
-#define INPLACEROTATE_PATCH 0
+#define INPLACEROTATE_PATCH 1
 
 /* This patch lets you define custom insets from each edge of the screen. One use case would be
  * to arrange space for an external bar.
@@ -1022,7 +1022,7 @@
 /* This patch lets you change the position of a client in the stack using the mouse.
  * https://github.com/bakkeby/patches/wiki/placemouse
  */
-#define PLACEMOUSE_PATCH 0
+#define PLACEMOUSE_PATCH 1
 
 /* This patch provides a way to move clients up and down inside the client list.
  * https://dwm.suckless.org/patches/push/
@@ -1059,13 +1059,13 @@
  * leftmost tag, and will be reduced to one tag after the operation is complete.
  * https://dwm.suckless.org/patches/reorganizetags/
  */
-#define REORGANIZETAGS_PATCH 0
+#define REORGANIZETAGS_PATCH 1
 
 /* By default, windows only resize from the bottom right corner. With this
  * patch the mouse is warped to the nearest corner and you resize from there.
  * https://dwm.suckless.org/patches/resizecorners/
  */
-#define RESIZECORNERS_PATCH 1
+#define RESIZECORNERS_PATCH 0
 
 /* Practically the same as resizecorners, but the cursor does not warp to corners.
  * This takes precedence over the resizecorners patch.
@@ -1137,7 +1137,7 @@
  *
  * The above is not persisted across reboots, however.
  */
-#define SEAMLESS_RESTART_PATCH 0
+#define SEAMLESS_RESTART_PATCH 1
 
 /* As opposed to the original patch this only adds a rule option allowing fake fullscreen
  * to be enabled for applications when they start. This is intended to be used in combination
@@ -1149,7 +1149,7 @@
 /* Allows restarting dwm without the dependency of an external script.
  * https://dwm.suckless.org/patches/selfrestart/
  */
-#define SELFRESTART_PATCH 1
+#define SELFRESTART_PATCH 0
 
 /* Floating windows being sent to another monitor will be centered.
  * https://dwm.suckless.org/patches/sendmoncenter/
@@ -1333,7 +1333,7 @@
 /* Adds keyboard shortcuts to move all (or only floating) windows from one tag to another.
  * https://dwm.suckless.org/patches/tagall/
  */
-#define TAGALL_PATCH 0
+#define TAGALL_PATCH 1
 
 /* This patch allows you to move all visible windows on a monitor to an adjacent monitor.
  * https://github.com/bakkeby/patches/blob/master/dwm/dwm-tagallmon-6.2.diff
@@ -1346,7 +1346,7 @@
  * takes precedence over the onemaster tagintostack patch.
  * https://dwm.suckless.org/patches/tagintostack/
  */
-#define TAGINTOSTACK_ALLMASTER_PATCH 0
+#define TAGINTOSTACK_ALLMASTER_PATCH 1
 
 /* This patch makes new clients attach into the stack area when you toggle a new tag into
  * view. This means your master area will remain unchanged when toggling views.
@@ -1388,7 +1388,7 @@
  * two-finger scrolling is configured in libinput.
  * https://dwm.suckless.org/patches/tapresize/
  */
-#define TAPRESIZE_PATCH 0
+#define TAPRESIZE_PATCH 1
 
 /* This patch allows you to toggle fullscreen on and off using a single shortcut key.
  * https://github.com/bakkeby/patches/blob/master/dwm/dwm-togglefullscreen-6.2.diff
@@ -1398,7 +1398,7 @@
 /* This patch allows for the bar position (top or bottom) to be toggled during runtime.
  * https://dwm.suckless.org/patches/toggletopbar/
  */
-#define TOGGLETOPBAR_PATCH 0
+#define TOGGLETOPBAR_PATCH 1
 
 /* Minor patch that lets you use the same keyboard shortcut to toggle to the previous layout if the
  * designated layout is already active.
@@ -1441,7 +1441,7 @@
  * Optionally also applies a layout.
  * https://dwm.suckless.org/patches/unfloatvisible/
  */
-#define UNFLOATVISIBLE_PATCH 0
+#define UNFLOATVISIBLE_PATCH 1
 
 /* This patch adds a client rule that allows for windows that do not specify the override-redirect
  * to not be managed by the window manager. This can be useful for external bars, widgets,
@@ -1567,7 +1567,7 @@
 /* Fibonacci dwindle layout.
  * https://dwm.suckless.org/patches/fibonacci/
  */
-#define FIBONACCI_DWINDLE_LAYOUT 0
+#define FIBONACCI_DWINDLE_LAYOUT 1
 
 /* Fibonacci spiral layout.
  * https://dwm.suckless.org/patches/fibonacci/
@@ -1604,6 +1604,11 @@
  * This can be optionally disabled in favour of other layouts.
  */
 #define TILE_LAYOUT 1
+
+/* The default floating layout.
+ * This can be optionally disabled in favour of other layouts.
+ */
+#define FLOATING_LAYOUT 0
 
 /* Monocle layout (default).
  * This can be optionally disabled in favour of other layouts.
