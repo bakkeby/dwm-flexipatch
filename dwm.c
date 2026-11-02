@@ -4550,6 +4550,10 @@ togglefloating(const Arg *arg)
 		c->alwaysontop = 0;
 	#endif // SAVEFLOATS_PATCH | EXRESIZE_PATCH | ALWAYSONTOP_PATCH
 	}
+	#if TOGGLEFLOATINGCENTER_PATCH
+	c->x = selmon->mx + (selmon->mw -  WIDTH(c)) / 2;
+	c->y = selmon->my + (selmon->mh - HEIGHT(c)) / 2;
+	#endif // TOGGLEFLOATINGCENTER_PATCH
 	arrange(c->mon);
 
 	#if BAR_EWMHTAGS_PATCH

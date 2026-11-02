@@ -1105,6 +1105,12 @@
  */
 #define SAVEFLOATS_PATCH 1
 
+/* Default behaviour is floating from top-left corner. This patch allows you to center
+ * clients just before togglefloating() ends.
+ * https://dwm.suckless.org/patches/togglefloatingcenter/
+ */
+#define TOGGLEFLOATINGCENTER_PATCH 1
+
 /* The scratchpad patch allows you to spawn or restore floating terminal windows.
  * It is typically useful when one need to do some short typing.
  *
