@@ -65,6 +65,10 @@ dragfact(const Arg *arg)
 		case Expose:
 		case MapRequest:
 			handler[ev.type](&ev);
+			#if BETTERSWALLOW_PATCH
+			if (c->swallowed)
+				c = c->swallowed;
+			#endif // BETTERSWALLOW_PATCH
 			break;
 		case MotionNotify:
 			if ((ev.xmotion.time - lasttime) <= (1000 / 40))

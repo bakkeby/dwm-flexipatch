@@ -538,6 +538,21 @@
  */
 #define BANISH_PATCH 0
 
+/* Unlike the existing swallow patch, betterswallow uses PID-based
+ * swallowing and a non-standard X11 ClientMessage for communication.
+ * https://dwm.suckless.org/patches/betterswallow/
+ *
+ * Usage:
+ * 1. Compile dwm-flexipatch with BETTERSWALLOW_PATCH
+ * 2. Compile the better-swallow binary from the following repository:
+ *       https://github.com/afishhh/better-swallow
+ * 3. Launch better-swallow followed by the command and arguments
+ * 4. Optional: Move better-swallow to $PATH and alias to bs
+ *
+ * https://dwm.suckless.org/patches/betterswallow/
+ */
+#define BETTERSWALLOW_PATCH 0
+
 /* This patch adds proper support for Right-To-Left languages. (such as Farsi, Arabic or Hebrew).
  *
  * You need to uncomment the corresponding lines in config.mk to use the -lfribidi library
@@ -1264,19 +1279,6 @@
  * https://dwm.suckless.org/patches/swallow/
  */
 #define SWALLOW_PATCH 0
-
-/* Unlike the existing dynamicswallow patch, betterswallow uses PID-based
- * swallowing and a non-standard X11 ClientMessage for communication.
- * https://dwm.suckless.org/patches/betterswallow/
- *
- * Usage (It's tutorial time):
- * 1. Compile dwm-flexipatch with BETTERSWALLOW_PATCH
- * 2. Compile the better-swallow binary from the repository below
- * 3. Launch better-swallow followed by the command and arguments
- * 4. Optional: Move better-swallow to $PATH and alias to bs
- * https://github.com/afishhh/better-swallow
- */
-#define BETTERSWALLOW_PATCH 0
 
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (MOD+s) instead of having to think if you should use mod-j or mod-k for reaching

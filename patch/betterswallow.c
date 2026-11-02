@@ -45,8 +45,8 @@ checkswallowed(Client *c) {
 void
 deleteswallower(Client *c) {
 	SwallowDef **prevnext = &swallowlist;
-	for(SwallowDef *sd = swallowlist; sd != NULL;) {
-		if(sd->swallower == c) {
+	for (SwallowDef *sd = swallowlist; sd != NULL;) {
+		if (sd->swallower == c) {
 			SwallowDef *next = sd->next;
 			*prevnext = next;
 			free(sd);
@@ -58,7 +58,7 @@ deleteswallower(Client *c) {
 	}
 
 	Client *sw = c->swallowed;
-	while(sw) {
+	while (sw) {
 		sw->swallower = NULL;
 		Client *next = sw->next_swallowed;
  		sw->next_swallowed = NULL;
@@ -84,24 +84,23 @@ copyclientpos(Client *dst, Client *src) {
 
 pid_t
 wintopid(Window window) {
-  XResClientIdSpec spec;
-  spec.client = window;
-  spec.mask = XRES_CLIENT_ID_XID;
+	XResClientIdSpec spec;
+	spec.client = window;
+	spec.mask = XRES_CLIENT_ID_XID;
 
-  long count;
-  XResClientIdValue *output;
-  XResQueryClientIds(dpy, 1, &spec, &count, &output);
+	long count;
+	XResClientIdValue *output;
+	XResQueryClientIds(dpy, 1, &spec, &count, &output);
 
-  pid_t pid = -1;
+	pid_t pid = -1;
 
-  for (int i = 0; i < count; ++i)
-    if (output[i].spec.mask == XRES_CLIENT_ID_PID_MASK) {
-      pid = *(pid_t *)output[i].value;
-      break;
-    }
+	for (int i = 0; i < count; ++i)
+		if (output[i].spec.mask == XRES_CLIENT_ID_PID_MASK) {
+			pid = *(pid_t *)output[i].value;
+			break;
+		}
 
-  XResClientIdsDestroy(count, output);
+	XResClientIdsDestroy(count, output);
 
-  return pid;
+	return pid;
 }
-
