@@ -88,10 +88,11 @@ copyclientpos(Client *dst, Client *src) {
 	dst->scratchkey = src->scratchkey;
 	#endif // RENAMED_SCRATCHPADS_PATCH
 	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
-	dst->sfx = src->sfx;
-	dst->sfy = src->sfy;
-	dst->sfw = src->sfw;
-	dst->sfh = src->sfh;
+	// Don't save floats: c->swallower will go out of screen
+	// dst->sfx = src->sfx;
+	// dst->sfy = src->sfy;
+	// dst->sfw = src->sfw;
+	// dst->sfh = src->sfh;
 	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
 	#if ALWAYSONTOP_PATCH
 	dst->alwaysontop = src->alwaysontop;
