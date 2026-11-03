@@ -540,7 +540,6 @@
 
 /* Unlike the existing swallow patch, betterswallow uses PID-based
  * swallowing and a non-standard X11 ClientMessage for communication.
- * https://dwm.suckless.org/patches/betterswallow/
  *
  * Usage:
  * 1. Compile dwm-flexipatch with BETTERSWALLOW_PATCH
