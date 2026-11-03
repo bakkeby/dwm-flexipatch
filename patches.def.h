@@ -540,7 +540,6 @@
 
 /* Unlike the existing swallow patch, betterswallow uses PID-based
  * swallowing and a non-standard X11 ClientMessage for communication.
- * https://dwm.suckless.org/patches/betterswallow/
  *
  * Usage:
  * 1. Compile dwm-flexipatch with BETTERSWALLOW_PATCH
@@ -548,10 +547,8 @@
  *       https://github.com/afishhh/better-swallow
  * 3. Launch better-swallow followed by the command and arguments
  * 4. Optional: Move better-swallow to $PATH and alias to bs
- *
- * https://dwm.suckless.org/patches/betterswallow/
  */
-#define BETTERSWALLOW_PATCH 1
+#define BETTERSWALLOW_PATCH 0
 
 /* This patch adds proper support for Right-To-Left languages. (such as Farsi, Arabic or Hebrew).
  *
@@ -661,7 +658,7 @@
 
 /* Patch that combines dragfact and dragmfact.
  */
-#define DRAGFACT_PATCH 0
+#define DRAGFACT_PATCH 1
 
 /* This patch lets you resize the split in the tile layout (i.e. modify mfact) by holding
  * the modkey and dragging the mouse.
@@ -1290,7 +1287,7 @@
  *
  * https://dwm.suckless.org/patches/swallow/
  */
-#define SWALLOW_PATCH 0
+#define SWALLOW_PATCH 1
 
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (MOD+s) instead of having to think if you should use mod-j or mod-k for reaching

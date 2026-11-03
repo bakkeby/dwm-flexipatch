@@ -19,6 +19,7 @@ checkswallowed(Client *c) {
 	SwallowDef **curr = &swallowlist;
 	while (*curr) {
 		if (pid == (*curr)->pid) {
+
 			SwallowDef *matched = *curr;
 
 			c->swallower = matched->swallower;
