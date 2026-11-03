@@ -80,6 +80,31 @@ copyclientpos(Client *dst, Client *src) {
 	dst->isfloating = src->isfloating;
 	dst->tags = src->tags;
 	dst->mon = src->mon;
+	#if CFACTS_PATCH
+	dst->cfact = src->cfact;
+	#endif // CFACTS_PATCH
+	#if RENAMED_SCRATCHPADS_PATCH
+	dst->scratchkey = src->scratchkey;
+	#endif // RENAMED_SCRATCHPADS_PATCH
+	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
+	// Don't save floats: c->swallower will go out of screen
+	// dst->sfx = src->sfx;
+	// dst->sfy = src->sfy;
+	// dst->sfw = src->sfw;
+	// dst->sfh = src->sfh;
+	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
+	#if ALWAYSONTOP_PATCH
+	dst->alwaysontop = src->alwaysontop;
+	#endif // ALWAYSONTOP_PATCH
+	#if !FAKEFULLSCREEN_PATCH && FAKEFULLSCREEN_CLIENT_PATCH
+	dst->fakefullscreen = src->fakefullscreen;
+	#endif // FAKEFULLSCREEN_CLIENT_PATCH
+	#if PLACEMOUSE_PATCH
+	dst->beingmoved = src->beingmoved;
+	#endif // PLACEMOUSE_PATCH
+	#if STICKY_PATCH
+	dst->issticky = src->issticky;
+	#endif // STICKY_PATCH
 }
 
 pid_t

@@ -2734,29 +2734,35 @@ manage(Window w, XWindowAttributes *wa)
 	updatemotifhints(c);
 	#endif // DECORATION_HINTS_PATCH
 
-	#if CENTER_PATCH && SAVEFLOATS_PATCH || CENTER_PATCH && EXRESIZE_PATCH
-	if (c->iscentered) {
+	#if BETTERSWALLOW_PATCH
+	if (!c->swallower) {
+	#endif // BETTERSWALLOW_PATCH
+		#if CENTER_PATCH && SAVEFLOATS_PATCH || CENTER_PATCH && EXRESIZE_PATCH
+		if (c->iscentered) {
+			c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+			c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+		}
+		#elif CENTER_PATCH
+		if (c->iscentered) {
+			c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+			c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+		}
+		#elif ALWAYSCENTER_PATCH && SAVEFLOATS_PATCH || ALWAYSCENTER_PATCH && EXRESIZE_PATCH
 		c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 		c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
-	}
-	#elif CENTER_PATCH
-	if (c->iscentered) {
+		#elif ALWAYSCENTER_PATCH
 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
 		c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+		#endif // CENTER_PATCH / ALWAYSCENTER_PATCH / SAVEFLOATS_PATCH
+		#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
+		if (c->sfw == -9999) {
+			c->sfw = c->w;
+			c->sfh = c->h;
+		}
+		#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
+	#if BETTERSWALLOW_PATCH
 	}
-	#elif ALWAYSCENTER_PATCH && SAVEFLOATS_PATCH || ALWAYSCENTER_PATCH && EXRESIZE_PATCH
-	c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
-	c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
-	#elif ALWAYSCENTER_PATCH
-	c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
-	c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
-	#endif // CENTER_PATCH / ALWAYSCENTER_PATCH / SAVEFLOATS_PATCH
-	#if SAVEFLOATS_PATCH || EXRESIZE_PATCH
-	if (c->sfw == -9999) {
-		c->sfw = c->w;
-		c->sfh = c->h;
-	}
-	#endif // SAVEFLOATS_PATCH / EXRESIZE_PATCH
+	#endif // BETTERSWALLOW_PATCH
 
 	if (getatomprop(c, netatom[NetWMState], XA_ATOM) == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
