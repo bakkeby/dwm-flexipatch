@@ -1087,6 +1087,12 @@
  */
 #define TOGGLEFLOATINGCENTER_PATCH 0
 
+/* This patch adds an isfloatingcenter rule to automatically center clients on
+ * calling togglefloating().
+ * This patch takes precedence over togglefloatingcenter.
+ */
+#define TOGGLEFLOATINGCENTER_ONDEMAND_PATCH 0
+
 /* The scratchpad patch allows you to spawn or restore floating terminal windows.
  * It is typically useful when one need to do some short typing.
  *
