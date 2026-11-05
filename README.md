@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2026-11-02 - Added the betterswallow patch
+
 2026-05-17 - Added the dragfact patch
 
 2025-10-30 - Added the movecenter patch
@@ -330,6 +332,10 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [bartabgroups](https://dwm.suckless.org/patches/bartabgroups/)
       - turns the titlebar area into a mfact-respecting tab-bar showing each client's title
+
+   - [betterswallow](https://dwm.suckless.org/patches/betterswallow/)
+      - uses PID-based swallowing and non-standard X11 client message for communication
+      - combines with an external tool akin to devour
 
    - [bidi](https://dwm.suckless.org/patches/bidi/)
       - adds proper support for Right-To-Left (RTL) languages (such as Farsi, Arabic or Hebrew)
