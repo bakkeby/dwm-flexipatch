@@ -413,6 +413,14 @@ struct Client {
 	#if STICKY_PATCH
 	int issticky;
 	#endif // STICKY_PATCH
+	#if TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
+	int isfloatingcenter;
+	#endif // TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
+	#if BETTERSWALLOW_PATCH
+	Client *swallower;
+	Client *swallowed;
+	Client *next_swallowed;
+	#endif // BETTERSWALLOW_PATCH
 	Client *next;
 	Client *snext;
 	#if SWALLOW_PATCH
@@ -578,6 +586,9 @@ typedef struct {
 	int isterminal;
 	int noswallow;
 	#endif // SWALLOW_PATCH
+	#if TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
+	int isfloatingcenter;
+	#endif // TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
 	#if FLOATPOS_PATCH
 	const char *floatpos;
 	#endif // FLOATPOS_PATCH
@@ -633,6 +644,11 @@ typedef struct {
 #define NOSWALLOW
 #define TERMINAL
 #endif // SWALLOW_PATCH
+#if TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
+#define FLOATINGCENTER , .isfloatingcenter = 1
+#else
+#define FLOATINGCENTER
+#endif // TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
 #if SWITCHTAG_PATCH
 #define SWITCHTAG , .switchtag = 1
 #else
@@ -1026,6 +1042,9 @@ applyrules(Client *c)
 				}
 			}
 			#endif // SWITCHTAG_PATCH
+			#if TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
+			c->isfloatingcenter = r->isfloatingcenter;
+			#endif // TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
 			#if XKB_PATCH
 			if (r->xkb_layout > -1)
 				c->xkb->group = r->xkb_layout;
@@ -4501,6 +4520,15 @@ togglefloating(const Arg *arg)
 		c->alwaysontop = 0;
 	#endif // SAVEFLOATS_PATCH | EXRESIZE_PATCH | ALWAYSONTOP_PATCH
 	}
+	#if TOGGLEFLOATINGCENTER_ONDEMAND_PATCH
+	if (c->isfloatingcenter) {
+		c->x = selmon->mx + (selmon->mw - WIDTH(c)) / 2;
+		c->y = selmon->my + (selmon->mh - HEIGHT(c)) / 2;
+	}
+	#elif TOGGLEFLOATINGCENTER_PATCH
+	c->x = selmon->mx + (selmon->mw - WIDTH(c)) / 2;
+	c->y = selmon->my + (selmon->mh - HEIGHT(c)) / 2;
+	#endif // TOGGLEFLOATINGCENTER_ONDEMAND_PATCH | TOGGLEFLOATINGCENTER_PATCH
 	arrange(c->mon);
 
 	#if BAR_EWMHTAGS_PATCH
