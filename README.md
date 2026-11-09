@@ -19,6 +19,8 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
 ### Changelog:
 
+2026-08-29 - Added the movecenter_resize patch
+
 2026-05-17 - Added the dragfact patch
 
 2025-10-30 - Added the movecenter patch
@@ -593,6 +595,12 @@ Browsing patches? There is a [map of patches](https://coggle.it/diagram/X9IiSSM6
 
    - [movecenter](https://dwm.suckless.org/patches/movecenter/)
       - adds a keybinding to center the focused window
+
+   - [movecenter_resize](https://github.com/alexskywalker8000/dwm-flexipatch/tree/movecenter_resize/)
+      - center resize the selected window using mouse.
+      - depends on movecenter.
+      - modifies resizemouse function.
+      - only works if provided argument is 1.
 
    - [moveplace](https://dwm.suckless.org/patches/moveplace/)
       - adds a function to place a window either centered or in one of 8 cardinal directions
