@@ -989,6 +989,12 @@
  */
 #define PERTAGBAR_PATCH 0
 
+/* Prevents multi-tagged clients from stealing focus by storing the last
+ * focused client for each tag.
+ * This patch depends on pertag and it will not work without.
+ */
+#define PERTAG_WITH_SEL_PATCH 0
+
 /* Similar to the focusdir patch this patch allow users to move a window in any direction
  * in the tiled stack (up, down, left, right).
  * https://github.com/bakkeby/patches/wiki/placedir
