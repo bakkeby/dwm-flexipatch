@@ -27,8 +27,8 @@ tile(Monitor *m)
 	sw = mw = m->ww - 2*ov;
 
 	if (m->nmaster && n > m->nmaster) {
-		sw = (mw - iv) * (1 - m->mfact);
-		mw = (mw - iv) * m->mfact;
+		sw = round((mw - iv) * (1 - m->mfact));
+		mw = round((mw - iv) * m->mfact);
 		sx = mx + mw + iv;
 	}
 	#else
@@ -38,8 +38,8 @@ tile(Monitor *m)
 	sw = mw = m->ww;
 
 	if (m->nmaster && n > m->nmaster) {
-		sw = mw * (1 - m->mfact);
-		mw = mw * m->mfact;
+		sw = round(mw * (1 - m->mfact));
+		mw = round(mw * m->mfact);
 		sx = mx + mw;
 	}
 	#endif // VANITYGAPS_PATCH
@@ -71,4 +71,3 @@ tile(Monitor *m)
 			#endif
 		}
 }
-
