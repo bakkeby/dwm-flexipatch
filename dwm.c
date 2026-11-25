@@ -4283,7 +4283,11 @@ spawn(const Arg *arg)
 
 	if ((pid = fork()) == -1) {
 		fprintf(stderr, "dwm: fork failed: %s\n", strerror(errno));
+		#if RIODRAW_PATCH
+		return -1;
+		#else
 		return;
+		#endif // RIODRAW_PATCH
 	}
 
 	if (pid == 0) {
