@@ -4774,6 +4774,8 @@ unmanage(Client *c, int destroyed)
 	else {
 		xkb = findxkb(c->win);
 		if (xkb != NULL) {
+			if (xkb == xkbSaved)
+				xkbSaved = xkb->next; /* keep the list head valid */
 			if (xkb->prev)
 				xkb->prev->next = xkb->next;
 			if (xkb->next)
