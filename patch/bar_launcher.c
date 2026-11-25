@@ -13,7 +13,7 @@ width_launcher(Bar *bar, BarArg *a)
 int
 draw_launcher(Bar *bar, BarArg *a)
 {
-	int i, w = 0;;
+	int i, w = 0;
 
 	for (i = 0; i < LENGTH(launchers); i++) {
 		w = status2dtextlength(launchers[i].name);
@@ -53,11 +53,11 @@ width_launcher(Bar *bar, BarArg *a)
 int
 draw_launcher(Bar *bar, BarArg *a)
 {
-	int i, x = 0, w = 0;;
+	int i, x = a->x, w = 0;
 
 	for (i = 0; i < LENGTH(launchers); i++) {
 		w = TEXTW(launchers[i].name);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, launchers[i].name, 0, True);
+		drw_text(drw, x, a->y, w, bh, lrpad / 2, launchers[i].name, 0, True);
 		x += w;
 	}
 
