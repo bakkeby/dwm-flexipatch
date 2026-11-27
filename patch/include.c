@@ -307,6 +307,9 @@
 #if SWALLOW_PATCH
 #include "swallow.c"
 #endif
+#if BETTERSWALLOW_PATCH
+#include "betterswallow.c"
+#endif
 #if SWAPFOCUS_PATCH && PERTAG_PATCH
 #include "swapfocus.c"
 #endif

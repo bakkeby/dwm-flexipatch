@@ -538,6 +538,20 @@
  */
 #define BANISH_PATCH 0
 
+/* Unlike the existing swallow patch, betterswallow uses PID-based
+ * swallowing and a non-standard X11 ClientMessage for communication.
+ *
+ * Usage:
+ * 1. Compile dwm-flexipatch with BETTERSWALLOW_PATCH
+ * 2. Compile the better-swallow binary from the following repository:
+ *       https://github.com/afishhh/better-swallow
+ * 3. Launch better-swallow followed by the command and arguments
+ * 4. Optional: Move better-swallow to $PATH and alias to bs
+ *
+ * https://dwm.suckless.org/patches/betterswallow/
+ */
+#define BETTERSWALLOW_PATCH 0
+
 /* This patch adds proper support for Right-To-Left languages. (such as Farsi, Arabic or Hebrew).
  *
  * You need to uncomment the corresponding lines in config.mk to use the -lfribidi library
@@ -965,6 +979,9 @@
 /* This patch makes it so dwm will only exit via quit() if no windows are open.
  * This is to prevent you accidentally losing all your work.
  * https://dwm.suckless.org/patches/onlyquitonempty/
+ *
+ * NOTE: If you are looking for a DOUBLEPRESSQUIT_PATCH, this patch is a better
+ * alternative that's already built into the source code.
  */
 #define ONLYQUITONEMPTY_PATCH 0
 
